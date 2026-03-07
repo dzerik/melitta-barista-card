@@ -128,10 +128,7 @@ export class MelittaBaristaCard extends LitElement {
   private _brew(): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
-    const brewId = `button.${prefix}_brew`;
-    if (this.hass.states[brewId]) {
-      this.hass.callService("button", "press", { entity_id: brewId });
-    }
+    this._pressButton(`button.${prefix}_brew`);
   }
 
   private _getSettings(): SettingItem[] {
@@ -165,6 +162,7 @@ export class MelittaBaristaCard extends LitElement {
   }
 
   private _pressButton(entityId: string): void {
+    if (!this.hass.states[entityId]) return;
     this.hass.callService("button", "press", { entity_id: entityId });
   }
 
@@ -196,6 +194,9 @@ export class MelittaBaristaCard extends LitElement {
     const isReady = machineState === "Ready";
     const hasAction = actionRequired && actionRequired !== "None" && actionRequired !== "unknown";
     const hasProgress = progress && progress !== "unknown" && progress !== "None";
+    const progressNum = hasProgress
+      ? Math.max(0, Math.min(100, parseFloat(progress!) || 0))
+      : 0;
 
     const stateColor = STATE_COLORS[machineState.toLowerCase()] || "var(--primary-text-color)";
     const recipeOptions = this._getRecipeOptions();
@@ -250,7 +251,7 @@ export class MelittaBaristaCard extends LitElement {
                 <div class="progress-bar-container">
                   <div
                     class="progress-bar"
-                    style="width: ${progress}%; background: ${stateColor}"
+                    style="width: ${progressNum}%; background: ${stateColor}"
                   ></div>
                 </div>
               `
@@ -519,6 +520,12 @@ export class MelittaBaristaCard extends LitElement {
       .brew-btn:disabled {
         opacity: 0.4;
         cursor: not-allowed;
+      }
+
+      .brew-btn:focus-visible,
+      .cancel-btn:focus-visible {
+        outline: 2px solid var(--primary-color, #03a9f4);
+        outline-offset: 2px;
       }
 
       .cancel-row {
