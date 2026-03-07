@@ -13,11 +13,15 @@ A custom Lovelace card for the [Melitta Barista Smart](https://github.com/dzerik
 - BLE connection indicator
 - Progress bar during brewing/cleaning
 - Action required alerts
-- Recipe buttons grid with one-click brewing
+- Recipe select dropdown with brew button
 - Cancel button during operations
 - Optional settings display
 - Visual card editor with device dropdown
 - Theme-aware styling (light/dark)
+
+## Screenshot
+
+![Melitta Barista Card](https://raw.githubusercontent.com/dzerik/melitta-barista-card/main/screenshot.png)
 
 ## Installation
 
