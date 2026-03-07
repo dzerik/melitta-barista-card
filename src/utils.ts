@@ -7,13 +7,13 @@ export interface DetectedDevice {
 
 /**
  * Scan hass.states for Melitta Barista devices by looking for
- * `button.<prefix>_brew_*` entities unique to the integration.
+ * the `button.<prefix>_brew` entity unique to the integration.
  */
 export function detectMelittaDevices(hass: HomeAssistant): DetectedDevice[] {
   const prefixSet = new Set<string>();
 
   for (const entityId of Object.keys(hass.states)) {
-    const match = entityId.match(/^button\.(.+?)_brew_/);
+    const match = entityId.match(/^button\.(.+?)_brew$/);
     if (match) {
       prefixSet.add(match[1]);
     }
