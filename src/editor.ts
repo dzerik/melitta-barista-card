@@ -1,4 +1,4 @@
-import { LitElement, html, css, CSSResultGroup } from "lit";
+import { LitElement, html, css, nothing, CSSResultGroup } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
 import type { MelittaCardConfig } from "./types";
@@ -54,7 +54,7 @@ export class MelittaBaristaCardEditor extends LitElement {
   }
 
   protected render() {
-    if (!this._config) return html``;
+    if (!this._config) return nothing;
 
     const devices: DetectedDevice[] = this.hass
       ? detectMelittaDevices(this.hass)
