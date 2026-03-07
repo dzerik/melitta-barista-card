@@ -1,4 +1,4 @@
-import { LitElement, html, css, CSSResultGroup } from "lit";
+import { LitElement, html, css, nothing, CSSResultGroup } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
 import type { MelittaCardConfig } from "./types";
@@ -54,7 +54,7 @@ export class MelittaBaristaCardEditor extends LitElement {
   }
 
   protected render() {
-    if (!this._config) return html``;
+    if (!this._config) return nothing;
 
     const devices: DetectedDevice[] = this.hass
       ? detectMelittaDevices(this.hass)
@@ -127,7 +127,7 @@ export class MelittaBaristaCardEditor extends LitElement {
           .checked=${this._config.show_recipes !== false}
           @change=${(ev: Event) => this._valueChanged("show_recipes", ev)}
         />
-        <label for="show_recipes">Show recipe buttons</label>
+        <label for="show_recipes">Show recipe selector</label>
       </div>
       <div class="checkbox-row">
         <input

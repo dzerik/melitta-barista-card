@@ -1,5 +1,3 @@
-import { HomeAssistant } from "custom-card-helpers";
-
 export interface MelittaCardConfig {
   type: string;
   name?: string;
@@ -13,5 +11,3 @@ export interface SettingItem {
   name: string;
   value: string;
 }
-
-export type { HomeAssistant };

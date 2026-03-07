@@ -67,7 +67,7 @@ compact: false
 | --------------- | ------- | --------------- | ---------------------------------------------- |
 | `name`          | string  | auto-detected   | Card title (auto-filled from device name)      |
 | `entity_prefix` | string  | auto-detected   | Entity prefix (auto-detected from integration) |
-| `show_recipes`  | boolean | true            | Show recipe buttons when machine is ready      |
+| `show_recipes`  | boolean | true            | Show recipe selector when machine is ready     |
 | `show_settings` | boolean | false           | Show machine settings section                  |
 | `compact`       | boolean | false           | Compact layout                                 |
 
