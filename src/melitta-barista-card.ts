@@ -1,7 +1,17 @@
 import { LitElement, html, css, nothing, PropertyValues, CSSResultGroup } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
-import { CARD_VERSION, STATE_COLORS, SWITCH_KEYS, NUMBER_KEYS } from "./const";
+import {
+  CARD_VERSION,
+  STATE_COLORS,
+  SWITCH_KEYS,
+  NUMBER_KEYS,
+  FREESTYLE_PROCESSES,
+  FREESTYLE_PROCESSES_WITH_NONE,
+  FREESTYLE_INTENSITIES,
+  FREESTYLE_TEMPERATURES,
+  FREESTYLE_SHOTS,
+} from "./const";
 import type { MelittaCardConfig, SettingItem } from "./types";
 import { detectMelittaDevices } from "./utils";
 import "./editor";
@@ -11,6 +21,19 @@ export class MelittaBaristaCard extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
   @state() private _config!: MelittaCardConfig;
   @state() private _resolvedPrefix: string | null = null;
+
+  // Freestyle form state
+  @state() private _freestyleName = "Custom";
+  @state() private _freestyleProcess1 = "coffee";
+  @state() private _freestyleIntensity1 = "medium";
+  @state() private _freestylePortion1 = 40;
+  @state() private _freestyleTemp1 = "normal";
+  @state() private _freestyleShots1 = "one";
+  @state() private _freestyleProcess2 = "none";
+  @state() private _freestyleIntensity2 = "medium";
+  @state() private _freestylePortion2 = 0;
+  @state() private _freestyleTemp2 = "normal";
+  @state() private _freestyleShots2 = "none";
 
   public static getConfigElement(): HTMLElement {
     return document.createElement("melitta-barista-card-editor");
@@ -31,6 +54,8 @@ export class MelittaBaristaCard extends LitElement {
     this._config = {
       ...config,
       show_recipes: config.show_recipes !== false,
+      show_profiles: config.show_profiles !== false,
+      show_freestyle: config.show_freestyle || false,
       show_settings: config.show_settings || false,
       compact: config.compact || false,
     };
@@ -125,10 +150,62 @@ export class MelittaBaristaCard extends LitElement {
     }
   }
 
+  private _getProfileSelectId(): string | null {
+    const prefix = this._getPrefix();
+    if (!prefix) return null;
+    const id = `select.${prefix}_profile`;
+    return this.hass.states[id] ? id : null;
+  }
+
+  private _getProfileOptions(): string[] {
+    const id = this._getProfileSelectId();
+    if (!id) return [];
+    return this.hass.states[id]?.attributes?.options || [];
+  }
+
+  private _getSelectedProfile(): string | null {
+    const id = this._getProfileSelectId();
+    if (!id) return null;
+    const state = this.hass.states[id]?.state;
+    return state && state !== "unknown" && state !== "unavailable" ? state : null;
+  }
+
+  private _selectProfile(option: string): void {
+    const id = this._getProfileSelectId();
+    if (id) {
+      this.hass.callService("select", "select_option", {
+        entity_id: id,
+        option,
+      });
+    }
+  }
+
   private _brew(): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
     this._pressButton(`button.${prefix}_brew`);
+  }
+
+  private _brewFreestyle(): void {
+    const prefix = this._getPrefix();
+    if (!prefix) return;
+    const brewEntityId = `button.${prefix}_brew`;
+    if (!this.hass.states[brewEntityId]) return;
+
+    this.hass.callService("melitta_barista", "brew_freestyle", {
+      entity_id: brewEntityId,
+      name: this._freestyleName,
+      process1: this._freestyleProcess1,
+      intensity1: this._freestyleIntensity1,
+      portion1_ml: this._freestylePortion1,
+      temperature1: this._freestyleTemp1,
+      shots1: this._freestyleShots1,
+      process2: this._freestyleProcess2,
+      intensity2: this._freestyleIntensity2,
+      portion2_ml: this._freestylePortion2,
+      temperature2: this._freestyleTemp2,
+      shots2: this._freestyleShots2,
+    });
   }
 
   private _getSettings(): SettingItem[] {
@@ -280,6 +357,10 @@ export class MelittaBaristaCard extends LitElement {
             `
           : nothing}
 
+        ${this._config.show_profiles && isReady && this._getProfileOptions().length > 1
+          ? this._renderProfileSelect()
+          : nothing}
+
         ${this._config.show_recipes && isReady && recipeOptions.length > 0
           ? html`
               <div class="section-title">Recipe</div>
@@ -313,8 +394,136 @@ export class MelittaBaristaCard extends LitElement {
             `
           : nothing}
 
+        ${this._config.show_freestyle && isReady
+          ? this._renderFreestyle()
+          : nothing}
+
         ${this._config.show_settings ? this._renderSettings() : nothing}
       </ha-card>
+    `;
+  }
+
+  private _renderProfileSelect() {
+    const profileOptions = this._getProfileOptions();
+    const selectedProfile = this._getSelectedProfile();
+
+    return html`
+      <div class="section-title">Profile</div>
+      <div class="profile-row">
+        <ha-icon icon="mdi:account-circle" class="profile-icon"></ha-icon>
+        <select
+          class="recipe-select"
+          .value=${selectedProfile || ""}
+          @change=${(e: Event) =>
+            this._selectProfile((e.target as HTMLSelectElement).value)}
+        >
+          ${profileOptions.map(
+            (opt) => html`
+              <option value=${opt} ?selected=${opt === selectedProfile}>
+                ${opt}
+              </option>
+            `
+          )}
+        </select>
+      </div>
+    `;
+  }
+
+  private _renderFreestyle() {
+    return html`
+      <div class="section-title">Freestyle</div>
+      <div class="freestyle-section">
+        <div class="freestyle-row">
+          <label>Name</label>
+          <input
+            class="freestyle-input"
+            type="text"
+            .value=${this._freestyleName}
+            @input=${(e: Event) => { this._freestyleName = (e.target as HTMLInputElement).value; }}
+          />
+        </div>
+
+        <div class="freestyle-subtitle">Component 1</div>
+        <div class="freestyle-grid">
+          <div class="freestyle-field">
+            <label>Process</label>
+            <select class="freestyle-select" .value=${this._freestyleProcess1}
+              @change=${(e: Event) => { this._freestyleProcess1 = (e.target as HTMLSelectElement).value; }}>
+              ${FREESTYLE_PROCESSES.map(p => html`<option value=${p} ?selected=${p === this._freestyleProcess1}>${p}</option>`)}
+            </select>
+          </div>
+          <div class="freestyle-field">
+            <label>Intensity</label>
+            <select class="freestyle-select" .value=${this._freestyleIntensity1}
+              @change=${(e: Event) => { this._freestyleIntensity1 = (e.target as HTMLSelectElement).value; }}>
+              ${FREESTYLE_INTENSITIES.map(i => html`<option value=${i} ?selected=${i === this._freestyleIntensity1}>${i}</option>`)}
+            </select>
+          </div>
+          <div class="freestyle-field">
+            <label>Portion (ml)</label>
+            <input class="freestyle-input" type="number" min="5" max="250" step="5"
+              .value=${String(this._freestylePortion1)}
+              @input=${(e: Event) => { this._freestylePortion1 = parseInt((e.target as HTMLInputElement).value) || 40; }} />
+          </div>
+          <div class="freestyle-field">
+            <label>Temperature</label>
+            <select class="freestyle-select" .value=${this._freestyleTemp1}
+              @change=${(e: Event) => { this._freestyleTemp1 = (e.target as HTMLSelectElement).value; }}>
+              ${FREESTYLE_TEMPERATURES.map(t => html`<option value=${t} ?selected=${t === this._freestyleTemp1}>${t}</option>`)}
+            </select>
+          </div>
+          <div class="freestyle-field">
+            <label>Shots</label>
+            <select class="freestyle-select" .value=${this._freestyleShots1}
+              @change=${(e: Event) => { this._freestyleShots1 = (e.target as HTMLSelectElement).value; }}>
+              ${FREESTYLE_SHOTS.map(s => html`<option value=${s} ?selected=${s === this._freestyleShots1}>${s}</option>`)}
+            </select>
+          </div>
+        </div>
+
+        <div class="freestyle-subtitle">Component 2</div>
+        <div class="freestyle-grid">
+          <div class="freestyle-field">
+            <label>Process</label>
+            <select class="freestyle-select" .value=${this._freestyleProcess2}
+              @change=${(e: Event) => { this._freestyleProcess2 = (e.target as HTMLSelectElement).value; }}>
+              ${FREESTYLE_PROCESSES_WITH_NONE.map(p => html`<option value=${p} ?selected=${p === this._freestyleProcess2}>${p}</option>`)}
+            </select>
+          </div>
+          <div class="freestyle-field">
+            <label>Intensity</label>
+            <select class="freestyle-select" .value=${this._freestyleIntensity2}
+              @change=${(e: Event) => { this._freestyleIntensity2 = (e.target as HTMLSelectElement).value; }}>
+              ${FREESTYLE_INTENSITIES.map(i => html`<option value=${i} ?selected=${i === this._freestyleIntensity2}>${i}</option>`)}
+            </select>
+          </div>
+          <div class="freestyle-field">
+            <label>Portion (ml)</label>
+            <input class="freestyle-input" type="number" min="0" max="250" step="5"
+              .value=${String(this._freestylePortion2)}
+              @input=${(e: Event) => { this._freestylePortion2 = parseInt((e.target as HTMLInputElement).value) || 0; }} />
+          </div>
+          <div class="freestyle-field">
+            <label>Temperature</label>
+            <select class="freestyle-select" .value=${this._freestyleTemp2}
+              @change=${(e: Event) => { this._freestyleTemp2 = (e.target as HTMLSelectElement).value; }}>
+              ${FREESTYLE_TEMPERATURES.map(t => html`<option value=${t} ?selected=${t === this._freestyleTemp2}>${t}</option>`)}
+            </select>
+          </div>
+          <div class="freestyle-field">
+            <label>Shots</label>
+            <select class="freestyle-select" .value=${this._freestyleShots2}
+              @change=${(e: Event) => { this._freestyleShots2 = (e.target as HTMLSelectElement).value; }}>
+              ${FREESTYLE_SHOTS.map(s => html`<option value=${s} ?selected=${s === this._freestyleShots2}>${s}</option>`)}
+            </select>
+          </div>
+        </div>
+
+        <button class="brew-btn freestyle-brew-btn" @click=${() => this._brewFreestyle()}>
+          <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
+          Brew Freestyle
+        </button>
+      </div>
     `;
   }
 
@@ -586,6 +795,87 @@ export class MelittaBaristaCard extends LitElement {
       .setting-value {
         color: var(--text-primary);
         font-weight: 500;
+      }
+
+      /* Profile */
+      .profile-row {
+        display: flex;
+        gap: 8px;
+        padding: 0 16px 12px;
+        align-items: center;
+      }
+
+      .profile-icon {
+        --mdc-icon-size: 20px;
+        color: var(--text-secondary);
+        flex-shrink: 0;
+      }
+
+      /* Freestyle */
+      .freestyle-section {
+        padding: 0 16px 12px;
+      }
+
+      .freestyle-row {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+
+      .freestyle-row label,
+      .freestyle-field label {
+        font-size: 0.75em;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      .freestyle-subtitle {
+        font-size: 0.8em;
+        font-weight: 500;
+        color: var(--text-secondary);
+        margin: 8px 0 4px;
+        opacity: 0.8;
+      }
+
+      .freestyle-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .freestyle-field {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .freestyle-input,
+      .freestyle-select {
+        padding: 6px 8px;
+        border: 1px solid var(--divider-color, #e0e0e0);
+        border-radius: 6px;
+        background: var(--card-bg);
+        color: var(--text-primary);
+        font-size: 0.85em;
+        font-family: inherit;
+      }
+
+      .freestyle-select {
+        cursor: pointer;
+        appearance: auto;
+      }
+
+      .freestyle-input:focus,
+      .freestyle-select:focus {
+        outline: none;
+        border-color: var(--primary-color, #03a9f4);
+      }
+
+      .freestyle-brew-btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 12px;
       }
     `;
   }

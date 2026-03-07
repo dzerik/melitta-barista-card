@@ -1,4 +1,10 @@
-export const CARD_VERSION = "0.4.1";
+export const CARD_VERSION = "0.5.0";
+
+export const FREESTYLE_PROCESSES = ["coffee", "steam", "water"] as const;
+export const FREESTYLE_PROCESSES_WITH_NONE = ["none", ...FREESTYLE_PROCESSES] as const;
+export const FREESTYLE_INTENSITIES = ["very_mild", "mild", "medium", "strong", "very_strong"] as const;
+export const FREESTYLE_TEMPERATURES = ["cold", "normal", "high"] as const;
+export const FREESTYLE_SHOTS = ["none", "one", "two", "three"] as const;
 
 export const STATE_COLORS: Record<string, string> = {
   ready: "var(--state-active-color, #4caf50)",
