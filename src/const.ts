@@ -1,4 +1,4 @@
-export const CARD_VERSION = "0.4.0";
+export const CARD_VERSION = "0.4.1";
 
 export const STATE_COLORS: Record<string, string> = {
   ready: "var(--state-active-color, #4caf50)",
