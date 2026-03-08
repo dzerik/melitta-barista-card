@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing, PropertyValues, CSSResultGroup } from "lit";
+import { LitElement, html, nothing, PropertyValues, CSSResultGroup } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
 import {
@@ -12,9 +12,40 @@ import {
   FREESTYLE_TEMPERATURES,
   FREESTYLE_SHOTS,
 } from "./const";
-import type { MelittaCardConfig, SettingItem } from "./types";
+import type { MelittaCardConfig } from "./types";
 import { detectMelittaDevices } from "./utils";
+import { coffeeIconSvg } from "./icons";
+import { cardStyles } from "./styles";
 import "./editor";
+
+const SWITCH_META: Record<string, { label: string; desc: string; icon: string }> = {
+  energy_saving: { label: "Energy Saving", desc: "Reduce power when idle", icon: "mdi:lightning-bolt" },
+  auto_bean_select: { label: "Auto Bean Select", desc: "Auto-choose bean hopper", icon: "mdi:seed" },
+  rinsing_disabled: { label: "Rinsing Disabled", desc: "Skip auto rinse cycle", icon: "mdi:water-off" },
+};
+
+const NUMBER_META: Record<string, { label: string; desc: string; icon: string; format: "level" | "minutes" }> = {
+  water_hardness: { label: "Water Hardness", desc: "Calibrate for water type", icon: "mdi:water", format: "level" },
+  auto_off_after: { label: "Auto Off", desc: "Minutes until shutdown", icon: "mdi:timer-outline", format: "minutes" },
+  brew_temperature: { label: "Brew Temperature", desc: "Brewing water temp", icon: "mdi:thermometer", format: "level" },
+};
+
+const LEVEL_LABELS: Record<string, Record<number, string>> = {
+  water_hardness: { 1: "Soft", 2: "Medium", 3: "Hard", 4: "Very Hard" },
+  brew_temperature: { 0: "Low", 1: "Normal", 2: "High" },
+};
+
+const DISPLAY: Record<string, string> = {
+  very_mild: "V.Mild", mild: "Mild", medium: "Med", strong: "Strong",
+  very_strong: "V.Strong", extra_strong: "X.Strong",
+  cold: "Cold", normal: "Normal", high: "High",
+  none: "None", one: "1", two: "2", three: "3",
+  coffee: "Coffee", milk: "Milk", water: "Water",
+};
+
+function displayName(v: string): string {
+  return DISPLAY[v] || v.charAt(0).toUpperCase() + v.slice(1).replace(/_/g, " ");
+}
 
 @customElement("melitta-barista-card")
 export class MelittaBaristaCard extends LitElement {
@@ -22,18 +53,18 @@ export class MelittaBaristaCard extends LitElement {
   @state() private _config!: MelittaCardConfig;
   @state() private _resolvedPrefix: string | null = null;
 
-  // Freestyle form state
-  @state() private _freestyleName = "Custom";
-  @state() private _freestyleProcess1 = "coffee";
-  @state() private _freestyleIntensity1 = "medium";
-  @state() private _freestylePortion1 = 40;
-  @state() private _freestyleTemp1 = "normal";
-  @state() private _freestyleShots1 = "one";
-  @state() private _freestyleProcess2 = "none";
-  @state() private _freestyleIntensity2 = "medium";
-  @state() private _freestylePortion2 = 0;
-  @state() private _freestyleTemp2 = "normal";
-  @state() private _freestyleShots2 = "none";
+  // Freestyle form
+  @state() private _fsName = "Custom";
+  @state() private _fsProcess1 = "coffee";
+  @state() private _fsIntensity1 = "medium";
+  @state() private _fsPortion1 = 40;
+  @state() private _fsTemp1 = "normal";
+  @state() private _fsShots1 = "one";
+  @state() private _fsProcess2 = "none";
+  @state() private _fsIntensity2 = "medium";
+  @state() private _fsPortion2 = 0;
+  @state() private _fsTemp2 = "normal";
+  @state() private _fsShots2 = "none";
 
   public static getConfigElement(): HTMLElement {
     return document.createElement("melitta-barista-card-editor");
@@ -59,7 +90,6 @@ export class MelittaBaristaCard extends LitElement {
       show_settings: config.show_settings || false,
       compact: config.compact || false,
     };
-    // Reset resolved prefix so it re-detects on next render
     this._resolvedPrefix = null;
   }
 
@@ -72,17 +102,12 @@ export class MelittaBaristaCard extends LitElement {
   }
 
   private _getPrefix(): string | null {
-    // Explicit config takes priority
     if (this._config.entity_prefix) return this._config.entity_prefix;
-
-    // Auto-detect and cache
     if (this._resolvedPrefix) return this._resolvedPrefix;
-
     if (this.hass) {
       const devices = detectMelittaDevices(this.hass);
       if (devices.length > 0) {
         this._resolvedPrefix = devices[0].prefix;
-        // Also set name if not configured
         if (!this._config.name) {
           this._config = { ...this._config, name: devices[0].name };
         }
@@ -94,790 +119,417 @@ export class MelittaBaristaCard extends LitElement {
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (changedProps.has("_config") || changedProps.has("_resolvedPrefix")) return true;
+    // Check freestyle state changes
+    for (const key of changedProps.keys()) {
+      if (typeof key === "string" && key.startsWith("_fs")) return true;
+    }
     const oldHass = changedProps.get("hass") as HomeAssistant | undefined;
     if (!oldHass) return true;
-
     const prefix = this._getPrefix();
     if (!prefix) return true;
-
     for (const [id, stateObj] of Object.entries(this.hass.states)) {
-      if (id.includes(prefix) && oldHass.states[id] !== stateObj) {
-        return true;
-      }
+      if (id.includes(prefix) && oldHass.states[id] !== stateObj) return true;
     }
     return false;
   }
 
-  private _getState(suffix: string): string | null {
-    if (!this.hass) return null;
+  private _entity(domain: string, suffix: string) {
+    const prefix = this._getPrefix();
+    if (!prefix) return undefined;
+    return this.hass.states[`${domain}.${prefix}_${suffix}`];
+  }
+
+  private _state(suffix: string): string | null {
     const prefix = this._getPrefix();
     if (!prefix) return null;
-    const domains = ["sensor", "button", "select", "number", "switch"];
-    for (const domain of domains) {
-      const id = `${domain}.${prefix}_${suffix}`;
-      if (this.hass.states[id]) return this.hass.states[id].state;
+    for (const d of ["sensor", "button", "select", "number", "switch"]) {
+      const e = this.hass.states[`${d}.${prefix}_${suffix}`];
+      if (e) return e.state;
     }
     return null;
   }
 
-  private _getRecipeSelectId(): string | null {
-    const prefix = this._getPrefix();
-    if (!prefix) return null;
-    const id = `select.${prefix}_recipe`;
-    return this.hass.states[id] ? id : null;
+  // ── Recipe helpers ──
+
+  private _recipeEntity() {
+    return this._entity("select", "recipe");
   }
 
-  private _getRecipeOptions(): string[] {
-    const id = this._getRecipeSelectId();
-    if (!id) return [];
-    return this.hass.states[id]?.attributes?.options || [];
+  private _recipeOptions(): string[] {
+    return this._recipeEntity()?.attributes?.options || [];
   }
 
-  private _getSelectedRecipe(): string | null {
-    const id = this._getRecipeSelectId();
-    if (!id) return null;
-    const state = this.hass.states[id]?.state;
-    return state && state !== "unknown" && state !== "unavailable" ? state : null;
+  private _selectedRecipe(): string | null {
+    const s = this._recipeEntity()?.state;
+    return s && s !== "unknown" && s !== "unavailable" ? s : null;
   }
 
   private _selectRecipe(option: string): void {
-    const id = this._getRecipeSelectId();
-    if (id) {
-      this.hass.callService("select", "select_option", {
-        entity_id: id,
-        option,
-      });
-    }
-  }
-
-  private _getProfileSelectId(): string | null {
     const prefix = this._getPrefix();
-    if (!prefix) return null;
-    const id = `select.${prefix}_profile`;
-    return this.hass.states[id] ? id : null;
+    if (!prefix) return;
+    this.hass.callService("select", "select_option", {
+      entity_id: `select.${prefix}_recipe`, option,
+    });
   }
 
-  private _getProfileOptions(): string[] {
-    const id = this._getProfileSelectId();
-    if (!id) return [];
-    return this.hass.states[id]?.attributes?.options || [];
+  // ── Profile helpers ──
+
+  private _profileEntity() {
+    return this._entity("select", "profile");
   }
 
-  private _getSelectedProfile(): string | null {
-    const id = this._getProfileSelectId();
-    if (!id) return null;
-    const state = this.hass.states[id]?.state;
-    return state && state !== "unknown" && state !== "unavailable" ? state : null;
+  private _profileOptions(): string[] {
+    return this._profileEntity()?.attributes?.options || [];
+  }
+
+  private _selectedProfile(): string | null {
+    const s = this._profileEntity()?.state;
+    return s && s !== "unknown" && s !== "unavailable" ? s : null;
   }
 
   private _selectProfile(option: string): void {
-    const id = this._getProfileSelectId();
-    if (id) {
-      this.hass.callService("select", "select_option", {
-        entity_id: id,
-        option,
-      });
-    }
+    const prefix = this._getPrefix();
+    if (!prefix) return;
+    this.hass.callService("select", "select_option", {
+      entity_id: `select.${prefix}_profile`, option,
+    });
   }
+
+  // ── Actions ──
 
   private _brew(): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
-    this._pressButton(`button.${prefix}_brew`);
+    this.hass.callService("button", "press", { entity_id: `button.${prefix}_brew` });
   }
 
   private _brewFreestyle(): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
-    const brewEntityId = `button.${prefix}_brew`;
-    if (!this.hass.states[brewEntityId]) return;
-
     this.hass.callService("melitta_barista", "brew_freestyle", {
-      entity_id: brewEntityId,
-      name: this._freestyleName,
-      process1: this._freestyleProcess1,
-      intensity1: this._freestyleIntensity1,
-      portion1_ml: this._freestylePortion1,
-      temperature1: this._freestyleTemp1,
-      shots1: this._freestyleShots1,
-      process2: this._freestyleProcess2,
-      intensity2: this._freestyleIntensity2,
-      portion2_ml: this._freestylePortion2,
-      temperature2: this._freestyleTemp2,
-      shots2: this._freestyleShots2,
+      entity_id: `button.${prefix}_brew`,
+      name: this._fsName,
+      process1: this._fsProcess1,
+      intensity1: this._fsIntensity1,
+      portion1_ml: this._fsPortion1,
+      temperature1: this._fsTemp1,
+      shots1: this._fsShots1,
+      process2: this._fsProcess2,
+      intensity2: this._fsIntensity2,
+      portion2_ml: this._fsPortion2,
+      temperature2: this._fsTemp2,
+      shots2: this._fsShots2,
     });
   }
 
-  private _getSettings(): SettingItem[] {
-    if (!this.hass) return [];
+  private _toggleSwitch(key: string, turnOn: boolean): void {
     const prefix = this._getPrefix();
-    if (!prefix) return [];
-    const settings: SettingItem[] = [];
-
-    for (const key of SWITCH_KEYS) {
-      const entity = this.hass.states[`switch.${prefix}_${key}`];
-      if (entity) {
-        settings.push({
-          name: entity.attributes.friendly_name || key,
-          value: entity.state === "on" ? "On" : "Off",
-        });
-      }
-    }
-
-    for (const key of NUMBER_KEYS) {
-      const entity = this.hass.states[`number.${prefix}_${key}`];
-      if (entity) {
-        const unit = entity.attributes.unit_of_measurement || "";
-        settings.push({
-          name: entity.attributes.friendly_name || key,
-          value: `${entity.state}${unit ? " " + unit : ""}`,
-        });
-      }
-    }
-
-    return settings;
+    if (!prefix) return;
+    this.hass.callService("switch", turnOn ? "turn_on" : "turn_off", {
+      entity_id: `switch.${prefix}_${key}`,
+    });
   }
 
-  private _pressButton(entityId: string): void {
-    if (!this.hass.states[entityId]) return;
-    this.hass.callService("button", "press", { entity_id: entityId });
-  }
+  // ── Render ──
 
   protected render() {
     if (!this.hass || !this._config) return nothing;
-
     const prefix = this._getPrefix();
     if (!prefix) {
-      return html`
-        <ha-card>
-          <div class="no-device">
-            <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
-            <p>No Melitta Barista device found.</p>
-            <p class="hint">Make sure the integration is installed and configured.</p>
-          </div>
-        </ha-card>
-      `;
+      return html`<ha-card>
+        <div class="no-device">
+          <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
+          <p>No Melitta Barista device found.</p>
+          <p class="hint">Make sure the integration is installed and configured.</p>
+        </div>
+      </ha-card>`;
     }
 
-    const machineState = this._getState("state") || "unavailable";
-    const activity = this._getState("activity") || "Idle";
-    const progress = this._getState("progress");
-    const actionRequired = this._getState("action_required");
-    const connection = this._getState("connection") || "Disconnected";
+    const machineState = this._state("state") || "unavailable";
+    const activity = this._state("activity") || "Idle";
+    const progress = this._state("progress");
+    const actionRequired = this._state("action_required");
+    const connection = this._state("connection") || "Disconnected";
 
     const isConnected = connection === "Connected";
     const isUnavailable = machineState === "unavailable" || machineState === "unknown";
     const isBrewing = machineState === "Brewing";
     const isReady = machineState === "Ready";
-    const hasAction = actionRequired && actionRequired !== "None" && actionRequired !== "unknown";
-    const hasProgress = progress && progress !== "unknown" && progress !== "None";
-    const progressNum = hasProgress
-      ? Math.max(0, Math.min(100, parseFloat(progress!) || 0))
-      : 0;
-
+    const hasAction = !!actionRequired && actionRequired !== "None" && actionRequired !== "unknown";
+    const hasProgress = !!progress && progress !== "unknown" && progress !== "None";
+    const progressNum = hasProgress ? Math.max(0, Math.min(100, parseFloat(progress!) || 0)) : 0;
     const stateColor = STATE_COLORS[machineState.toLowerCase()] || "var(--primary-text-color)";
-    const recipeOptions = this._getRecipeOptions();
-    const selectedRecipe = this._getSelectedRecipe();
-    const cancelEntityId = `button.${prefix}_cancel`;
     const cardName = this._config.name || "Melitta Barista";
 
     if (isUnavailable) {
-      return html`
-        <ha-card>
-          <div class="card-header">
-            <span class="machine-name">${cardName}</span>
-            <div
-              class="connection-dot"
-              style="background: var(--error-color, #f44336)"
-              title="Disconnected"
-            ></div>
-          </div>
-          <div class="offline-section">
-            <ha-icon icon="mdi:bluetooth-off"></ha-icon>
-            <span>Machine offline</span>
-          </div>
-        </ha-card>
-      `;
-    }
-
-    return html`
-      <ha-card>
+      return html`<ha-card>
         <div class="card-header">
           <span class="machine-name">${cardName}</span>
-          <div
-            class="connection-dot"
-            style="background: ${isConnected ? "var(--state-active-color, #4caf50)" : "var(--error-color, #f44336)"}"
-            title="${connection}"
-          ></div>
+          <div class="connection-dot" style="background: var(--mbc-error)"></div>
         </div>
+        <div class="offline-section">
+          <ha-icon icon="mdi:bluetooth-off"></ha-icon>
+          <span>Machine offline</span>
+        </div>
+      </ha-card>`;
+    }
 
-        <div class="status-section">
-          <div class="state-row">
-            <span
-              class="state-badge"
-              style="background: ${stateColor}22; color: ${stateColor}"
-            >
-              ${machineState}
-            </span>
-            ${isBrewing
-              ? html`<span class="activity-text">${activity}</span>`
-              : nothing}
+    return html`<ha-card>
+      <div class="card-header">
+        <span class="machine-name">${cardName}</span>
+        <div class="connection-dot" style="background: ${isConnected ? "var(--mbc-success)" : "var(--mbc-error)"}"></div>
+      </div>
+
+      <div class="status-section">
+        <div class="state-row">
+          <span class="state-badge" style="background: ${stateColor}18; color: ${stateColor}">
+            ${machineState}
+          </span>
+          ${isBrewing ? html`<span class="activity-text">${activity}</span>` : nothing}
+        </div>
+        ${hasProgress ? html`
+          <div class="progress-container">
+            <div class="progress-fill" style="width: ${progressNum}%; background: ${stateColor}"></div>
           </div>
-          ${hasProgress
-            ? html`
-                <div class="progress-bar-container">
-                  <div
-                    class="progress-bar"
-                    style="width: ${progressNum}%; background: ${stateColor}"
-                  ></div>
-                </div>
-              `
-            : nothing}
+        ` : nothing}
+      </div>
+
+      ${hasAction ? html`
+        <div class="action-alert">
+          <ha-icon icon="mdi:alert-circle"></ha-icon>
+          <span>${actionRequired}</span>
         </div>
+      ` : nothing}
 
-        ${hasAction
-          ? html`
-              <div class="action-alert">
-                <ha-icon icon="mdi:alert-circle"></ha-icon>
-                <span>${actionRequired}</span>
-              </div>
-            `
-          : nothing}
+      ${isBrewing ? html`
+        <div class="cancel-row">
+          <button class="cancel-btn" @click=${() => this.hass.callService("button", "press", { entity_id: `button.${prefix}_cancel` })}>
+            Cancel
+          </button>
+        </div>
+      ` : nothing}
 
-        ${isBrewing
-          ? html`
-              <div class="cancel-row">
-                <button
-                  class="cancel-btn"
-                  @click=${() => this._pressButton(cancelEntityId)}
-                >
-                  Cancel
-                </button>
-              </div>
-            `
-          : nothing}
+      ${this._config.show_profiles && isReady && this._profileOptions().length > 1
+        ? this._renderProfile()
+        : nothing}
 
-        ${this._config.show_profiles && isReady && this._getProfileOptions().length > 1
-          ? this._renderProfileSelect()
-          : nothing}
+      ${this._config.show_recipes && isReady && this._recipeOptions().length > 0
+        ? this._renderRecipes()
+        : nothing}
 
-        ${this._config.show_recipes && isReady && recipeOptions.length > 0
-          ? html`
-              <div class="section-title">Recipe</div>
-              <div class="recipe-row">
-                <select
-                  class="recipe-select"
-                  .value=${selectedRecipe || ""}
-                  @change=${(e: Event) =>
-                    this._selectRecipe((e.target as HTMLSelectElement).value)}
-                >
-                  <option value="" disabled ?selected=${!selectedRecipe}>
-                    Select recipe…
-                  </option>
-                  ${recipeOptions.map(
-                    (opt) => html`
-                      <option value=${opt} ?selected=${opt === selectedRecipe}>
-                        ${opt}
-                      </option>
-                    `
-                  )}
-                </select>
-                <button
-                  class="brew-btn"
-                  ?disabled=${!selectedRecipe}
-                  @click=${() => this._brew()}
-                >
-                  <ha-icon icon="mdi:coffee"></ha-icon>
-                  Brew
-                </button>
-              </div>
-            `
-          : nothing}
+      ${this._config.show_freestyle && isReady
+        ? this._renderFreestyle()
+        : nothing}
 
-        ${this._config.show_freestyle && isReady
-          ? this._renderFreestyle()
-          : nothing}
-
-        ${this._config.show_settings ? this._renderSettings() : nothing}
-      </ha-card>
-    `;
+      ${this._config.show_settings
+        ? this._renderSettings()
+        : nothing}
+    </ha-card>`;
   }
 
-  private _renderProfileSelect() {
-    const profileOptions = this._getProfileOptions();
-    const selectedProfile = this._getSelectedProfile();
+  // ── Profile ──
 
+  private _renderProfile() {
+    const options = this._profileOptions();
+    const selected = this._selectedProfile();
     return html`
       <div class="section-title">Profile</div>
       <div class="profile-row">
-        <ha-icon icon="mdi:account-circle" class="profile-icon"></ha-icon>
-        <select
-          class="recipe-select"
-          .value=${selectedProfile || ""}
-          @change=${(e: Event) =>
-            this._selectProfile((e.target as HTMLSelectElement).value)}
-        >
-          ${profileOptions.map(
-            (opt) => html`
-              <option value=${opt} ?selected=${opt === selectedProfile}>
-                ${opt}
-              </option>
-            `
-          )}
+        <ha-icon icon="mdi:account-circle"></ha-icon>
+        <select class="profile-select" .value=${selected || ""}
+          @change=${(e: Event) => this._selectProfile((e.target as HTMLSelectElement).value)}>
+          ${options.map(o => html`<option value=${o} ?selected=${o === selected}>${o}</option>`)}
         </select>
       </div>
     `;
   }
 
-  private _renderFreestyle() {
+  // ── Recipes ──
+
+  private _renderRecipes() {
+    const options = this._recipeOptions();
+    const selected = this._selectedRecipe();
     return html`
-      <div class="section-title">Freestyle</div>
-      <div class="freestyle-section">
-        <div class="freestyle-row">
-          <label>Name</label>
-          <input
-            class="freestyle-input"
-            type="text"
-            .value=${this._freestyleName}
-            @input=${(e: Event) => { this._freestyleName = (e.target as HTMLInputElement).value; }}
-          />
-        </div>
-
-        <div class="freestyle-subtitle">Component 1</div>
-        <div class="freestyle-grid">
-          <div class="freestyle-field">
-            <label>Process</label>
-            <select class="freestyle-select" .value=${this._freestyleProcess1}
-              @change=${(e: Event) => { this._freestyleProcess1 = (e.target as HTMLSelectElement).value; }}>
-              ${FREESTYLE_PROCESSES.map(p => html`<option value=${p} ?selected=${p === this._freestyleProcess1}>${p}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Intensity</label>
-            <select class="freestyle-select" .value=${this._freestyleIntensity1}
-              @change=${(e: Event) => { this._freestyleIntensity1 = (e.target as HTMLSelectElement).value; }}>
-              ${FREESTYLE_INTENSITIES.map(i => html`<option value=${i} ?selected=${i === this._freestyleIntensity1}>${i}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Portion (ml)</label>
-            <input class="freestyle-input" type="number" min="5" max="250" step="5"
-              .value=${String(this._freestylePortion1)}
-              @input=${(e: Event) => { this._freestylePortion1 = parseInt((e.target as HTMLInputElement).value) || 40; }} />
-          </div>
-          <div class="freestyle-field">
-            <label>Temperature</label>
-            <select class="freestyle-select" .value=${this._freestyleTemp1}
-              @change=${(e: Event) => { this._freestyleTemp1 = (e.target as HTMLSelectElement).value; }}>
-              ${FREESTYLE_TEMPERATURES.map(t => html`<option value=${t} ?selected=${t === this._freestyleTemp1}>${t}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Shots</label>
-            <select class="freestyle-select" .value=${this._freestyleShots1}
-              @change=${(e: Event) => { this._freestyleShots1 = (e.target as HTMLSelectElement).value; }}>
-              ${FREESTYLE_SHOTS.map(s => html`<option value=${s} ?selected=${s === this._freestyleShots1}>${s}</option>`)}
-            </select>
-          </div>
-        </div>
-
-        <div class="freestyle-subtitle">Component 2</div>
-        <div class="freestyle-grid">
-          <div class="freestyle-field">
-            <label>Process</label>
-            <select class="freestyle-select" .value=${this._freestyleProcess2}
-              @change=${(e: Event) => { this._freestyleProcess2 = (e.target as HTMLSelectElement).value; }}>
-              ${FREESTYLE_PROCESSES_WITH_NONE.map(p => html`<option value=${p} ?selected=${p === this._freestyleProcess2}>${p}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Intensity</label>
-            <select class="freestyle-select" .value=${this._freestyleIntensity2}
-              @change=${(e: Event) => { this._freestyleIntensity2 = (e.target as HTMLSelectElement).value; }}>
-              ${FREESTYLE_INTENSITIES.map(i => html`<option value=${i} ?selected=${i === this._freestyleIntensity2}>${i}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Portion (ml)</label>
-            <input class="freestyle-input" type="number" min="0" max="250" step="5"
-              .value=${String(this._freestylePortion2)}
-              @input=${(e: Event) => { this._freestylePortion2 = parseInt((e.target as HTMLInputElement).value) || 0; }} />
-          </div>
-          <div class="freestyle-field">
-            <label>Temperature</label>
-            <select class="freestyle-select" .value=${this._freestyleTemp2}
-              @change=${(e: Event) => { this._freestyleTemp2 = (e.target as HTMLSelectElement).value; }}>
-              ${FREESTYLE_TEMPERATURES.map(t => html`<option value=${t} ?selected=${t === this._freestyleTemp2}>${t}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Shots</label>
-            <select class="freestyle-select" .value=${this._freestyleShots2}
-              @change=${(e: Event) => { this._freestyleShots2 = (e.target as HTMLSelectElement).value; }}>
-              ${FREESTYLE_SHOTS.map(s => html`<option value=${s} ?selected=${s === this._freestyleShots2}>${s}</option>`)}
-            </select>
-          </div>
-        </div>
-
-        <button class="brew-btn freestyle-brew-btn" @click=${() => this._brewFreestyle()}>
-          <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
-          Brew Freestyle
+      <div class="section-title">Recipe</div>
+      <div class="recipe-grid">
+        ${options.map((name) => {
+          const uid = name.replace(/[^a-zA-Z0-9]/g, "");
+          return html`
+            <div class="recipe-card"
+              ?data-selected=${name === selected}
+              @click=${() => this._selectRecipe(name)}>
+              ${coffeeIconSvg(name, 48, `r-${uid}`)}
+              <span class="recipe-name">${name}</span>
+            </div>
+          `;
+        })}
+      </div>
+      <div class="brew-row">
+        <button class="brew-btn" ?disabled=${!selected} @click=${() => this._brew()}>
+          <ha-icon icon="mdi:coffee"></ha-icon>
+          Brew ${selected || ""}
         </button>
       </div>
     `;
   }
 
+  // ── Freestyle ──
+
+  private _renderSegment(
+    label: string,
+    options: readonly string[],
+    value: string,
+    onChange: (v: string) => void,
+    disabled = false,
+  ) {
+    return html`
+      <div class="segment-picker ${disabled ? "freestyle-disabled" : ""}">
+        <span class="segment-label">${label}</span>
+        <div class="segment-options">
+          ${options.map(o => html`
+            <button class="segment-opt" ?data-active=${o === value}
+              @click=${() => onChange(o)}>${displayName(o)}</button>
+          `)}
+        </div>
+      </div>
+    `;
+  }
+
+  private _renderPortion(
+    label: string, value: number, min: number, max: number, step: number,
+    onChange: (v: number) => void, disabled = false,
+  ) {
+    return html`
+      <div class="portion-row ${disabled ? "freestyle-disabled" : ""}">
+        <div class="portion-header">
+          <span class="portion-label">${label}</span>
+          <span class="portion-value">${value} ml</span>
+        </div>
+        <input type="range" class="portion-slider"
+          min=${min} max=${max} step=${step} .value=${String(value)}
+          @input=${(e: Event) => onChange(parseInt((e.target as HTMLInputElement).value) || 0)} />
+      </div>
+    `;
+  }
+
+  private _renderFreestyle() {
+    const p1Coffee = this._fsProcess1 === "coffee";
+    const p2None = this._fsProcess2 === "none";
+    const p2Coffee = this._fsProcess2 === "coffee";
+
+    return html`
+      <div class="section-title">Freestyle</div>
+      <div class="freestyle-section">
+        <div class="freestyle-name-row">
+          <input class="freestyle-name-input" type="text" placeholder="Drink name"
+            .value=${this._fsName}
+            @input=${(e: Event) => { this._fsName = (e.target as HTMLInputElement).value; }} />
+        </div>
+
+        <div class="freestyle-components">
+          <div class="freestyle-component">
+            <div class="component-title">Component 1</div>
+            ${this._renderSegment("Process", FREESTYLE_PROCESSES, this._fsProcess1,
+              (v) => { this._fsProcess1 = v; })}
+            ${this._renderPortion("Portion", this._fsPortion1, 5, 250, 5,
+              (v) => { this._fsPortion1 = v; })}
+            ${this._renderSegment("Intensity", FREESTYLE_INTENSITIES, this._fsIntensity1,
+              (v) => { this._fsIntensity1 = v; }, !p1Coffee)}
+            ${this._renderSegment("Temp", FREESTYLE_TEMPERATURES, this._fsTemp1,
+              (v) => { this._fsTemp1 = v; })}
+            ${this._renderSegment("Shots", FREESTYLE_SHOTS, this._fsShots1,
+              (v) => { this._fsShots1 = v; }, !p1Coffee)}
+          </div>
+
+          <div class="freestyle-component">
+            <div class="component-title">Component 2</div>
+            ${this._renderSegment("Process", FREESTYLE_PROCESSES_WITH_NONE, this._fsProcess2,
+              (v) => { this._fsProcess2 = v; })}
+            ${this._renderPortion("Portion", this._fsPortion2, 0, 250, 5,
+              (v) => { this._fsPortion2 = v; }, p2None)}
+            ${this._renderSegment("Intensity", FREESTYLE_INTENSITIES, this._fsIntensity2,
+              (v) => { this._fsIntensity2 = v; }, !p2Coffee)}
+            ${this._renderSegment("Temp", FREESTYLE_TEMPERATURES, this._fsTemp2,
+              (v) => { this._fsTemp2 = v; }, p2None)}
+            ${this._renderSegment("Shots", FREESTYLE_SHOTS, this._fsShots2,
+              (v) => { this._fsShots2 = v; }, !p2Coffee)}
+          </div>
+        </div>
+
+        <div class="freestyle-brew-row">
+          <button class="brew-btn" @click=${() => this._brewFreestyle()}>
+            <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
+            Brew ${this._fsName}
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Settings ──
+
   private _renderSettings() {
-    const settings = this._getSettings();
-    if (settings.length === 0) return nothing;
+    const prefix = this._getPrefix();
+    if (!prefix) return nothing;
+
+    const switchCards = SWITCH_KEYS.map((key) => {
+      const entity = this.hass.states[`switch.${prefix}_${key}`];
+      if (!entity) return nothing;
+      const isOn = entity.state === "on";
+      const meta = SWITCH_META[key];
+      return html`
+        <div class="setting-card">
+          <ha-icon class="setting-icon" icon="${meta.icon}"></ha-icon>
+          <div class="setting-info">
+            <div class="setting-label">${meta.label}</div>
+            <div class="setting-desc">${meta.desc}</div>
+          </div>
+          <button class="toggle-track" ?data-on=${isOn}
+            @click=${() => this._toggleSwitch(key, !isOn)}>
+            <span class="toggle-thumb"></span>
+          </button>
+        </div>
+      `;
+    });
+
+    const numberCards = NUMBER_KEYS.map((key) => {
+      const entity = this.hass.states[`number.${prefix}_${key}`];
+      if (!entity) return nothing;
+      const meta = NUMBER_META[key];
+      const val = parseFloat(entity.state) || 0;
+      let display: string;
+      if (meta.format === "level") {
+        display = LEVEL_LABELS[key]?.[val] ?? String(val);
+      } else {
+        display = `${val} min`;
+      }
+      return html`
+        <div class="setting-card">
+          <ha-icon class="setting-icon" icon="${meta.icon}"></ha-icon>
+          <div class="setting-info">
+            <div class="setting-label">${meta.label}</div>
+            <div class="setting-desc">${meta.desc}</div>
+          </div>
+          <span class="setting-value">${display}</span>
+        </div>
+      `;
+    });
+
+    if (switchCards.every(c => c === nothing) && numberCards.every(c => c === nothing)) {
+      return nothing;
+    }
 
     return html`
       <div class="section-title">Settings</div>
-      <div class="settings-list">
-        ${settings.map(
-          (s) => html`
-            <div class="setting-row">
-              <span class="setting-label">${s.name}</span>
-              <span class="setting-value">${s.value}</span>
-            </div>
-          `
-        )}
+      <div class="settings-grid">
+        ${switchCards}
+        ${numberCards}
       </div>
     `;
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --card-bg: var(
-          --ha-card-background,
-          var(--card-background-color, white)
-        );
-        --text-primary: var(--primary-text-color);
-        --text-secondary: var(--secondary-text-color);
-      }
-
-      .no-device {
-        padding: 32px 16px;
-        text-align: center;
-        color: var(--text-secondary);
-      }
-
-      .no-device ha-icon {
-        --mdc-icon-size: 48px;
-        opacity: 0.4;
-      }
-
-      .no-device p {
-        margin: 8px 0 0;
-      }
-
-      .no-device .hint {
-        font-size: 0.85em;
-        opacity: 0.7;
-      }
-
-      .offline-section {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 12px 16px 20px;
-        color: var(--secondary-text-color);
-        font-size: 0.9em;
-      }
-
-      .offline-section ha-icon {
-        --mdc-icon-size: 20px;
-        opacity: 0.5;
-      }
-
-      .card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 16px 8px;
-      }
-
-      .machine-name {
-        font-size: 1.1em;
-        font-weight: 500;
-        color: var(--text-primary);
-      }
-
-      .connection-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-
-      .status-section {
-        padding: 0 16px 12px;
-      }
-
-      .state-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
-      }
-
-      .state-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 12px;
-        border-radius: 16px;
-        font-size: 0.85em;
-        font-weight: 500;
-      }
-
-      .activity-text {
-        font-size: 0.85em;
-        color: var(--text-secondary);
-      }
-
-      .progress-bar-container {
-        height: 4px;
-        background: var(--divider-color, #e0e0e0);
-        border-radius: 2px;
-        margin: 8px 0;
-        overflow: hidden;
-      }
-
-      .progress-bar {
-        height: 100%;
-        border-radius: 2px;
-        transition: width 0.5s ease;
-      }
-
-      .action-alert {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        margin: 0 16px 8px;
-        border-radius: 8px;
-        background: color-mix(
-          in srgb,
-          var(--error-color, #f44336) 8%,
-          transparent
-        );
-        color: var(--error-color, #f44336);
-        font-size: 0.85em;
-      }
-
-      .action-alert ha-icon {
-        --mdc-icon-size: 18px;
-        flex-shrink: 0;
-      }
-
-      .recipe-row {
-        display: flex;
-        gap: 8px;
-        padding: 0 16px 12px;
-        align-items: center;
-      }
-
-      .recipe-select {
-        flex: 1;
-        padding: 8px 12px;
-        border: 1px solid var(--divider-color, #e0e0e0);
-        border-radius: 8px;
-        background: var(--card-bg);
-        color: var(--text-primary);
-        font-size: 0.9em;
-        font-family: inherit;
-        cursor: pointer;
-        appearance: auto;
-      }
-
-      .recipe-select:focus {
-        outline: none;
-        border-color: var(--primary-color, #03a9f4);
-      }
-
-      .brew-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 8px;
-        background: var(--primary-color, #03a9f4);
-        color: var(--text-primary-color, #fff);
-        font-size: 0.9em;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: inherit;
-        transition: all 0.15s ease;
-        white-space: nowrap;
-      }
-
-      .brew-btn ha-icon {
-        --mdc-icon-size: 18px;
-      }
-
-      .brew-btn:hover:not(:disabled) {
-        opacity: 0.85;
-      }
-
-      .brew-btn:active:not(:disabled) {
-        transform: scale(0.96);
-      }
-
-      .brew-btn:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-      }
-
-      .brew-btn:focus-visible,
-      .cancel-btn:focus-visible {
-        outline: 2px solid var(--primary-color, #03a9f4);
-        outline-offset: 2px;
-      }
-
-      .cancel-row {
-        padding: 0 16px 12px;
-      }
-
-      .cancel-btn {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid var(--error-color, #f44336);
-        border-radius: 8px;
-        background: color-mix(
-          in srgb,
-          var(--error-color, #f44336) 8%,
-          transparent
-        );
-        color: var(--error-color, #f44336);
-        font-size: 0.85em;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: inherit;
-        transition: all 0.15s ease;
-      }
-
-      .cancel-btn:hover {
-        background: color-mix(
-          in srgb,
-          var(--error-color, #f44336) 18%,
-          transparent
-        );
-      }
-
-      .section-title {
-        font-size: 0.8em;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--text-secondary);
-        padding: 8px 16px 4px;
-      }
-
-      .settings-list {
-        padding: 0 16px 12px;
-      }
-
-      .setting-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 6px 0;
-        font-size: 0.85em;
-      }
-
-      .setting-label {
-        color: var(--text-secondary);
-      }
-
-      .setting-value {
-        color: var(--text-primary);
-        font-weight: 500;
-      }
-
-      /* Profile */
-      .profile-row {
-        display: flex;
-        gap: 8px;
-        padding: 0 16px 12px;
-        align-items: center;
-      }
-
-      .profile-icon {
-        --mdc-icon-size: 20px;
-        color: var(--text-secondary);
-        flex-shrink: 0;
-      }
-
-      /* Freestyle */
-      .freestyle-section {
-        padding: 0 16px 12px;
-      }
-
-      .freestyle-row {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        margin-bottom: 8px;
-      }
-
-      .freestyle-row label,
-      .freestyle-field label {
-        font-size: 0.75em;
-        color: var(--text-secondary);
-        font-weight: 500;
-      }
-
-      .freestyle-subtitle {
-        font-size: 0.8em;
-        font-weight: 500;
-        color: var(--text-secondary);
-        margin: 8px 0 4px;
-        opacity: 0.8;
-      }
-
-      .freestyle-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .freestyle-field {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .freestyle-input,
-      .freestyle-select {
-        padding: 6px 8px;
-        border: 1px solid var(--divider-color, #e0e0e0);
-        border-radius: 6px;
-        background: var(--card-bg);
-        color: var(--text-primary);
-        font-size: 0.85em;
-        font-family: inherit;
-      }
-
-      .freestyle-select {
-        cursor: pointer;
-        appearance: auto;
-      }
-
-      .freestyle-input:focus,
-      .freestyle-select:focus {
-        outline: none;
-        border-color: var(--primary-color, #03a9f4);
-      }
-
-      .freestyle-brew-btn {
-        width: 100%;
-        justify-content: center;
-        margin-top: 12px;
-      }
-    `;
+    return cardStyles;
   }
 }
 
@@ -886,7 +538,7 @@ export class MelittaBaristaCard extends LitElement {
 (window as any).customCards.push({
   type: "melitta-barista-card",
   name: "Melitta Barista Card",
-  description: "Control your Melitta Barista coffee machine",
+  description: "Premium control card for Melitta Barista coffee machines",
   preview: true,
   documentationURL: "https://github.com/dzerik/melitta-barista-card",
 });
@@ -894,5 +546,5 @@ export class MelittaBaristaCard extends LitElement {
 console.info(
   `%c MELITTA-BARISTA-CARD %c v${CARD_VERSION} `,
   "color: white; background: #795548; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;",
-  "color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;"
+  "color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;",
 );

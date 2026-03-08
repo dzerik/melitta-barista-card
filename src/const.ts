@@ -1,4 +1,4 @@
-export const CARD_VERSION = "0.5.0";
+export const CARD_VERSION = "1.0.0";
 
 export const FREESTYLE_PROCESSES = ["coffee", "milk", "water"] as const;
 export const FREESTYLE_PROCESSES_WITH_NONE = ["none", ...FREESTYLE_PROCESSES] as const;
