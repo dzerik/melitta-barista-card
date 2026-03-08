@@ -1,4 +1,4 @@
-function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)n=Reflect.decorate(t,e,i,s);else for(var a=t.length-1;a>=0;a--)(r=t[a])&&(n=(o<3?r(n):o>3?r(e,i,n):r(e,i))||n);return o>3&&n&&Object.defineProperty(e,i,n),n}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,i=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s=Symbol(),r=new WeakMap;let o=class{constructor(t,e,i){if(this._$cssResult$=!0,i!==s)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(i&&void 0===t){const i=void 0!==e&&1===e.length;i&&(t=r.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),i&&r.set(e,t))}return t}toString(){return this.cssText}};const n=(t,...e)=>{const i=1===t.length?t[0]:e.reduce((e,i,s)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[s+1],t[0]);return new o(i,t,s)},a=i?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return(t=>new o("string"==typeof t?t:t+"",void 0,s))(e)})(t):t,{is:c,defineProperty:l,getOwnPropertyDescriptor:h,getOwnPropertyNames:d,getOwnPropertySymbols:p,getPrototypeOf:f}=Object,g=globalThis,u=g.trustedTypes,m=u?u.emptyScript:"",$=g.reactiveElementPolyfillSupport,_=(t,e)=>t,b={toAttribute(t,e){switch(e){case Boolean:t=t?m:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},v=(t,e)=>!c(t,e),y={attribute:!0,type:String,converter:b,reflect:!1,useDefault:!1,hasChanged:v};Symbol.metadata??=Symbol("metadata"),g.litPropertyMetadata??=new WeakMap;let x=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=y){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const i=Symbol(),s=this.getPropertyDescriptor(t,i,e);void 0!==s&&l(this.prototype,t,s)}}static getPropertyDescriptor(t,e,i){const{get:s,set:r}=h(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:s,set(e){const o=s?.call(this);r?.call(this,e),this.requestUpdate(t,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??y}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const t=f(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const t=this.properties,e=[...d(t),...p(t)];for(const i of e)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,i]of e)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const i=this._$Eu(t,e);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(a(t))}else void 0!==t&&e.push(a(t));return e}static _$Eu(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const i of e.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,s)=>{if(i)t.adoptedStyleSheets=s.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const i of s){const s=document.createElement("style"),r=e.litNonce;void 0!==r&&s.setAttribute("nonce",r),s.textContent=i.cssText,t.appendChild(s)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$ET(t,e){const i=this.constructor.elementProperties.get(t),s=this.constructor._$Eu(t,i);if(void 0!==s&&!0===i.reflect){const r=(void 0!==i.converter?.toAttribute?i.converter:b).toAttribute(e,i.type);this._$Em=t,null==r?this.removeAttribute(s):this.setAttribute(s,r),this._$Em=null}}_$AK(t,e){const i=this.constructor,s=i._$Eh.get(t);if(void 0!==s&&this._$Em!==s){const t=i.getPropertyOptions(s),r="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:b;this._$Em=s;const o=r.fromAttribute(e,t.type);this[s]=o??this._$Ej?.get(s)??o,this._$Em=null}}requestUpdate(t,e,i,s=!1,r){if(void 0!==t){const o=this.constructor;if(!1===s&&(r=this[t]),i??=o.getPropertyOptions(t),!((i.hasChanged??v)(r,e)||i.useDefault&&i.reflect&&r===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,i))))return;this.C(t,e,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:i,reflect:s,wrapped:r},o){i&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==r||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||i||(e=void 0),this._$AL.set(t,e)),!0===s&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,i]of t){const{wrapped:t}=i,s=this[e];!0!==t||this._$AL.has(e)||void 0===s||this.C(e,void 0,i,s)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};x.elementStyles=[],x.shadowRootOptions={mode:"open"},x[_("elementProperties")]=new Map,x[_("finalized")]=new Map,$?.({ReactiveElement:x}),(g.reactiveElementVersions??=[]).push("2.1.2");const w=globalThis,A=t=>t,E=w.trustedTypes,k=E?E.createPolicy("lit-html",{createHTML:t=>t}):void 0,S="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,P="?"+C,M=`<${P}>`,D=document,O=()=>D.createComment(""),T=t=>null===t||"object"!=typeof t&&"function"!=typeof t,N=Array.isArray,R="[ \t\n\f\r]",z=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,U=/-->/g,L=/>/g,H=RegExp(`>|${R}(?:([^\\s"'>=/]+)(${R}*=${R}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),B=/'/g,F=/"/g,I=/^(?:script|style|textarea|title)$/i,j=t=>(e,...i)=>({_$litType$:t,strings:e,values:i}),W=j(1),Q=j(2),V=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),G=new WeakMap,Z=D.createTreeWalker(D,129);function X(t,e){if(!N(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==k?k.createHTML(e):e}const J=(t,e)=>{const i=t.length-1,s=[];let r,o=2===e?"<svg>":3===e?"<math>":"",n=z;for(let e=0;e<i;e++){const i=t[e];let a,c,l=-1,h=0;for(;h<i.length&&(n.lastIndex=h,c=n.exec(i),null!==c);)h=n.lastIndex,n===z?"!--"===c[1]?n=U:void 0!==c[1]?n=L:void 0!==c[2]?(I.test(c[2])&&(r=RegExp("</"+c[2],"g")),n=H):void 0!==c[3]&&(n=H):n===H?">"===c[0]?(n=r??z,l=-1):void 0===c[1]?l=-2:(l=n.lastIndex-c[2].length,a=c[1],n=void 0===c[3]?H:'"'===c[3]?F:B):n===F||n===B?n=H:n===U||n===L?n=z:(n=H,r=void 0);const d=n===H&&t[e+1].startsWith("/>")?" ":"";o+=n===z?i+M:l>=0?(s.push(a),i.slice(0,l)+S+i.slice(l)+C+d):i+C+(-2===l?e:d)}return[X(t,o+(t[i]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),s]};class K{constructor({strings:t,_$litType$:e},i){let s;this.parts=[];let r=0,o=0;const n=t.length-1,a=this.parts,[c,l]=J(t,e);if(this.el=K.createElement(c,i),Z.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(s=Z.nextNode())&&a.length<n;){if(1===s.nodeType){if(s.hasAttributes())for(const t of s.getAttributeNames())if(t.endsWith(S)){const e=l[o++],i=s.getAttribute(t).split(C),n=/([.?@])?(.*)/.exec(e);a.push({type:1,index:r,name:n[2],strings:i,ctor:"."===n[1]?st:"?"===n[1]?rt:"@"===n[1]?ot:it}),s.removeAttribute(t)}else t.startsWith(C)&&(a.push({type:6,index:r}),s.removeAttribute(t));if(I.test(s.tagName)){const t=s.textContent.split(C),e=t.length-1;if(e>0){s.textContent=E?E.emptyScript:"";for(let i=0;i<e;i++)s.append(t[i],O()),Z.nextNode(),a.push({type:2,index:++r});s.append(t[e],O())}}}else if(8===s.nodeType)if(s.data===P)a.push({type:2,index:r});else{let t=-1;for(;-1!==(t=s.data.indexOf(C,t+1));)a.push({type:7,index:r}),t+=C.length-1}r++}}static createElement(t,e){const i=D.createElement("template");return i.innerHTML=t,i}}function Y(t,e,i=t,s){if(e===V)return e;let r=void 0!==s?i._$Co?.[s]:i._$Cl;const o=T(e)?void 0:e._$litDirective$;return r?.constructor!==o&&(r?._$AO?.(!1),void 0===o?r=void 0:(r=new o(t),r._$AT(t,i,s)),void 0!==s?(i._$Co??=[])[s]=r:i._$Cl=r),void 0!==r&&(e=Y(t,r._$AS(t,e.values),r,s)),e}class tt{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:i}=this._$AD,s=(t?.creationScope??D).importNode(e,!0);Z.currentNode=s;let r=Z.nextNode(),o=0,n=0,a=i[0];for(;void 0!==a;){if(o===a.index){let e;2===a.type?e=new et(r,r.nextSibling,this,t):1===a.type?e=new a.ctor(r,a.name,a.strings,this,t):6===a.type&&(e=new nt(r,this,t)),this._$AV.push(e),a=i[++n]}o!==a?.index&&(r=Z.nextNode(),o++)}return Z.currentNode=D,s}p(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class et{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,i,s){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=s,this._$Cv=s?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Y(this,t,e),T(t)?t===q||null==t||""===t?(this._$AH!==q&&this._$AR(),this._$AH=q):t!==this._$AH&&t!==V&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>N(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==q&&T(this._$AH)?this._$AA.nextSibling.data=t:this.T(D.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:i}=t,s="number"==typeof i?this._$AC(t):(void 0===i.el&&(i.el=K.createElement(X(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===s)this._$AH.p(e);else{const t=new tt(s,this),i=t.u(this.options);t.p(e),this.T(i),this._$AH=t}}_$AC(t){let e=G.get(t.strings);return void 0===e&&G.set(t.strings,e=new K(t)),e}k(t){N(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,s=0;for(const r of t)s===e.length?e.push(i=new et(this.O(O()),this.O(O()),this,this.options)):i=e[s],i._$AI(r),s++;s<e.length&&(this._$AR(i&&i._$AB.nextSibling,s),e.length=s)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=A(t).nextSibling;A(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class it{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,i,s,r){this.type=1,this._$AH=q,this._$AN=void 0,this.element=t,this.name=e,this._$AM=s,this.options=r,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=q}_$AI(t,e=this,i,s){const r=this.strings;let o=!1;if(void 0===r)t=Y(this,t,e,0),o=!T(t)||t!==this._$AH&&t!==V,o&&(this._$AH=t);else{const s=t;let n,a;for(t=r[0],n=0;n<r.length-1;n++)a=Y(this,s[i+n],e,n),a===V&&(a=this._$AH[n]),o||=!T(a)||a!==this._$AH[n],a===q?t=q:t!==q&&(t+=(a??"")+r[n+1]),this._$AH[n]=a}o&&!s&&this.j(t)}j(t){t===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class st extends it{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===q?void 0:t}}class rt extends it{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==q)}}class ot extends it{constructor(t,e,i,s,r){super(t,e,i,s,r),this.type=5}_$AI(t,e=this){if((t=Y(this,t,e,0)??q)===V)return;const i=this._$AH,s=t===q&&i!==q||t.capture!==i.capture||t.once!==i.once||t.passive!==i.passive,r=t!==q&&(i===q||s);s&&this.element.removeEventListener(this.name,this,i),r&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class nt{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){Y(this,t)}}const at=w.litHtmlPolyfillSupport;at?.(K,et),(w.litHtmlVersions??=[]).push("3.3.2");const ct=globalThis;class lt extends x{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,i)=>{const s=i?.renderBefore??e;let r=s._$litPart$;if(void 0===r){const t=i?.renderBefore??null;s._$litPart$=r=new et(e.insertBefore(O(),t),t,void 0,i??{})}return r._$AI(t),r})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return V}}lt._$litElement$=!0,lt.finalized=!0,ct.litElementHydrateSupport?.({LitElement:lt});const ht=ct.litElementPolyfillSupport;ht?.({LitElement:lt}),(ct.litElementVersions??=[]).push("4.2.2");const dt=t=>(e,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},pt={attribute:!0,type:String,converter:b,reflect:!1,hasChanged:v},ft=(t=pt,e,i)=>{const{kind:s,metadata:r}=i;let o=globalThis.litPropertyMetadata.get(r);if(void 0===o&&globalThis.litPropertyMetadata.set(r,o=new Map),"setter"===s&&((t=Object.create(t)).wrapped=!0),o.set(i.name,t),"accessor"===s){const{name:s}=i;return{set(i){const r=e.get.call(this);e.set.call(this,i),this.requestUpdate(s,r,t,!0,i)},init(e){return void 0!==e&&this.C(s,void 0,t,e),e}}}if("setter"===s){const{name:s}=i;return function(i){const r=this[s];e.call(this,i),this.requestUpdate(s,r,t,!0,i)}}throw Error("Unsupported decorator location: "+s)};function gt(t){return(e,i)=>"object"==typeof i?ft(t,e,i):((t,e,i)=>{const s=e.hasOwnProperty(i);return e.constructor.createProperty(i,t),s?Object.getOwnPropertyDescriptor(e,i):void 0})(t,e,i)}function ut(t){return gt({...t,state:!0,attribute:!1})}const mt=["coffee","milk","water"],$t=["none",...mt],_t=["very_mild","mild","medium","strong","very_strong"],bt=["cold","normal","high"],vt=["none","one","two","three"],yt={ready:"var(--state-active-color, #4caf50)",brewing:"var(--warning-color, #ff9800)",cleaning:"var(--info-color, #2196f3)",descaling:"var(--info-color, #2196f3)",off:"var(--disabled-color, #9e9e9e)",busy:"var(--warning-color, #ff9800)",unavailable:"var(--error-color, #f44336)"},xt=["energy_saving","auto_bean_select","rinsing_disabled"],wt=["water_hardness","auto_off_after","brew_temperature"];function At(t){const e=new Set;for(const i of Object.keys(t.states)){const t=i.match(/^button\.(.+?)_brew$/);t&&e.add(t[1])}const i=[];for(const s of e){const e=t.states[`sensor.${s}_state`];if(!e)continue;const r=e.attributes.friendly_name,o=r?r.replace(/\s*State$/,""):s.replace(/_/g," ");i.push({prefix:s,name:o})}return i}const Et={Espresso:{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#C9A87C",height:.04}},Ristretto:{layers:[{color:"#1A0D04",height:.22}],foam:{color:"#B89970",height:.03}},Lungo:{layers:[{color:"#4A2A14",height:.5}],foam:{color:"#C9A87C",height:.04}},"Espresso Doppio":{layers:[{color:"#3E1F0D",height:.45}],foam:{color:"#C9A87C",height:.04}},"Ristretto Doppio":{layers:[{color:"#1A0D04",height:.4}],foam:{color:"#B89970",height:.03}},"Café Crème":{layers:[{color:"#5C3A1E",height:.5}],foam:{color:"#E8D5B7",height:.08}},"Café Crème Doppio":{layers:[{color:"#5C3A1E",height:.58}],foam:{color:"#E8D5B7",height:.08}},Americano:{layers:[{color:"#3E1F0D",height:.6}]},"Americano Extra":{layers:[{color:"#2C1507",height:.65}]},"Long Black":{layers:[{color:"#3E1F0D",height:.55}],foam:{color:"#C9A87C",height:.05}},"Red Eye":{layers:[{color:"#2C1507",height:.6}]},"Black Eye":{layers:[{color:"#1A0D04",height:.65}]},"Dead Eye":{layers:[{color:"#0F0803",height:.7}]},Cappuccino:{layers:[{color:"#3E1F0D",height:.28},{color:"#D4B896",height:.22}],foam:{color:"#F5EDE0",height:.18}},"Espresso Macchiato":{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#F5EDE0",height:.12}},"Caffè Latte":{tall:!0,layers:[{color:"#E8D5B7",height:.35},{color:"#8B5A30",height:.18}],foam:{color:"#F5EDE0",height:.1}},"Café au Lait":{layers:[{color:"#C9A87C",height:.5}],foam:{color:"#F0E6D8",height:.06}},"Flat White":{layers:[{color:"#3E1F0D",height:.2},{color:"#D4B896",height:.3}],foam:{color:"#F0E6D8",height:.05}},"Latte Macchiato":{tall:!0,layers:[{color:"#F0E6D8",height:.28},{color:"#6B4226",height:.12},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.15}},"Latte Macchiato Extra":{tall:!0,layers:[{color:"#F0E6D8",height:.25},{color:"#5C3A1E",height:.16},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.14}},"Latte Macchiato Triple":{tall:!0,layers:[{color:"#F0E6D8",height:.22},{color:"#4A2A14",height:.2},{color:"#E8D5B7",height:.1}],foam:{color:"#FEFCFA",height:.14}},Milk:{tall:!0,layers:[{color:"#F0E6D8",height:.55}]},"Milk Froth":{tall:!0,layers:[{color:"#F0E6D8",height:.15}],foam:{color:"#FEFCFA",height:.4}},"Hot Water":{layers:[{color:"#9DC4D8",height:.5}]}},kt={layers:[{color:"#5C3A1E",height:.45}]};const St=n`
+function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)n=Reflect.decorate(t,e,i,s);else for(var a=t.length-1;a>=0;a--)(r=t[a])&&(n=(o<3?r(n):o>3?r(e,i,n):r(e,i))||n);return o>3&&n&&Object.defineProperty(e,i,n),n}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,i=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s=Symbol(),r=new WeakMap;let o=class{constructor(t,e,i){if(this._$cssResult$=!0,i!==s)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(i&&void 0===t){const i=void 0!==e&&1===e.length;i&&(t=r.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),i&&r.set(e,t))}return t}toString(){return this.cssText}};const n=(t,...e)=>{const i=1===t.length?t[0]:e.reduce((e,i,s)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[s+1],t[0]);return new o(i,t,s)},a=i?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return(t=>new o("string"==typeof t?t:t+"",void 0,s))(e)})(t):t,{is:c,defineProperty:l,getOwnPropertyDescriptor:h,getOwnPropertyNames:d,getOwnPropertySymbols:p,getPrototypeOf:f}=Object,g=globalThis,u=g.trustedTypes,m=u?u.emptyScript:"",$=g.reactiveElementPolyfillSupport,_=(t,e)=>t,b={toAttribute(t,e){switch(e){case Boolean:t=t?m:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},v=(t,e)=>!c(t,e),y={attribute:!0,type:String,converter:b,reflect:!1,useDefault:!1,hasChanged:v};Symbol.metadata??=Symbol("metadata"),g.litPropertyMetadata??=new WeakMap;let x=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=y){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const i=Symbol(),s=this.getPropertyDescriptor(t,i,e);void 0!==s&&l(this.prototype,t,s)}}static getPropertyDescriptor(t,e,i){const{get:s,set:r}=h(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:s,set(e){const o=s?.call(this);r?.call(this,e),this.requestUpdate(t,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??y}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const t=f(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const t=this.properties,e=[...d(t),...p(t)];for(const i of e)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,i]of e)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const i=this._$Eu(t,e);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(a(t))}else void 0!==t&&e.push(a(t));return e}static _$Eu(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const i of e.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,s)=>{if(i)t.adoptedStyleSheets=s.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const i of s){const s=document.createElement("style"),r=e.litNonce;void 0!==r&&s.setAttribute("nonce",r),s.textContent=i.cssText,t.appendChild(s)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$ET(t,e){const i=this.constructor.elementProperties.get(t),s=this.constructor._$Eu(t,i);if(void 0!==s&&!0===i.reflect){const r=(void 0!==i.converter?.toAttribute?i.converter:b).toAttribute(e,i.type);this._$Em=t,null==r?this.removeAttribute(s):this.setAttribute(s,r),this._$Em=null}}_$AK(t,e){const i=this.constructor,s=i._$Eh.get(t);if(void 0!==s&&this._$Em!==s){const t=i.getPropertyOptions(s),r="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:b;this._$Em=s;const o=r.fromAttribute(e,t.type);this[s]=o??this._$Ej?.get(s)??o,this._$Em=null}}requestUpdate(t,e,i,s=!1,r){if(void 0!==t){const o=this.constructor;if(!1===s&&(r=this[t]),i??=o.getPropertyOptions(t),!((i.hasChanged??v)(r,e)||i.useDefault&&i.reflect&&r===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,i))))return;this.C(t,e,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:i,reflect:s,wrapped:r},o){i&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==r||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||i||(e=void 0),this._$AL.set(t,e)),!0===s&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,i]of t){const{wrapped:t}=i,s=this[e];!0!==t||this._$AL.has(e)||void 0===s||this.C(e,void 0,i,s)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};x.elementStyles=[],x.shadowRootOptions={mode:"open"},x[_("elementProperties")]=new Map,x[_("finalized")]=new Map,$?.({ReactiveElement:x}),(g.reactiveElementVersions??=[]).push("2.1.2");const w=globalThis,A=t=>t,E=w.trustedTypes,k=E?E.createPolicy("lit-html",{createHTML:t=>t}):void 0,S="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,P="?"+C,M=`<${P}>`,D=document,O=()=>D.createComment(""),N=t=>null===t||"object"!=typeof t&&"function"!=typeof t,T=Array.isArray,R="[ \t\n\f\r]",z=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,U=/-->/g,L=/>/g,H=RegExp(`>|${R}(?:([^\\s"'>=/]+)(${R}*=${R}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),B=/'/g,F=/"/g,I=/^(?:script|style|textarea|title)$/i,j=t=>(e,...i)=>({_$litType$:t,strings:e,values:i}),W=j(1),Q=j(2),V=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),G=new WeakMap,Z=D.createTreeWalker(D,129);function X(t,e){if(!T(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==k?k.createHTML(e):e}const J=(t,e)=>{const i=t.length-1,s=[];let r,o=2===e?"<svg>":3===e?"<math>":"",n=z;for(let e=0;e<i;e++){const i=t[e];let a,c,l=-1,h=0;for(;h<i.length&&(n.lastIndex=h,c=n.exec(i),null!==c);)h=n.lastIndex,n===z?"!--"===c[1]?n=U:void 0!==c[1]?n=L:void 0!==c[2]?(I.test(c[2])&&(r=RegExp("</"+c[2],"g")),n=H):void 0!==c[3]&&(n=H):n===H?">"===c[0]?(n=r??z,l=-1):void 0===c[1]?l=-2:(l=n.lastIndex-c[2].length,a=c[1],n=void 0===c[3]?H:'"'===c[3]?F:B):n===F||n===B?n=H:n===U||n===L?n=z:(n=H,r=void 0);const d=n===H&&t[e+1].startsWith("/>")?" ":"";o+=n===z?i+M:l>=0?(s.push(a),i.slice(0,l)+S+i.slice(l)+C+d):i+C+(-2===l?e:d)}return[X(t,o+(t[i]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),s]};class K{constructor({strings:t,_$litType$:e},i){let s;this.parts=[];let r=0,o=0;const n=t.length-1,a=this.parts,[c,l]=J(t,e);if(this.el=K.createElement(c,i),Z.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(s=Z.nextNode())&&a.length<n;){if(1===s.nodeType){if(s.hasAttributes())for(const t of s.getAttributeNames())if(t.endsWith(S)){const e=l[o++],i=s.getAttribute(t).split(C),n=/([.?@])?(.*)/.exec(e);a.push({type:1,index:r,name:n[2],strings:i,ctor:"."===n[1]?st:"?"===n[1]?rt:"@"===n[1]?ot:it}),s.removeAttribute(t)}else t.startsWith(C)&&(a.push({type:6,index:r}),s.removeAttribute(t));if(I.test(s.tagName)){const t=s.textContent.split(C),e=t.length-1;if(e>0){s.textContent=E?E.emptyScript:"";for(let i=0;i<e;i++)s.append(t[i],O()),Z.nextNode(),a.push({type:2,index:++r});s.append(t[e],O())}}}else if(8===s.nodeType)if(s.data===P)a.push({type:2,index:r});else{let t=-1;for(;-1!==(t=s.data.indexOf(C,t+1));)a.push({type:7,index:r}),t+=C.length-1}r++}}static createElement(t,e){const i=D.createElement("template");return i.innerHTML=t,i}}function Y(t,e,i=t,s){if(e===V)return e;let r=void 0!==s?i._$Co?.[s]:i._$Cl;const o=N(e)?void 0:e._$litDirective$;return r?.constructor!==o&&(r?._$AO?.(!1),void 0===o?r=void 0:(r=new o(t),r._$AT(t,i,s)),void 0!==s?(i._$Co??=[])[s]=r:i._$Cl=r),void 0!==r&&(e=Y(t,r._$AS(t,e.values),r,s)),e}class tt{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:i}=this._$AD,s=(t?.creationScope??D).importNode(e,!0);Z.currentNode=s;let r=Z.nextNode(),o=0,n=0,a=i[0];for(;void 0!==a;){if(o===a.index){let e;2===a.type?e=new et(r,r.nextSibling,this,t):1===a.type?e=new a.ctor(r,a.name,a.strings,this,t):6===a.type&&(e=new nt(r,this,t)),this._$AV.push(e),a=i[++n]}o!==a?.index&&(r=Z.nextNode(),o++)}return Z.currentNode=D,s}p(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class et{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,i,s){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=s,this._$Cv=s?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Y(this,t,e),N(t)?t===q||null==t||""===t?(this._$AH!==q&&this._$AR(),this._$AH=q):t!==this._$AH&&t!==V&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>T(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==q&&N(this._$AH)?this._$AA.nextSibling.data=t:this.T(D.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:i}=t,s="number"==typeof i?this._$AC(t):(void 0===i.el&&(i.el=K.createElement(X(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===s)this._$AH.p(e);else{const t=new tt(s,this),i=t.u(this.options);t.p(e),this.T(i),this._$AH=t}}_$AC(t){let e=G.get(t.strings);return void 0===e&&G.set(t.strings,e=new K(t)),e}k(t){T(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,s=0;for(const r of t)s===e.length?e.push(i=new et(this.O(O()),this.O(O()),this,this.options)):i=e[s],i._$AI(r),s++;s<e.length&&(this._$AR(i&&i._$AB.nextSibling,s),e.length=s)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=A(t).nextSibling;A(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class it{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,i,s,r){this.type=1,this._$AH=q,this._$AN=void 0,this.element=t,this.name=e,this._$AM=s,this.options=r,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=q}_$AI(t,e=this,i,s){const r=this.strings;let o=!1;if(void 0===r)t=Y(this,t,e,0),o=!N(t)||t!==this._$AH&&t!==V,o&&(this._$AH=t);else{const s=t;let n,a;for(t=r[0],n=0;n<r.length-1;n++)a=Y(this,s[i+n],e,n),a===V&&(a=this._$AH[n]),o||=!N(a)||a!==this._$AH[n],a===q?t=q:t!==q&&(t+=(a??"")+r[n+1]),this._$AH[n]=a}o&&!s&&this.j(t)}j(t){t===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class st extends it{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===q?void 0:t}}class rt extends it{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==q)}}class ot extends it{constructor(t,e,i,s,r){super(t,e,i,s,r),this.type=5}_$AI(t,e=this){if((t=Y(this,t,e,0)??q)===V)return;const i=this._$AH,s=t===q&&i!==q||t.capture!==i.capture||t.once!==i.once||t.passive!==i.passive,r=t!==q&&(i===q||s);s&&this.element.removeEventListener(this.name,this,i),r&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class nt{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){Y(this,t)}}const at=w.litHtmlPolyfillSupport;at?.(K,et),(w.litHtmlVersions??=[]).push("3.3.2");const ct=globalThis;class lt extends x{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,i)=>{const s=i?.renderBefore??e;let r=s._$litPart$;if(void 0===r){const t=i?.renderBefore??null;s._$litPart$=r=new et(e.insertBefore(O(),t),t,void 0,i??{})}return r._$AI(t),r})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return V}}lt._$litElement$=!0,lt.finalized=!0,ct.litElementHydrateSupport?.({LitElement:lt});const ht=ct.litElementPolyfillSupport;ht?.({LitElement:lt}),(ct.litElementVersions??=[]).push("4.2.2");const dt=t=>(e,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},pt={attribute:!0,type:String,converter:b,reflect:!1,hasChanged:v},ft=(t=pt,e,i)=>{const{kind:s,metadata:r}=i;let o=globalThis.litPropertyMetadata.get(r);if(void 0===o&&globalThis.litPropertyMetadata.set(r,o=new Map),"setter"===s&&((t=Object.create(t)).wrapped=!0),o.set(i.name,t),"accessor"===s){const{name:s}=i;return{set(i){const r=e.get.call(this);e.set.call(this,i),this.requestUpdate(s,r,t,!0,i)},init(e){return void 0!==e&&this.C(s,void 0,t,e),e}}}if("setter"===s){const{name:s}=i;return function(i){const r=this[s];e.call(this,i),this.requestUpdate(s,r,t,!0,i)}}throw Error("Unsupported decorator location: "+s)};function gt(t){return(e,i)=>"object"==typeof i?ft(t,e,i):((t,e,i)=>{const s=e.hasOwnProperty(i);return e.constructor.createProperty(i,t),s?Object.getOwnPropertyDescriptor(e,i):void 0})(t,e,i)}function ut(t){return gt({...t,state:!0,attribute:!1})}const mt=["coffee","milk","water"],$t=["none",...mt],_t=["very_mild","mild","medium","strong","very_strong"],bt=["cold","normal","high"],vt=["none","one","two","three"],yt={ready:"var(--state-active-color, #4caf50)",brewing:"var(--warning-color, #ff9800)",cleaning:"var(--info-color, #2196f3)",descaling:"var(--info-color, #2196f3)",off:"var(--disabled-color, #9e9e9e)",busy:"var(--warning-color, #ff9800)",unavailable:"var(--error-color, #f44336)"},xt=["energy_saving","auto_bean_select","rinsing_disabled"],wt=["water_hardness","auto_off_after","brew_temperature"];function At(t){const e=new Set;for(const i of Object.keys(t.states)){const t=i.match(/^button\.(.+?)_brew$/);t&&e.add(t[1])}const i=[];for(const s of e){const e=t.states[`sensor.${s}_state`];if(!e)continue;const r=e.attributes.friendly_name,o=r?r.replace(/\s*State$/,""):s.replace(/_/g," ");i.push({prefix:s,name:o})}return i}const Et={Espresso:{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#C9A87C",height:.04}},Ristretto:{layers:[{color:"#1A0D04",height:.22}],foam:{color:"#B89970",height:.03}},Lungo:{layers:[{color:"#4A2A14",height:.5}],foam:{color:"#C9A87C",height:.04}},"Espresso Doppio":{layers:[{color:"#3E1F0D",height:.45}],foam:{color:"#C9A87C",height:.04}},"Ristretto Doppio":{layers:[{color:"#1A0D04",height:.4}],foam:{color:"#B89970",height:.03}},"Café Crème":{layers:[{color:"#5C3A1E",height:.5}],foam:{color:"#E8D5B7",height:.08}},"Café Crème Doppio":{layers:[{color:"#5C3A1E",height:.58}],foam:{color:"#E8D5B7",height:.08}},Americano:{layers:[{color:"#3E1F0D",height:.6}]},"Americano Extra":{layers:[{color:"#2C1507",height:.65}]},"Long Black":{layers:[{color:"#3E1F0D",height:.55}],foam:{color:"#C9A87C",height:.05}},"Red Eye":{layers:[{color:"#2C1507",height:.6}]},"Black Eye":{layers:[{color:"#1A0D04",height:.65}]},"Dead Eye":{layers:[{color:"#0F0803",height:.7}]},Cappuccino:{layers:[{color:"#3E1F0D",height:.28},{color:"#D4B896",height:.22}],foam:{color:"#F5EDE0",height:.18}},"Espresso Macchiato":{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#F5EDE0",height:.12}},"Caffè Latte":{tall:!0,layers:[{color:"#E8D5B7",height:.35},{color:"#8B5A30",height:.18}],foam:{color:"#F5EDE0",height:.1}},"Café au Lait":{layers:[{color:"#C9A87C",height:.5}],foam:{color:"#F0E6D8",height:.06}},"Flat White":{layers:[{color:"#3E1F0D",height:.2},{color:"#D4B896",height:.3}],foam:{color:"#F0E6D8",height:.05}},"Latte Macchiato":{tall:!0,layers:[{color:"#F0E6D8",height:.28},{color:"#6B4226",height:.12},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.15}},"Latte Macchiato Extra":{tall:!0,layers:[{color:"#F0E6D8",height:.25},{color:"#5C3A1E",height:.16},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.14}},"Latte Macchiato Triple":{tall:!0,layers:[{color:"#F0E6D8",height:.22},{color:"#4A2A14",height:.2},{color:"#E8D5B7",height:.1}],foam:{color:"#FEFCFA",height:.14}},Milk:{tall:!0,layers:[{color:"#F0E6D8",height:.55}]},"Milk Froth":{tall:!0,layers:[{color:"#F0E6D8",height:.15}],foam:{color:"#FEFCFA",height:.4}},"Hot Water":{layers:[{color:"#9DC4D8",height:.5}]}},kt={layers:[{color:"#5C3A1E",height:.45}]};const St=n`
   :host {
     --mbc-bg: var(--ha-card-background, var(--card-background-color, #1a1a1a));
     --mbc-text: var(--primary-text-color, #e5e5e5);
@@ -12,24 +12,28 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
     --mbc-warning: var(--warning-color, #ff9800);
     --mbc-radius: 12px;
   }
+  ha-card { overflow: hidden; background: var(--mbc-bg); }
 
-  ha-card {
-    overflow: hidden;
-    background: var(--mbc-bg);
-  }
-
-  /* ── No device ── */
+  /* ── No device / Offline ── */
   .no-device {
     padding: 40px 20px;
     text-align: center;
     color: var(--mbc-text2);
   }
-  .no-device ha-icon {
-    --mdc-icon-size: 48px;
-    opacity: 0.3;
-  }
+  .no-device ha-icon { --mdc-icon-size: 48px; opacity: 0.3; }
   .no-device p { margin: 8px 0 0; }
   .no-device .hint { font-size: 0.8em; opacity: 0.6; }
+
+  .offline-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 16px 32px;
+    color: var(--mbc-text2);
+    font-size: 0.85em;
+  }
+  .offline-section ha-icon { --mdc-icon-size: 32px; opacity: 0.3; }
 
   /* ── Header ── */
   .card-header {
@@ -50,6 +54,16 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
     border-radius: 50%;
     flex-shrink: 0;
     transition: background 0.3s;
+  }
+
+  .section-title {
+    font-size: 0.65em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--mbc-text2);
+    padding: 12px 16px 6px;
+    opacity: 0.7;
   }
 
   /* ── Status ── */
@@ -116,36 +130,48 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
     font-size: 0.82em;
     font-weight: 500;
   }
-  .action-alert ha-icon {
-    --mdc-icon-size: 18px;
-    flex-shrink: 0;
-  }
+  .action-alert ha-icon { --mdc-icon-size: 18px; flex-shrink: 0; }
 
-  /* ── Section titles ── */
-  .section-title {
-    font-size: 0.65em;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--mbc-text2);
-    padding: 12px 16px 6px;
-    opacity: 0.7;
+  /* ── Cancel ── */
+  .cancel-row { padding: 0 12px 8px; }
+  .cancel-btn {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid color-mix(in srgb, var(--mbc-error) 40%, transparent);
+    border-radius: var(--mbc-radius);
+    background: color-mix(in srgb, var(--mbc-error) 8%, transparent);
+    color: var(--mbc-error);
+    font-size: 0.8em;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
   }
+  .cancel-btn:hover { background: color-mix(in srgb, var(--mbc-error) 15%, transparent); }
+  .cancel-btn:active { transform: scale(0.97); }
 
-  /* ── Offline ── */
-  .offline-section {
+  /* ── Profile ── */
+  .profile-row {
     display: flex;
-    flex-direction: column;
+    gap: 6px;
+    padding: 4px 12px 8px;
     align-items: center;
-    gap: 8px;
-    padding: 24px 16px 32px;
-    color: var(--mbc-text2);
-    font-size: 0.85em;
   }
-  .offline-section ha-icon {
-    --mdc-icon-size: 32px;
-    opacity: 0.3;
+  .profile-row ha-icon { --mdc-icon-size: 18px; color: var(--mbc-text2); opacity: 0.6; }
+  .profile-select {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--mbc-border);
+    border-radius: 8px;
+    background: var(--mbc-surface);
+    color: var(--mbc-text);
+    font-size: 0.82em;
+    font-family: inherit;
+    cursor: pointer;
+    appearance: auto;
+    transition: border-color 0.2s;
   }
+  .profile-select:focus { outline: none; border-color: var(--mbc-accent); }
 
   /* ── Recipe grid ── */
   .recipe-grid {
@@ -167,12 +193,8 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
     position: relative;
     overflow: hidden;
   }
-  .recipe-card:hover {
-    background: var(--mbc-surface-hover);
-  }
-  .recipe-card:active {
-    transform: scale(0.96);
-  }
+  .recipe-card:hover { background: var(--mbc-surface-hover); }
+  .recipe-card:active { transform: scale(0.96); }
   .recipe-card[data-selected] {
     border-color: rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.06);
@@ -180,10 +202,8 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
   .recipe-card[data-selected]::before {
     content: "";
     position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 5px;
-    height: 5px;
+    top: 4px; right: 4px;
+    width: 5px; height: 5px;
     border-radius: 50%;
     background: white;
   }
@@ -203,9 +223,7 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
   }
 
   /* ── Brew button ── */
-  .brew-row {
-    padding: 4px 12px 12px;
-  }
+  .brew-row { padding: 4px 12px 12px; }
   .brew-btn {
     display: flex;
     align-items: center;
@@ -229,142 +247,9 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
   .brew-btn:active:not(:disabled) { transform: scale(0.97); }
   .brew-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-  /* ── Cancel ── */
-  .cancel-row { padding: 0 12px 8px; }
-  .cancel-btn {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid color-mix(in srgb, var(--mbc-error) 40%, transparent);
-    border-radius: var(--mbc-radius);
-    background: color-mix(in srgb, var(--mbc-error) 8%, transparent);
-    color: var(--mbc-error);
-    font-size: 0.8em;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s ease;
-  }
-  .cancel-btn:hover {
-    background: color-mix(in srgb, var(--mbc-error) 15%, transparent);
-  }
-  .cancel-btn:active { transform: scale(0.97); }
-
-  /* ── Profile ── */
-  .profile-row {
-    display: flex;
-    gap: 6px;
-    padding: 4px 12px 8px;
-    align-items: center;
-  }
-  .profile-row ha-icon {
-    --mdc-icon-size: 18px;
-    color: var(--mbc-text2);
-    opacity: 0.6;
-  }
-  .profile-select,
-  .recipe-select {
-    flex: 1;
-    padding: 8px 10px;
-    border: 1px solid var(--mbc-border);
-    border-radius: 8px;
-    background: var(--mbc-surface);
-    color: var(--mbc-text);
-    font-size: 0.82em;
-    font-family: inherit;
-    cursor: pointer;
-    appearance: auto;
-    transition: border-color 0.2s;
-  }
-  .profile-select:focus,
-  .recipe-select:focus {
-    outline: none;
-    border-color: var(--mbc-accent);
-  }
-
-  /* ── Settings ── */
-  .settings-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 4px 12px 12px;
-  }
-  .setting-card {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: var(--mbc-radius);
-    background: var(--mbc-surface);
-    border: 1px solid var(--mbc-border);
-    transition: background 0.2s;
-  }
-  .setting-icon {
-    --mdc-icon-size: 18px;
-    color: var(--mbc-text2);
-    opacity: 0.6;
-    flex-shrink: 0;
-  }
-  .setting-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .setting-label {
-    font-size: 0.82em;
-    font-weight: 500;
-    color: var(--mbc-text);
-  }
-  .setting-desc {
-    font-size: 0.68em;
-    color: var(--mbc-text2);
-    opacity: 0.7;
-    margin-top: 1px;
-  }
-  .setting-value {
-    font-size: 0.82em;
-    font-weight: 600;
-    color: var(--mbc-text);
-    white-space: nowrap;
-  }
-
-  /* Toggle switch */
-  .toggle-track {
-    position: relative;
-    width: 36px;
-    height: 20px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.12);
-    cursor: pointer;
-    transition: background 0.2s;
-    flex-shrink: 0;
-    border: none;
-    padding: 0;
-  }
-  .toggle-track[data-on] {
-    background: var(--mbc-text);
-  }
-  .toggle-thumb {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.5);
-    transition: transform 0.2s, background 0.2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  }
-  .toggle-track[data-on] .toggle-thumb {
-    transform: translateX(16px);
-    background: var(--mbc-bg);
-  }
-
   /* ── Freestyle ── */
-  .freestyle-section {
-    padding: 4px 12px 12px;
-  }
-  .freestyle-name-row {
-    margin-bottom: 10px;
-  }
+  .freestyle-section { padding: 4px 12px 12px; }
+  .freestyle-name-row { margin-bottom: 10px; }
   .freestyle-name-input {
     width: 100%;
     padding: 8px 10px;
@@ -377,10 +262,7 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
     box-sizing: border-box;
     transition: border-color 0.2s;
   }
-  .freestyle-name-input:focus {
-    outline: none;
-    border-color: var(--mbc-accent);
-  }
+  .freestyle-name-input:focus { outline: none; border-color: var(--mbc-accent); }
 
   .freestyle-components {
     display: grid;
@@ -402,7 +284,6 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
     margin-bottom: 2px;
   }
 
-  /* Segment picker */
   .segment-picker {
     display: flex;
     flex-direction: column;
@@ -434,19 +315,14 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
     transition: all 0.15s;
     text-transform: capitalize;
   }
-  .segment-opt + .segment-opt {
-    border-left: 1px solid var(--mbc-border);
-  }
+  .segment-opt + .segment-opt { border-left: 1px solid var(--mbc-border); }
   .segment-opt[data-active] {
     background: var(--mbc-text);
     color: var(--mbc-bg);
     font-weight: 700;
   }
-  .segment-opt:hover:not([data-active]) {
-    background: var(--mbc-surface-hover);
-  }
+  .segment-opt:hover:not([data-active]) { background: var(--mbc-surface-hover); }
 
-  /* Portion slider */
   .portion-row {
     display: flex;
     flex-direction: column;
@@ -489,13 +365,76 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
     box-shadow: 0 1px 4px rgba(0,0,0,0.4);
   }
 
-  .freestyle-disabled {
-    opacity: 0.25;
-    pointer-events: none;
+  .freestyle-disabled { opacity: 0.25; pointer-events: none; }
+  .freestyle-brew-row { margin-top: 10px; }
+
+  /* ── Settings ── */
+  .settings-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 12px 12px;
+  }
+  .setting-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--mbc-radius);
+    background: var(--mbc-surface);
+    border: 1px solid var(--mbc-border);
+    transition: background 0.2s;
+  }
+  .setting-icon {
+    --mdc-icon-size: 18px;
+    color: var(--mbc-text2);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+  .setting-info { flex: 1; min-width: 0; }
+  .setting-label {
+    font-size: 0.82em;
+    font-weight: 500;
+    color: var(--mbc-text);
+  }
+  .setting-desc {
+    font-size: 0.68em;
+    color: var(--mbc-text2);
+    opacity: 0.7;
+    margin-top: 1px;
+  }
+  .setting-value {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--mbc-text);
+    white-space: nowrap;
   }
 
-  .freestyle-brew-row {
-    margin-top: 10px;
+  .toggle-track {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+  }
+  .toggle-track[data-on] { background: var(--mbc-text); }
+  .toggle-thumb {
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .toggle-track[data-on] .toggle-thumb {
+    transform: translateX(16px);
+    background: var(--mbc-bg);
   }
 `;let Ct=class extends lt{setConfig(t){this._config=t}_fireConfigChanged(){const t=new CustomEvent("config-changed",{detail:{config:{...this._config}},bubbles:!0,composed:!0});this.dispatchEvent(t)}_valueChanged(t,e){const i=e.target,s=i instanceof HTMLInputElement&&"checkbox"===i.type?i.checked:i.value;this._config={...this._config,[t]:s},this._fireConfigChanged()}_deviceSelected(t){const e=t.target.value;if("__manual__"===e)return this._config={...this._config,entity_prefix:""},void this._fireConfigChanged();const i=(this.hass?At(this.hass):[]).find(t=>t.prefix===e);this._config={...this._config,entity_prefix:e,name:i?.name||this._config.name},this._fireConfigChanged()}render(){if(!this._config)return q;const t=this.hass?At(this.hass):[],e=this._config.entity_prefix||"",i=t.some(t=>t.prefix===e),s=e&&!i&&t.length>0;return W`
       ${t.length>0?W`
@@ -635,7 +574,7 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
         gap: 8px;
         margin-bottom: 8px;
       }
-    `}};t([gt({attribute:!1})],Ct.prototype,"hass",void 0),t([ut()],Ct.prototype,"_config",void 0),Ct=t([dt("melitta-barista-card-editor")],Ct);const Pt={energy_saving:{label:"Energy Saving",desc:"Reduce power when idle",icon:"mdi:lightning-bolt"},auto_bean_select:{label:"Auto Bean Select",desc:"Auto-choose bean hopper",icon:"mdi:seed"},rinsing_disabled:{label:"Rinsing Disabled",desc:"Skip auto rinse cycle",icon:"mdi:water-off"}},Mt={water_hardness:{label:"Water Hardness",desc:"Calibrate for water type",icon:"mdi:water",format:"level"},auto_off_after:{label:"Auto Off",desc:"Minutes until shutdown",icon:"mdi:timer-outline",format:"minutes"},brew_temperature:{label:"Brew Temperature",desc:"Brewing water temp",icon:"mdi:thermometer",format:"level"}},Dt={water_hardness:{1:"Soft",2:"Medium",3:"Hard",4:"Very Hard"},brew_temperature:{0:"Low",1:"Normal",2:"High"}},Ot={very_mild:"V.Mild",mild:"Mild",medium:"Med",strong:"Strong",very_strong:"V.Strong",extra_strong:"X.Strong",cold:"Cold",normal:"Normal",high:"High",none:"None",one:"1",two:"2",three:"3",coffee:"Coffee",milk:"Milk",water:"Water"};let Tt=class extends lt{constructor(){super(...arguments),this._resolvedPrefix=null,this._fsName="Custom",this._fsProcess1="coffee",this._fsIntensity1="medium",this._fsPortion1=40,this._fsTemp1="normal",this._fsShots1="one",this._fsProcess2="none",this._fsIntensity2="medium",this._fsPortion2=0,this._fsTemp2="normal",this._fsShots2="none"}static getConfigElement(){return document.createElement("melitta-barista-card-editor")}static getStubConfig(t){const e=At(t);return{entity_prefix:e.length>0?e[0].prefix:"",name:e.length>0?e[0].name:"Melitta Barista",show_recipes:!0,show_settings:!1,compact:!1}}setConfig(t){this._config={...t,show_recipes:!1!==t.show_recipes,show_profiles:!1!==t.show_profiles,show_freestyle:t.show_freestyle||!1,show_settings:t.show_settings||!1,compact:t.compact||!1},this._resolvedPrefix=null}getCardSize(){return this._config?.compact?3:5}getGridOptions(){return{rows:this._config?.compact?3:5,columns:6,min_rows:2,min_columns:3}}_getPrefix(){if(this._config.entity_prefix)return this._config.entity_prefix;if(this._resolvedPrefix)return this._resolvedPrefix;if(this.hass){const t=At(this.hass);if(t.length>0)return this._resolvedPrefix=t[0].prefix,this._config.name||(this._config={...this._config,name:t[0].name}),this._resolvedPrefix}return null}shouldUpdate(t){if(t.has("_config")||t.has("_resolvedPrefix"))return!0;for(const e of t.keys())if("string"==typeof e&&e.startsWith("_fs"))return!0;const e=t.get("hass");if(!e)return!0;const i=this._getPrefix();if(!i)return!0;for(const[t,s]of Object.entries(this.hass.states))if(t.includes(i)&&e.states[t]!==s)return!0;return!1}_entity(t,e){const i=this._getPrefix();if(i)return this.hass.states[`${t}.${i}_${e}`]}_state(t){const e=this._getPrefix();if(!e)return null;for(const i of["sensor","button","select","number","switch"]){const s=this.hass.states[`${i}.${e}_${t}`];if(s)return s.state}return null}_recipeEntity(){return this._entity("select","recipe")}_recipeOptions(){return this._recipeEntity()?.attributes?.options||[]}_selectedRecipe(){const t=this._recipeEntity()?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectRecipe(t){const e=this._getPrefix();e&&this.hass.callService("select","select_option",{entity_id:`select.${e}_recipe`,option:t})}_profileEntity(){return this._entity("select","profile")}_profileOptions(){return this._profileEntity()?.attributes?.options||[]}_selectedProfile(){const t=this._profileEntity()?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectProfile(t){const e=this._getPrefix();e&&this.hass.callService("select","select_option",{entity_id:`select.${e}_profile`,option:t})}_brew(){const t=this._getPrefix();t&&this.hass.callService("button","press",{entity_id:`button.${t}_brew`})}_brewFreestyle(){const t=this._getPrefix();t&&this.hass.callService("melitta_barista","brew_freestyle",{entity_id:`button.${t}_brew`,name:this._fsName,process1:this._fsProcess1,intensity1:this._fsIntensity1,portion1_ml:this._fsPortion1,temperature1:this._fsTemp1,shots1:this._fsShots1,process2:this._fsProcess2,intensity2:this._fsIntensity2,portion2_ml:this._fsPortion2,temperature2:this._fsTemp2,shots2:this._fsShots2})}_toggleSwitch(t,e){const i=this._getPrefix();i&&this.hass.callService("switch",e?"turn_on":"turn_off",{entity_id:`switch.${i}_${t}`})}render(){if(!this.hass||!this._config)return q;const t=this._getPrefix();if(!t)return W`<ha-card>
+    `}};t([gt({attribute:!1})],Ct.prototype,"hass",void 0),t([ut()],Ct.prototype,"_config",void 0),Ct=t([dt("melitta-barista-card-editor")],Ct);const Pt={energy_saving:{label:"Energy Saving",desc:"Reduce power when idle",icon:"mdi:lightning-bolt"},auto_bean_select:{label:"Auto Bean Select",desc:"Auto-choose bean hopper",icon:"mdi:seed"},rinsing_disabled:{label:"Rinsing Disabled",desc:"Skip auto rinse cycle",icon:"mdi:water-off"}},Mt={water_hardness:{label:"Water Hardness",desc:"Calibrate for water type",icon:"mdi:water",format:"level"},auto_off_after:{label:"Auto Off",desc:"Minutes until shutdown",icon:"mdi:timer-outline",format:"minutes"},brew_temperature:{label:"Brew Temperature",desc:"Brewing water temp",icon:"mdi:thermometer",format:"level"}},Dt={water_hardness:{1:"Soft",2:"Medium",3:"Hard",4:"Very Hard"},brew_temperature:{0:"Low",1:"Normal",2:"High"}},Ot={very_mild:"V.Mild",mild:"Mild",medium:"Med",strong:"Strong",very_strong:"V.Strong",extra_strong:"X.Strong",cold:"Cold",normal:"Normal",high:"High",none:"None",one:"1",two:"2",three:"3",coffee:"Coffee",milk:"Milk",water:"Water"};let Nt=class extends lt{constructor(){super(...arguments),this._resolvedPrefix=null,this._fsName="Custom",this._fsProcess1="coffee",this._fsIntensity1="medium",this._fsPortion1=40,this._fsTemp1="normal",this._fsShots1="one",this._fsProcess2="none",this._fsIntensity2="medium",this._fsPortion2=0,this._fsTemp2="normal",this._fsShots2="none"}static getConfigElement(){return document.createElement("melitta-barista-card-editor")}static getStubConfig(t){const e=At(t);return{entity_prefix:e.length>0?e[0].prefix:"",name:e.length>0?e[0].name:"Melitta Barista",show_recipes:!0,show_settings:!1,compact:!1}}setConfig(t){this._config={...t,show_recipes:!1!==t.show_recipes,show_profiles:!1!==t.show_profiles,show_freestyle:t.show_freestyle||!1,show_settings:t.show_settings||!1,compact:t.compact||!1},this._resolvedPrefix=null}getCardSize(){return this._config?.compact?3:5}getGridOptions(){return{rows:this._config?.compact?3:5,columns:6,min_rows:2,min_columns:3}}_getPrefix(){if(this._config.entity_prefix)return this._config.entity_prefix;if(this._resolvedPrefix)return this._resolvedPrefix;if(this.hass){const t=At(this.hass);if(t.length>0)return this._resolvedPrefix=t[0].prefix,this._config.name||(this._config={...this._config,name:t[0].name}),this._resolvedPrefix}return null}shouldUpdate(t){if(t.has("_config")||t.has("_resolvedPrefix"))return!0;for(const e of t.keys())if("string"==typeof e&&e.startsWith("_fs"))return!0;const e=t.get("hass");if(!e)return!0;const i=this._getPrefix();if(!i)return!0;for(const[t,s]of Object.entries(this.hass.states))if(t.includes(i)&&e.states[t]!==s)return!0;return!1}_entity(t,e){const i=this._getPrefix();if(i)return this.hass.states[`${t}.${i}_${e}`]}_state(t){const e=this._getPrefix();if(!e)return null;for(const i of["sensor","button","select","number","switch"]){const s=this.hass.states[`${i}.${e}_${t}`];if(s)return s.state}return null}_recipeEntity(){return this._entity("select","recipe")}_recipeOptions(){return this._recipeEntity()?.attributes?.options||[]}_selectedRecipe(){const t=this._recipeEntity()?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectRecipe(t){const e=this._getPrefix();e&&this.hass.callService("select","select_option",{entity_id:`select.${e}_recipe`,option:t})}_profileEntity(){return this._entity("select","profile")}_profileOptions(){return this._profileEntity()?.attributes?.options||[]}_selectedProfile(){const t=this._profileEntity()?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectProfile(t){const e=this._getPrefix();e&&this.hass.callService("select","select_option",{entity_id:`select.${e}_profile`,option:t})}_brew(){const t=this._getPrefix();t&&this.hass.callService("button","press",{entity_id:`button.${t}_brew`})}_brewFreestyle(){const t=this._getPrefix();t&&this.hass.callService("melitta_barista","brew_freestyle",{entity_id:`button.${t}_brew`,name:this._fsName,process1:this._fsProcess1,intensity1:this._fsIntensity1,portion1_ml:this._fsPortion1,temperature1:this._fsTemp1,shots1:this._fsShots1,process2:this._fsProcess2,intensity2:this._fsIntensity2,portion2_ml:this._fsPortion2,temperature2:this._fsTemp2,shots2:this._fsShots2})}_toggleSwitch(t,e){const i=this._getPrefix();i&&this.hass.callService("switch",e?"turn_on":"turn_off",{entity_id:`switch.${i}_${t}`})}render(){if(!this.hass||!this._config)return q;const t=this._getPrefix();if(!t)return W`<ha-card>
         <div class="no-device">
           <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
           <p>No Melitta Barista device found.</p>
@@ -708,7 +647,7 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
             <div class="recipe-card"
               ?data-selected=${t===e}
               @click=${()=>this._selectRecipe(t)}>
-              ${function(t,e,i){const s=Et[t]||kt,r=s.tall,o=r?36:50,n=r?30:42,a=r?68:48,c=r?12:28,l=c+a,h=r?50:46,d=h-o/2,p=h+o/2,f=h-n/2,g=h+n/2,u=`M ${d} ${c} L ${f+4} ${l-4} Q ${f} ${l} ${f+4} ${l} L ${g-4} ${l} Q ${g} ${l} ${g-4} ${l-4} L ${p} ${c}`,m=1.5,$=d+m,_=p-m,b=f+m+1.2,v=g-m-1.2,y=c+m,x=l-m,w=2.8,A=`M ${$} ${y} L ${b+w} ${x-w} Q ${b} ${x} ${b+w} ${x} L ${v-w} ${x} Q ${v} ${x} ${v-w} ${x-w} L ${_} ${y} Z`,E=(t,e)=>{const i=(t-y)/(x-y);return e?$+(b-$)*i:_+(v-_)*i};let k=x;const S=[],C=[...s.layers];for(let t=C.length-1;t>=0;t--){const{color:e,height:i}=C[t],s=k,r=k-a*i;k=r;const o=E(r,!0),n=E(r,!1),c=E(s,!0),l=E(s,!1),h=t===C.length-1,d=h?w:0,p=h?`M ${o} ${r} L ${c+d} ${s-d} Q ${c} ${s} ${c+d} ${s} L ${l-d} ${s} Q ${l} ${s} ${l-d} ${s-d} L ${n} ${r} Z`:`M ${o} ${r} L ${c} ${s} L ${l} ${s} L ${n} ${r} Z`;S.push({d:p,fill:e})}if(s.foam){const t=k,e=k-a*s.foam.height;k=e;const i=E(e,!0),r=E(e,!1),o=E(t,!0),n=E(t,!1);S.push({d:`M ${i} ${e} L ${o} ${t} L ${n} ${t} L ${r} ${e} Z`,fill:s.foam.color})}const P=p,M=c+.18*a,D=c+.65*a,O=r?10:14,T=`M ${h-6} ${c-2} Q ${h-8} ${c-10} ${h-5} ${c-16}`,N=`${T};M ${h-6} ${c-2} Q ${h-4} ${c-10} ${h-7} ${c-16};${T}`,R=`M ${h+1} ${c-3} Q ${h+3} ${c-11} ${h} ${c-18}`,z=`${R};M ${h+1} ${c-3} Q ${h-1} ${c-11} ${h+2} ${c-18};${R}`,U=`M ${h+8} ${c-2} Q ${h+6} ${c-9} ${h+9} ${c-15}`,L=`${U};M ${h+8} ${c-2} Q ${h+10} ${c-9} ${h+7} ${c-15};${U}`;return Q`
+              ${function(t,e,i){const s=Et[t]||kt,r=s.tall,o=r?36:50,n=r?30:42,a=r?68:48,c=r?12:28,l=c+a,h=r?50:46,d=h-o/2,p=h+o/2,f=h-n/2,g=h+n/2,u=`M ${d} ${c} L ${f+4} ${l-4} Q ${f} ${l} ${f+4} ${l} L ${g-4} ${l} Q ${g} ${l} ${g-4} ${l-4} L ${p} ${c}`,m=1.5,$=d+m,_=p-m,b=f+m+1.2,v=g-m-1.2,y=c+m,x=l-m,w=2.8,A=`M ${$} ${y} L ${b+w} ${x-w} Q ${b} ${x} ${b+w} ${x} L ${v-w} ${x} Q ${v} ${x} ${v-w} ${x-w} L ${_} ${y} Z`,E=(t,e)=>{const i=(t-y)/(x-y);return e?$+(b-$)*i:_+(v-_)*i};let k=x;const S=[],C=[...s.layers];for(let t=C.length-1;t>=0;t--){const{color:e,height:i}=C[t],s=k,r=k-a*i;k=r;const o=E(r,!0),n=E(r,!1),c=E(s,!0),l=E(s,!1),h=t===C.length-1,d=h?w:0,p=h?`M ${o} ${r} L ${c+d} ${s-d} Q ${c} ${s} ${c+d} ${s} L ${l-d} ${s} Q ${l} ${s} ${l-d} ${s-d} L ${n} ${r} Z`:`M ${o} ${r} L ${c} ${s} L ${l} ${s} L ${n} ${r} Z`;S.push({d:p,fill:e})}if(s.foam){const t=k,e=k-a*s.foam.height;k=e;const i=E(e,!0),r=E(e,!1),o=E(t,!0),n=E(t,!1);S.push({d:`M ${i} ${e} L ${o} ${t} L ${n} ${t} L ${r} ${e} Z`,fill:s.foam.color})}const P=p,M=c+.18*a,D=c+.65*a,O=r?10:14,N=`M ${h-6} ${c-2} Q ${h-8} ${c-10} ${h-5} ${c-16}`,T=`${N};M ${h-6} ${c-2} Q ${h-4} ${c-10} ${h-7} ${c-16};${N}`,R=`M ${h+1} ${c-3} Q ${h+3} ${c-11} ${h} ${c-18}`,z=`${R};M ${h+1} ${c-3} Q ${h-1} ${c-11} ${h+2} ${c-18};${R}`,U=`M ${h+8} ${c-2} Q ${h+6} ${c-9} ${h+9} ${c-15}`,L=`${U};M ${h+8} ${c-2} Q ${h+10} ${c-9} ${h+7} ${c-15};${U}`;return Q`
     <svg width="${e}" height="${1.15*e}" viewBox="0 0 ${100} ${115}" fill="none">
       <defs>
         <clipPath id="clip-${i}">
@@ -739,12 +678,12 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
 
       ${"Milk"!==t&&"Milk Froth"!==t&&"Hot Water"!==t?Q`
         <g opacity="0.20" stroke="rgba(255,255,255,0.6)" stroke-width="4" fill="none" stroke-linecap="round" filter="url(#sg-${i})">
-          <path d="${T}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${N}" /></path>
+          <path d="${N}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${T}" /></path>
           <path d="${R}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${z}" /></path>
           <path d="${U}"><animate attributeName="d" dur="3.3s" repeatCount="indefinite" values="${L}" /></path>
         </g>
         <g opacity="0.40" stroke="#D4C4A0" stroke-width="1" fill="none" stroke-linecap="round">
-          <path d="${T}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${N}" /></path>
+          <path d="${N}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${T}" /></path>
           <path d="${R}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${z}" /></path>
           <path d="${U}"><animate attributeName="d" dur="3.3s" repeatCount="indefinite" values="${L}" /></path>
         </g>
@@ -867,4 +806,4 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
         ${e}
         ${i}
       </div>
-    `}static get styles(){return St}};t([gt({attribute:!1})],Tt.prototype,"hass",void 0),t([ut()],Tt.prototype,"_config",void 0),t([ut()],Tt.prototype,"_resolvedPrefix",void 0),t([ut()],Tt.prototype,"_fsName",void 0),t([ut()],Tt.prototype,"_fsProcess1",void 0),t([ut()],Tt.prototype,"_fsIntensity1",void 0),t([ut()],Tt.prototype,"_fsPortion1",void 0),t([ut()],Tt.prototype,"_fsTemp1",void 0),t([ut()],Tt.prototype,"_fsShots1",void 0),t([ut()],Tt.prototype,"_fsProcess2",void 0),t([ut()],Tt.prototype,"_fsIntensity2",void 0),t([ut()],Tt.prototype,"_fsPortion2",void 0),t([ut()],Tt.prototype,"_fsTemp2",void 0),t([ut()],Tt.prototype,"_fsShots2",void 0),Tt=t([dt("melitta-barista-card")],Tt),window.customCards=window.customCards||[],window.customCards.push({type:"melitta-barista-card",name:"Melitta Barista Card",description:"Premium control card for Melitta Barista coffee machines",preview:!0,documentationURL:"https://github.com/dzerik/melitta-barista-card"}),console.info("%c MELITTA-BARISTA-CARD %c v1.0.0 ","color: white; background: #795548; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;","color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;");export{Tt as MelittaBaristaCard};
+    `}static get styles(){return St}};t([gt({attribute:!1})],Nt.prototype,"hass",void 0),t([ut()],Nt.prototype,"_config",void 0),t([ut()],Nt.prototype,"_resolvedPrefix",void 0),t([ut()],Nt.prototype,"_fsName",void 0),t([ut()],Nt.prototype,"_fsProcess1",void 0),t([ut()],Nt.prototype,"_fsIntensity1",void 0),t([ut()],Nt.prototype,"_fsPortion1",void 0),t([ut()],Nt.prototype,"_fsTemp1",void 0),t([ut()],Nt.prototype,"_fsShots1",void 0),t([ut()],Nt.prototype,"_fsProcess2",void 0),t([ut()],Nt.prototype,"_fsIntensity2",void 0),t([ut()],Nt.prototype,"_fsPortion2",void 0),t([ut()],Nt.prototype,"_fsTemp2",void 0),t([ut()],Nt.prototype,"_fsShots2",void 0),Nt=t([dt("melitta-barista-card")],Nt),window.customCards=window.customCards||[],window.customCards.push({type:"melitta-barista-card",name:"Melitta Barista Card",description:"Premium control card for Melitta Barista coffee machines",preview:!0,documentationURL:"https://github.com/dzerik/melitta-barista-card"}),console.info("%c MELITTA-BARISTA-CARD %c v1.0.0 ","color: white; background: #795548; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;","color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;");export{Nt as MelittaBaristaCard};

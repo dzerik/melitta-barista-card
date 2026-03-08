@@ -8,8 +8,3 @@ export interface MelittaCardConfig {
   show_settings?: boolean;
   compact?: boolean;
 }
-
-export interface SettingItem {
-  name: string;
-  value: string;
-}
