@@ -14,24 +14,28 @@ export const cardStyles = css`
     --mbc-warning: var(--warning-color, #ff9800);
     --mbc-radius: 12px;
   }
+  ha-card { overflow: hidden; background: var(--mbc-bg); }
 
-  ha-card {
-    overflow: hidden;
-    background: var(--mbc-bg);
-  }
-
-  /* ── No device ── */
+  /* ── No device / Offline ── */
   .no-device {
     padding: 40px 20px;
     text-align: center;
     color: var(--mbc-text2);
   }
-  .no-device ha-icon {
-    --mdc-icon-size: 48px;
-    opacity: 0.3;
-  }
+  .no-device ha-icon { --mdc-icon-size: 48px; opacity: 0.3; }
   .no-device p { margin: 8px 0 0; }
   .no-device .hint { font-size: 0.8em; opacity: 0.6; }
+
+  .offline-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 16px 32px;
+    color: var(--mbc-text2);
+    font-size: 0.85em;
+  }
+  .offline-section ha-icon { --mdc-icon-size: 32px; opacity: 0.3; }
 
   /* ── Header ── */
   .card-header {
@@ -52,6 +56,16 @@ export const cardStyles = css`
     border-radius: 50%;
     flex-shrink: 0;
     transition: background 0.3s;
+  }
+
+  .section-title {
+    font-size: 0.65em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--mbc-text2);
+    padding: 12px 16px 6px;
+    opacity: 0.7;
   }
 
   /* ── Status ── */
@@ -118,36 +132,48 @@ export const cardStyles = css`
     font-size: 0.82em;
     font-weight: 500;
   }
-  .action-alert ha-icon {
-    --mdc-icon-size: 18px;
-    flex-shrink: 0;
-  }
+  .action-alert ha-icon { --mdc-icon-size: 18px; flex-shrink: 0; }
 
-  /* ── Section titles ── */
-  .section-title {
-    font-size: 0.65em;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--mbc-text2);
-    padding: 12px 16px 6px;
-    opacity: 0.7;
+  /* ── Cancel ── */
+  .cancel-row { padding: 0 12px 8px; }
+  .cancel-btn {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid color-mix(in srgb, var(--mbc-error) 40%, transparent);
+    border-radius: var(--mbc-radius);
+    background: color-mix(in srgb, var(--mbc-error) 8%, transparent);
+    color: var(--mbc-error);
+    font-size: 0.8em;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
   }
+  .cancel-btn:hover { background: color-mix(in srgb, var(--mbc-error) 15%, transparent); }
+  .cancel-btn:active { transform: scale(0.97); }
 
-  /* ── Offline ── */
-  .offline-section {
+  /* ── Profile ── */
+  .profile-row {
     display: flex;
-    flex-direction: column;
+    gap: 6px;
+    padding: 4px 12px 8px;
     align-items: center;
-    gap: 8px;
-    padding: 24px 16px 32px;
-    color: var(--mbc-text2);
-    font-size: 0.85em;
   }
-  .offline-section ha-icon {
-    --mdc-icon-size: 32px;
-    opacity: 0.3;
+  .profile-row ha-icon { --mdc-icon-size: 18px; color: var(--mbc-text2); opacity: 0.6; }
+  .profile-select {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--mbc-border);
+    border-radius: 8px;
+    background: var(--mbc-surface);
+    color: var(--mbc-text);
+    font-size: 0.82em;
+    font-family: inherit;
+    cursor: pointer;
+    appearance: auto;
+    transition: border-color 0.2s;
   }
+  .profile-select:focus { outline: none; border-color: var(--mbc-accent); }
 
   /* ── Recipe grid ── */
   .recipe-grid {
@@ -169,12 +195,8 @@ export const cardStyles = css`
     position: relative;
     overflow: hidden;
   }
-  .recipe-card:hover {
-    background: var(--mbc-surface-hover);
-  }
-  .recipe-card:active {
-    transform: scale(0.96);
-  }
+  .recipe-card:hover { background: var(--mbc-surface-hover); }
+  .recipe-card:active { transform: scale(0.96); }
   .recipe-card[data-selected] {
     border-color: rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.06);
@@ -182,10 +204,8 @@ export const cardStyles = css`
   .recipe-card[data-selected]::before {
     content: "";
     position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 5px;
-    height: 5px;
+    top: 4px; right: 4px;
+    width: 5px; height: 5px;
     border-radius: 50%;
     background: white;
   }
@@ -205,9 +225,7 @@ export const cardStyles = css`
   }
 
   /* ── Brew button ── */
-  .brew-row {
-    padding: 4px 12px 12px;
-  }
+  .brew-row { padding: 4px 12px 12px; }
   .brew-btn {
     display: flex;
     align-items: center;
@@ -231,142 +249,9 @@ export const cardStyles = css`
   .brew-btn:active:not(:disabled) { transform: scale(0.97); }
   .brew-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-  /* ── Cancel ── */
-  .cancel-row { padding: 0 12px 8px; }
-  .cancel-btn {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid color-mix(in srgb, var(--mbc-error) 40%, transparent);
-    border-radius: var(--mbc-radius);
-    background: color-mix(in srgb, var(--mbc-error) 8%, transparent);
-    color: var(--mbc-error);
-    font-size: 0.8em;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s ease;
-  }
-  .cancel-btn:hover {
-    background: color-mix(in srgb, var(--mbc-error) 15%, transparent);
-  }
-  .cancel-btn:active { transform: scale(0.97); }
-
-  /* ── Profile ── */
-  .profile-row {
-    display: flex;
-    gap: 6px;
-    padding: 4px 12px 8px;
-    align-items: center;
-  }
-  .profile-row ha-icon {
-    --mdc-icon-size: 18px;
-    color: var(--mbc-text2);
-    opacity: 0.6;
-  }
-  .profile-select,
-  .recipe-select {
-    flex: 1;
-    padding: 8px 10px;
-    border: 1px solid var(--mbc-border);
-    border-radius: 8px;
-    background: var(--mbc-surface);
-    color: var(--mbc-text);
-    font-size: 0.82em;
-    font-family: inherit;
-    cursor: pointer;
-    appearance: auto;
-    transition: border-color 0.2s;
-  }
-  .profile-select:focus,
-  .recipe-select:focus {
-    outline: none;
-    border-color: var(--mbc-accent);
-  }
-
-  /* ── Settings ── */
-  .settings-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 4px 12px 12px;
-  }
-  .setting-card {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: var(--mbc-radius);
-    background: var(--mbc-surface);
-    border: 1px solid var(--mbc-border);
-    transition: background 0.2s;
-  }
-  .setting-icon {
-    --mdc-icon-size: 18px;
-    color: var(--mbc-text2);
-    opacity: 0.6;
-    flex-shrink: 0;
-  }
-  .setting-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .setting-label {
-    font-size: 0.82em;
-    font-weight: 500;
-    color: var(--mbc-text);
-  }
-  .setting-desc {
-    font-size: 0.68em;
-    color: var(--mbc-text2);
-    opacity: 0.7;
-    margin-top: 1px;
-  }
-  .setting-value {
-    font-size: 0.82em;
-    font-weight: 600;
-    color: var(--mbc-text);
-    white-space: nowrap;
-  }
-
-  /* Toggle switch */
-  .toggle-track {
-    position: relative;
-    width: 36px;
-    height: 20px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.12);
-    cursor: pointer;
-    transition: background 0.2s;
-    flex-shrink: 0;
-    border: none;
-    padding: 0;
-  }
-  .toggle-track[data-on] {
-    background: var(--mbc-text);
-  }
-  .toggle-thumb {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.5);
-    transition: transform 0.2s, background 0.2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  }
-  .toggle-track[data-on] .toggle-thumb {
-    transform: translateX(16px);
-    background: var(--mbc-bg);
-  }
-
   /* ── Freestyle ── */
-  .freestyle-section {
-    padding: 4px 12px 12px;
-  }
-  .freestyle-name-row {
-    margin-bottom: 10px;
-  }
+  .freestyle-section { padding: 4px 12px 12px; }
+  .freestyle-name-row { margin-bottom: 10px; }
   .freestyle-name-input {
     width: 100%;
     padding: 8px 10px;
@@ -379,10 +264,7 @@ export const cardStyles = css`
     box-sizing: border-box;
     transition: border-color 0.2s;
   }
-  .freestyle-name-input:focus {
-    outline: none;
-    border-color: var(--mbc-accent);
-  }
+  .freestyle-name-input:focus { outline: none; border-color: var(--mbc-accent); }
 
   .freestyle-components {
     display: grid;
@@ -404,7 +286,6 @@ export const cardStyles = css`
     margin-bottom: 2px;
   }
 
-  /* Segment picker */
   .segment-picker {
     display: flex;
     flex-direction: column;
@@ -436,19 +317,14 @@ export const cardStyles = css`
     transition: all 0.15s;
     text-transform: capitalize;
   }
-  .segment-opt + .segment-opt {
-    border-left: 1px solid var(--mbc-border);
-  }
+  .segment-opt + .segment-opt { border-left: 1px solid var(--mbc-border); }
   .segment-opt[data-active] {
     background: var(--mbc-text);
     color: var(--mbc-bg);
     font-weight: 700;
   }
-  .segment-opt:hover:not([data-active]) {
-    background: var(--mbc-surface-hover);
-  }
+  .segment-opt:hover:not([data-active]) { background: var(--mbc-surface-hover); }
 
-  /* Portion slider */
   .portion-row {
     display: flex;
     flex-direction: column;
@@ -491,12 +367,75 @@ export const cardStyles = css`
     box-shadow: 0 1px 4px rgba(0,0,0,0.4);
   }
 
-  .freestyle-disabled {
-    opacity: 0.25;
-    pointer-events: none;
+  .freestyle-disabled { opacity: 0.25; pointer-events: none; }
+  .freestyle-brew-row { margin-top: 10px; }
+
+  /* ── Settings ── */
+  .settings-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 12px 12px;
+  }
+  .setting-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--mbc-radius);
+    background: var(--mbc-surface);
+    border: 1px solid var(--mbc-border);
+    transition: background 0.2s;
+  }
+  .setting-icon {
+    --mdc-icon-size: 18px;
+    color: var(--mbc-text2);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+  .setting-info { flex: 1; min-width: 0; }
+  .setting-label {
+    font-size: 0.82em;
+    font-weight: 500;
+    color: var(--mbc-text);
+  }
+  .setting-desc {
+    font-size: 0.68em;
+    color: var(--mbc-text2);
+    opacity: 0.7;
+    margin-top: 1px;
+  }
+  .setting-value {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--mbc-text);
+    white-space: nowrap;
   }
 
-  .freestyle-brew-row {
-    margin-top: 10px;
+  .toggle-track {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+  }
+  .toggle-track[data-on] { background: var(--mbc-text); }
+  .toggle-thumb {
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .toggle-track[data-on] .toggle-thumb {
+    transform: translateX(16px);
+    background: var(--mbc-bg);
   }
 `;
