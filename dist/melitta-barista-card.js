@@ -1,41 +1,540 @@
-function e(e,t,s,i){var r,o=arguments.length,n=o<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)n=Reflect.decorate(e,t,s,i);else for(var a=e.length-1;a>=0;a--)(r=e[a])&&(n=(o<3?r(n):o>3?r(t,s,n):r(t,s))||n);return o>3&&n&&Object.defineProperty(t,s,n),n}"function"==typeof SuppressedError&&SuppressedError;const t=globalThis,s=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),r=new WeakMap;let o=class{constructor(e,t,s){if(this._$cssResult$=!0,s!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=e,this.t=t}get styleSheet(){let e=this.o;const t=this.t;if(s&&void 0===e){const s=void 0!==t&&1===t.length;s&&(e=r.get(t)),void 0===e&&((this.o=e=new CSSStyleSheet).replaceSync(this.cssText),s&&r.set(t,e))}return e}toString(){return this.cssText}};const n=(e,...t)=>{const s=1===e.length?e[0]:t.reduce((t,s,i)=>t+(e=>{if(!0===e._$cssResult$)return e.cssText;if("number"==typeof e)return e;throw Error("Value passed to 'css' function must be a 'css' function result: "+e+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+e[i+1],e[0]);return new o(s,e,i)},a=s?e=>e:e=>e instanceof CSSStyleSheet?(e=>{let t="";for(const s of e.cssRules)t+=s.cssText;return(e=>new o("string"==typeof e?e:e+"",void 0,i))(t)})(e):e,{is:l,defineProperty:c,getOwnPropertyDescriptor:h,getOwnPropertyNames:d,getOwnPropertySymbols:p,getPrototypeOf:f}=Object,u=globalThis,_=u.trustedTypes,g=_?_.emptyScript:"",y=u.reactiveElementPolyfillSupport,v=(e,t)=>e,m={toAttribute(e,t){switch(t){case Boolean:e=e?g:null;break;case Object:case Array:e=null==e?e:JSON.stringify(e)}return e},fromAttribute(e,t){let s=e;switch(t){case Boolean:s=null!==e;break;case Number:s=null===e?null:Number(e);break;case Object:case Array:try{s=JSON.parse(e)}catch(e){s=null}}return s}},$=(e,t)=>!l(e,t),b={attribute:!0,type:String,converter:m,reflect:!1,useDefault:!1,hasChanged:$};Symbol.metadata??=Symbol("metadata"),u.litPropertyMetadata??=new WeakMap;let x=class extends HTMLElement{static addInitializer(e){this._$Ei(),(this.l??=[]).push(e)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(e,t=b){if(t.state&&(t.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(e)&&((t=Object.create(t)).wrapped=!0),this.elementProperties.set(e,t),!t.noAccessor){const s=Symbol(),i=this.getPropertyDescriptor(e,s,t);void 0!==i&&c(this.prototype,e,i)}}static getPropertyDescriptor(e,t,s){const{get:i,set:r}=h(this.prototype,e)??{get(){return this[t]},set(e){this[t]=e}};return{get:i,set(t){const o=i?.call(this);r?.call(this,t),this.requestUpdate(e,o,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(e){return this.elementProperties.get(e)??b}static _$Ei(){if(this.hasOwnProperty(v("elementProperties")))return;const e=f(this);e.finalize(),void 0!==e.l&&(this.l=[...e.l]),this.elementProperties=new Map(e.elementProperties)}static finalize(){if(this.hasOwnProperty(v("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(v("properties"))){const e=this.properties,t=[...d(e),...p(e)];for(const s of t)this.createProperty(s,e[s])}const e=this[Symbol.metadata];if(null!==e){const t=litPropertyMetadata.get(e);if(void 0!==t)for(const[e,s]of t)this.elementProperties.set(e,s)}this._$Eh=new Map;for(const[e,t]of this.elementProperties){const s=this._$Eu(e,t);void 0!==s&&this._$Eh.set(s,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(e){const t=[];if(Array.isArray(e)){const s=new Set(e.flat(1/0).reverse());for(const e of s)t.unshift(a(e))}else void 0!==e&&t.push(a(e));return t}static _$Eu(e,t){const s=t.attribute;return!1===s?void 0:"string"==typeof s?s:"string"==typeof e?e.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(e=>e(this))}addController(e){(this._$EO??=new Set).add(e),void 0!==this.renderRoot&&this.isConnected&&e.hostConnected?.()}removeController(e){this._$EO?.delete(e)}_$E_(){const e=new Map,t=this.constructor.elementProperties;for(const s of t.keys())this.hasOwnProperty(s)&&(e.set(s,this[s]),delete this[s]);e.size>0&&(this._$Ep=e)}createRenderRoot(){const e=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((e,i)=>{if(s)e.adoptedStyleSheets=i.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(const s of i){const i=document.createElement("style"),r=t.litNonce;void 0!==r&&i.setAttribute("nonce",r),i.textContent=s.cssText,e.appendChild(i)}})(e,this.constructor.elementStyles),e}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(e=>e.hostConnected?.())}enableUpdating(e){}disconnectedCallback(){this._$EO?.forEach(e=>e.hostDisconnected?.())}attributeChangedCallback(e,t,s){this._$AK(e,s)}_$ET(e,t){const s=this.constructor.elementProperties.get(e),i=this.constructor._$Eu(e,s);if(void 0!==i&&!0===s.reflect){const r=(void 0!==s.converter?.toAttribute?s.converter:m).toAttribute(t,s.type);this._$Em=e,null==r?this.removeAttribute(i):this.setAttribute(i,r),this._$Em=null}}_$AK(e,t){const s=this.constructor,i=s._$Eh.get(e);if(void 0!==i&&this._$Em!==i){const e=s.getPropertyOptions(i),r="function"==typeof e.converter?{fromAttribute:e.converter}:void 0!==e.converter?.fromAttribute?e.converter:m;this._$Em=i;const o=r.fromAttribute(t,e.type);this[i]=o??this._$Ej?.get(i)??o,this._$Em=null}}requestUpdate(e,t,s,i=!1,r){if(void 0!==e){const o=this.constructor;if(!1===i&&(r=this[e]),s??=o.getPropertyOptions(e),!((s.hasChanged??$)(r,t)||s.useDefault&&s.reflect&&r===this._$Ej?.get(e)&&!this.hasAttribute(o._$Eu(e,s))))return;this.C(e,t,s)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(e,t,{useDefault:s,reflect:i,wrapped:r},o){s&&!(this._$Ej??=new Map).has(e)&&(this._$Ej.set(e,o??t??this[e]),!0!==r||void 0!==o)||(this._$AL.has(e)||(this.hasUpdated||s||(t=void 0),this._$AL.set(e,t)),!0===i&&this._$Em!==e&&(this._$Eq??=new Set).add(e))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}const e=this.scheduleUpdate();return null!=e&&await e,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[e,t]of this._$Ep)this[e]=t;this._$Ep=void 0}const e=this.constructor.elementProperties;if(e.size>0)for(const[t,s]of e){const{wrapped:e}=s,i=this[t];!0!==e||this._$AL.has(t)||void 0===i||this.C(t,void 0,s,i)}}let e=!1;const t=this._$AL;try{e=this.shouldUpdate(t),e?(this.willUpdate(t),this._$EO?.forEach(e=>e.hostUpdate?.()),this.update(t)):this._$EM()}catch(t){throw e=!1,this._$EM(),t}e&&this._$AE(t)}willUpdate(e){}_$AE(e){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(e)),this.updated(e)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(e){return!0}update(e){this._$Eq&&=this._$Eq.forEach(e=>this._$ET(e,this[e])),this._$EM()}updated(e){}firstUpdated(e){}};x.elementStyles=[],x.shadowRootOptions={mode:"open"},x[v("elementProperties")]=new Map,x[v("finalized")]=new Map,y?.({ReactiveElement:x}),(u.reactiveElementVersions??=[]).push("2.1.2");const w=globalThis,A=e=>e,S=w.trustedTypes,P=S?S.createPolicy("lit-html",{createHTML:e=>e}):void 0,E="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,k="?"+C,O=`<${k}>`,T=document,M=()=>T.createComment(""),R=e=>null===e||"object"!=typeof e&&"function"!=typeof e,U=Array.isArray,N="[ \t\n\f\r]",I=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,z=/-->/g,H=/>/g,j=RegExp(`>|${N}(?:([^\\s"'>=/]+)(${N}*=${N}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),B=/'/g,D=/"/g,L=/^(?:script|style|textarea|title)$/i,q=(e=>(t,...s)=>({_$litType$:e,strings:t,values:s}))(1),F=Symbol.for("lit-noChange"),W=Symbol.for("lit-nothing"),V=new WeakMap,J=T.createTreeWalker(T,129);function K(e,t){if(!U(e)||!e.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==P?P.createHTML(t):t}const Z=(e,t)=>{const s=e.length-1,i=[];let r,o=2===t?"<svg>":3===t?"<math>":"",n=I;for(let t=0;t<s;t++){const s=e[t];let a,l,c=-1,h=0;for(;h<s.length&&(n.lastIndex=h,l=n.exec(s),null!==l);)h=n.lastIndex,n===I?"!--"===l[1]?n=z:void 0!==l[1]?n=H:void 0!==l[2]?(L.test(l[2])&&(r=RegExp("</"+l[2],"g")),n=j):void 0!==l[3]&&(n=j):n===j?">"===l[0]?(n=r??I,c=-1):void 0===l[1]?c=-2:(c=n.lastIndex-l[2].length,a=l[1],n=void 0===l[3]?j:'"'===l[3]?D:B):n===D||n===B?n=j:n===z||n===H?n=I:(n=j,r=void 0);const d=n===j&&e[t+1].startsWith("/>")?" ":"";o+=n===I?s+O:c>=0?(i.push(a),s.slice(0,c)+E+s.slice(c)+C+d):s+C+(-2===c?t:d)}return[K(e,o+(e[s]||"<?>")+(2===t?"</svg>":3===t?"</math>":"")),i]};class G{constructor({strings:e,_$litType$:t},s){let i;this.parts=[];let r=0,o=0;const n=e.length-1,a=this.parts,[l,c]=Z(e,t);if(this.el=G.createElement(l,s),J.currentNode=this.el.content,2===t||3===t){const e=this.el.content.firstChild;e.replaceWith(...e.childNodes)}for(;null!==(i=J.nextNode())&&a.length<n;){if(1===i.nodeType){if(i.hasAttributes())for(const e of i.getAttributeNames())if(e.endsWith(E)){const t=c[o++],s=i.getAttribute(e).split(C),n=/([.?@])?(.*)/.exec(t);a.push({type:1,index:r,name:n[2],strings:s,ctor:"."===n[1]?te:"?"===n[1]?se:"@"===n[1]?ie:ee}),i.removeAttribute(e)}else e.startsWith(C)&&(a.push({type:6,index:r}),i.removeAttribute(e));if(L.test(i.tagName)){const e=i.textContent.split(C),t=e.length-1;if(t>0){i.textContent=S?S.emptyScript:"";for(let s=0;s<t;s++)i.append(e[s],M()),J.nextNode(),a.push({type:2,index:++r});i.append(e[t],M())}}}else if(8===i.nodeType)if(i.data===k)a.push({type:2,index:r});else{let e=-1;for(;-1!==(e=i.data.indexOf(C,e+1));)a.push({type:7,index:r}),e+=C.length-1}r++}}static createElement(e,t){const s=T.createElement("template");return s.innerHTML=e,s}}function Q(e,t,s=e,i){if(t===F)return t;let r=void 0!==i?s._$Co?.[i]:s._$Cl;const o=R(t)?void 0:t._$litDirective$;return r?.constructor!==o&&(r?._$AO?.(!1),void 0===o?r=void 0:(r=new o(e),r._$AT(e,s,i)),void 0!==i?(s._$Co??=[])[i]=r:s._$Cl=r),void 0!==r&&(t=Q(e,r._$AS(e,t.values),r,i)),t}class X{constructor(e,t){this._$AV=[],this._$AN=void 0,this._$AD=e,this._$AM=t}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(e){const{el:{content:t},parts:s}=this._$AD,i=(e?.creationScope??T).importNode(t,!0);J.currentNode=i;let r=J.nextNode(),o=0,n=0,a=s[0];for(;void 0!==a;){if(o===a.index){let t;2===a.type?t=new Y(r,r.nextSibling,this,e):1===a.type?t=new a.ctor(r,a.name,a.strings,this,e):6===a.type&&(t=new re(r,this,e)),this._$AV.push(t),a=s[++n]}o!==a?.index&&(r=J.nextNode(),o++)}return J.currentNode=T,i}p(e){let t=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(e,s,t),t+=s.strings.length-2):s._$AI(e[t])),t++}}class Y{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(e,t,s,i){this.type=2,this._$AH=W,this._$AN=void 0,this._$AA=e,this._$AB=t,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let e=this._$AA.parentNode;const t=this._$AM;return void 0!==t&&11===e?.nodeType&&(e=t.parentNode),e}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(e,t=this){e=Q(this,e,t),R(e)?e===W||null==e||""===e?(this._$AH!==W&&this._$AR(),this._$AH=W):e!==this._$AH&&e!==F&&this._(e):void 0!==e._$litType$?this.$(e):void 0!==e.nodeType?this.T(e):(e=>U(e)||"function"==typeof e?.[Symbol.iterator])(e)?this.k(e):this._(e)}O(e){return this._$AA.parentNode.insertBefore(e,this._$AB)}T(e){this._$AH!==e&&(this._$AR(),this._$AH=this.O(e))}_(e){this._$AH!==W&&R(this._$AH)?this._$AA.nextSibling.data=e:this.T(T.createTextNode(e)),this._$AH=e}$(e){const{values:t,_$litType$:s}=e,i="number"==typeof s?this._$AC(e):(void 0===s.el&&(s.el=G.createElement(K(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(t);else{const e=new X(i,this),s=e.u(this.options);e.p(t),this.T(s),this._$AH=e}}_$AC(e){let t=V.get(e.strings);return void 0===t&&V.set(e.strings,t=new G(e)),t}k(e){U(this._$AH)||(this._$AH=[],this._$AR());const t=this._$AH;let s,i=0;for(const r of e)i===t.length?t.push(s=new Y(this.O(M()),this.O(M()),this,this.options)):s=t[i],s._$AI(r),i++;i<t.length&&(this._$AR(s&&s._$AB.nextSibling,i),t.length=i)}_$AR(e=this._$AA.nextSibling,t){for(this._$AP?.(!1,!0,t);e!==this._$AB;){const t=A(e).nextSibling;A(e).remove(),e=t}}setConnected(e){void 0===this._$AM&&(this._$Cv=e,this._$AP?.(e))}}class ee{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(e,t,s,i,r){this.type=1,this._$AH=W,this._$AN=void 0,this.element=e,this.name=t,this._$AM=i,this.options=r,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=W}_$AI(e,t=this,s,i){const r=this.strings;let o=!1;if(void 0===r)e=Q(this,e,t,0),o=!R(e)||e!==this._$AH&&e!==F,o&&(this._$AH=e);else{const i=e;let n,a;for(e=r[0],n=0;n<r.length-1;n++)a=Q(this,i[s+n],t,n),a===F&&(a=this._$AH[n]),o||=!R(a)||a!==this._$AH[n],a===W?e=W:e!==W&&(e+=(a??"")+r[n+1]),this._$AH[n]=a}o&&!i&&this.j(e)}j(e){e===W?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,e??"")}}class te extends ee{constructor(){super(...arguments),this.type=3}j(e){this.element[this.name]=e===W?void 0:e}}class se extends ee{constructor(){super(...arguments),this.type=4}j(e){this.element.toggleAttribute(this.name,!!e&&e!==W)}}class ie extends ee{constructor(e,t,s,i,r){super(e,t,s,i,r),this.type=5}_$AI(e,t=this){if((e=Q(this,e,t,0)??W)===F)return;const s=this._$AH,i=e===W&&s!==W||e.capture!==s.capture||e.once!==s.once||e.passive!==s.passive,r=e!==W&&(s===W||i);i&&this.element.removeEventListener(this.name,this,s),r&&this.element.addEventListener(this.name,this,e),this._$AH=e}handleEvent(e){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,e):this._$AH.handleEvent(e)}}class re{constructor(e,t,s){this.element=e,this.type=6,this._$AN=void 0,this._$AM=t,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(e){Q(this,e)}}const oe=w.litHtmlPolyfillSupport;oe?.(G,Y),(w.litHtmlVersions??=[]).push("3.3.2");const ne=globalThis;class ae extends x{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const e=super.createRenderRoot();return this.renderOptions.renderBefore??=e.firstChild,e}update(e){const t=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(e),this._$Do=((e,t,s)=>{const i=s?.renderBefore??t;let r=i._$litPart$;if(void 0===r){const e=s?.renderBefore??null;i._$litPart$=r=new Y(t.insertBefore(M(),e),e,void 0,s??{})}return r._$AI(e),r})(t,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return F}}ae._$litElement$=!0,ae.finalized=!0,ne.litElementHydrateSupport?.({LitElement:ae});const le=ne.litElementPolyfillSupport;le?.({LitElement:ae}),(ne.litElementVersions??=[]).push("4.2.2");const ce=e=>(t,s)=>{void 0!==s?s.addInitializer(()=>{customElements.define(e,t)}):customElements.define(e,t)},he={attribute:!0,type:String,converter:m,reflect:!1,hasChanged:$},de=(e=he,t,s)=>{const{kind:i,metadata:r}=s;let o=globalThis.litPropertyMetadata.get(r);if(void 0===o&&globalThis.litPropertyMetadata.set(r,o=new Map),"setter"===i&&((e=Object.create(e)).wrapped=!0),o.set(s.name,e),"accessor"===i){const{name:i}=s;return{set(s){const r=t.get.call(this);t.set.call(this,s),this.requestUpdate(i,r,e,!0,s)},init(t){return void 0!==t&&this.C(i,void 0,e,t),t}}}if("setter"===i){const{name:i}=s;return function(s){const r=this[i];t.call(this,s),this.requestUpdate(i,r,e,!0,s)}}throw Error("Unsupported decorator location: "+i)};function pe(e){return(t,s)=>"object"==typeof s?de(e,t,s):((e,t,s)=>{const i=t.hasOwnProperty(s);return t.constructor.createProperty(s,e),i?Object.getOwnPropertyDescriptor(t,s):void 0})(e,t,s)}function fe(e){return pe({...e,state:!0,attribute:!1})}const ue=["coffee","milk","water"],_e=["none",...ue],ge=["very_mild","mild","medium","strong","very_strong"],ye=["cold","normal","high"],ve=["none","one","two","three"],me={ready:"var(--state-active-color, #4caf50)",brewing:"var(--warning-color, #ff9800)",cleaning:"var(--info-color, #2196f3)",descaling:"var(--info-color, #2196f3)",off:"var(--disabled-color, #9e9e9e)",busy:"var(--warning-color, #ff9800)",unavailable:"var(--error-color, #f44336)"},$e=["energy_saving","auto_bean_select","rinsing_disabled"],be=["water_hardness","auto_off_after","brew_temperature"];function xe(e){const t=new Set;for(const s of Object.keys(e.states)){const e=s.match(/^button\.(.+?)_brew$/);e&&t.add(e[1])}const s=[];for(const i of t){const t=e.states[`sensor.${i}_state`];if(!t)continue;const r=t.attributes.friendly_name,o=r?r.replace(/\s*State$/,""):i.replace(/_/g," ");s.push({prefix:i,name:o})}return s}let we=class extends ae{setConfig(e){this._config=e}_fireConfigChanged(){const e=new CustomEvent("config-changed",{detail:{config:{...this._config}},bubbles:!0,composed:!0});this.dispatchEvent(e)}_valueChanged(e,t){const s=t.target,i=s instanceof HTMLInputElement&&"checkbox"===s.type?s.checked:s.value;this._config={...this._config,[e]:i},this._fireConfigChanged()}_deviceSelected(e){const t=e.target.value;if("__manual__"===t)return this._config={...this._config,entity_prefix:""},void this._fireConfigChanged();const s=(this.hass?xe(this.hass):[]).find(e=>e.prefix===t);this._config={...this._config,entity_prefix:t,name:s?.name||this._config.name},this._fireConfigChanged()}render(){if(!this._config)return W;const e=this.hass?xe(this.hass):[],t=this._config.entity_prefix||"",s=e.some(e=>e.prefix===t),i=t&&!s&&e.length>0;return q`
-      ${e.length>0?q`
+function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)n=Reflect.decorate(t,e,i,s);else for(var a=t.length-1;a>=0;a--)(r=t[a])&&(n=(o<3?r(n):o>3?r(e,i,n):r(e,i))||n);return o>3&&n&&Object.defineProperty(e,i,n),n}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,i=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s=Symbol(),r=new WeakMap;let o=class{constructor(t,e,i){if(this._$cssResult$=!0,i!==s)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(i&&void 0===t){const i=void 0!==e&&1===e.length;i&&(t=r.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),i&&r.set(e,t))}return t}toString(){return this.cssText}};const n=(t,...e)=>{const i=1===t.length?t[0]:e.reduce((e,i,s)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[s+1],t[0]);return new o(i,t,s)},a=i?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return(t=>new o("string"==typeof t?t:t+"",void 0,s))(e)})(t):t,{is:c,defineProperty:l,getOwnPropertyDescriptor:h,getOwnPropertyNames:d,getOwnPropertySymbols:p,getPrototypeOf:f}=Object,g=globalThis,u=g.trustedTypes,m=u?u.emptyScript:"",$=g.reactiveElementPolyfillSupport,_=(t,e)=>t,b={toAttribute(t,e){switch(e){case Boolean:t=t?m:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},v=(t,e)=>!c(t,e),y={attribute:!0,type:String,converter:b,reflect:!1,useDefault:!1,hasChanged:v};Symbol.metadata??=Symbol("metadata"),g.litPropertyMetadata??=new WeakMap;let x=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=y){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const i=Symbol(),s=this.getPropertyDescriptor(t,i,e);void 0!==s&&l(this.prototype,t,s)}}static getPropertyDescriptor(t,e,i){const{get:s,set:r}=h(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:s,set(e){const o=s?.call(this);r?.call(this,e),this.requestUpdate(t,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??y}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const t=f(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const t=this.properties,e=[...d(t),...p(t)];for(const i of e)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,i]of e)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const i=this._$Eu(t,e);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(a(t))}else void 0!==t&&e.push(a(t));return e}static _$Eu(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const i of e.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,s)=>{if(i)t.adoptedStyleSheets=s.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const i of s){const s=document.createElement("style"),r=e.litNonce;void 0!==r&&s.setAttribute("nonce",r),s.textContent=i.cssText,t.appendChild(s)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$ET(t,e){const i=this.constructor.elementProperties.get(t),s=this.constructor._$Eu(t,i);if(void 0!==s&&!0===i.reflect){const r=(void 0!==i.converter?.toAttribute?i.converter:b).toAttribute(e,i.type);this._$Em=t,null==r?this.removeAttribute(s):this.setAttribute(s,r),this._$Em=null}}_$AK(t,e){const i=this.constructor,s=i._$Eh.get(t);if(void 0!==s&&this._$Em!==s){const t=i.getPropertyOptions(s),r="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:b;this._$Em=s;const o=r.fromAttribute(e,t.type);this[s]=o??this._$Ej?.get(s)??o,this._$Em=null}}requestUpdate(t,e,i,s=!1,r){if(void 0!==t){const o=this.constructor;if(!1===s&&(r=this[t]),i??=o.getPropertyOptions(t),!((i.hasChanged??v)(r,e)||i.useDefault&&i.reflect&&r===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,i))))return;this.C(t,e,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:i,reflect:s,wrapped:r},o){i&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==r||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||i||(e=void 0),this._$AL.set(t,e)),!0===s&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,i]of t){const{wrapped:t}=i,s=this[e];!0!==t||this._$AL.has(e)||void 0===s||this.C(e,void 0,i,s)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};x.elementStyles=[],x.shadowRootOptions={mode:"open"},x[_("elementProperties")]=new Map,x[_("finalized")]=new Map,$?.({ReactiveElement:x}),(g.reactiveElementVersions??=[]).push("2.1.2");const w=globalThis,A=t=>t,E=w.trustedTypes,k=E?E.createPolicy("lit-html",{createHTML:t=>t}):void 0,S="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,P="?"+C,M=`<${P}>`,D=document,O=()=>D.createComment(""),T=t=>null===t||"object"!=typeof t&&"function"!=typeof t,N=Array.isArray,R="[ \t\n\f\r]",z=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,U=/-->/g,L=/>/g,H=RegExp(`>|${R}(?:([^\\s"'>=/]+)(${R}*=${R}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),B=/'/g,F=/"/g,I=/^(?:script|style|textarea|title)$/i,j=t=>(e,...i)=>({_$litType$:t,strings:e,values:i}),W=j(1),Q=j(2),V=Symbol.for("lit-noChange"),q=Symbol.for("lit-nothing"),G=new WeakMap,Z=D.createTreeWalker(D,129);function X(t,e){if(!N(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==k?k.createHTML(e):e}const J=(t,e)=>{const i=t.length-1,s=[];let r,o=2===e?"<svg>":3===e?"<math>":"",n=z;for(let e=0;e<i;e++){const i=t[e];let a,c,l=-1,h=0;for(;h<i.length&&(n.lastIndex=h,c=n.exec(i),null!==c);)h=n.lastIndex,n===z?"!--"===c[1]?n=U:void 0!==c[1]?n=L:void 0!==c[2]?(I.test(c[2])&&(r=RegExp("</"+c[2],"g")),n=H):void 0!==c[3]&&(n=H):n===H?">"===c[0]?(n=r??z,l=-1):void 0===c[1]?l=-2:(l=n.lastIndex-c[2].length,a=c[1],n=void 0===c[3]?H:'"'===c[3]?F:B):n===F||n===B?n=H:n===U||n===L?n=z:(n=H,r=void 0);const d=n===H&&t[e+1].startsWith("/>")?" ":"";o+=n===z?i+M:l>=0?(s.push(a),i.slice(0,l)+S+i.slice(l)+C+d):i+C+(-2===l?e:d)}return[X(t,o+(t[i]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),s]};class K{constructor({strings:t,_$litType$:e},i){let s;this.parts=[];let r=0,o=0;const n=t.length-1,a=this.parts,[c,l]=J(t,e);if(this.el=K.createElement(c,i),Z.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(s=Z.nextNode())&&a.length<n;){if(1===s.nodeType){if(s.hasAttributes())for(const t of s.getAttributeNames())if(t.endsWith(S)){const e=l[o++],i=s.getAttribute(t).split(C),n=/([.?@])?(.*)/.exec(e);a.push({type:1,index:r,name:n[2],strings:i,ctor:"."===n[1]?st:"?"===n[1]?rt:"@"===n[1]?ot:it}),s.removeAttribute(t)}else t.startsWith(C)&&(a.push({type:6,index:r}),s.removeAttribute(t));if(I.test(s.tagName)){const t=s.textContent.split(C),e=t.length-1;if(e>0){s.textContent=E?E.emptyScript:"";for(let i=0;i<e;i++)s.append(t[i],O()),Z.nextNode(),a.push({type:2,index:++r});s.append(t[e],O())}}}else if(8===s.nodeType)if(s.data===P)a.push({type:2,index:r});else{let t=-1;for(;-1!==(t=s.data.indexOf(C,t+1));)a.push({type:7,index:r}),t+=C.length-1}r++}}static createElement(t,e){const i=D.createElement("template");return i.innerHTML=t,i}}function Y(t,e,i=t,s){if(e===V)return e;let r=void 0!==s?i._$Co?.[s]:i._$Cl;const o=T(e)?void 0:e._$litDirective$;return r?.constructor!==o&&(r?._$AO?.(!1),void 0===o?r=void 0:(r=new o(t),r._$AT(t,i,s)),void 0!==s?(i._$Co??=[])[s]=r:i._$Cl=r),void 0!==r&&(e=Y(t,r._$AS(t,e.values),r,s)),e}class tt{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:i}=this._$AD,s=(t?.creationScope??D).importNode(e,!0);Z.currentNode=s;let r=Z.nextNode(),o=0,n=0,a=i[0];for(;void 0!==a;){if(o===a.index){let e;2===a.type?e=new et(r,r.nextSibling,this,t):1===a.type?e=new a.ctor(r,a.name,a.strings,this,t):6===a.type&&(e=new nt(r,this,t)),this._$AV.push(e),a=i[++n]}o!==a?.index&&(r=Z.nextNode(),o++)}return Z.currentNode=D,s}p(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class et{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,i,s){this.type=2,this._$AH=q,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=s,this._$Cv=s?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Y(this,t,e),T(t)?t===q||null==t||""===t?(this._$AH!==q&&this._$AR(),this._$AH=q):t!==this._$AH&&t!==V&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>N(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==q&&T(this._$AH)?this._$AA.nextSibling.data=t:this.T(D.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:i}=t,s="number"==typeof i?this._$AC(t):(void 0===i.el&&(i.el=K.createElement(X(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===s)this._$AH.p(e);else{const t=new tt(s,this),i=t.u(this.options);t.p(e),this.T(i),this._$AH=t}}_$AC(t){let e=G.get(t.strings);return void 0===e&&G.set(t.strings,e=new K(t)),e}k(t){N(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,s=0;for(const r of t)s===e.length?e.push(i=new et(this.O(O()),this.O(O()),this,this.options)):i=e[s],i._$AI(r),s++;s<e.length&&(this._$AR(i&&i._$AB.nextSibling,s),e.length=s)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=A(t).nextSibling;A(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class it{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,i,s,r){this.type=1,this._$AH=q,this._$AN=void 0,this.element=t,this.name=e,this._$AM=s,this.options=r,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=q}_$AI(t,e=this,i,s){const r=this.strings;let o=!1;if(void 0===r)t=Y(this,t,e,0),o=!T(t)||t!==this._$AH&&t!==V,o&&(this._$AH=t);else{const s=t;let n,a;for(t=r[0],n=0;n<r.length-1;n++)a=Y(this,s[i+n],e,n),a===V&&(a=this._$AH[n]),o||=!T(a)||a!==this._$AH[n],a===q?t=q:t!==q&&(t+=(a??"")+r[n+1]),this._$AH[n]=a}o&&!s&&this.j(t)}j(t){t===q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class st extends it{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===q?void 0:t}}class rt extends it{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==q)}}class ot extends it{constructor(t,e,i,s,r){super(t,e,i,s,r),this.type=5}_$AI(t,e=this){if((t=Y(this,t,e,0)??q)===V)return;const i=this._$AH,s=t===q&&i!==q||t.capture!==i.capture||t.once!==i.once||t.passive!==i.passive,r=t!==q&&(i===q||s);s&&this.element.removeEventListener(this.name,this,i),r&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class nt{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){Y(this,t)}}const at=w.litHtmlPolyfillSupport;at?.(K,et),(w.litHtmlVersions??=[]).push("3.3.2");const ct=globalThis;class lt extends x{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,i)=>{const s=i?.renderBefore??e;let r=s._$litPart$;if(void 0===r){const t=i?.renderBefore??null;s._$litPart$=r=new et(e.insertBefore(O(),t),t,void 0,i??{})}return r._$AI(t),r})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return V}}lt._$litElement$=!0,lt.finalized=!0,ct.litElementHydrateSupport?.({LitElement:lt});const ht=ct.litElementPolyfillSupport;ht?.({LitElement:lt}),(ct.litElementVersions??=[]).push("4.2.2");const dt=t=>(e,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},pt={attribute:!0,type:String,converter:b,reflect:!1,hasChanged:v},ft=(t=pt,e,i)=>{const{kind:s,metadata:r}=i;let o=globalThis.litPropertyMetadata.get(r);if(void 0===o&&globalThis.litPropertyMetadata.set(r,o=new Map),"setter"===s&&((t=Object.create(t)).wrapped=!0),o.set(i.name,t),"accessor"===s){const{name:s}=i;return{set(i){const r=e.get.call(this);e.set.call(this,i),this.requestUpdate(s,r,t,!0,i)},init(e){return void 0!==e&&this.C(s,void 0,t,e),e}}}if("setter"===s){const{name:s}=i;return function(i){const r=this[s];e.call(this,i),this.requestUpdate(s,r,t,!0,i)}}throw Error("Unsupported decorator location: "+s)};function gt(t){return(e,i)=>"object"==typeof i?ft(t,e,i):((t,e,i)=>{const s=e.hasOwnProperty(i);return e.constructor.createProperty(i,t),s?Object.getOwnPropertyDescriptor(e,i):void 0})(t,e,i)}function ut(t){return gt({...t,state:!0,attribute:!1})}const mt=["coffee","milk","water"],$t=["none",...mt],_t=["very_mild","mild","medium","strong","very_strong"],bt=["cold","normal","high"],vt=["none","one","two","three"],yt={ready:"var(--state-active-color, #4caf50)",brewing:"var(--warning-color, #ff9800)",cleaning:"var(--info-color, #2196f3)",descaling:"var(--info-color, #2196f3)",off:"var(--disabled-color, #9e9e9e)",busy:"var(--warning-color, #ff9800)",unavailable:"var(--error-color, #f44336)"},xt=["energy_saving","auto_bean_select","rinsing_disabled"],wt=["water_hardness","auto_off_after","brew_temperature"];function At(t){const e=new Set;for(const i of Object.keys(t.states)){const t=i.match(/^button\.(.+?)_brew$/);t&&e.add(t[1])}const i=[];for(const s of e){const e=t.states[`sensor.${s}_state`];if(!e)continue;const r=e.attributes.friendly_name,o=r?r.replace(/\s*State$/,""):s.replace(/_/g," ");i.push({prefix:s,name:o})}return i}const Et={Espresso:{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#C9A87C",height:.04}},Ristretto:{layers:[{color:"#1A0D04",height:.22}],foam:{color:"#B89970",height:.03}},Lungo:{layers:[{color:"#4A2A14",height:.5}],foam:{color:"#C9A87C",height:.04}},"Espresso Doppio":{layers:[{color:"#3E1F0D",height:.45}],foam:{color:"#C9A87C",height:.04}},"Ristretto Doppio":{layers:[{color:"#1A0D04",height:.4}],foam:{color:"#B89970",height:.03}},"Café Crème":{layers:[{color:"#5C3A1E",height:.5}],foam:{color:"#E8D5B7",height:.08}},"Café Crème Doppio":{layers:[{color:"#5C3A1E",height:.58}],foam:{color:"#E8D5B7",height:.08}},Americano:{layers:[{color:"#3E1F0D",height:.6}]},"Americano Extra":{layers:[{color:"#2C1507",height:.65}]},"Long Black":{layers:[{color:"#3E1F0D",height:.55}],foam:{color:"#C9A87C",height:.05}},"Red Eye":{layers:[{color:"#2C1507",height:.6}]},"Black Eye":{layers:[{color:"#1A0D04",height:.65}]},"Dead Eye":{layers:[{color:"#0F0803",height:.7}]},Cappuccino:{layers:[{color:"#3E1F0D",height:.28},{color:"#D4B896",height:.22}],foam:{color:"#F5EDE0",height:.18}},"Espresso Macchiato":{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#F5EDE0",height:.12}},"Caffè Latte":{tall:!0,layers:[{color:"#E8D5B7",height:.35},{color:"#8B5A30",height:.18}],foam:{color:"#F5EDE0",height:.1}},"Café au Lait":{layers:[{color:"#C9A87C",height:.5}],foam:{color:"#F0E6D8",height:.06}},"Flat White":{layers:[{color:"#3E1F0D",height:.2},{color:"#D4B896",height:.3}],foam:{color:"#F0E6D8",height:.05}},"Latte Macchiato":{tall:!0,layers:[{color:"#F0E6D8",height:.28},{color:"#6B4226",height:.12},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.15}},"Latte Macchiato Extra":{tall:!0,layers:[{color:"#F0E6D8",height:.25},{color:"#5C3A1E",height:.16},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.14}},"Latte Macchiato Triple":{tall:!0,layers:[{color:"#F0E6D8",height:.22},{color:"#4A2A14",height:.2},{color:"#E8D5B7",height:.1}],foam:{color:"#FEFCFA",height:.14}},Milk:{tall:!0,layers:[{color:"#F0E6D8",height:.55}]},"Milk Froth":{tall:!0,layers:[{color:"#F0E6D8",height:.15}],foam:{color:"#FEFCFA",height:.4}},"Hot Water":{layers:[{color:"#9DC4D8",height:.5}]}},kt={layers:[{color:"#5C3A1E",height:.45}]};const St=n`
+  :host {
+    --mbc-bg: var(--ha-card-background, var(--card-background-color, #1a1a1a));
+    --mbc-text: var(--primary-text-color, #e5e5e5);
+    --mbc-text2: var(--secondary-text-color, #a3a3a3);
+    --mbc-border: rgba(255, 255, 255, 0.06);
+    --mbc-surface: rgba(255, 255, 255, 0.03);
+    --mbc-surface-hover: rgba(255, 255, 255, 0.06);
+    --mbc-accent: var(--primary-color, #03a9f4);
+    --mbc-error: var(--error-color, #f44336);
+    --mbc-success: var(--state-active-color, #4caf50);
+    --mbc-warning: var(--warning-color, #ff9800);
+    --mbc-radius: 12px;
+  }
+
+  ha-card {
+    overflow: hidden;
+    background: var(--mbc-bg);
+  }
+
+  /* ── No device ── */
+  .no-device {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--mbc-text2);
+  }
+  .no-device ha-icon {
+    --mdc-icon-size: 48px;
+    opacity: 0.3;
+  }
+  .no-device p { margin: 8px 0 0; }
+  .no-device .hint { font-size: 0.8em; opacity: 0.6; }
+
+  /* ── Header ── */
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 0;
+  }
+  .machine-name {
+    font-size: 1.05em;
+    font-weight: 600;
+    color: var(--mbc-text);
+    letter-spacing: 0.02em;
+  }
+  .connection-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+
+  /* ── Status ── */
+  .status-section { padding: 8px 16px 12px; }
+  .state-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .state-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+  .activity-text {
+    font-size: 0.8em;
+    color: var(--mbc-text2);
+    opacity: 0.8;
+  }
+
+  /* Progress bar */
+  .progress-container {
+    height: 3px;
+    background: var(--mbc-border);
+    border-radius: 2px;
+    margin: 10px 0 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    position: relative;
+  }
+  .progress-fill::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 40px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+    animation: progress-shimmer 1.5s infinite;
+  }
+  @keyframes progress-shimmer {
+    0% { opacity: 0; transform: translateX(-40px); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(40px); }
+  }
+
+  /* ── Action alert ── */
+  .action-alert {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    margin: 0 12px 8px;
+    border-radius: var(--mbc-radius);
+    background: color-mix(in srgb, var(--mbc-error) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--mbc-error) 20%, transparent);
+    color: var(--mbc-error);
+    font-size: 0.82em;
+    font-weight: 500;
+  }
+  .action-alert ha-icon {
+    --mdc-icon-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ── Section titles ── */
+  .section-title {
+    font-size: 0.65em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--mbc-text2);
+    padding: 12px 16px 6px;
+    opacity: 0.7;
+  }
+
+  /* ── Offline ── */
+  .offline-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 16px 32px;
+    color: var(--mbc-text2);
+    font-size: 0.85em;
+  }
+  .offline-section ha-icon {
+    --mdc-icon-size: 32px;
+    opacity: 0.3;
+  }
+
+  /* ── Recipe grid ── */
+  .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 4px;
+    padding: 4px 12px 8px;
+  }
+  .recipe-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px 6px;
+    border-radius: var(--mbc-radius);
+    background: var(--mbc-surface);
+    border: 1px solid var(--mbc-border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .recipe-card:hover {
+    background: var(--mbc-surface-hover);
+  }
+  .recipe-card:active {
+    transform: scale(0.96);
+  }
+  .recipe-card[data-selected] {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .recipe-card[data-selected]::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: white;
+  }
+  .recipe-name {
+    font-size: 0.6em;
+    color: var(--mbc-text2);
+    font-weight: 500;
+    margin-top: 3px;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  /* ── Brew button ── */
+  .brew-row {
+    padding: 4px 12px 12px;
+  }
+  .brew-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    border-radius: var(--mbc-radius);
+    background: var(--mbc-text);
+    color: var(--mbc-bg);
+    font-size: 0.85em;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+    letter-spacing: 0.02em;
+  }
+  .brew-btn ha-icon { --mdc-icon-size: 18px; }
+  .brew-btn:hover:not(:disabled) { opacity: 0.88; }
+  .brew-btn:active:not(:disabled) { transform: scale(0.97); }
+  .brew-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* ── Cancel ── */
+  .cancel-row { padding: 0 12px 8px; }
+  .cancel-btn {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid color-mix(in srgb, var(--mbc-error) 40%, transparent);
+    border-radius: var(--mbc-radius);
+    background: color-mix(in srgb, var(--mbc-error) 8%, transparent);
+    color: var(--mbc-error);
+    font-size: 0.8em;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .cancel-btn:hover {
+    background: color-mix(in srgb, var(--mbc-error) 15%, transparent);
+  }
+  .cancel-btn:active { transform: scale(0.97); }
+
+  /* ── Profile ── */
+  .profile-row {
+    display: flex;
+    gap: 6px;
+    padding: 4px 12px 8px;
+    align-items: center;
+  }
+  .profile-row ha-icon {
+    --mdc-icon-size: 18px;
+    color: var(--mbc-text2);
+    opacity: 0.6;
+  }
+  .profile-select,
+  .recipe-select {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--mbc-border);
+    border-radius: 8px;
+    background: var(--mbc-surface);
+    color: var(--mbc-text);
+    font-size: 0.82em;
+    font-family: inherit;
+    cursor: pointer;
+    appearance: auto;
+    transition: border-color 0.2s;
+  }
+  .profile-select:focus,
+  .recipe-select:focus {
+    outline: none;
+    border-color: var(--mbc-accent);
+  }
+
+  /* ── Settings ── */
+  .settings-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 12px 12px;
+  }
+  .setting-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--mbc-radius);
+    background: var(--mbc-surface);
+    border: 1px solid var(--mbc-border);
+    transition: background 0.2s;
+  }
+  .setting-icon {
+    --mdc-icon-size: 18px;
+    color: var(--mbc-text2);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+  .setting-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .setting-label {
+    font-size: 0.82em;
+    font-weight: 500;
+    color: var(--mbc-text);
+  }
+  .setting-desc {
+    font-size: 0.68em;
+    color: var(--mbc-text2);
+    opacity: 0.7;
+    margin-top: 1px;
+  }
+  .setting-value {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--mbc-text);
+    white-space: nowrap;
+  }
+
+  /* Toggle switch */
+  .toggle-track {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+  }
+  .toggle-track[data-on] {
+    background: var(--mbc-text);
+  }
+  .toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .toggle-track[data-on] .toggle-thumb {
+    transform: translateX(16px);
+    background: var(--mbc-bg);
+  }
+
+  /* ── Freestyle ── */
+  .freestyle-section {
+    padding: 4px 12px 12px;
+  }
+  .freestyle-name-row {
+    margin-bottom: 10px;
+  }
+  .freestyle-name-input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--mbc-border);
+    border-radius: 8px;
+    background: var(--mbc-surface);
+    color: var(--mbc-text);
+    font-size: 0.85em;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+  .freestyle-name-input:focus {
+    outline: none;
+    border-color: var(--mbc-accent);
+  }
+
+  .freestyle-components {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .freestyle-component {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .component-title {
+    font-size: 0.65em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mbc-text2);
+    opacity: 0.7;
+    margin-bottom: 2px;
+  }
+
+  /* Segment picker */
+  .segment-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .segment-label {
+    font-size: 0.65em;
+    font-weight: 500;
+    color: var(--mbc-text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .segment-options {
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--mbc-border);
+  }
+  .segment-opt {
+    flex: 1;
+    padding: 5px 2px;
+    border: none;
+    background: var(--mbc-surface);
+    color: var(--mbc-text2);
+    font-size: 0.62em;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    text-transform: capitalize;
+  }
+  .segment-opt + .segment-opt {
+    border-left: 1px solid var(--mbc-border);
+  }
+  .segment-opt[data-active] {
+    background: var(--mbc-text);
+    color: var(--mbc-bg);
+    font-weight: 700;
+  }
+  .segment-opt:hover:not([data-active]) {
+    background: var(--mbc-surface-hover);
+  }
+
+  /* Portion slider */
+  .portion-row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .portion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .portion-label {
+    font-size: 0.65em;
+    font-weight: 500;
+    color: var(--mbc-text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .portion-value {
+    font-size: 0.68em;
+    font-weight: 700;
+    color: var(--mbc-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .portion-slider {
+    width: 100%;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  .portion-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--mbc-text);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+
+  .freestyle-disabled {
+    opacity: 0.25;
+    pointer-events: none;
+  }
+
+  .freestyle-brew-row {
+    margin-top: 10px;
+  }
+`;let Ct=class extends lt{setConfig(t){this._config=t}_fireConfigChanged(){const t=new CustomEvent("config-changed",{detail:{config:{...this._config}},bubbles:!0,composed:!0});this.dispatchEvent(t)}_valueChanged(t,e){const i=e.target,s=i instanceof HTMLInputElement&&"checkbox"===i.type?i.checked:i.value;this._config={...this._config,[t]:s},this._fireConfigChanged()}_deviceSelected(t){const e=t.target.value;if("__manual__"===e)return this._config={...this._config,entity_prefix:""},void this._fireConfigChanged();const i=(this.hass?At(this.hass):[]).find(t=>t.prefix===e);this._config={...this._config,entity_prefix:e,name:i?.name||this._config.name},this._fireConfigChanged()}render(){if(!this._config)return q;const t=this.hass?At(this.hass):[],e=this._config.entity_prefix||"",i=t.some(t=>t.prefix===e),s=e&&!i&&t.length>0;return W`
+      ${t.length>0?W`
             <div class="editor-row">
               <label for="device">Device</label>
               <select
                 id="device"
                 @change=${this._deviceSelected}
               >
-                ${e.map(e=>q`
-                    <option value=${e.prefix} ?selected=${e.prefix===t}>
-                      ${e.name}
+                ${t.map(t=>W`
+                    <option value=${t.prefix} ?selected=${t.prefix===e}>
+                      ${t.name}
                     </option>
                   `)}
-                <option value="__manual__" ?selected=${i}>
+                <option value="__manual__" ?selected=${s}>
                   Enter manually...
                 </option>
               </select>
             </div>
-          `:q`
+          `:W`
             <div class="editor-row">
               <label for="entity_prefix">Entity Prefix</label>
               <input
                 id="entity_prefix"
-                .value=${t}
+                .value=${e}
                 placeholder="Auto-detected if integration is running"
-                @input=${e=>this._valueChanged("entity_prefix",e)}
+                @input=${t=>this._valueChanged("entity_prefix",t)}
               />
               <span class="hint">No Melitta devices detected. Enter prefix manually or check that the integration is configured.</span>
             </div>
           `}
 
-      ${i?q`
+      ${s?W`
             <div class="editor-row">
               <label for="entity_prefix">Entity Prefix</label>
               <input
                 id="entity_prefix"
-                .value=${t}
-                @input=${e=>this._valueChanged("entity_prefix",e)}
+                .value=${e}
+                @input=${t=>this._valueChanged("entity_prefix",t)}
               />
             </div>
           `:""}
@@ -45,7 +544,7 @@ function e(e,t,s,i){var r,o=arguments.length,n=o<3?t:null===i?i=Object.getOwnPro
         <input
           id="name"
           .value=${this._config.name||"Melitta Barista"}
-          @input=${e=>this._valueChanged("name",e)}
+          @input=${t=>this._valueChanged("name",t)}
         />
       </div>
       <div class="checkbox-row">
@@ -53,7 +552,7 @@ function e(e,t,s,i){var r,o=arguments.length,n=o<3?t:null===i?i=Object.getOwnPro
           type="checkbox"
           id="show_profiles"
           .checked=${!1!==this._config.show_profiles}
-          @change=${e=>this._valueChanged("show_profiles",e)}
+          @change=${t=>this._valueChanged("show_profiles",t)}
         />
         <label for="show_profiles">Show profile selector</label>
       </div>
@@ -62,7 +561,7 @@ function e(e,t,s,i){var r,o=arguments.length,n=o<3?t:null===i?i=Object.getOwnPro
           type="checkbox"
           id="show_recipes"
           .checked=${!1!==this._config.show_recipes}
-          @change=${e=>this._valueChanged("show_recipes",e)}
+          @change=${t=>this._valueChanged("show_recipes",t)}
         />
         <label for="show_recipes">Show recipe selector</label>
       </div>
@@ -71,7 +570,7 @@ function e(e,t,s,i){var r,o=arguments.length,n=o<3?t:null===i?i=Object.getOwnPro
           type="checkbox"
           id="show_freestyle"
           .checked=${this._config.show_freestyle||!1}
-          @change=${e=>this._valueChanged("show_freestyle",e)}
+          @change=${t=>this._valueChanged("show_freestyle",t)}
         />
         <label for="show_freestyle">Show freestyle recipe</label>
       </div>
@@ -80,7 +579,7 @@ function e(e,t,s,i){var r,o=arguments.length,n=o<3?t:null===i?i=Object.getOwnPro
           type="checkbox"
           id="show_settings"
           .checked=${this._config.show_settings||!1}
-          @change=${e=>this._valueChanged("show_settings",e)}
+          @change=${t=>this._valueChanged("show_settings",t)}
         />
         <label for="show_settings">Show settings</label>
       </div>
@@ -89,7 +588,7 @@ function e(e,t,s,i){var r,o=arguments.length,n=o<3?t:null===i?i=Object.getOwnPro
           type="checkbox"
           id="compact"
           .checked=${this._config.compact||!1}
-          @change=${e=>this._valueChanged("compact",e)}
+          @change=${t=>this._valueChanged("compact",t)}
         />
         <label for="compact">Compact mode</label>
       </div>
@@ -136,560 +635,236 @@ function e(e,t,s,i){var r,o=arguments.length,n=o<3?t:null===i?i=Object.getOwnPro
         gap: 8px;
         margin-bottom: 8px;
       }
-    `}};e([pe({attribute:!1})],we.prototype,"hass",void 0),e([fe()],we.prototype,"_config",void 0),we=e([ce("melitta-barista-card-editor")],we);let Ae=class extends ae{constructor(){super(...arguments),this._resolvedPrefix=null,this._freestyleName="Custom",this._freestyleProcess1="coffee",this._freestyleIntensity1="medium",this._freestylePortion1=40,this._freestyleTemp1="normal",this._freestyleShots1="one",this._freestyleProcess2="none",this._freestyleIntensity2="medium",this._freestylePortion2=0,this._freestyleTemp2="normal",this._freestyleShots2="none"}static getConfigElement(){return document.createElement("melitta-barista-card-editor")}static getStubConfig(e){const t=xe(e);return{entity_prefix:t.length>0?t[0].prefix:"",name:t.length>0?t[0].name:"Melitta Barista",show_recipes:!0,show_settings:!1,compact:!1}}setConfig(e){this._config={...e,show_recipes:!1!==e.show_recipes,show_profiles:!1!==e.show_profiles,show_freestyle:e.show_freestyle||!1,show_settings:e.show_settings||!1,compact:e.compact||!1},this._resolvedPrefix=null}getCardSize(){return this._config?.compact?3:5}getGridOptions(){return{rows:this._config?.compact?3:5,columns:6,min_rows:2,min_columns:3}}_getPrefix(){if(this._config.entity_prefix)return this._config.entity_prefix;if(this._resolvedPrefix)return this._resolvedPrefix;if(this.hass){const e=xe(this.hass);if(e.length>0)return this._resolvedPrefix=e[0].prefix,this._config.name||(this._config={...this._config,name:e[0].name}),this._resolvedPrefix}return null}shouldUpdate(e){if(e.has("_config")||e.has("_resolvedPrefix"))return!0;const t=e.get("hass");if(!t)return!0;const s=this._getPrefix();if(!s)return!0;for(const[e,i]of Object.entries(this.hass.states))if(e.includes(s)&&t.states[e]!==i)return!0;return!1}_getState(e){if(!this.hass)return null;const t=this._getPrefix();if(!t)return null;const s=["sensor","button","select","number","switch"];for(const i of s){const s=`${i}.${t}_${e}`;if(this.hass.states[s])return this.hass.states[s].state}return null}_getRecipeSelectId(){const e=this._getPrefix();if(!e)return null;const t=`select.${e}_recipe`;return this.hass.states[t]?t:null}_getRecipeOptions(){const e=this._getRecipeSelectId();return e&&this.hass.states[e]?.attributes?.options||[]}_getSelectedRecipe(){const e=this._getRecipeSelectId();if(!e)return null;const t=this.hass.states[e]?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectRecipe(e){const t=this._getRecipeSelectId();t&&this.hass.callService("select","select_option",{entity_id:t,option:e})}_getProfileSelectId(){const e=this._getPrefix();if(!e)return null;const t=`select.${e}_profile`;return this.hass.states[t]?t:null}_getProfileOptions(){const e=this._getProfileSelectId();return e&&this.hass.states[e]?.attributes?.options||[]}_getSelectedProfile(){const e=this._getProfileSelectId();if(!e)return null;const t=this.hass.states[e]?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectProfile(e){const t=this._getProfileSelectId();t&&this.hass.callService("select","select_option",{entity_id:t,option:e})}_brew(){const e=this._getPrefix();e&&this._pressButton(`button.${e}_brew`)}_brewFreestyle(){const e=this._getPrefix();if(!e)return;const t=`button.${e}_brew`;this.hass.states[t]&&this.hass.callService("melitta_barista","brew_freestyle",{entity_id:t,name:this._freestyleName,process1:this._freestyleProcess1,intensity1:this._freestyleIntensity1,portion1_ml:this._freestylePortion1,temperature1:this._freestyleTemp1,shots1:this._freestyleShots1,process2:this._freestyleProcess2,intensity2:this._freestyleIntensity2,portion2_ml:this._freestylePortion2,temperature2:this._freestyleTemp2,shots2:this._freestyleShots2})}_getSettings(){if(!this.hass)return[];const e=this._getPrefix();if(!e)return[];const t=[];for(const s of $e){const i=this.hass.states[`switch.${e}_${s}`];i&&t.push({name:i.attributes.friendly_name||s,value:"on"===i.state?"On":"Off"})}for(const s of be){const i=this.hass.states[`number.${e}_${s}`];if(i){const e=i.attributes.unit_of_measurement||"";t.push({name:i.attributes.friendly_name||s,value:`${i.state}${e?" "+e:""}`})}}return t}_pressButton(e){this.hass.states[e]&&this.hass.callService("button","press",{entity_id:e})}render(){if(!this.hass||!this._config)return W;const e=this._getPrefix();if(!e)return q`
-        <ha-card>
-          <div class="no-device">
-            <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
-            <p>No Melitta Barista device found.</p>
-            <p class="hint">Make sure the integration is installed and configured.</p>
-          </div>
-        </ha-card>
-      `;const t=this._getState("state")||"unavailable",s=this._getState("activity")||"Idle",i=this._getState("progress"),r=this._getState("action_required"),o=this._getState("connection")||"Disconnected",n="Connected"===o,a="unavailable"===t||"unknown"===t,l="Brewing"===t,c="Ready"===t,h=r&&"None"!==r&&"unknown"!==r,d=i&&"unknown"!==i&&"None"!==i,p=d?Math.max(0,Math.min(100,parseFloat(i)||0)):0,f=me[t.toLowerCase()]||"var(--primary-text-color)",u=this._getRecipeOptions(),_=this._getSelectedRecipe(),g=`button.${e}_cancel`,y=this._config.name||"Melitta Barista";return a?q`
-        <ha-card>
-          <div class="card-header">
-            <span class="machine-name">${y}</span>
-            <div
-              class="connection-dot"
-              style="background: var(--error-color, #f44336)"
-              title="Disconnected"
-            ></div>
-          </div>
-          <div class="offline-section">
-            <ha-icon icon="mdi:bluetooth-off"></ha-icon>
-            <span>Machine offline</span>
-          </div>
-        </ha-card>
-      `:q`
-      <ha-card>
+    `}};t([gt({attribute:!1})],Ct.prototype,"hass",void 0),t([ut()],Ct.prototype,"_config",void 0),Ct=t([dt("melitta-barista-card-editor")],Ct);const Pt={energy_saving:{label:"Energy Saving",desc:"Reduce power when idle",icon:"mdi:lightning-bolt"},auto_bean_select:{label:"Auto Bean Select",desc:"Auto-choose bean hopper",icon:"mdi:seed"},rinsing_disabled:{label:"Rinsing Disabled",desc:"Skip auto rinse cycle",icon:"mdi:water-off"}},Mt={water_hardness:{label:"Water Hardness",desc:"Calibrate for water type",icon:"mdi:water",format:"level"},auto_off_after:{label:"Auto Off",desc:"Minutes until shutdown",icon:"mdi:timer-outline",format:"minutes"},brew_temperature:{label:"Brew Temperature",desc:"Brewing water temp",icon:"mdi:thermometer",format:"level"}},Dt={water_hardness:{1:"Soft",2:"Medium",3:"Hard",4:"Very Hard"},brew_temperature:{0:"Low",1:"Normal",2:"High"}},Ot={very_mild:"V.Mild",mild:"Mild",medium:"Med",strong:"Strong",very_strong:"V.Strong",extra_strong:"X.Strong",cold:"Cold",normal:"Normal",high:"High",none:"None",one:"1",two:"2",three:"3",coffee:"Coffee",milk:"Milk",water:"Water"};let Tt=class extends lt{constructor(){super(...arguments),this._resolvedPrefix=null,this._fsName="Custom",this._fsProcess1="coffee",this._fsIntensity1="medium",this._fsPortion1=40,this._fsTemp1="normal",this._fsShots1="one",this._fsProcess2="none",this._fsIntensity2="medium",this._fsPortion2=0,this._fsTemp2="normal",this._fsShots2="none"}static getConfigElement(){return document.createElement("melitta-barista-card-editor")}static getStubConfig(t){const e=At(t);return{entity_prefix:e.length>0?e[0].prefix:"",name:e.length>0?e[0].name:"Melitta Barista",show_recipes:!0,show_settings:!1,compact:!1}}setConfig(t){this._config={...t,show_recipes:!1!==t.show_recipes,show_profiles:!1!==t.show_profiles,show_freestyle:t.show_freestyle||!1,show_settings:t.show_settings||!1,compact:t.compact||!1},this._resolvedPrefix=null}getCardSize(){return this._config?.compact?3:5}getGridOptions(){return{rows:this._config?.compact?3:5,columns:6,min_rows:2,min_columns:3}}_getPrefix(){if(this._config.entity_prefix)return this._config.entity_prefix;if(this._resolvedPrefix)return this._resolvedPrefix;if(this.hass){const t=At(this.hass);if(t.length>0)return this._resolvedPrefix=t[0].prefix,this._config.name||(this._config={...this._config,name:t[0].name}),this._resolvedPrefix}return null}shouldUpdate(t){if(t.has("_config")||t.has("_resolvedPrefix"))return!0;for(const e of t.keys())if("string"==typeof e&&e.startsWith("_fs"))return!0;const e=t.get("hass");if(!e)return!0;const i=this._getPrefix();if(!i)return!0;for(const[t,s]of Object.entries(this.hass.states))if(t.includes(i)&&e.states[t]!==s)return!0;return!1}_entity(t,e){const i=this._getPrefix();if(i)return this.hass.states[`${t}.${i}_${e}`]}_state(t){const e=this._getPrefix();if(!e)return null;for(const i of["sensor","button","select","number","switch"]){const s=this.hass.states[`${i}.${e}_${t}`];if(s)return s.state}return null}_recipeEntity(){return this._entity("select","recipe")}_recipeOptions(){return this._recipeEntity()?.attributes?.options||[]}_selectedRecipe(){const t=this._recipeEntity()?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectRecipe(t){const e=this._getPrefix();e&&this.hass.callService("select","select_option",{entity_id:`select.${e}_recipe`,option:t})}_profileEntity(){return this._entity("select","profile")}_profileOptions(){return this._profileEntity()?.attributes?.options||[]}_selectedProfile(){const t=this._profileEntity()?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectProfile(t){const e=this._getPrefix();e&&this.hass.callService("select","select_option",{entity_id:`select.${e}_profile`,option:t})}_brew(){const t=this._getPrefix();t&&this.hass.callService("button","press",{entity_id:`button.${t}_brew`})}_brewFreestyle(){const t=this._getPrefix();t&&this.hass.callService("melitta_barista","brew_freestyle",{entity_id:`button.${t}_brew`,name:this._fsName,process1:this._fsProcess1,intensity1:this._fsIntensity1,portion1_ml:this._fsPortion1,temperature1:this._fsTemp1,shots1:this._fsShots1,process2:this._fsProcess2,intensity2:this._fsIntensity2,portion2_ml:this._fsPortion2,temperature2:this._fsTemp2,shots2:this._fsShots2})}_toggleSwitch(t,e){const i=this._getPrefix();i&&this.hass.callService("switch",e?"turn_on":"turn_off",{entity_id:`switch.${i}_${t}`})}render(){if(!this.hass||!this._config)return q;const t=this._getPrefix();if(!t)return W`<ha-card>
+        <div class="no-device">
+          <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
+          <p>No Melitta Barista device found.</p>
+          <p class="hint">Make sure the integration is installed and configured.</p>
+        </div>
+      </ha-card>`;const e=this._state("state")||"unavailable",i=this._state("activity")||"Idle",s=this._state("progress"),r=this._state("action_required"),o="Connected"===(this._state("connection")||"Disconnected"),n="unavailable"===e||"unknown"===e,a="Brewing"===e,c="Ready"===e,l=!!r&&"None"!==r&&"unknown"!==r,h=!!s&&"unknown"!==s&&"None"!==s,d=h?Math.max(0,Math.min(100,parseFloat(s)||0)):0,p=yt[e.toLowerCase()]||"var(--primary-text-color)",f=this._config.name||"Melitta Barista";return n?W`<ha-card>
         <div class="card-header">
-          <span class="machine-name">${y}</span>
-          <div
-            class="connection-dot"
-            style="background: ${n?"var(--state-active-color, #4caf50)":"var(--error-color, #f44336)"}"
-            title="${o}"
-          ></div>
+          <span class="machine-name">${f}</span>
+          <div class="connection-dot" style="background: var(--mbc-error)"></div>
         </div>
+        <div class="offline-section">
+          <ha-icon icon="mdi:bluetooth-off"></ha-icon>
+          <span>Machine offline</span>
+        </div>
+      </ha-card>`:W`<ha-card>
+      <div class="card-header">
+        <span class="machine-name">${f}</span>
+        <div class="connection-dot" style="background: ${o?"var(--mbc-success)":"var(--mbc-error)"}"></div>
+      </div>
 
-        <div class="status-section">
-          <div class="state-row">
-            <span
-              class="state-badge"
-              style="background: ${f}22; color: ${f}"
-            >
-              ${t}
-            </span>
-            ${l?q`<span class="activity-text">${s}</span>`:W}
+      <div class="status-section">
+        <div class="state-row">
+          <span class="state-badge" style="background: ${p}18; color: ${p}">
+            ${e}
+          </span>
+          ${a?W`<span class="activity-text">${i}</span>`:q}
+        </div>
+        ${h?W`
+          <div class="progress-container">
+            <div class="progress-fill" style="width: ${d}%; background: ${p}"></div>
           </div>
-          ${d?q`
-                <div class="progress-bar-container">
-                  <div
-                    class="progress-bar"
-                    style="width: ${p}%; background: ${f}"
-                  ></div>
-                </div>
-              `:W}
+        `:q}
+      </div>
+
+      ${l?W`
+        <div class="action-alert">
+          <ha-icon icon="mdi:alert-circle"></ha-icon>
+          <span>${r}</span>
         </div>
+      `:q}
 
-        ${h?q`
-              <div class="action-alert">
-                <ha-icon icon="mdi:alert-circle"></ha-icon>
-                <span>${r}</span>
-              </div>
-            `:W}
+      ${a?W`
+        <div class="cancel-row">
+          <button class="cancel-btn" @click=${()=>this.hass.callService("button","press",{entity_id:`button.${t}_cancel`})}>
+            Cancel
+          </button>
+        </div>
+      `:q}
 
-        ${l?q`
-              <div class="cancel-row">
-                <button
-                  class="cancel-btn"
-                  @click=${()=>this._pressButton(g)}
-                >
-                  Cancel
-                </button>
-              </div>
-            `:W}
+      ${this._config.show_profiles&&c&&this._profileOptions().length>1?this._renderProfile():q}
 
-        ${this._config.show_profiles&&c&&this._getProfileOptions().length>1?this._renderProfileSelect():W}
+      ${this._config.show_recipes&&c&&this._recipeOptions().length>0?this._renderRecipes():q}
 
-        ${this._config.show_recipes&&c&&u.length>0?q`
-              <div class="section-title">Recipe</div>
-              <div class="recipe-row">
-                <select
-                  class="recipe-select"
-                  .value=${_||""}
-                  @change=${e=>this._selectRecipe(e.target.value)}
-                >
-                  <option value="" disabled ?selected=${!_}>
-                    Select recipe…
-                  </option>
-                  ${u.map(e=>q`
-                      <option value=${e} ?selected=${e===_}>
-                        ${e}
-                      </option>
-                    `)}
-                </select>
-                <button
-                  class="brew-btn"
-                  ?disabled=${!_}
-                  @click=${()=>this._brew()}
-                >
-                  <ha-icon icon="mdi:coffee"></ha-icon>
-                  Brew
-                </button>
-              </div>
-            `:W}
+      ${this._config.show_freestyle&&c?this._renderFreestyle():q}
 
-        ${this._config.show_freestyle&&c?this._renderFreestyle():W}
-
-        ${this._config.show_settings?this._renderSettings():W}
-      </ha-card>
-    `}_renderProfileSelect(){const e=this._getProfileOptions(),t=this._getSelectedProfile();return q`
+      ${this._config.show_settings?this._renderSettings():q}
+    </ha-card>`}_renderProfile(){const t=this._profileOptions(),e=this._selectedProfile();return W`
       <div class="section-title">Profile</div>
       <div class="profile-row">
-        <ha-icon icon="mdi:account-circle" class="profile-icon"></ha-icon>
-        <select
-          class="recipe-select"
-          .value=${t||""}
-          @change=${e=>this._selectProfile(e.target.value)}
-        >
-          ${e.map(e=>q`
-              <option value=${e} ?selected=${e===t}>
-                ${e}
-              </option>
-            `)}
+        <ha-icon icon="mdi:account-circle"></ha-icon>
+        <select class="profile-select" .value=${e||""}
+          @change=${t=>this._selectProfile(t.target.value)}>
+          ${t.map(t=>W`<option value=${t} ?selected=${t===e}>${t}</option>`)}
         </select>
       </div>
-    `}_renderFreestyle(){return q`
-      <div class="section-title">Freestyle</div>
-      <div class="freestyle-section">
-        <div class="freestyle-row">
-          <label>Name</label>
-          <input
-            class="freestyle-input"
-            type="text"
-            .value=${this._freestyleName}
-            @input=${e=>{this._freestyleName=e.target.value}}
-          />
-        </div>
+    `}_renderRecipes(){const t=this._recipeOptions(),e=this._selectedRecipe();return W`
+      <div class="section-title">Recipe</div>
+      <div class="recipe-grid">
+        ${t.map(t=>{const i=t.replace(/[^a-zA-Z0-9]/g,"");return W`
+            <div class="recipe-card"
+              ?data-selected=${t===e}
+              @click=${()=>this._selectRecipe(t)}>
+              ${function(t,e,i){const s=Et[t]||kt,r=s.tall,o=r?36:50,n=r?30:42,a=r?68:48,c=r?12:28,l=c+a,h=r?50:46,d=h-o/2,p=h+o/2,f=h-n/2,g=h+n/2,u=`M ${d} ${c} L ${f+4} ${l-4} Q ${f} ${l} ${f+4} ${l} L ${g-4} ${l} Q ${g} ${l} ${g-4} ${l-4} L ${p} ${c}`,m=1.5,$=d+m,_=p-m,b=f+m+1.2,v=g-m-1.2,y=c+m,x=l-m,w=2.8,A=`M ${$} ${y} L ${b+w} ${x-w} Q ${b} ${x} ${b+w} ${x} L ${v-w} ${x} Q ${v} ${x} ${v-w} ${x-w} L ${_} ${y} Z`,E=(t,e)=>{const i=(t-y)/(x-y);return e?$+(b-$)*i:_+(v-_)*i};let k=x;const S=[],C=[...s.layers];for(let t=C.length-1;t>=0;t--){const{color:e,height:i}=C[t],s=k,r=k-a*i;k=r;const o=E(r,!0),n=E(r,!1),c=E(s,!0),l=E(s,!1),h=t===C.length-1,d=h?w:0,p=h?`M ${o} ${r} L ${c+d} ${s-d} Q ${c} ${s} ${c+d} ${s} L ${l-d} ${s} Q ${l} ${s} ${l-d} ${s-d} L ${n} ${r} Z`:`M ${o} ${r} L ${c} ${s} L ${l} ${s} L ${n} ${r} Z`;S.push({d:p,fill:e})}if(s.foam){const t=k,e=k-a*s.foam.height;k=e;const i=E(e,!0),r=E(e,!1),o=E(t,!0),n=E(t,!1);S.push({d:`M ${i} ${e} L ${o} ${t} L ${n} ${t} L ${r} ${e} Z`,fill:s.foam.color})}const P=p,M=c+.18*a,D=c+.65*a,O=r?10:14,T=`M ${h-6} ${c-2} Q ${h-8} ${c-10} ${h-5} ${c-16}`,N=`${T};M ${h-6} ${c-2} Q ${h-4} ${c-10} ${h-7} ${c-16};${T}`,R=`M ${h+1} ${c-3} Q ${h+3} ${c-11} ${h} ${c-18}`,z=`${R};M ${h+1} ${c-3} Q ${h-1} ${c-11} ${h+2} ${c-18};${R}`,U=`M ${h+8} ${c-2} Q ${h+6} ${c-9} ${h+9} ${c-15}`,L=`${U};M ${h+8} ${c-2} Q ${h+10} ${c-9} ${h+7} ${c-15};${U}`;return Q`
+    <svg width="${e}" height="${1.15*e}" viewBox="0 0 ${100} ${115}" fill="none">
+      <defs>
+        <clipPath id="clip-${i}">
+          <path d="${A}" />
+        </clipPath>
+        <linearGradient id="refl-${i}" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="white" stop-opacity="0.18" />
+          <stop offset="15%" stop-color="white" stop-opacity="0.06" />
+          <stop offset="50%" stop-color="white" stop-opacity="0" />
+          <stop offset="80%" stop-color="white" stop-opacity="0.03" />
+          <stop offset="100%" stop-color="white" stop-opacity="0.10" />
+        </linearGradient>
+        <linearGradient id="spec-${i}" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="white" stop-opacity="0.35" />
+          <stop offset="100%" stop-color="white" stop-opacity="0" />
+        </linearGradient>
+        <filter id="sg-${i}" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2.5" />
+        </filter>
+        <linearGradient id="rf-${i}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="white" stop-opacity="0.15" />
+          <stop offset="100%" stop-color="white" stop-opacity="0" />
+        </linearGradient>
+        <mask id="rm-${i}">
+          <rect x="0" y="${l+1}" width="${100}" height="${.4*a}" fill="url(#rf-${i})" />
+        </mask>
+      </defs>
 
-        <div class="freestyle-subtitle">Component 1</div>
-        <div class="freestyle-grid">
-          <div class="freestyle-field">
-            <label>Process</label>
-            <select class="freestyle-select" .value=${this._freestyleProcess1}
-              @change=${e=>{this._freestyleProcess1=e.target.value}}>
-              ${ue.map(e=>q`<option value=${e} ?selected=${e===this._freestyleProcess1}>${e}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Intensity</label>
-            <select class="freestyle-select" .value=${this._freestyleIntensity1}
-              @change=${e=>{this._freestyleIntensity1=e.target.value}}>
-              ${ge.map(e=>q`<option value=${e} ?selected=${e===this._freestyleIntensity1}>${e}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Portion (ml)</label>
-            <input class="freestyle-input" type="number" min="5" max="250" step="5"
-              .value=${String(this._freestylePortion1)}
-              @input=${e=>{this._freestylePortion1=parseInt(e.target.value)||40}} />
-          </div>
-          <div class="freestyle-field">
-            <label>Temperature</label>
-            <select class="freestyle-select" .value=${this._freestyleTemp1}
-              @change=${e=>{this._freestyleTemp1=e.target.value}}>
-              ${ye.map(e=>q`<option value=${e} ?selected=${e===this._freestyleTemp1}>${e}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Shots</label>
-            <select class="freestyle-select" .value=${this._freestyleShots1}
-              @change=${e=>{this._freestyleShots1=e.target.value}}>
-              ${ve.map(e=>q`<option value=${e} ?selected=${e===this._freestyleShots1}>${e}</option>`)}
-            </select>
-          </div>
-        </div>
+      ${"Milk"!==t&&"Milk Froth"!==t&&"Hot Water"!==t?Q`
+        <g opacity="0.20" stroke="rgba(255,255,255,0.6)" stroke-width="4" fill="none" stroke-linecap="round" filter="url(#sg-${i})">
+          <path d="${T}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${N}" /></path>
+          <path d="${R}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${z}" /></path>
+          <path d="${U}"><animate attributeName="d" dur="3.3s" repeatCount="indefinite" values="${L}" /></path>
+        </g>
+        <g opacity="0.40" stroke="#D4C4A0" stroke-width="1" fill="none" stroke-linecap="round">
+          <path d="${T}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${N}" /></path>
+          <path d="${R}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${z}" /></path>
+          <path d="${U}"><animate attributeName="d" dur="3.3s" repeatCount="indefinite" values="${L}" /></path>
+        </g>
+      `:q}
 
-        <div class="freestyle-subtitle">Component 2</div>
-        <div class="freestyle-grid">
-          <div class="freestyle-field">
-            <label>Process</label>
-            <select class="freestyle-select" .value=${this._freestyleProcess2}
-              @change=${e=>{this._freestyleProcess2=e.target.value}}>
-              ${_e.map(e=>q`<option value=${e} ?selected=${e===this._freestyleProcess2}>${e}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Intensity</label>
-            <select class="freestyle-select" .value=${this._freestyleIntensity2}
-              @change=${e=>{this._freestyleIntensity2=e.target.value}}>
-              ${ge.map(e=>q`<option value=${e} ?selected=${e===this._freestyleIntensity2}>${e}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Portion (ml)</label>
-            <input class="freestyle-input" type="number" min="0" max="250" step="5"
-              .value=${String(this._freestylePortion2)}
-              @input=${e=>{this._freestylePortion2=parseInt(e.target.value)||0}} />
-          </div>
-          <div class="freestyle-field">
-            <label>Temperature</label>
-            <select class="freestyle-select" .value=${this._freestyleTemp2}
-              @change=${e=>{this._freestyleTemp2=e.target.value}}>
-              ${ye.map(e=>q`<option value=${e} ?selected=${e===this._freestyleTemp2}>${e}</option>`)}
-            </select>
-          </div>
-          <div class="freestyle-field">
-            <label>Shots</label>
-            <select class="freestyle-select" .value=${this._freestyleShots2}
-              @change=${e=>{this._freestyleShots2=e.target.value}}>
-              ${ve.map(e=>q`<option value=${e} ?selected=${e===this._freestyleShots2}>${e}</option>`)}
-            </select>
-          </div>
-        </div>
+      <path d="${u}" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linejoin="round" />
 
-        <button class="brew-btn freestyle-brew-btn" @click=${()=>this._brewFreestyle()}>
-          <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
-          Brew Freestyle
+      <g clip-path="url(#clip-${i})">
+        ${S.map(t=>Q`<path d="${t.d}" fill="${t.fill}" />`)}
+      </g>
+
+      <path d="${u}" fill="url(#refl-${i})" clip-path="url(#clip-${i})" />
+      <path d="M ${d+1.5} ${c+3} L ${f+2.5} ${l-5} L ${f+2.5+(r?4:5)} ${l-5} L ${d+1.5+(r?4:5)} ${c+3} Z" fill="url(#spec-${i})" />
+      <line x1="${p-2.5}" y1="${c+5}" x2="${g-3}" y2="${l-7}" stroke="rgba(255,255,255,0.08)" stroke-width="2" stroke-linecap="round" />
+      <line x1="${d+3}" y1="${c+.5}" x2="${p-3}" y2="${c+.5}" stroke="rgba(255,255,255,0.20)" stroke-width="1" stroke-linecap="round" />
+
+      <path d="M ${P} ${M} C ${P+O} ${M-2}, ${P+O} ${D+2}, ${P} ${D}" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" fill="none" stroke-linecap="round" />
+
+      <g mask="url(#rm-${i})">
+        <g transform="translate(0, ${2*l+2}) scale(1, -1)">
+          <path d="${u}" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-linejoin="round" />
+          <g clip-path="url(#clip-${i})" opacity="0.5">
+            ${S.map(t=>Q`<path d="${t.d}" fill="${t.fill}" />`)}
+          </g>
+          <path d="M ${P} ${M} C ${P+O} ${M-2}, ${P+O} ${D+2}, ${P} ${D}" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none" />
+        </g>
+      </g>
+    </svg>
+  `}(t,48,`r-${i}`)}
+              <span class="recipe-name">${t}</span>
+            </div>
+          `})}
+      </div>
+      <div class="brew-row">
+        <button class="brew-btn" ?disabled=${!e} @click=${()=>this._brew()}>
+          <ha-icon icon="mdi:coffee"></ha-icon>
+          Brew ${e||""}
         </button>
       </div>
-    `}_renderSettings(){const e=this._getSettings();return 0===e.length?W:q`
-      <div class="section-title">Settings</div>
-      <div class="settings-list">
-        ${e.map(e=>q`
-            <div class="setting-row">
-              <span class="setting-label">${e.name}</span>
-              <span class="setting-value">${e.value}</span>
-            </div>
+    `}_renderSegment(t,e,i,s,r=!1){return W`
+      <div class="segment-picker ${r?"freestyle-disabled":""}">
+        <span class="segment-label">${t}</span>
+        <div class="segment-options">
+          ${e.map(t=>W`
+            <button class="segment-opt" ?data-active=${t===i}
+              @click=${()=>s(t)}>${function(t){return Ot[t]||t.charAt(0).toUpperCase()+t.slice(1).replace(/_/g," ")}(t)}</button>
           `)}
+        </div>
       </div>
-    `}static get styles(){return n`
-      :host {
-        --card-bg: var(
-          --ha-card-background,
-          var(--card-background-color, white)
-        );
-        --text-primary: var(--primary-text-color);
-        --text-secondary: var(--secondary-text-color);
-      }
+    `}_renderPortion(t,e,i,s,r,o,n=!1){return W`
+      <div class="portion-row ${n?"freestyle-disabled":""}">
+        <div class="portion-header">
+          <span class="portion-label">${t}</span>
+          <span class="portion-value">${e} ml</span>
+        </div>
+        <input type="range" class="portion-slider"
+          min=${i} max=${s} step=${r} .value=${String(e)}
+          @input=${t=>o(parseInt(t.target.value)||0)} />
+      </div>
+    `}_renderFreestyle(){const t="coffee"===this._fsProcess1,e="none"===this._fsProcess2,i="coffee"===this._fsProcess2;return W`
+      <div class="section-title">Freestyle</div>
+      <div class="freestyle-section">
+        <div class="freestyle-name-row">
+          <input class="freestyle-name-input" type="text" placeholder="Drink name"
+            .value=${this._fsName}
+            @input=${t=>{this._fsName=t.target.value}} />
+        </div>
 
-      .no-device {
-        padding: 32px 16px;
-        text-align: center;
-        color: var(--text-secondary);
-      }
+        <div class="freestyle-components">
+          <div class="freestyle-component">
+            <div class="component-title">Component 1</div>
+            ${this._renderSegment("Process",mt,this._fsProcess1,t=>{this._fsProcess1=t})}
+            ${this._renderPortion("Portion",this._fsPortion1,5,250,5,t=>{this._fsPortion1=t})}
+            ${this._renderSegment("Intensity",_t,this._fsIntensity1,t=>{this._fsIntensity1=t},!t)}
+            ${this._renderSegment("Temp",bt,this._fsTemp1,t=>{this._fsTemp1=t})}
+            ${this._renderSegment("Shots",vt,this._fsShots1,t=>{this._fsShots1=t},!t)}
+          </div>
 
-      .no-device ha-icon {
-        --mdc-icon-size: 48px;
-        opacity: 0.4;
-      }
+          <div class="freestyle-component">
+            <div class="component-title">Component 2</div>
+            ${this._renderSegment("Process",$t,this._fsProcess2,t=>{this._fsProcess2=t})}
+            ${this._renderPortion("Portion",this._fsPortion2,0,250,5,t=>{this._fsPortion2=t},e)}
+            ${this._renderSegment("Intensity",_t,this._fsIntensity2,t=>{this._fsIntensity2=t},!i)}
+            ${this._renderSegment("Temp",bt,this._fsTemp2,t=>{this._fsTemp2=t},e)}
+            ${this._renderSegment("Shots",vt,this._fsShots2,t=>{this._fsShots2=t},!i)}
+          </div>
+        </div>
 
-      .no-device p {
-        margin: 8px 0 0;
-      }
-
-      .no-device .hint {
-        font-size: 0.85em;
-        opacity: 0.7;
-      }
-
-      .offline-section {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 12px 16px 20px;
-        color: var(--secondary-text-color);
-        font-size: 0.9em;
-      }
-
-      .offline-section ha-icon {
-        --mdc-icon-size: 20px;
-        opacity: 0.5;
-      }
-
-      .card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 16px 8px;
-      }
-
-      .machine-name {
-        font-size: 1.1em;
-        font-weight: 500;
-        color: var(--text-primary);
-      }
-
-      .connection-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-
-      .status-section {
-        padding: 0 16px 12px;
-      }
-
-      .state-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
-      }
-
-      .state-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 12px;
-        border-radius: 16px;
-        font-size: 0.85em;
-        font-weight: 500;
-      }
-
-      .activity-text {
-        font-size: 0.85em;
-        color: var(--text-secondary);
-      }
-
-      .progress-bar-container {
-        height: 4px;
-        background: var(--divider-color, #e0e0e0);
-        border-radius: 2px;
-        margin: 8px 0;
-        overflow: hidden;
-      }
-
-      .progress-bar {
-        height: 100%;
-        border-radius: 2px;
-        transition: width 0.5s ease;
-      }
-
-      .action-alert {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        margin: 0 16px 8px;
-        border-radius: 8px;
-        background: color-mix(
-          in srgb,
-          var(--error-color, #f44336) 8%,
-          transparent
-        );
-        color: var(--error-color, #f44336);
-        font-size: 0.85em;
-      }
-
-      .action-alert ha-icon {
-        --mdc-icon-size: 18px;
-        flex-shrink: 0;
-      }
-
-      .recipe-row {
-        display: flex;
-        gap: 8px;
-        padding: 0 16px 12px;
-        align-items: center;
-      }
-
-      .recipe-select {
-        flex: 1;
-        padding: 8px 12px;
-        border: 1px solid var(--divider-color, #e0e0e0);
-        border-radius: 8px;
-        background: var(--card-bg);
-        color: var(--text-primary);
-        font-size: 0.9em;
-        font-family: inherit;
-        cursor: pointer;
-        appearance: auto;
-      }
-
-      .recipe-select:focus {
-        outline: none;
-        border-color: var(--primary-color, #03a9f4);
-      }
-
-      .brew-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 8px;
-        background: var(--primary-color, #03a9f4);
-        color: var(--text-primary-color, #fff);
-        font-size: 0.9em;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: inherit;
-        transition: all 0.15s ease;
-        white-space: nowrap;
-      }
-
-      .brew-btn ha-icon {
-        --mdc-icon-size: 18px;
-      }
-
-      .brew-btn:hover:not(:disabled) {
-        opacity: 0.85;
-      }
-
-      .brew-btn:active:not(:disabled) {
-        transform: scale(0.96);
-      }
-
-      .brew-btn:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-      }
-
-      .brew-btn:focus-visible,
-      .cancel-btn:focus-visible {
-        outline: 2px solid var(--primary-color, #03a9f4);
-        outline-offset: 2px;
-      }
-
-      .cancel-row {
-        padding: 0 16px 12px;
-      }
-
-      .cancel-btn {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid var(--error-color, #f44336);
-        border-radius: 8px;
-        background: color-mix(
-          in srgb,
-          var(--error-color, #f44336) 8%,
-          transparent
-        );
-        color: var(--error-color, #f44336);
-        font-size: 0.85em;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: inherit;
-        transition: all 0.15s ease;
-      }
-
-      .cancel-btn:hover {
-        background: color-mix(
-          in srgb,
-          var(--error-color, #f44336) 18%,
-          transparent
-        );
-      }
-
-      .section-title {
-        font-size: 0.8em;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--text-secondary);
-        padding: 8px 16px 4px;
-      }
-
-      .settings-list {
-        padding: 0 16px 12px;
-      }
-
-      .setting-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 6px 0;
-        font-size: 0.85em;
-      }
-
-      .setting-label {
-        color: var(--text-secondary);
-      }
-
-      .setting-value {
-        color: var(--text-primary);
-        font-weight: 500;
-      }
-
-      /* Profile */
-      .profile-row {
-        display: flex;
-        gap: 8px;
-        padding: 0 16px 12px;
-        align-items: center;
-      }
-
-      .profile-icon {
-        --mdc-icon-size: 20px;
-        color: var(--text-secondary);
-        flex-shrink: 0;
-      }
-
-      /* Freestyle */
-      .freestyle-section {
-        padding: 0 16px 12px;
-      }
-
-      .freestyle-row {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        margin-bottom: 8px;
-      }
-
-      .freestyle-row label,
-      .freestyle-field label {
-        font-size: 0.75em;
-        color: var(--text-secondary);
-        font-weight: 500;
-      }
-
-      .freestyle-subtitle {
-        font-size: 0.8em;
-        font-weight: 500;
-        color: var(--text-secondary);
-        margin: 8px 0 4px;
-        opacity: 0.8;
-      }
-
-      .freestyle-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .freestyle-field {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .freestyle-input,
-      .freestyle-select {
-        padding: 6px 8px;
-        border: 1px solid var(--divider-color, #e0e0e0);
-        border-radius: 6px;
-        background: var(--card-bg);
-        color: var(--text-primary);
-        font-size: 0.85em;
-        font-family: inherit;
-      }
-
-      .freestyle-select {
-        cursor: pointer;
-        appearance: auto;
-      }
-
-      .freestyle-input:focus,
-      .freestyle-select:focus {
-        outline: none;
-        border-color: var(--primary-color, #03a9f4);
-      }
-
-      .freestyle-brew-btn {
-        width: 100%;
-        justify-content: center;
-        margin-top: 12px;
-      }
-    `}};e([pe({attribute:!1})],Ae.prototype,"hass",void 0),e([fe()],Ae.prototype,"_config",void 0),e([fe()],Ae.prototype,"_resolvedPrefix",void 0),e([fe()],Ae.prototype,"_freestyleName",void 0),e([fe()],Ae.prototype,"_freestyleProcess1",void 0),e([fe()],Ae.prototype,"_freestyleIntensity1",void 0),e([fe()],Ae.prototype,"_freestylePortion1",void 0),e([fe()],Ae.prototype,"_freestyleTemp1",void 0),e([fe()],Ae.prototype,"_freestyleShots1",void 0),e([fe()],Ae.prototype,"_freestyleProcess2",void 0),e([fe()],Ae.prototype,"_freestyleIntensity2",void 0),e([fe()],Ae.prototype,"_freestylePortion2",void 0),e([fe()],Ae.prototype,"_freestyleTemp2",void 0),e([fe()],Ae.prototype,"_freestyleShots2",void 0),Ae=e([ce("melitta-barista-card")],Ae),window.customCards=window.customCards||[],window.customCards.push({type:"melitta-barista-card",name:"Melitta Barista Card",description:"Control your Melitta Barista coffee machine",preview:!0,documentationURL:"https://github.com/dzerik/melitta-barista-card"}),console.info("%c MELITTA-BARISTA-CARD %c v0.5.0 ","color: white; background: #795548; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;","color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;");export{Ae as MelittaBaristaCard};
+        <div class="freestyle-brew-row">
+          <button class="brew-btn" @click=${()=>this._brewFreestyle()}>
+            <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
+            Brew ${this._fsName}
+          </button>
+        </div>
+      </div>
+    `}_renderSettings(){const t=this._getPrefix();if(!t)return q;const e=xt.map(e=>{const i=this.hass.states[`switch.${t}_${e}`];if(!i)return q;const s="on"===i.state,r=Pt[e];return W`
+        <div class="setting-card">
+          <ha-icon class="setting-icon" icon="${r.icon}"></ha-icon>
+          <div class="setting-info">
+            <div class="setting-label">${r.label}</div>
+            <div class="setting-desc">${r.desc}</div>
+          </div>
+          <button class="toggle-track" ?data-on=${s}
+            @click=${()=>this._toggleSwitch(e,!s)}>
+            <span class="toggle-thumb"></span>
+          </button>
+        </div>
+      `}),i=wt.map(e=>{const i=this.hass.states[`number.${t}_${e}`];if(!i)return q;const s=Mt[e],r=parseFloat(i.state)||0;let o;return o="level"===s.format?Dt[e]?.[r]??String(r):`${r} min`,W`
+        <div class="setting-card">
+          <ha-icon class="setting-icon" icon="${s.icon}"></ha-icon>
+          <div class="setting-info">
+            <div class="setting-label">${s.label}</div>
+            <div class="setting-desc">${s.desc}</div>
+          </div>
+          <span class="setting-value">${o}</span>
+        </div>
+      `});return e.every(t=>t===q)&&i.every(t=>t===q)?q:W`
+      <div class="section-title">Settings</div>
+      <div class="settings-grid">
+        ${e}
+        ${i}
+      </div>
+    `}static get styles(){return St}};t([gt({attribute:!1})],Tt.prototype,"hass",void 0),t([ut()],Tt.prototype,"_config",void 0),t([ut()],Tt.prototype,"_resolvedPrefix",void 0),t([ut()],Tt.prototype,"_fsName",void 0),t([ut()],Tt.prototype,"_fsProcess1",void 0),t([ut()],Tt.prototype,"_fsIntensity1",void 0),t([ut()],Tt.prototype,"_fsPortion1",void 0),t([ut()],Tt.prototype,"_fsTemp1",void 0),t([ut()],Tt.prototype,"_fsShots1",void 0),t([ut()],Tt.prototype,"_fsProcess2",void 0),t([ut()],Tt.prototype,"_fsIntensity2",void 0),t([ut()],Tt.prototype,"_fsPortion2",void 0),t([ut()],Tt.prototype,"_fsTemp2",void 0),t([ut()],Tt.prototype,"_fsShots2",void 0),Tt=t([dt("melitta-barista-card")],Tt),window.customCards=window.customCards||[],window.customCards.push({type:"melitta-barista-card",name:"Melitta Barista Card",description:"Premium control card for Melitta Barista coffee machines",preview:!0,documentationURL:"https://github.com/dzerik/melitta-barista-card"}),console.info("%c MELITTA-BARISTA-CARD %c v1.0.0 ","color: white; background: #795548; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;","color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;");export{Tt as MelittaBaristaCard};
