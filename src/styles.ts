@@ -135,23 +135,92 @@ export const cardStyles = css`
   }
   .action-alert ha-icon { --mdc-icon-size: 18px; flex-shrink: 0; }
 
-  /* ── Cancel ── */
-  .cancel-row { padding: 0 12px 8px; }
-  .cancel-btn {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid color-mix(in srgb, var(--mbc-error) 40%, transparent);
+  /* ── Brewing view ── */
+  .brewing-view {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    margin: 0 12px 8px;
     border-radius: var(--mbc-radius);
+    background: var(--mbc-surface);
+    border: 1px solid var(--mbc-border);
+    animation: brewing-fade-in 0.3s ease both;
+  }
+  @keyframes brewing-fade-in {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .brewing-icon-wrap {
+    flex-shrink: 0;
+    animation: brewing-pulse 2s ease-in-out infinite;
+  }
+  @keyframes brewing-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  .brewing-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .brewing-recipe {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--mbc-text);
+  }
+  .brewing-activity {
+    font-size: 0.72em;
+    color: var(--mbc-text2);
+  }
+  .brewing-progress {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 2px;
+  }
+  .brewing-progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--mbc-warning);
+    transition: width 0.5s ease;
+    position: relative;
+  }
+  .brewing-progress-fill::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 30px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+    animation: progress-shimmer 1.5s infinite;
+  }
+  .brewing-percent {
+    font-size: 0.65em;
+    font-weight: 700;
+    color: var(--mbc-warning);
+    font-variant-numeric: tabular-nums;
+  }
+  .brewing-cancel {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--mbc-error) 30%, transparent);
     background: color-mix(in srgb, var(--mbc-error) 8%, transparent);
     color: var(--mbc-error);
-    font-size: 0.8em;
-    font-weight: 500;
     cursor: pointer;
-    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.15s ease;
+    padding: 0;
   }
-  .cancel-btn:hover { background: color-mix(in srgb, var(--mbc-error) 15%, transparent); }
-  .cancel-btn:active { transform: scale(0.97); }
+  .brewing-cancel ha-icon { --mdc-icon-size: 16px; }
+  .brewing-cancel:hover { background: color-mix(in srgb, var(--mbc-error) 18%, transparent); }
+  .brewing-cancel:active { transform: scale(0.9); }
 
   /* ── Profile ── */
   .profile-row {
