@@ -42,17 +42,18 @@ export const cardStyles = css`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 16px 0;
+    padding: 10px 16px 0;
   }
   .machine-name {
-    font-size: 1.05em;
-    font-weight: 600;
-    color: var(--mbc-text);
-    letter-spacing: 0.02em;
+    font-size: 0.7em;
+    font-weight: 500;
+    color: var(--mbc-text2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
   .connection-dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     flex-shrink: 0;
     transition: background 0.3s;

@@ -123,6 +123,24 @@ export class MelittaBaristaCardEditor extends LitElement {
       <div class="checkbox-row">
         <input
           type="checkbox"
+          id="show_header"
+          .checked=${this._config.show_header !== false}
+          @change=${(ev: Event) => this._valueChanged("show_header", ev)}
+        />
+        <label for="show_header">Show header</label>
+      </div>
+      <div class="checkbox-row">
+        <input
+          type="checkbox"
+          id="show_status"
+          .checked=${this._config.show_status !== false}
+          @change=${(ev: Event) => this._valueChanged("show_status", ev)}
+        />
+        <label for="show_status">Show status</label>
+      </div>
+      <div class="checkbox-row">
+        <input
+          type="checkbox"
           id="show_profiles"
           .checked=${this._config.show_profiles !== false}
           @change=${(ev: Event) => this._valueChanged("show_profiles", ev)}

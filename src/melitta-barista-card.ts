@@ -84,6 +84,8 @@ export class MelittaBaristaCard extends LitElement {
   public setConfig(config: MelittaCardConfig): void {
     this._config = {
       ...config,
+      show_header: config.show_header !== false,
+      show_status: config.show_status !== false,
       show_recipes: config.show_recipes !== false,
       show_profiles: config.show_profiles !== false,
       show_freestyle: config.show_freestyle || false,
@@ -261,12 +263,17 @@ export class MelittaBaristaCard extends LitElement {
     const stateColor = STATE_COLORS[machineState.toLowerCase()] || "var(--primary-text-color)";
     const cardName = this._config.name || "Melitta Barista";
 
+    const showHeader = this._config.show_header;
+    const showStatus = this._config.show_status;
+
     if (isUnavailable) {
       return html`<ha-card>
-        <div class="card-header">
-          <span class="machine-name">${cardName}</span>
-          <div class="connection-dot" style="background: var(--mbc-error)"></div>
-        </div>
+        ${showHeader ? html`
+          <div class="card-header">
+            <span class="machine-name">${cardName}</span>
+            <div class="connection-dot" style="background: var(--mbc-error)"></div>
+          </div>
+        ` : nothing}
         <div class="offline-section">
           <ha-icon icon="mdi:bluetooth-off"></ha-icon>
           <span>Machine offline</span>
@@ -275,30 +282,34 @@ export class MelittaBaristaCard extends LitElement {
     }
 
     return html`<ha-card>
-      <div class="card-header">
-        <span class="machine-name">${cardName}</span>
-        <div class="connection-dot" style="background: ${isConnected ? "var(--mbc-success)" : "var(--mbc-error)"}"></div>
-      </div>
-
-      <div class="status-section">
-        <div class="state-row">
-          <span class="state-badge" style="background: ${stateColor}18; color: ${stateColor}">
-            ${machineState}
-          </span>
-          ${isBrewing ? html`<span class="activity-text">${activity}</span>` : nothing}
+      ${showHeader ? html`
+        <div class="card-header">
+          <span class="machine-name">${cardName}</span>
+          <div class="connection-dot" style="background: ${isConnected ? "var(--mbc-success)" : "var(--mbc-error)"}"></div>
         </div>
-        ${hasProgress ? html`
-          <div class="progress-container">
-            <div class="progress-fill" style="width: ${progressNum}%; background: ${stateColor}"></div>
+      ` : nothing}
+
+      ${showStatus ? html`
+        <div class="status-section">
+          <div class="state-row">
+            <span class="state-badge" style="background: ${stateColor}18; color: ${stateColor}">
+              ${machineState}
+            </span>
+            ${isBrewing ? html`<span class="activity-text">${activity}</span>` : nothing}
+          </div>
+          ${hasProgress ? html`
+            <div class="progress-container">
+              <div class="progress-fill" style="width: ${progressNum}%; background: ${stateColor}"></div>
+            </div>
+          ` : nothing}
+        </div>
+
+        ${hasAction ? html`
+          <div class="action-alert">
+            <ha-icon icon="mdi:alert-circle"></ha-icon>
+            <span>${actionRequired}</span>
           </div>
         ` : nothing}
-      </div>
-
-      ${hasAction ? html`
-        <div class="action-alert">
-          <ha-icon icon="mdi:alert-circle"></ha-icon>
-          <span>${actionRequired}</span>
-        </div>
       ` : nothing}
 
       ${isBrewing ? html`
