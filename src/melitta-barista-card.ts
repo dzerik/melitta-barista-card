@@ -289,19 +289,13 @@ export class MelittaBaristaCard extends LitElement {
         </div>
       ` : nothing}
 
-      ${showStatus ? html`
+      ${showStatus && !isBrewing ? html`
         <div class="status-section">
           <div class="state-row">
             <span class="state-badge" style="background: ${stateColor}18; color: ${stateColor}">
               ${machineState}
             </span>
-            ${isBrewing ? html`<span class="activity-text">${activity}</span>` : nothing}
           </div>
-          ${hasProgress ? html`
-            <div class="progress-container">
-              <div class="progress-fill" style="width: ${progressNum}%; background: ${stateColor}"></div>
-            </div>
-          ` : nothing}
         </div>
 
         ${hasAction ? html`
@@ -313,22 +307,35 @@ export class MelittaBaristaCard extends LitElement {
       ` : nothing}
 
       ${isBrewing ? html`
-        <div class="cancel-row">
-          <button class="cancel-btn" @click=${() => this.hass.callService("button", "press", { entity_id: `button.${prefix}_cancel` })}>
-            Cancel
+        <div class="brewing-view">
+          <div class="brewing-icon-wrap">
+            ${coffeeIconSvg(this._selectedRecipe() || "Espresso", 64, "brew-active")}
+          </div>
+          <div class="brewing-info">
+            <span class="brewing-recipe">${this._selectedRecipe() || "Brewing"}</span>
+            <span class="brewing-activity">${activity}</span>
+            ${hasProgress ? html`
+              <div class="brewing-progress">
+                <div class="brewing-progress-fill" style="width: ${progressNum}%"></div>
+              </div>
+              <span class="brewing-percent">${Math.round(progressNum)}%</span>
+            ` : nothing}
+          </div>
+          <button class="brewing-cancel" @click=${() => this.hass.callService("button", "press", { entity_id: `button.${prefix}_cancel` })}>
+            <ha-icon icon="mdi:close"></ha-icon>
           </button>
         </div>
       ` : nothing}
 
-      ${this._config.show_profiles && isReady && this._profileOptions().length > 1
+      ${!isBrewing && this._config.show_profiles && isReady && this._profileOptions().length > 1
         ? this._renderProfile()
         : nothing}
 
-      ${this._config.show_recipes && isReady && this._recipeOptions().length > 0
+      ${!isBrewing && this._config.show_recipes && this._recipeOptions().length > 0
         ? this._renderRecipes()
         : nothing}
 
-      ${this._config.show_freestyle && isReady
+      ${!isBrewing && this._config.show_freestyle && isReady
         ? this._renderFreestyle()
         : nothing}
 
