@@ -42,7 +42,6 @@ export class MelittaBaristaCardEditor extends LitElement {
       return;
     }
 
-    // Also auto-fill name from detected device
     const devices = this.hass ? detectMelittaDevices(this.hass) : [];
     const device = devices.find((d) => d.prefix === prefix);
     this._config = {
@@ -69,10 +68,7 @@ export class MelittaBaristaCardEditor extends LitElement {
         ? html`
             <div class="editor-row">
               <label for="device">Device</label>
-              <select
-                id="device"
-                @change=${this._deviceSelected}
-              >
+              <select id="device" @change=${this._deviceSelected}>
                 ${devices.map(
                   (d) => html`
                     <option value=${d.prefix} ?selected=${d.prefix === currentPrefix}>
@@ -121,66 +117,57 @@ export class MelittaBaristaCardEditor extends LitElement {
         />
       </div>
       <div class="checkbox-row">
-        <input
-          type="checkbox"
-          id="show_header"
+        <input type="checkbox" id="show_header"
           .checked=${this._config.show_header !== false}
-          @change=${(ev: Event) => this._valueChanged("show_header", ev)}
-        />
+          @change=${(ev: Event) => this._valueChanged("show_header", ev)} />
         <label for="show_header">Show header</label>
       </div>
       <div class="checkbox-row">
-        <input
-          type="checkbox"
-          id="show_status"
+        <input type="checkbox" id="show_status"
           .checked=${this._config.show_status !== false}
-          @change=${(ev: Event) => this._valueChanged("show_status", ev)}
-        />
+          @change=${(ev: Event) => this._valueChanged("show_status", ev)} />
         <label for="show_status">Show status</label>
       </div>
       <div class="checkbox-row">
-        <input
-          type="checkbox"
-          id="show_profiles"
+        <input type="checkbox" id="show_profiles"
           .checked=${this._config.show_profiles !== false}
-          @change=${(ev: Event) => this._valueChanged("show_profiles", ev)}
-        />
+          @change=${(ev: Event) => this._valueChanged("show_profiles", ev)} />
         <label for="show_profiles">Show profile selector</label>
       </div>
       <div class="checkbox-row">
-        <input
-          type="checkbox"
-          id="show_recipes"
+        <input type="checkbox" id="show_recipes"
           .checked=${this._config.show_recipes !== false}
-          @change=${(ev: Event) => this._valueChanged("show_recipes", ev)}
-        />
+          @change=${(ev: Event) => this._valueChanged("show_recipes", ev)} />
         <label for="show_recipes">Show recipe selector</label>
       </div>
       <div class="checkbox-row">
-        <input
-          type="checkbox"
-          id="show_freestyle"
+        <input type="checkbox" id="show_freestyle"
           .checked=${this._config.show_freestyle || false}
-          @change=${(ev: Event) => this._valueChanged("show_freestyle", ev)}
-        />
+          @change=${(ev: Event) => this._valueChanged("show_freestyle", ev)} />
         <label for="show_freestyle">Show freestyle recipe</label>
       </div>
       <div class="checkbox-row">
-        <input
-          type="checkbox"
-          id="show_settings"
+        <input type="checkbox" id="show_stats"
+          .checked=${this._config.show_stats || false}
+          @change=${(ev: Event) => this._valueChanged("show_stats", ev)} />
+        <label for="show_stats">Show cup statistics</label>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="show_maintenance"
+          .checked=${this._config.show_maintenance || false}
+          @change=${(ev: Event) => this._valueChanged("show_maintenance", ev)} />
+        <label for="show_maintenance">Show maintenance</label>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="show_settings"
           .checked=${this._config.show_settings || false}
-          @change=${(ev: Event) => this._valueChanged("show_settings", ev)}
-        />
+          @change=${(ev: Event) => this._valueChanged("show_settings", ev)} />
         <label for="show_settings">Show settings</label>
       </div>
       <div class="checkbox-row">
-        <input
-          type="checkbox"
-          id="compact"
+        <input type="checkbox" id="compact"
           .checked=${this._config.compact || false}
-          @change=${(ev: Event) => this._valueChanged("compact", ev)}
-        />
+          @change=${(ev: Event) => this._valueChanged("compact", ev)} />
         <label for="compact">Compact mode</label>
       </div>
     `;
@@ -193,13 +180,11 @@ export class MelittaBaristaCardEditor extends LitElement {
         flex-direction: column;
         margin-bottom: 12px;
       }
-
       label {
         font-weight: 500;
         margin-bottom: 4px;
         font-size: 0.9em;
       }
-
       input[type="text"],
       input:not([type]),
       select {
@@ -207,23 +192,15 @@ export class MelittaBaristaCardEditor extends LitElement {
         border: 1px solid var(--divider-color, #ccc);
         border-radius: 4px;
         font-size: 0.9em;
-        background: var(
-          --ha-card-background,
-          var(--card-background-color, white)
-        );
+        background: var(--ha-card-background, var(--card-background-color, white));
         color: var(--primary-text-color);
       }
-
-      select {
-        cursor: pointer;
-      }
-
+      select { cursor: pointer; }
       .hint {
         font-size: 0.8em;
         color: var(--secondary-text-color);
         margin-top: 4px;
       }
-
       .checkbox-row {
         display: flex;
         align-items: center;
