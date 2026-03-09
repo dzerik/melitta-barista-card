@@ -8,5 +8,7 @@ export interface MelittaCardConfig {
   show_profiles?: boolean;
   show_freestyle?: boolean;
   show_settings?: boolean;
+  show_stats?: boolean;
+  show_maintenance?: boolean;
   compact?: boolean;
 }
