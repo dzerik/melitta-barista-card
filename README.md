@@ -85,6 +85,14 @@ npm run build     # Production build (minified)
 npm run dev       # Watch mode for development
 ```
 
+## Disclaimer
+
+This project is an independent, open-source, non-commercial Lovelace card created for personal and home automation purposes. It is **not affiliated with, endorsed by, or connected to Melitta Group Management GmbH & Co. KG** or any of its subsidiaries.
+
+"Melitta", "Barista T Smart", "Barista TS Smart", and the Melitta logo are registered trademarks of Melitta Group Management GmbH & Co. KG. All product names, logos, brands, and graphical assets are the property of their respective owners and are used here solely for identification and interoperability purposes.
+
+This software is not intended for commercial use or the generation of revenue. See [NOTICE](NOTICE) for full legal details.
+
 ## License
 
 [MIT](LICENSE)

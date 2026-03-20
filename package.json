@@ -1,6 +1,6 @@
 {
   "name": "melitta-barista-card",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Custom Lovelace card for Melitta Barista Smart coffee machines",
   "main": "dist/melitta-barista-card.js",
   "type": "module",
