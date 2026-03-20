@@ -1,5 +1,6 @@
 {
   "name": "Melitta Barista Card",
   "render_readme": true,
-  "filename": "melitta-barista-card.js"
+  "filename": "melitta-barista-card.js",
+  "homeassistant": "2024.1.0"
 }

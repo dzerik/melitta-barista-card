@@ -257,7 +257,7 @@ export const cardStyles = css`
   /* -- DirectKey grid -- */
   .dk-grid {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
     gap: 1px;
     background: var(--mbc-border);
   }
