@@ -130,6 +130,12 @@ const DRINKS: Record<string, DrinkProfile> = {
   },
 };
 
+// Aliases for names without accents (from integration entity attributes)
+DRINKS["Cafe Creme"] = DRINKS["Café Crème"];
+DRINKS["Cafe Creme Doppio"] = DRINKS["Café Crème Doppio"];
+DRINKS["Caffe Latte"] = DRINKS["Caffè Latte"];
+DRINKS["Cafe au Lait"] = DRINKS["Café au Lait"];
+
 const DEFAULT: DrinkProfile = {
   layers: [{ color: "#5C3A1E", height: 0.45 }],
 };

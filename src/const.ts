@@ -21,7 +21,7 @@ export type DirectKeyCategory = (typeof DIRECTKEY_CATEGORIES)[number];
 
 export const DK_LABELS: Record<DirectKeyCategory, string> = {
   espresso: "Espresso",
-  cafe_creme: "Cafe Creme",
+  cafe_creme: "Café Crème",
   cappuccino: "Cappuccino",
   latte_macchiato: "Latte Macchiato",
   milk: "Milk",
@@ -29,15 +29,6 @@ export const DK_LABELS: Record<DirectKeyCategory, string> = {
   water: "Hot Water",
 };
 
-export const DK_RECIPE_ICON: Record<DirectKeyCategory, string> = {
-  espresso: "Espresso",
-  cafe_creme: "Cafe Creme",
-  cappuccino: "Cappuccino",
-  latte_macchiato: "Latte Macchiato",
-  milk: "Milk",
-  milk_froth: "Milk Froth",
-  water: "Hot Water",
-};
 
 export const DIRECTKEY_DISPLAY_TO_KEY: Record<string, DirectKeyCategory> = {
   "Espresso": "espresso",

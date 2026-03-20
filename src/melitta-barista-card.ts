@@ -14,7 +14,6 @@ import {
   FREESTYLE_SHOTS,
   DIRECTKEY_CATEGORIES,
   DK_LABELS,
-  DK_RECIPE_ICON,
   DIRECTKEY_DISPLAY_TO_KEY,
   CLEANING_ACTIONS,
   FILTER_ACTIONS,
@@ -90,8 +89,6 @@ export class MelittaBaristaCard extends LitElement {
   // DirectKey state
   @state() private _selectedDk: DirectKeyCategory | null = null;
   @state() private _twoCups = false;
-  @state() private _aromaIntense = false;
-
   // Recipe edit dialog
   @state() private _editDk: { category: DirectKeyCategory; recipe: DirectKeyRecipe } | null = null;
   @state() private _editState: Record<string, string | number> | null = null;
@@ -164,7 +161,7 @@ export class MelittaBaristaCard extends LitElement {
     if (changedProps.has("_config") || changedProps.has("_resolvedPrefix")) return true;
     for (const key of changedProps.keys()) {
       if (typeof key === "string" && (key.startsWith("_fs") || key.startsWith("_selected") ||
-          key.startsWith("_two") || key.startsWith("_aroma") || key.startsWith("_edit") ||
+          key.startsWith("_two") || key.startsWith("_edit") ||
           key.startsWith("_confirm") || key.startsWith("_busy"))) return true;
     }
     const oldHass = changedProps.get("hass") as HomeAssistant | undefined;
@@ -569,7 +566,7 @@ export class MelittaBaristaCard extends LitElement {
               @pointerleave=${() => this._cancelDkLongPress()}
               @contextmenu=${(e: Event) => e.preventDefault()}>
               <div style="${isSelected && hasDetails ? "opacity: 0.15" : ""}">
-                ${coffeeIconSvg(DK_RECIPE_ICON[cat], 48, `dk-${cat}`)}
+                ${coffeeIconSvg(DK_LABELS[cat], 48, `dk-${cat}`)}
               </div>
               ${isSelected && hasDetails ? html`
                 <div class="dk-card-overlay">
@@ -592,14 +589,6 @@ export class MelittaBaristaCard extends LitElement {
           <span class="dk-card-label">${this._twoCups ? "2x ON" : "2x"}</span>
         </button>
 
-        <!-- Aroma toggle -->
-        <button class="dk-card" ?data-selected=${this._aromaIntense}
-          @click=${() => { this._aromaIntense = !this._aromaIntense; }}>
-          <div style="display:flex;align-items:center;justify-content:center;width:48px;height:55px">
-            <ha-icon icon="mdi:scent" style="--mdc-icon-size:28px;opacity:${this._aromaIntense ? "1" : "0.35"};color:var(--mbc-text)"></ha-icon>
-          </div>
-          <span class="dk-card-label">${this._aromaIntense ? "Aroma+" : "Aroma"}</span>
-        </button>
       </div>
     `;
   }
