@@ -9,19 +9,47 @@ A custom Lovelace card for the [Melitta Barista Smart](https://github.com/dzerik
 ## Features
 
 - **Auto-detection** -- automatically finds your Melitta device, no manual configuration needed
-- Machine state with color-coded badge
-- BLE connection indicator
-- Progress bar during brewing/cleaning
-- Action required alerts
-- Recipe select dropdown with brew button
-- Cancel button during operations
-- Optional settings display
-- Visual card editor with device dropdown
-- Theme-aware styling (light/dark)
+- **Recipe grid** -- all 24 recipes with SVG cup icons, DirectKey quick-access buttons, and user profile tabs
+- **Freestyle builder** -- custom drink with two components, intensity, aroma, temperature, shots, and portion size
+- **Cup statistics** -- total counter and per-recipe stats dashboard
+- **Maintenance** -- easy clean, intensive clean, descaling, evaporating, water filter management
+- **Machine settings** -- toggles and sliders for energy saving, auto bean select, rinsing, water hardness, auto-off, brew temperature
+- **Real-time status** -- machine state badge, BLE connection indicator, brewing/cleaning progress bar
+- **Action alerts** -- fill water, empty trays, insert brew unit, and other required actions
+- **Visual editor** -- device dropdown in the card editor UI
+- **Theme-aware** -- light and dark mode styling
 
-## Screenshot
+## Screenshots
 
-![Melitta Barista Card](https://raw.githubusercontent.com/dzerik/melitta-barista-card/main/screenshot.png)
+### Recipes
+
+Recipe grid with user profiles, DirectKey quick-access buttons, and all available recipes with SVG cup icons.
+
+![Recipes](images/recipes.png)
+
+### Freestyle
+
+Custom drink builder with two components, adjustable intensity, aroma, temperature, shots, and portion size.
+
+![Freestyle](images/freestyle.png)
+
+### Stats
+
+Cup counter dashboard with total count and per-recipe statistics.
+
+![Stats](images/stats.png)
+
+### Maintenance
+
+Cleaning, descaling, evaporating, water filter management, and power off.
+
+![Maintenance](images/maintenance.png)
+
+### Settings
+
+Machine configuration: toggles (energy saving, auto bean, rinsing) and sliders (water hardness, auto-off, brew temperature).
+
+![Settings](images/settings.png)
 
 ## Installation
 
