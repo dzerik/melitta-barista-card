@@ -893,4 +893,88 @@ export const cardStyles = css`
   .edit-btn-save:hover { opacity: 0.88; }
   .edit-btn-save:active { transform: scale(0.97); }
   .edit-btn-save:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Sommelier */
+  .som-hoppers {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .som-hopper-tag {
+    font-size: 0.72em;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: var(--mbc-surface);
+    color: var(--mbc-subtext);
+    border: 1px solid var(--mbc-border);
+  }
+  .som-favorites { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+  .som-fav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--mbc-surface);
+    border: 1px solid var(--mbc-border);
+  }
+  .som-fav-info { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .som-fav-name {
+    font-size: 0.78em;
+    font-weight: 500;
+    color: var(--mbc-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .som-fav-count { font-size: 0.68em; color: var(--mbc-subtext); flex-shrink: 0; }
+  .som-brew-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: none;
+    background: var(--mbc-text);
+    color: var(--mbc-bg);
+    font-size: 0.72em;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .som-brew-btn:hover { opacity: 0.85; }
+  .som-brew-btn.full { width: 100%; justify-content: center; padding: 6px; margin-top: 6px; }
+  .som-brew-btn ha-icon { --mdc-icon-size: 16px; }
+  .som-quick-recipe {
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--mbc-surface);
+    border: 1px solid var(--mbc-accent, var(--mbc-border));
+    margin-bottom: 10px;
+  }
+  .som-quick-name { font-size: 0.82em; font-weight: 600; color: var(--mbc-text); margin-bottom: 4px; }
+  .som-quick-desc { font-size: 0.72em; color: var(--mbc-subtext); line-height: 1.3; }
+  .som-actions { display: flex; gap: 6px; }
+  .som-surprise-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--mbc-border);
+    background: transparent;
+    color: var(--mbc-text);
+    font-size: 0.78em;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .som-surprise-btn:hover { background: var(--mbc-surface); }
+  .som-surprise-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .som-surprise-btn ha-icon { --mdc-icon-size: 18px; }
+  @keyframes mbc-spin { to { transform: rotate(360deg); } }
+  .spin ha-icon, ha-icon.spin { animation: mbc-spin 1s linear infinite; }
 `;

@@ -1,5 +1,5 @@
-function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)n=Reflect.decorate(t,e,i,s);else for(var a=t.length-1;a>=0;a--)(r=t[a])&&(n=(o<3?r(n):o>3?r(e,i,n):r(e,i))||n);return o>3&&n&&Object.defineProperty(e,i,n),n}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,i=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s=Symbol(),r=new WeakMap;let o=class{constructor(t,e,i){if(this._$cssResult$=!0,i!==s)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(i&&void 0===t){const i=void 0!==e&&1===e.length;i&&(t=r.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),i&&r.set(e,t))}return t}toString(){return this.cssText}};const n=(t,...e)=>{const i=1===t.length?t[0]:e.reduce((e,i,s)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[s+1],t[0]);return new o(i,t,s)},a=i?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return(t=>new o("string"==typeof t?t:t+"",void 0,s))(e)})(t):t,{is:c,defineProperty:l,getOwnPropertyDescriptor:d,getOwnPropertyNames:p,getOwnPropertySymbols:h,getPrototypeOf:f}=Object,m=globalThis,g=m.trustedTypes,u=g?g.emptyScript:"",b=m.reactiveElementPolyfillSupport,_=(t,e)=>t,v={toAttribute(t,e){switch(e){case Boolean:t=t?u:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},$=(t,e)=>!c(t,e),x={attribute:!0,type:String,converter:v,reflect:!1,useDefault:!1,hasChanged:$};Symbol.metadata??=Symbol("metadata"),m.litPropertyMetadata??=new WeakMap;let y=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=x){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const i=Symbol(),s=this.getPropertyDescriptor(t,i,e);void 0!==s&&l(this.prototype,t,s)}}static getPropertyDescriptor(t,e,i){const{get:s,set:r}=d(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:s,set(e){const o=s?.call(this);r?.call(this,e),this.requestUpdate(t,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??x}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const t=f(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const t=this.properties,e=[...p(t),...h(t)];for(const i of e)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,i]of e)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const i=this._$Eu(t,e);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(a(t))}else void 0!==t&&e.push(a(t));return e}static _$Eu(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const i of e.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,s)=>{if(i)t.adoptedStyleSheets=s.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const i of s){const s=document.createElement("style"),r=e.litNonce;void 0!==r&&s.setAttribute("nonce",r),s.textContent=i.cssText,t.appendChild(s)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$ET(t,e){const i=this.constructor.elementProperties.get(t),s=this.constructor._$Eu(t,i);if(void 0!==s&&!0===i.reflect){const r=(void 0!==i.converter?.toAttribute?i.converter:v).toAttribute(e,i.type);this._$Em=t,null==r?this.removeAttribute(s):this.setAttribute(s,r),this._$Em=null}}_$AK(t,e){const i=this.constructor,s=i._$Eh.get(t);if(void 0!==s&&this._$Em!==s){const t=i.getPropertyOptions(s),r="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:v;this._$Em=s;const o=r.fromAttribute(e,t.type);this[s]=o??this._$Ej?.get(s)??o,this._$Em=null}}requestUpdate(t,e,i,s=!1,r){if(void 0!==t){const o=this.constructor;if(!1===s&&(r=this[t]),i??=o.getPropertyOptions(t),!((i.hasChanged??$)(r,e)||i.useDefault&&i.reflect&&r===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,i))))return;this.C(t,e,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:i,reflect:s,wrapped:r},o){i&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==r||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||i||(e=void 0),this._$AL.set(t,e)),!0===s&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,i]of t){const{wrapped:t}=i,s=this[e];!0!==t||this._$AL.has(e)||void 0===s||this.C(e,void 0,i,s)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};y.elementStyles=[],y.shadowRootOptions={mode:"open"},y[_("elementProperties")]=new Map,y[_("finalized")]=new Map,b?.({ReactiveElement:y}),(m.reactiveElementVersions??=[]).push("2.1.2");const w=globalThis,k=t=>t,S=w.trustedTypes,A=S?S.createPolicy("lit-html",{createHTML:t=>t}):void 0,C="$lit$",E=`lit$${Math.random().toFixed(9).slice(2)}$`,P="?"+E,D=`<${P}>`,M=document,z=()=>M.createComment(""),T=t=>null===t||"object"!=typeof t&&"function"!=typeof t,L=Array.isArray,O="[ \t\n\f\r]",R=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,N=/-->/g,F=/>/g,U=RegExp(`>|${O}(?:([^\\s"'>=/]+)(${O}*=${O}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),B=/'/g,H=/"/g,j=/^(?:script|style|textarea|title)$/i,I=t=>(e,...i)=>({_$litType$:t,strings:e,values:i}),K=I(1),W=I(2),Q=Symbol.for("lit-noChange"),V=Symbol.for("lit-nothing"),q=new WeakMap,Z=M.createTreeWalker(M,129);function G(t,e){if(!L(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==A?A.createHTML(e):e}const X=(t,e)=>{const i=t.length-1,s=[];let r,o=2===e?"<svg>":3===e?"<math>":"",n=R;for(let e=0;e<i;e++){const i=t[e];let a,c,l=-1,d=0;for(;d<i.length&&(n.lastIndex=d,c=n.exec(i),null!==c);)d=n.lastIndex,n===R?"!--"===c[1]?n=N:void 0!==c[1]?n=F:void 0!==c[2]?(j.test(c[2])&&(r=RegExp("</"+c[2],"g")),n=U):void 0!==c[3]&&(n=U):n===U?">"===c[0]?(n=r??R,l=-1):void 0===c[1]?l=-2:(l=n.lastIndex-c[2].length,a=c[1],n=void 0===c[3]?U:'"'===c[3]?H:B):n===H||n===B?n=U:n===N||n===F?n=R:(n=U,r=void 0);const p=n===U&&t[e+1].startsWith("/>")?" ":"";o+=n===R?i+D:l>=0?(s.push(a),i.slice(0,l)+C+i.slice(l)+E+p):i+E+(-2===l?e:p)}return[G(t,o+(t[i]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),s]};class J{constructor({strings:t,_$litType$:e},i){let s;this.parts=[];let r=0,o=0;const n=t.length-1,a=this.parts,[c,l]=X(t,e);if(this.el=J.createElement(c,i),Z.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(s=Z.nextNode())&&a.length<n;){if(1===s.nodeType){if(s.hasAttributes())for(const t of s.getAttributeNames())if(t.endsWith(C)){const e=l[o++],i=s.getAttribute(t).split(E),n=/([.?@])?(.*)/.exec(e);a.push({type:1,index:r,name:n[2],strings:i,ctor:"."===n[1]?st:"?"===n[1]?rt:"@"===n[1]?ot:it}),s.removeAttribute(t)}else t.startsWith(E)&&(a.push({type:6,index:r}),s.removeAttribute(t));if(j.test(s.tagName)){const t=s.textContent.split(E),e=t.length-1;if(e>0){s.textContent=S?S.emptyScript:"";for(let i=0;i<e;i++)s.append(t[i],z()),Z.nextNode(),a.push({type:2,index:++r});s.append(t[e],z())}}}else if(8===s.nodeType)if(s.data===P)a.push({type:2,index:r});else{let t=-1;for(;-1!==(t=s.data.indexOf(E,t+1));)a.push({type:7,index:r}),t+=E.length-1}r++}}static createElement(t,e){const i=M.createElement("template");return i.innerHTML=t,i}}function Y(t,e,i=t,s){if(e===Q)return e;let r=void 0!==s?i._$Co?.[s]:i._$Cl;const o=T(e)?void 0:e._$litDirective$;return r?.constructor!==o&&(r?._$AO?.(!1),void 0===o?r=void 0:(r=new o(t),r._$AT(t,i,s)),void 0!==s?(i._$Co??=[])[s]=r:i._$Cl=r),void 0!==r&&(e=Y(t,r._$AS(t,e.values),r,s)),e}class tt{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:i}=this._$AD,s=(t?.creationScope??M).importNode(e,!0);Z.currentNode=s;let r=Z.nextNode(),o=0,n=0,a=i[0];for(;void 0!==a;){if(o===a.index){let e;2===a.type?e=new et(r,r.nextSibling,this,t):1===a.type?e=new a.ctor(r,a.name,a.strings,this,t):6===a.type&&(e=new nt(r,this,t)),this._$AV.push(e),a=i[++n]}o!==a?.index&&(r=Z.nextNode(),o++)}return Z.currentNode=M,s}p(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class et{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,i,s){this.type=2,this._$AH=V,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=s,this._$Cv=s?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Y(this,t,e),T(t)?t===V||null==t||""===t?(this._$AH!==V&&this._$AR(),this._$AH=V):t!==this._$AH&&t!==Q&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>L(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==V&&T(this._$AH)?this._$AA.nextSibling.data=t:this.T(M.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:i}=t,s="number"==typeof i?this._$AC(t):(void 0===i.el&&(i.el=J.createElement(G(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===s)this._$AH.p(e);else{const t=new tt(s,this),i=t.u(this.options);t.p(e),this.T(i),this._$AH=t}}_$AC(t){let e=q.get(t.strings);return void 0===e&&q.set(t.strings,e=new J(t)),e}k(t){L(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,s=0;for(const r of t)s===e.length?e.push(i=new et(this.O(z()),this.O(z()),this,this.options)):i=e[s],i._$AI(r),s++;s<e.length&&(this._$AR(i&&i._$AB.nextSibling,s),e.length=s)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=k(t).nextSibling;k(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class it{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,i,s,r){this.type=1,this._$AH=V,this._$AN=void 0,this.element=t,this.name=e,this._$AM=s,this.options=r,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=V}_$AI(t,e=this,i,s){const r=this.strings;let o=!1;if(void 0===r)t=Y(this,t,e,0),o=!T(t)||t!==this._$AH&&t!==Q,o&&(this._$AH=t);else{const s=t;let n,a;for(t=r[0],n=0;n<r.length-1;n++)a=Y(this,s[i+n],e,n),a===Q&&(a=this._$AH[n]),o||=!T(a)||a!==this._$AH[n],a===V?t=V:t!==V&&(t+=(a??"")+r[n+1]),this._$AH[n]=a}o&&!s&&this.j(t)}j(t){t===V?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class st extends it{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===V?void 0:t}}class rt extends it{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==V)}}class ot extends it{constructor(t,e,i,s,r){super(t,e,i,s,r),this.type=5}_$AI(t,e=this){if((t=Y(this,t,e,0)??V)===Q)return;const i=this._$AH,s=t===V&&i!==V||t.capture!==i.capture||t.once!==i.once||t.passive!==i.passive,r=t!==V&&(i===V||s);s&&this.element.removeEventListener(this.name,this,i),r&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class nt{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){Y(this,t)}}const at=w.litHtmlPolyfillSupport;at?.(J,et),(w.litHtmlVersions??=[]).push("3.3.2");const ct=globalThis;class lt extends y{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,i)=>{const s=i?.renderBefore??e;let r=s._$litPart$;if(void 0===r){const t=i?.renderBefore??null;s._$litPart$=r=new et(e.insertBefore(z(),t),t,void 0,i??{})}return r._$AI(t),r})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return Q}}lt._$litElement$=!0,lt.finalized=!0,ct.litElementHydrateSupport?.({LitElement:lt});const dt=ct.litElementPolyfillSupport;dt?.({LitElement:lt}),(ct.litElementVersions??=[]).push("4.2.2");const pt=t=>(e,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},ht={attribute:!0,type:String,converter:v,reflect:!1,hasChanged:$},ft=(t=ht,e,i)=>{const{kind:s,metadata:r}=i;let o=globalThis.litPropertyMetadata.get(r);if(void 0===o&&globalThis.litPropertyMetadata.set(r,o=new Map),"setter"===s&&((t=Object.create(t)).wrapped=!0),o.set(i.name,t),"accessor"===s){const{name:s}=i;return{set(i){const r=e.get.call(this);e.set.call(this,i),this.requestUpdate(s,r,t,!0,i)},init(e){return void 0!==e&&this.C(s,void 0,t,e),e}}}if("setter"===s){const{name:s}=i;return function(i){const r=this[s];e.call(this,i),this.requestUpdate(s,r,t,!0,i)}}throw Error("Unsupported decorator location: "+s)};function mt(t){return(e,i)=>"object"==typeof i?ft(t,e,i):((t,e,i)=>{const s=e.hasOwnProperty(i);return e.constructor.createProperty(i,t),s?Object.getOwnPropertyDescriptor(e,i):void 0})(t,e,i)}function gt(t){return mt({...t,state:!0,attribute:!1})}const ut=["coffee","milk","water"],bt=["none",...ut],_t=["very_mild","mild","medium","strong","very_strong"],vt=["standard","intense"],$t=["cold","normal","high"],xt=["none","one","two","three"],yt=["espresso","cafe_creme","cappuccino","latte_macchiato","milk","milk_froth","water"],wt={espresso:"Espresso",cafe_creme:"Café Crème",cappuccino:"Cappuccino",latte_macchiato:"Latte Macchiato",milk:"Milk",milk_froth:"Milk Froth",water:"Hot Water"},kt={Espresso:"espresso","Cafe Creme":"cafe_creme","Café Crème":"cafe_creme",Cappuccino:"cappuccino","Latte Macchiato":"latte_macchiato",Milk:"milk","Milk Froth":"milk_froth","Hot Water":"water"},St={ready:"var(--state-active-color, #4caf50)",brewing:"var(--warning-color, #ff9800)",cleaning:"var(--info-color, #2196f3)",descaling:"var(--info-color, #2196f3)",off:"var(--disabled-color, #9e9e9e)",busy:"var(--warning-color, #ff9800)",unavailable:"var(--error-color, #f44336)"},At=["energy_saving","auto_bean_select","rinsing_disabled"],Ct=["water_hardness","auto_off_after","brew_temperature"],Et=[{key:"easy_clean",suffix:"easy_clean",label:"Easy Clean",desc:"Quick rinse of the brew unit",icon:"mdi:broom",confirm:!0},{key:"intensive_clean",suffix:"intensive_clean",label:"Intensive Clean",desc:"Deep cleaning with tablet",icon:"mdi:spray-bottle",confirm:!0},{key:"descaling",suffix:"descaling",label:"Descaling",desc:"Remove limescale buildup",icon:"mdi:water-alert",confirm:!0},{key:"evaporating",suffix:"evaporating",label:"Evaporating",desc:"Purge the steam system",icon:"mdi:weather-fog",confirm:!0}],Pt=[{key:"filter_insert",suffix:"filter_insert",label:"Insert Filter",desc:"Start using a new water filter",icon:"mdi:filter-plus"},{key:"filter_replace",suffix:"filter_replace",label:"Replace Filter",desc:"Replace the current water filter",icon:"mdi:filter"},{key:"filter_remove",suffix:"filter_remove",label:"Remove Filter",desc:"Stop using the water filter",icon:"mdi:filter-remove"}],Dt=[{key:"switch_off",suffix:"switch_off",label:"Switch Off",desc:"Turn off the machine",icon:"mdi:power",confirm:!0}];function Mt(t){const e=new Set;for(const i of Object.keys(t.states)){const t=i.match(/^button\.(.+?)_brew$/);t&&e.add(t[1])}const i=[];for(const s of e){const e=t.states[`sensor.${s}_state`];if(!e)continue;const r=e.attributes.friendly_name,o=r?r.replace(/\s*State$/,""):s.replace(/_/g," ");i.push({prefix:s,name:o})}return i}const zt={Espresso:{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#C9A87C",height:.04}},Ristretto:{layers:[{color:"#1A0D04",height:.22}],foam:{color:"#B89970",height:.03}},Lungo:{layers:[{color:"#4A2A14",height:.5}],foam:{color:"#C9A87C",height:.04}},"Espresso Doppio":{layers:[{color:"#3E1F0D",height:.45}],foam:{color:"#C9A87C",height:.04}},"Ristretto Doppio":{layers:[{color:"#1A0D04",height:.4}],foam:{color:"#B89970",height:.03}},"Café Crème":{layers:[{color:"#5C3A1E",height:.5}],foam:{color:"#E8D5B7",height:.08}},"Café Crème Doppio":{layers:[{color:"#5C3A1E",height:.58}],foam:{color:"#E8D5B7",height:.08}},Americano:{layers:[{color:"#3E1F0D",height:.6}]},"Americano Extra":{layers:[{color:"#2C1507",height:.65}]},"Long Black":{layers:[{color:"#3E1F0D",height:.55}],foam:{color:"#C9A87C",height:.05}},"Red Eye":{layers:[{color:"#2C1507",height:.6}]},"Black Eye":{layers:[{color:"#1A0D04",height:.65}]},"Dead Eye":{layers:[{color:"#0F0803",height:.7}]},Cappuccino:{layers:[{color:"#3E1F0D",height:.28},{color:"#D4B896",height:.22}],foam:{color:"#F5EDE0",height:.18}},"Espresso Macchiato":{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#F5EDE0",height:.12}},"Caffè Latte":{tall:!0,layers:[{color:"#E8D5B7",height:.35},{color:"#8B5A30",height:.18}],foam:{color:"#F5EDE0",height:.1}},"Café au Lait":{layers:[{color:"#C9A87C",height:.5}],foam:{color:"#F0E6D8",height:.06}},"Flat White":{layers:[{color:"#3E1F0D",height:.2},{color:"#D4B896",height:.3}],foam:{color:"#F0E6D8",height:.05}},"Latte Macchiato":{tall:!0,layers:[{color:"#F0E6D8",height:.28},{color:"#6B4226",height:.12},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.15}},"Latte Macchiato Extra":{tall:!0,layers:[{color:"#F0E6D8",height:.25},{color:"#5C3A1E",height:.16},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.14}},"Latte Macchiato Triple":{tall:!0,layers:[{color:"#F0E6D8",height:.22},{color:"#4A2A14",height:.2},{color:"#E8D5B7",height:.1}],foam:{color:"#FEFCFA",height:.14}},Milk:{tall:!0,layers:[{color:"#F0E6D8",height:.55}]},"Milk Froth":{tall:!0,layers:[{color:"#F0E6D8",height:.15}],foam:{color:"#FEFCFA",height:.4}},"Hot Water":{layers:[{color:"#9DC4D8",height:.5}]}};zt["Cafe Creme"]=zt["Café Crème"],zt["Cafe Creme Doppio"]=zt["Café Crème Doppio"],zt["Caffe Latte"]=zt["Caffè Latte"],zt["Cafe au Lait"]=zt["Café au Lait"];const Tt={layers:[{color:"#5C3A1E",height:.45}]};function Lt(t,e,i){const s=zt[t]||Tt,r=s.tall,o=r?36:50,n=r?30:42,a=r?68:48,c=r?12:28,l=c+a,d=r?50:46,p=d-o/2,h=d+o/2,f=d-n/2,m=d+n/2,g=`M ${p} ${c} L ${f+4} ${l-4} Q ${f} ${l} ${f+4} ${l} L ${m-4} ${l} Q ${m} ${l} ${m-4} ${l-4} L ${h} ${c}`,u=1.5,b=p+u,_=h-u,v=f+u+1.2,$=m-u-1.2,x=c+u,y=l-u,w=2.8,k=`M ${b} ${x} L ${v+w} ${y-w} Q ${v} ${y} ${v+w} ${y} L ${$-w} ${y} Q ${$} ${y} ${$-w} ${y-w} L ${_} ${x} Z`,S=(t,e)=>{const i=(t-x)/(y-x);return e?b+(v-b)*i:_+($-_)*i};let A=y;const C=[],E=[...s.layers];for(let t=E.length-1;t>=0;t--){const{color:e,height:i}=E[t],s=A,r=A-a*i;A=r;const o=S(r,!0),n=S(r,!1),c=S(s,!0),l=S(s,!1),d=t===E.length-1,p=d?w:0,h=d?`M ${o} ${r} L ${c+p} ${s-p} Q ${c} ${s} ${c+p} ${s} L ${l-p} ${s} Q ${l} ${s} ${l-p} ${s-p} L ${n} ${r} Z`:`M ${o} ${r} L ${c} ${s} L ${l} ${s} L ${n} ${r} Z`;C.push({d:h,fill:e})}if(s.foam){const t=A,e=A-a*s.foam.height;A=e;const i=S(e,!0),r=S(e,!1),o=S(t,!0),n=S(t,!1);C.push({d:`M ${i} ${e} L ${o} ${t} L ${n} ${t} L ${r} ${e} Z`,fill:s.foam.color})}const P=h,D=c+.18*a,M=c+.65*a,z=r?10:14,T=`M ${d-6} ${c-2} Q ${d-8} ${c-10} ${d-5} ${c-16}`,L=`${T};M ${d-6} ${c-2} Q ${d-4} ${c-10} ${d-7} ${c-16};${T}`,O=`M ${d+1} ${c-3} Q ${d+3} ${c-11} ${d} ${c-18}`,R=`${O};M ${d+1} ${c-3} Q ${d-1} ${c-11} ${d+2} ${c-18};${O}`,N=`M ${d+8} ${c-2} Q ${d+6} ${c-9} ${d+9} ${c-15}`,F=`${N};M ${d+8} ${c-2} Q ${d+10} ${c-9} ${d+7} ${c-15};${N}`;return W`
-    <svg width="${e}" height="${1.15*e}" viewBox="0 0 ${100} ${115}" fill="none">
+function e(e,t,i,s){var r,o=arguments.length,n=o<3?t:null===s?s=Object.getOwnPropertyDescriptor(t,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)n=Reflect.decorate(e,t,i,s);else for(var a=e.length-1;a>=0;a--)(r=e[a])&&(n=(o<3?r(n):o>3?r(t,i,n):r(t,i))||n);return o>3&&n&&Object.defineProperty(t,i,n),n}"function"==typeof SuppressedError&&SuppressedError;const t=globalThis,i=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s=Symbol(),r=new WeakMap;let o=class{constructor(e,t,i){if(this._$cssResult$=!0,i!==s)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=e,this.t=t}get styleSheet(){let e=this.o;const t=this.t;if(i&&void 0===e){const i=void 0!==t&&1===t.length;i&&(e=r.get(t)),void 0===e&&((this.o=e=new CSSStyleSheet).replaceSync(this.cssText),i&&r.set(t,e))}return e}toString(){return this.cssText}};const n=(e,...t)=>{const i=1===e.length?e[0]:t.reduce((t,i,s)=>t+(e=>{if(!0===e._$cssResult$)return e.cssText;if("number"==typeof e)return e;throw Error("Value passed to 'css' function must be a 'css' function result: "+e+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+e[s+1],e[0]);return new o(i,e,s)},a=i?e=>e:e=>e instanceof CSSStyleSheet?(e=>{let t="";for(const i of e.cssRules)t+=i.cssText;return(e=>new o("string"==typeof e?e:e+"",void 0,s))(t)})(e):e,{is:c,defineProperty:l,getOwnPropertyDescriptor:d,getOwnPropertyNames:p,getOwnPropertySymbols:h,getPrototypeOf:m}=Object,f=globalThis,g=f.trustedTypes,u=g?g.emptyScript:"",b=f.reactiveElementPolyfillSupport,_=(e,t)=>e,v={toAttribute(e,t){switch(t){case Boolean:e=e?u:null;break;case Object:case Array:e=null==e?e:JSON.stringify(e)}return e},fromAttribute(e,t){let i=e;switch(t){case Boolean:i=null!==e;break;case Number:i=null===e?null:Number(e);break;case Object:case Array:try{i=JSON.parse(e)}catch(e){i=null}}return i}},$=(e,t)=>!c(e,t),x={attribute:!0,type:String,converter:v,reflect:!1,useDefault:!1,hasChanged:$};Symbol.metadata??=Symbol("metadata"),f.litPropertyMetadata??=new WeakMap;let y=class extends HTMLElement{static addInitializer(e){this._$Ei(),(this.l??=[]).push(e)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(e,t=x){if(t.state&&(t.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(e)&&((t=Object.create(t)).wrapped=!0),this.elementProperties.set(e,t),!t.noAccessor){const i=Symbol(),s=this.getPropertyDescriptor(e,i,t);void 0!==s&&l(this.prototype,e,s)}}static getPropertyDescriptor(e,t,i){const{get:s,set:r}=d(this.prototype,e)??{get(){return this[t]},set(e){this[t]=e}};return{get:s,set(t){const o=s?.call(this);r?.call(this,t),this.requestUpdate(e,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(e){return this.elementProperties.get(e)??x}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const e=m(this);e.finalize(),void 0!==e.l&&(this.l=[...e.l]),this.elementProperties=new Map(e.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const e=this.properties,t=[...p(e),...h(e)];for(const i of t)this.createProperty(i,e[i])}const e=this[Symbol.metadata];if(null!==e){const t=litPropertyMetadata.get(e);if(void 0!==t)for(const[e,i]of t)this.elementProperties.set(e,i)}this._$Eh=new Map;for(const[e,t]of this.elementProperties){const i=this._$Eu(e,t);void 0!==i&&this._$Eh.set(i,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(e){const t=[];if(Array.isArray(e)){const i=new Set(e.flat(1/0).reverse());for(const e of i)t.unshift(a(e))}else void 0!==e&&t.push(a(e));return t}static _$Eu(e,t){const i=t.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof e?e.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(e=>e(this))}addController(e){(this._$EO??=new Set).add(e),void 0!==this.renderRoot&&this.isConnected&&e.hostConnected?.()}removeController(e){this._$EO?.delete(e)}_$E_(){const e=new Map,t=this.constructor.elementProperties;for(const i of t.keys())this.hasOwnProperty(i)&&(e.set(i,this[i]),delete this[i]);e.size>0&&(this._$Ep=e)}createRenderRoot(){const e=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((e,s)=>{if(i)e.adoptedStyleSheets=s.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(const i of s){const s=document.createElement("style"),r=t.litNonce;void 0!==r&&s.setAttribute("nonce",r),s.textContent=i.cssText,e.appendChild(s)}})(e,this.constructor.elementStyles),e}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(e=>e.hostConnected?.())}enableUpdating(e){}disconnectedCallback(){this._$EO?.forEach(e=>e.hostDisconnected?.())}attributeChangedCallback(e,t,i){this._$AK(e,i)}_$ET(e,t){const i=this.constructor.elementProperties.get(e),s=this.constructor._$Eu(e,i);if(void 0!==s&&!0===i.reflect){const r=(void 0!==i.converter?.toAttribute?i.converter:v).toAttribute(t,i.type);this._$Em=e,null==r?this.removeAttribute(s):this.setAttribute(s,r),this._$Em=null}}_$AK(e,t){const i=this.constructor,s=i._$Eh.get(e);if(void 0!==s&&this._$Em!==s){const e=i.getPropertyOptions(s),r="function"==typeof e.converter?{fromAttribute:e.converter}:void 0!==e.converter?.fromAttribute?e.converter:v;this._$Em=s;const o=r.fromAttribute(t,e.type);this[s]=o??this._$Ej?.get(s)??o,this._$Em=null}}requestUpdate(e,t,i,s=!1,r){if(void 0!==e){const o=this.constructor;if(!1===s&&(r=this[e]),i??=o.getPropertyOptions(e),!((i.hasChanged??$)(r,t)||i.useDefault&&i.reflect&&r===this._$Ej?.get(e)&&!this.hasAttribute(o._$Eu(e,i))))return;this.C(e,t,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(e,t,{useDefault:i,reflect:s,wrapped:r},o){i&&!(this._$Ej??=new Map).has(e)&&(this._$Ej.set(e,o??t??this[e]),!0!==r||void 0!==o)||(this._$AL.has(e)||(this.hasUpdated||i||(t=void 0),this._$AL.set(e,t)),!0===s&&this._$Em!==e&&(this._$Eq??=new Set).add(e))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}const e=this.scheduleUpdate();return null!=e&&await e,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[e,t]of this._$Ep)this[e]=t;this._$Ep=void 0}const e=this.constructor.elementProperties;if(e.size>0)for(const[t,i]of e){const{wrapped:e}=i,s=this[t];!0!==e||this._$AL.has(t)||void 0===s||this.C(t,void 0,i,s)}}let e=!1;const t=this._$AL;try{e=this.shouldUpdate(t),e?(this.willUpdate(t),this._$EO?.forEach(e=>e.hostUpdate?.()),this.update(t)):this._$EM()}catch(t){throw e=!1,this._$EM(),t}e&&this._$AE(t)}willUpdate(e){}_$AE(e){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(e)),this.updated(e)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(e){return!0}update(e){this._$Eq&&=this._$Eq.forEach(e=>this._$ET(e,this[e])),this._$EM()}updated(e){}firstUpdated(e){}};y.elementStyles=[],y.shadowRootOptions={mode:"open"},y[_("elementProperties")]=new Map,y[_("finalized")]=new Map,b?.({ReactiveElement:y}),(f.reactiveElementVersions??=[]).push("2.1.2");const w=globalThis,k=e=>e,S=w.trustedTypes,A=S?S.createPolicy("lit-html",{createHTML:e=>e}):void 0,C="$lit$",E=`lit$${Math.random().toFixed(9).slice(2)}$`,P="?"+E,D=`<${P}>`,M=document,z=()=>M.createComment(""),L=e=>null===e||"object"!=typeof e&&"function"!=typeof e,R=Array.isArray,T="[ \t\n\f\r]",O=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,N=/-->/g,F=/>/g,B=RegExp(`>|${T}(?:([^\\s"'>=/]+)(${T}*=${T}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),H=/'/g,U=/"/g,j=/^(?:script|style|textarea|title)$/i,I=e=>(t,...i)=>({_$litType$:e,strings:t,values:i}),W=I(1),K=I(2),Q=Symbol.for("lit-noChange"),G=Symbol.for("lit-nothing"),q=new WeakMap,V=M.createTreeWalker(M,129);function Z(e,t){if(!R(e)||!e.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==A?A.createHTML(t):t}const X=(e,t)=>{const i=e.length-1,s=[];let r,o=2===t?"<svg>":3===t?"<math>":"",n=O;for(let t=0;t<i;t++){const i=e[t];let a,c,l=-1,d=0;for(;d<i.length&&(n.lastIndex=d,c=n.exec(i),null!==c);)d=n.lastIndex,n===O?"!--"===c[1]?n=N:void 0!==c[1]?n=F:void 0!==c[2]?(j.test(c[2])&&(r=RegExp("</"+c[2],"g")),n=B):void 0!==c[3]&&(n=B):n===B?">"===c[0]?(n=r??O,l=-1):void 0===c[1]?l=-2:(l=n.lastIndex-c[2].length,a=c[1],n=void 0===c[3]?B:'"'===c[3]?U:H):n===U||n===H?n=B:n===N||n===F?n=O:(n=B,r=void 0);const p=n===B&&e[t+1].startsWith("/>")?" ":"";o+=n===O?i+D:l>=0?(s.push(a),i.slice(0,l)+C+i.slice(l)+E+p):i+E+(-2===l?t:p)}return[Z(e,o+(e[i]||"<?>")+(2===t?"</svg>":3===t?"</math>":"")),s]};class J{constructor({strings:e,_$litType$:t},i){let s;this.parts=[];let r=0,o=0;const n=e.length-1,a=this.parts,[c,l]=X(e,t);if(this.el=J.createElement(c,i),V.currentNode=this.el.content,2===t||3===t){const e=this.el.content.firstChild;e.replaceWith(...e.childNodes)}for(;null!==(s=V.nextNode())&&a.length<n;){if(1===s.nodeType){if(s.hasAttributes())for(const e of s.getAttributeNames())if(e.endsWith(C)){const t=l[o++],i=s.getAttribute(e).split(E),n=/([.?@])?(.*)/.exec(t);a.push({type:1,index:r,name:n[2],strings:i,ctor:"."===n[1]?se:"?"===n[1]?re:"@"===n[1]?oe:ie}),s.removeAttribute(e)}else e.startsWith(E)&&(a.push({type:6,index:r}),s.removeAttribute(e));if(j.test(s.tagName)){const e=s.textContent.split(E),t=e.length-1;if(t>0){s.textContent=S?S.emptyScript:"";for(let i=0;i<t;i++)s.append(e[i],z()),V.nextNode(),a.push({type:2,index:++r});s.append(e[t],z())}}}else if(8===s.nodeType)if(s.data===P)a.push({type:2,index:r});else{let e=-1;for(;-1!==(e=s.data.indexOf(E,e+1));)a.push({type:7,index:r}),e+=E.length-1}r++}}static createElement(e,t){const i=M.createElement("template");return i.innerHTML=e,i}}function Y(e,t,i=e,s){if(t===Q)return t;let r=void 0!==s?i._$Co?.[s]:i._$Cl;const o=L(t)?void 0:t._$litDirective$;return r?.constructor!==o&&(r?._$AO?.(!1),void 0===o?r=void 0:(r=new o(e),r._$AT(e,i,s)),void 0!==s?(i._$Co??=[])[s]=r:i._$Cl=r),void 0!==r&&(t=Y(e,r._$AS(e,t.values),r,s)),t}class ee{constructor(e,t){this._$AV=[],this._$AN=void 0,this._$AD=e,this._$AM=t}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(e){const{el:{content:t},parts:i}=this._$AD,s=(e?.creationScope??M).importNode(t,!0);V.currentNode=s;let r=V.nextNode(),o=0,n=0,a=i[0];for(;void 0!==a;){if(o===a.index){let t;2===a.type?t=new te(r,r.nextSibling,this,e):1===a.type?t=new a.ctor(r,a.name,a.strings,this,e):6===a.type&&(t=new ne(r,this,e)),this._$AV.push(t),a=i[++n]}o!==a?.index&&(r=V.nextNode(),o++)}return V.currentNode=M,s}p(e){let t=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(e,i,t),t+=i.strings.length-2):i._$AI(e[t])),t++}}class te{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(e,t,i,s){this.type=2,this._$AH=G,this._$AN=void 0,this._$AA=e,this._$AB=t,this._$AM=i,this.options=s,this._$Cv=s?.isConnected??!0}get parentNode(){let e=this._$AA.parentNode;const t=this._$AM;return void 0!==t&&11===e?.nodeType&&(e=t.parentNode),e}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(e,t=this){e=Y(this,e,t),L(e)?e===G||null==e||""===e?(this._$AH!==G&&this._$AR(),this._$AH=G):e!==this._$AH&&e!==Q&&this._(e):void 0!==e._$litType$?this.$(e):void 0!==e.nodeType?this.T(e):(e=>R(e)||"function"==typeof e?.[Symbol.iterator])(e)?this.k(e):this._(e)}O(e){return this._$AA.parentNode.insertBefore(e,this._$AB)}T(e){this._$AH!==e&&(this._$AR(),this._$AH=this.O(e))}_(e){this._$AH!==G&&L(this._$AH)?this._$AA.nextSibling.data=e:this.T(M.createTextNode(e)),this._$AH=e}$(e){const{values:t,_$litType$:i}=e,s="number"==typeof i?this._$AC(e):(void 0===i.el&&(i.el=J.createElement(Z(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===s)this._$AH.p(t);else{const e=new ee(s,this),i=e.u(this.options);e.p(t),this.T(i),this._$AH=e}}_$AC(e){let t=q.get(e.strings);return void 0===t&&q.set(e.strings,t=new J(e)),t}k(e){R(this._$AH)||(this._$AH=[],this._$AR());const t=this._$AH;let i,s=0;for(const r of e)s===t.length?t.push(i=new te(this.O(z()),this.O(z()),this,this.options)):i=t[s],i._$AI(r),s++;s<t.length&&(this._$AR(i&&i._$AB.nextSibling,s),t.length=s)}_$AR(e=this._$AA.nextSibling,t){for(this._$AP?.(!1,!0,t);e!==this._$AB;){const t=k(e).nextSibling;k(e).remove(),e=t}}setConnected(e){void 0===this._$AM&&(this._$Cv=e,this._$AP?.(e))}}class ie{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(e,t,i,s,r){this.type=1,this._$AH=G,this._$AN=void 0,this.element=e,this.name=t,this._$AM=s,this.options=r,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=G}_$AI(e,t=this,i,s){const r=this.strings;let o=!1;if(void 0===r)e=Y(this,e,t,0),o=!L(e)||e!==this._$AH&&e!==Q,o&&(this._$AH=e);else{const s=e;let n,a;for(e=r[0],n=0;n<r.length-1;n++)a=Y(this,s[i+n],t,n),a===Q&&(a=this._$AH[n]),o||=!L(a)||a!==this._$AH[n],a===G?e=G:e!==G&&(e+=(a??"")+r[n+1]),this._$AH[n]=a}o&&!s&&this.j(e)}j(e){e===G?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,e??"")}}class se extends ie{constructor(){super(...arguments),this.type=3}j(e){this.element[this.name]=e===G?void 0:e}}class re extends ie{constructor(){super(...arguments),this.type=4}j(e){this.element.toggleAttribute(this.name,!!e&&e!==G)}}class oe extends ie{constructor(e,t,i,s,r){super(e,t,i,s,r),this.type=5}_$AI(e,t=this){if((e=Y(this,e,t,0)??G)===Q)return;const i=this._$AH,s=e===G&&i!==G||e.capture!==i.capture||e.once!==i.once||e.passive!==i.passive,r=e!==G&&(i===G||s);s&&this.element.removeEventListener(this.name,this,i),r&&this.element.addEventListener(this.name,this,e),this._$AH=e}handleEvent(e){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,e):this._$AH.handleEvent(e)}}class ne{constructor(e,t,i){this.element=e,this.type=6,this._$AN=void 0,this._$AM=t,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(e){Y(this,e)}}const ae=w.litHtmlPolyfillSupport;ae?.(J,te),(w.litHtmlVersions??=[]).push("3.3.2");const ce=globalThis;class le extends y{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const e=super.createRenderRoot();return this.renderOptions.renderBefore??=e.firstChild,e}update(e){const t=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(e),this._$Do=((e,t,i)=>{const s=i?.renderBefore??t;let r=s._$litPart$;if(void 0===r){const e=i?.renderBefore??null;s._$litPart$=r=new te(t.insertBefore(z(),e),e,void 0,i??{})}return r._$AI(e),r})(t,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return Q}}le._$litElement$=!0,le.finalized=!0,ce.litElementHydrateSupport?.({LitElement:le});const de=ce.litElementPolyfillSupport;de?.({LitElement:le}),(ce.litElementVersions??=[]).push("4.2.2");const pe=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}):customElements.define(e,t)},he={attribute:!0,type:String,converter:v,reflect:!1,hasChanged:$},me=(e=he,t,i)=>{const{kind:s,metadata:r}=i;let o=globalThis.litPropertyMetadata.get(r);if(void 0===o&&globalThis.litPropertyMetadata.set(r,o=new Map),"setter"===s&&((e=Object.create(e)).wrapped=!0),o.set(i.name,e),"accessor"===s){const{name:s}=i;return{set(i){const r=t.get.call(this);t.set.call(this,i),this.requestUpdate(s,r,e,!0,i)},init(t){return void 0!==t&&this.C(s,void 0,e,t),t}}}if("setter"===s){const{name:s}=i;return function(i){const r=this[s];t.call(this,i),this.requestUpdate(s,r,e,!0,i)}}throw Error("Unsupported decorator location: "+s)};function fe(e){return(t,i)=>"object"==typeof i?me(e,t,i):((e,t,i)=>{const s=t.hasOwnProperty(i);return t.constructor.createProperty(i,e),s?Object.getOwnPropertyDescriptor(t,i):void 0})(e,t,i)}function ge(e){return fe({...e,state:!0,attribute:!1})}const ue=["coffee","milk","water"],be=["none",...ue],_e=["very_mild","mild","medium","strong","very_strong"],ve=["standard","intense"],$e=["cold","normal","high"],xe=["none","one","two","three"],ye=["espresso","cafe_creme","cappuccino","latte_macchiato","milk","milk_froth","water"],we={espresso:"Espresso",cafe_creme:"Café Crème",cappuccino:"Cappuccino",latte_macchiato:"Latte Macchiato",milk:"Milk",milk_froth:"Milk Froth",water:"Hot Water"},ke={Espresso:"espresso","Cafe Creme":"cafe_creme","Café Crème":"cafe_creme",Cappuccino:"cappuccino","Latte Macchiato":"latte_macchiato",Milk:"milk","Milk Froth":"milk_froth","Hot Water":"water"},Se={ready:"var(--state-active-color, #4caf50)",brewing:"var(--warning-color, #ff9800)",cleaning:"var(--info-color, #2196f3)",descaling:"var(--info-color, #2196f3)",off:"var(--disabled-color, #9e9e9e)",busy:"var(--warning-color, #ff9800)",unavailable:"var(--error-color, #f44336)"},Ae=["energy_saving","auto_bean_select","rinsing_disabled"],Ce=["water_hardness","auto_off_after","brew_temperature"],Ee=[{key:"easy_clean",suffix:"easy_clean",label:"Easy Clean",desc:"Quick rinse of the brew unit",icon:"mdi:broom",confirm:!0},{key:"intensive_clean",suffix:"intensive_clean",label:"Intensive Clean",desc:"Deep cleaning with tablet",icon:"mdi:spray-bottle",confirm:!0},{key:"descaling",suffix:"descaling",label:"Descaling",desc:"Remove limescale buildup",icon:"mdi:water-alert",confirm:!0},{key:"evaporating",suffix:"evaporating",label:"Evaporating",desc:"Purge the steam system",icon:"mdi:weather-fog",confirm:!0}],Pe=[{key:"filter_insert",suffix:"filter_insert",label:"Insert Filter",desc:"Start using a new water filter",icon:"mdi:filter-plus"},{key:"filter_replace",suffix:"filter_replace",label:"Replace Filter",desc:"Replace the current water filter",icon:"mdi:filter"},{key:"filter_remove",suffix:"filter_remove",label:"Remove Filter",desc:"Stop using the water filter",icon:"mdi:filter-remove"}],De=[{key:"switch_off",suffix:"switch_off",label:"Switch Off",desc:"Turn off the machine",icon:"mdi:power",confirm:!0}];function Me(e){const t=new Set;for(const i of Object.keys(e.states)){const e=i.match(/^button\.(.+?)_brew$/);e&&t.add(e[1])}const i=[];for(const s of t){const t=e.states[`sensor.${s}_state`];if(!t)continue;const r=t.attributes.friendly_name,o=r?r.replace(/\s*State$/,""):s.replace(/_/g," ");i.push({prefix:s,name:o})}return i}const ze={Espresso:{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#C9A87C",height:.04}},Ristretto:{layers:[{color:"#1A0D04",height:.22}],foam:{color:"#B89970",height:.03}},Lungo:{layers:[{color:"#4A2A14",height:.5}],foam:{color:"#C9A87C",height:.04}},"Espresso Doppio":{layers:[{color:"#3E1F0D",height:.45}],foam:{color:"#C9A87C",height:.04}},"Ristretto Doppio":{layers:[{color:"#1A0D04",height:.4}],foam:{color:"#B89970",height:.03}},"Café Crème":{layers:[{color:"#5C3A1E",height:.5}],foam:{color:"#E8D5B7",height:.08}},"Café Crème Doppio":{layers:[{color:"#5C3A1E",height:.58}],foam:{color:"#E8D5B7",height:.08}},Americano:{layers:[{color:"#3E1F0D",height:.6}]},"Americano Extra":{layers:[{color:"#2C1507",height:.65}]},"Long Black":{layers:[{color:"#3E1F0D",height:.55}],foam:{color:"#C9A87C",height:.05}},"Red Eye":{layers:[{color:"#2C1507",height:.6}]},"Black Eye":{layers:[{color:"#1A0D04",height:.65}]},"Dead Eye":{layers:[{color:"#0F0803",height:.7}]},Cappuccino:{layers:[{color:"#3E1F0D",height:.28},{color:"#D4B896",height:.22}],foam:{color:"#F5EDE0",height:.18}},"Espresso Macchiato":{layers:[{color:"#3E1F0D",height:.3}],foam:{color:"#F5EDE0",height:.12}},"Caffè Latte":{tall:!0,layers:[{color:"#E8D5B7",height:.35},{color:"#8B5A30",height:.18}],foam:{color:"#F5EDE0",height:.1}},"Café au Lait":{layers:[{color:"#C9A87C",height:.5}],foam:{color:"#F0E6D8",height:.06}},"Flat White":{layers:[{color:"#3E1F0D",height:.2},{color:"#D4B896",height:.3}],foam:{color:"#F0E6D8",height:.05}},"Latte Macchiato":{tall:!0,layers:[{color:"#F0E6D8",height:.28},{color:"#6B4226",height:.12},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.15}},"Latte Macchiato Extra":{tall:!0,layers:[{color:"#F0E6D8",height:.25},{color:"#5C3A1E",height:.16},{color:"#E8D5B7",height:.12}],foam:{color:"#FEFCFA",height:.14}},"Latte Macchiato Triple":{tall:!0,layers:[{color:"#F0E6D8",height:.22},{color:"#4A2A14",height:.2},{color:"#E8D5B7",height:.1}],foam:{color:"#FEFCFA",height:.14}},Milk:{tall:!0,layers:[{color:"#F0E6D8",height:.55}]},"Milk Froth":{tall:!0,layers:[{color:"#F0E6D8",height:.15}],foam:{color:"#FEFCFA",height:.4}},"Hot Water":{layers:[{color:"#9DC4D8",height:.5}]}};ze["Cafe Creme"]=ze["Café Crème"],ze["Cafe Creme Doppio"]=ze["Café Crème Doppio"],ze["Caffe Latte"]=ze["Caffè Latte"],ze["Cafe au Lait"]=ze["Café au Lait"];const Le={layers:[{color:"#5C3A1E",height:.45}]};function Re(e,t,i){const s=ze[e]||Le,r=s.tall,o=r?36:50,n=r?30:42,a=r?68:48,c=r?12:28,l=c+a,d=r?50:46,p=d-o/2,h=d+o/2,m=d-n/2,f=d+n/2,g=`M ${p} ${c} L ${m+4} ${l-4} Q ${m} ${l} ${m+4} ${l} L ${f-4} ${l} Q ${f} ${l} ${f-4} ${l-4} L ${h} ${c}`,u=1.5,b=p+u,_=h-u,v=m+u+1.2,$=f-u-1.2,x=c+u,y=l-u,w=2.8,k=`M ${b} ${x} L ${v+w} ${y-w} Q ${v} ${y} ${v+w} ${y} L ${$-w} ${y} Q ${$} ${y} ${$-w} ${y-w} L ${_} ${x} Z`,S=(e,t)=>{const i=(e-x)/(y-x);return t?b+(v-b)*i:_+($-_)*i};let A=y;const C=[],E=[...s.layers];for(let e=E.length-1;e>=0;e--){const{color:t,height:i}=E[e],s=A,r=A-a*i;A=r;const o=S(r,!0),n=S(r,!1),c=S(s,!0),l=S(s,!1),d=e===E.length-1,p=d?w:0,h=d?`M ${o} ${r} L ${c+p} ${s-p} Q ${c} ${s} ${c+p} ${s} L ${l-p} ${s} Q ${l} ${s} ${l-p} ${s-p} L ${n} ${r} Z`:`M ${o} ${r} L ${c} ${s} L ${l} ${s} L ${n} ${r} Z`;C.push({d:h,fill:t})}if(s.foam){const e=A,t=A-a*s.foam.height;A=t;const i=S(t,!0),r=S(t,!1),o=S(e,!0),n=S(e,!1);C.push({d:`M ${i} ${t} L ${o} ${e} L ${n} ${e} L ${r} ${t} Z`,fill:s.foam.color})}const P=h,D=c+.18*a,M=c+.65*a,z=r?10:14,L=`M ${d-6} ${c-2} Q ${d-8} ${c-10} ${d-5} ${c-16}`,R=`${L};M ${d-6} ${c-2} Q ${d-4} ${c-10} ${d-7} ${c-16};${L}`,T=`M ${d+1} ${c-3} Q ${d+3} ${c-11} ${d} ${c-18}`,O=`${T};M ${d+1} ${c-3} Q ${d-1} ${c-11} ${d+2} ${c-18};${T}`,N=`M ${d+8} ${c-2} Q ${d+6} ${c-9} ${d+9} ${c-15}`,F=`${N};M ${d+8} ${c-2} Q ${d+10} ${c-9} ${d+7} ${c-15};${N}`;return K`
+    <svg width="${t}" height="${1.15*t}" viewBox="0 0 ${100} ${115}" fill="none">
       <defs>
         <clipPath id="clip-${i}">
           <path d="${k}" />
@@ -27,28 +27,28 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
         </mask>
       </defs>
 
-      ${"Milk"!==t&&"Milk Froth"!==t&&"Hot Water"!==t?W`
+      ${"Milk"!==e&&"Milk Froth"!==e&&"Hot Water"!==e?K`
         <g opacity="0.20" stroke="rgba(255,255,255,0.6)" stroke-width="4" fill="none" stroke-linecap="round" filter="url(#sg-${i})">
-          <path d="${T}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${L}" /></path>
-          <path d="${O}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${R}" /></path>
+          <path d="${L}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${R}" /></path>
+          <path d="${T}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${O}" /></path>
           <path d="${N}"><animate attributeName="d" dur="3.3s" repeatCount="indefinite" values="${F}" /></path>
         </g>
         <g opacity="0.40" stroke="#D4C4A0" stroke-width="1" fill="none" stroke-linecap="round">
-          <path d="${T}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${L}" /></path>
-          <path d="${O}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${R}" /></path>
+          <path d="${L}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${R}" /></path>
+          <path d="${T}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${O}" /></path>
           <path d="${N}"><animate attributeName="d" dur="3.3s" repeatCount="indefinite" values="${F}" /></path>
         </g>
-      `:V}
+      `:G}
 
       <path d="${g}" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linejoin="round" />
 
       <g clip-path="url(#clip-${i})">
-        ${C.map(t=>W`<path d="${t.d}" fill="${t.fill}" />`)}
+        ${C.map(e=>K`<path d="${e.d}" fill="${e.fill}" />`)}
       </g>
 
       <path d="${g}" fill="url(#refl-${i})" clip-path="url(#clip-${i})" />
-      <path d="M ${p+1.5} ${c+3} L ${f+2.5} ${l-5} L ${f+2.5+(r?4:5)} ${l-5} L ${p+1.5+(r?4:5)} ${c+3} Z" fill="url(#spec-${i})" />
-      <line x1="${h-2.5}" y1="${c+5}" x2="${m-3}" y2="${l-7}" stroke="rgba(255,255,255,0.08)" stroke-width="2" stroke-linecap="round" />
+      <path d="M ${p+1.5} ${c+3} L ${m+2.5} ${l-5} L ${m+2.5+(r?4:5)} ${l-5} L ${p+1.5+(r?4:5)} ${c+3} Z" fill="url(#spec-${i})" />
+      <line x1="${h-2.5}" y1="${c+5}" x2="${f-3}" y2="${l-7}" stroke="rgba(255,255,255,0.08)" stroke-width="2" stroke-linecap="round" />
       <line x1="${p+3}" y1="${c+.5}" x2="${h-3}" y2="${c+.5}" stroke="rgba(255,255,255,0.20)" stroke-width="1" stroke-linecap="round" />
 
       <path d="M ${P} ${D} C ${P+z} ${D-2}, ${P+z} ${M+2}, ${P} ${M}" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" fill="none" stroke-linecap="round" />
@@ -57,13 +57,13 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
         <g transform="translate(0, ${2*l+2}) scale(1, -1)">
           <path d="${g}" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-linejoin="round" />
           <g clip-path="url(#clip-${i})" opacity="0.5">
-            ${C.map(t=>W`<path d="${t.d}" fill="${t.fill}" />`)}
+            ${C.map(e=>K`<path d="${e.d}" fill="${e.fill}" />`)}
           </g>
           <path d="M ${P} ${D} C ${P+z} ${D-2}, ${P+z} ${M+2}, ${P} ${M}" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none" />
         </g>
       </g>
     </svg>
-  `}const Ot=n`
+  `}const Te=n`
   :host {
     --mbc-bg: var(--ha-card-background, var(--card-background-color, #1a1a1a));
     --mbc-text: var(--primary-text-color, #e5e5e5);
@@ -956,14 +956,98 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
   .edit-btn-save:hover { opacity: 0.88; }
   .edit-btn-save:active { transform: scale(0.97); }
   .edit-btn-save:disabled { opacity: 0.4; cursor: not-allowed; }
-`;let Rt=class extends lt{setConfig(t){this._config=t}_fireConfigChanged(){const t=new CustomEvent("config-changed",{detail:{config:{...this._config}},bubbles:!0,composed:!0});this.dispatchEvent(t)}_valueChanged(t,e){const i=e.target,s=i instanceof HTMLInputElement&&"checkbox"===i.type?i.checked:i.value;this._config={...this._config,[t]:s},this._fireConfigChanged()}_deviceSelected(t){const e=t.target.value;if("__manual__"===e)return this._config={...this._config,entity_prefix:""},void this._fireConfigChanged();const i=(this.hass?Mt(this.hass):[]).find(t=>t.prefix===e);this._config={...this._config,entity_prefix:e,name:i?.name||this._config.name},this._fireConfigChanged()}render(){if(!this._config)return V;const t=this.hass?Mt(this.hass):[],e=this._config.entity_prefix||"",i=t.some(t=>t.prefix===e),s=e&&!i&&t.length>0;return K`
-      ${t.length>0?K`
+
+  /* Sommelier */
+  .som-hoppers {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .som-hopper-tag {
+    font-size: 0.72em;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: var(--mbc-surface);
+    color: var(--mbc-subtext);
+    border: 1px solid var(--mbc-border);
+  }
+  .som-favorites { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+  .som-fav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--mbc-surface);
+    border: 1px solid var(--mbc-border);
+  }
+  .som-fav-info { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .som-fav-name {
+    font-size: 0.78em;
+    font-weight: 500;
+    color: var(--mbc-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .som-fav-count { font-size: 0.68em; color: var(--mbc-subtext); flex-shrink: 0; }
+  .som-brew-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: none;
+    background: var(--mbc-text);
+    color: var(--mbc-bg);
+    font-size: 0.72em;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .som-brew-btn:hover { opacity: 0.85; }
+  .som-brew-btn.full { width: 100%; justify-content: center; padding: 6px; margin-top: 6px; }
+  .som-brew-btn ha-icon { --mdc-icon-size: 16px; }
+  .som-quick-recipe {
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--mbc-surface);
+    border: 1px solid var(--mbc-accent, var(--mbc-border));
+    margin-bottom: 10px;
+  }
+  .som-quick-name { font-size: 0.82em; font-weight: 600; color: var(--mbc-text); margin-bottom: 4px; }
+  .som-quick-desc { font-size: 0.72em; color: var(--mbc-subtext); line-height: 1.3; }
+  .som-actions { display: flex; gap: 6px; }
+  .som-surprise-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--mbc-border);
+    background: transparent;
+    color: var(--mbc-text);
+    font-size: 0.78em;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .som-surprise-btn:hover { background: var(--mbc-surface); }
+  .som-surprise-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .som-surprise-btn ha-icon { --mdc-icon-size: 18px; }
+  @keyframes mbc-spin { to { transform: rotate(360deg); } }
+  .spin ha-icon, ha-icon.spin { animation: mbc-spin 1s linear infinite; }
+`;let Oe=class extends le{setConfig(e){this._config=e}_fireConfigChanged(){const e=new CustomEvent("config-changed",{detail:{config:{...this._config}},bubbles:!0,composed:!0});this.dispatchEvent(e)}_valueChanged(e,t){const i=t.target,s=i instanceof HTMLInputElement&&"checkbox"===i.type?i.checked:i.value;this._config={...this._config,[e]:s},this._fireConfigChanged()}_deviceSelected(e){const t=e.target.value;if("__manual__"===t)return this._config={...this._config,entity_prefix:""},void this._fireConfigChanged();const i=(this.hass?Me(this.hass):[]).find(e=>e.prefix===t);this._config={...this._config,entity_prefix:t,name:i?.name||this._config.name},this._fireConfigChanged()}render(){if(!this._config)return G;const e=this.hass?Me(this.hass):[],t=this._config.entity_prefix||"",i=e.some(e=>e.prefix===t),s=t&&!i&&e.length>0;return W`
+      ${e.length>0?W`
             <div class="editor-row">
               <label for="device">Device</label>
               <select id="device" @change=${this._deviceSelected}>
-                ${t.map(t=>K`
-                    <option value=${t.prefix} ?selected=${t.prefix===e}>
-                      ${t.name}
+                ${e.map(e=>W`
+                    <option value=${e.prefix} ?selected=${e.prefix===t}>
+                      ${e.name}
                     </option>
                   `)}
                 <option value="__manual__" ?selected=${s}>
@@ -971,26 +1055,26 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
                 </option>
               </select>
             </div>
-          `:K`
+          `:W`
             <div class="editor-row">
               <label for="entity_prefix">Entity Prefix</label>
               <input
                 id="entity_prefix"
-                .value=${e}
+                .value=${t}
                 placeholder="Auto-detected if integration is running"
-                @input=${t=>this._valueChanged("entity_prefix",t)}
+                @input=${e=>this._valueChanged("entity_prefix",e)}
               />
               <span class="hint">No Melitta devices detected. Enter prefix manually or check that the integration is configured.</span>
             </div>
           `}
 
-      ${s?K`
+      ${s?W`
             <div class="editor-row">
               <label for="entity_prefix">Entity Prefix</label>
               <input
                 id="entity_prefix"
-                .value=${e}
-                @input=${t=>this._valueChanged("entity_prefix",t)}
+                .value=${t}
+                @input=${e=>this._valueChanged("entity_prefix",e)}
               />
             </div>
           `:""}
@@ -1000,61 +1084,67 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
         <input
           id="name"
           .value=${this._config.name||"Melitta Barista"}
-          @input=${t=>this._valueChanged("name",t)}
+          @input=${e=>this._valueChanged("name",e)}
         />
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="show_header"
           .checked=${!1!==this._config.show_header}
-          @change=${t=>this._valueChanged("show_header",t)} />
+          @change=${e=>this._valueChanged("show_header",e)} />
         <label for="show_header">Show header</label>
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="show_status"
           .checked=${!1!==this._config.show_status}
-          @change=${t=>this._valueChanged("show_status",t)} />
+          @change=${e=>this._valueChanged("show_status",e)} />
         <label for="show_status">Show status</label>
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="show_profiles"
           .checked=${!1!==this._config.show_profiles}
-          @change=${t=>this._valueChanged("show_profiles",t)} />
+          @change=${e=>this._valueChanged("show_profiles",e)} />
         <label for="show_profiles">Show profile selector</label>
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="show_recipes"
           .checked=${!1!==this._config.show_recipes}
-          @change=${t=>this._valueChanged("show_recipes",t)} />
+          @change=${e=>this._valueChanged("show_recipes",e)} />
         <label for="show_recipes">Show recipe selector</label>
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="show_freestyle"
           .checked=${this._config.show_freestyle||!1}
-          @change=${t=>this._valueChanged("show_freestyle",t)} />
+          @change=${e=>this._valueChanged("show_freestyle",e)} />
         <label for="show_freestyle">Show freestyle recipe</label>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="show_sommelier"
+          .checked=${this._config.show_sommelier||!1}
+          @change=${e=>this._valueChanged("show_sommelier",e)} />
+        <label for="show_sommelier">Show AI Sommelier</label>
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="show_stats"
           .checked=${this._config.show_stats||!1}
-          @change=${t=>this._valueChanged("show_stats",t)} />
+          @change=${e=>this._valueChanged("show_stats",e)} />
         <label for="show_stats">Show cup statistics</label>
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="show_maintenance"
           .checked=${this._config.show_maintenance||!1}
-          @change=${t=>this._valueChanged("show_maintenance",t)} />
+          @change=${e=>this._valueChanged("show_maintenance",e)} />
         <label for="show_maintenance">Show maintenance</label>
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="show_settings"
           .checked=${this._config.show_settings||!1}
-          @change=${t=>this._valueChanged("show_settings",t)} />
+          @change=${e=>this._valueChanged("show_settings",e)} />
         <label for="show_settings">Show settings</label>
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="compact"
           .checked=${this._config.compact||!1}
-          @change=${t=>this._valueChanged("compact",t)} />
+          @change=${e=>this._valueChanged("compact",e)} />
         <label for="compact">Compact mode</label>
       </div>
     `}static get styles(){return n`
@@ -1090,114 +1180,116 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
         gap: 8px;
         margin-bottom: 8px;
       }
-    `}};t([mt({attribute:!1})],Rt.prototype,"hass",void 0),t([gt()],Rt.prototype,"_config",void 0),Rt=t([pt("melitta-barista-card-editor")],Rt);const Nt={energy_saving:{label:"Energy Saving",desc:"Reduce power when idle",icon:"mdi:lightning-bolt"},auto_bean_select:{label:"Auto Bean Select",desc:"Auto-choose bean hopper",icon:"mdi:seed"},rinsing_disabled:{label:"Rinsing Disabled",desc:"Skip auto rinse cycle",icon:"mdi:water-off"}},Ft={water_hardness:{label:"Water Hardness",desc:"Calibrate for water type",icon:"mdi:water",format:"level"},auto_off_after:{label:"Auto Off",desc:"Minutes until shutdown",icon:"mdi:timer-outline",format:"minutes"},brew_temperature:{label:"Brew Temperature",desc:"Brewing water temp",icon:"mdi:thermometer",format:"level"}},Ut={water_hardness:{1:"Soft",2:"Medium",3:"Hard",4:"Very Hard"},brew_temperature:{0:"Low",1:"Normal",2:"High"}},Bt={very_mild:"V.Mild",mild:"Mild",medium:"Med",strong:"Strong",very_strong:"V.Strong",extra_strong:"X.Strong",cold:"Cold",normal:"Normal",high:"High",none:"None",one:"1",two:"2",three:"3",coffee:"Coffee",milk:"Milk",water:"Water",standard:"Std",intense:"Int+"},Ht={very_mild:1,mild:2,medium:3,strong:4,very_strong:5},jt={0:"none",1:"one",2:"two",3:"three"};let It=class extends lt{constructor(){super(...arguments),this._resolvedPrefix=null,this._fsName="Custom",this._fsProcess1="coffee",this._fsIntensity1="medium",this._fsAroma1="standard",this._fsPortion1=40,this._fsTemp1="normal",this._fsShots1="one",this._fsProcess2="none",this._fsIntensity2="medium",this._fsAroma2="standard",this._fsPortion2=0,this._fsTemp2="normal",this._fsShots2="none",this._selectedDk=null,this._twoCups=!1,this._editDk=null,this._editState=null,this._editSaving=!1,this._confirmKey=null,this._busyKey=null,this._dkLongPressTimer=null,this._dkLongPressTriggered=!1}static getConfigElement(){return document.createElement("melitta-barista-card-editor")}static getStubConfig(t){const e=Mt(t);return{entity_prefix:e.length>0?e[0].prefix:"",name:e.length>0?e[0].name:"Melitta Barista",show_recipes:!0,show_settings:!1,compact:!1}}setConfig(t){this._config={...t,show_header:!1!==t.show_header,show_status:!1!==t.show_status,show_recipes:!1!==t.show_recipes,show_profiles:!1!==t.show_profiles,show_freestyle:t.show_freestyle||!1,show_settings:t.show_settings||!1,show_stats:t.show_stats||!1,show_maintenance:t.show_maintenance||!1,compact:t.compact||!1},this._resolvedPrefix=null}getCardSize(){return this._config?.compact?3:5}getGridOptions(){return{rows:this._config?.compact?3:5,columns:6,min_rows:2,min_columns:3}}_getPrefix(){if(this._config.entity_prefix)return this._config.entity_prefix;if(this._resolvedPrefix)return this._resolvedPrefix;if(this.hass){const t=Mt(this.hass);if(t.length>0)return this._resolvedPrefix=t[0].prefix,this._config.name||(this._config={...this._config,name:t[0].name}),this._resolvedPrefix}return null}shouldUpdate(t){if(t.has("_config")||t.has("_resolvedPrefix"))return!0;for(const e of t.keys())if("string"==typeof e&&(e.startsWith("_fs")||e.startsWith("_selected")||e.startsWith("_two")||e.startsWith("_edit")||e.startsWith("_confirm")||e.startsWith("_busy")))return!0;const e=t.get("hass");if(!e)return!0;const i=this._getPrefix();if(!i)return!0;for(const[t,s]of Object.entries(this.hass.states))if(t.includes(i)&&e.states[t]!==s)return!0;return!1}_entity(t,e){const i=this._getPrefix();if(i)return this.hass.states[`${t}.${i}_${e}`]}_state(t){const e=this._getPrefix();if(!e)return null;for(const i of["sensor","button","select","number","switch"]){const s=this.hass.states[`${i}.${e}_${t}`];if(s)return s.state}return null}_recipeEntity(){return this._entity("select","recipe")}_recipeOptions(){return this._recipeEntity()?.attributes?.options||[]}_selectedRecipe(){const t=this._recipeEntity()?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectRecipe(t){const e=this._getPrefix();e&&(this._selectedDk=null,this.hass.callService("select","select_option",{entity_id:`select.${e}_recipe`,option:t}))}_profileEntity(){return this._entity("select","profile")}_profileOptions(){return this._profileEntity()?.attributes?.options||[]}_selectedProfile(){const t=this._profileEntity()?.state;return t&&"unknown"!==t&&"unavailable"!==t?t:null}_selectProfile(t){const e=this._getPrefix();e&&this.hass.callService("select","select_option",{entity_id:`select.${e}_profile`,option:t})}_getDirectKeyData(){const t=this._profileEntity();if(!t?.attributes)return null;const e=t.attributes.directkey_recipes,i=t.attributes.active_profile??0;if(!e)return null;const s={};for(const[t,i]of Object.entries(e)){const e=Number(t);s[e]={};for(const[t,r]of Object.entries(i)){const i=kt[t]||t;s[e][i]=r}}return{activeProfile:i,profiles:s}}_brew(){const t=this._getPrefix();t&&this.hass.callService("button","press",{entity_id:`button.${t}_brew`})}_brewDirectkey(t){const e=this._getPrefix();e&&this.hass.callService("melitta_barista","brew_directkey",{entity_id:`button.${e}_brew`,category:t,two_cups:this._twoCups})}_brewFreestyle(){const t=this._getPrefix();t&&this.hass.callService("melitta_barista","brew_freestyle",{entity_id:`button.${t}_brew`,name:this._fsName,process1:this._fsProcess1,intensity1:this._fsIntensity1,aroma1:this._fsAroma1,portion1_ml:this._fsPortion1,temperature1:this._fsTemp1,shots1:this._fsShots1,process2:this._fsProcess2,intensity2:this._fsIntensity2,aroma2:this._fsAroma2,portion2_ml:this._fsPortion2,temperature2:this._fsTemp2,shots2:this._fsShots2})}_toggleSwitch(t,e){const i=this._getPrefix();i&&this.hass.callService("switch",e?"turn_on":"turn_off",{entity_id:`switch.${i}_${t}`})}_saveDirectkey(){if(!this._editDk||!this._editState)return;const t=this._getPrefix();if(!t)return;this._editSaving=!0;const e=this._getDirectKeyData();this.hass.callService("melitta_barista","save_directkey",{entity_id:`button.${t}_brew`,category:this._editDk.category,profile_id:e?.activeProfile??0,process1:this._editState.process1,intensity1:this._editState.intensity1,aroma1:this._editState.aroma1,portion1_ml:this._editState.portion1,temperature1:this._editState.temperature1,shots1:this._editState.shots1,process2:this._editState.process2,intensity2:this._editState.intensity2,aroma2:this._editState.aroma2,portion2_ml:this._editState.portion2,temperature2:this._editState.temperature2,shots2:this._editState.shots2}).then(()=>{this._editDk=null,this._editState=null,this._editSaving=!1}).catch(()=>{this._editSaving=!1})}_pressMaintenanceButton(t){if(t.confirm&&this._confirmKey!==t.key)return void(this._confirmKey=t.key);this._confirmKey=null,this._busyKey=t.key;const e=this._getPrefix();e&&this.hass.callService("button","press",{entity_id:`button.${e}_${t.suffix}`}).finally(()=>{setTimeout(()=>{this._busyKey=null},2e3)})}_startDkLongPress(t,e){this._dkLongPressTriggered=!1,this._dkLongPressTimer=setTimeout(()=>{this._dkLongPressTriggered=!0,this._openEditDialog(t,e)},500)}_cancelDkLongPress(){this._dkLongPressTimer&&(clearTimeout(this._dkLongPressTimer),this._dkLongPressTimer=null)}_handleDkClick(t){this._dkLongPressTriggered||(this._selectedDk===t?this._brewDirectkey(t):this._selectedDk=t)}_openEditDialog(t,e){this._editDk={category:t,recipe:e},this._editState={process1:e.c1_process||"coffee",intensity1:e.c1_intensity||"medium",aroma1:e.c1_aroma||"standard",temperature1:e.c1_temperature||"normal",shots1:jt[e.c1_shots]||"one",portion1:e.c1_portion_ml||40,process2:e.c2_process||"none",intensity2:e.c2_intensity||"medium",aroma2:e.c2_aroma||"standard",temperature2:e.c2_temperature||"normal",shots2:jt[e.c2_shots]||"none",portion2:e.c2_portion_ml||0},this._editSaving=!1}render(){if(!this.hass||!this._config)return V;const t=this._getPrefix();if(!t)return K`<ha-card>
+    `}};e([fe({attribute:!1})],Oe.prototype,"hass",void 0),e([ge()],Oe.prototype,"_config",void 0),Oe=e([pe("melitta-barista-card-editor")],Oe);const Ne={energy_saving:{label:"Energy Saving",desc:"Reduce power when idle",icon:"mdi:lightning-bolt"},auto_bean_select:{label:"Auto Bean Select",desc:"Auto-choose bean hopper",icon:"mdi:seed"},rinsing_disabled:{label:"Rinsing Disabled",desc:"Skip auto rinse cycle",icon:"mdi:water-off"}},Fe={water_hardness:{label:"Water Hardness",desc:"Calibrate for water type",icon:"mdi:water",format:"level"},auto_off_after:{label:"Auto Off",desc:"Minutes until shutdown",icon:"mdi:timer-outline",format:"minutes"},brew_temperature:{label:"Brew Temperature",desc:"Brewing water temp",icon:"mdi:thermometer",format:"level"}},Be={water_hardness:{1:"Soft",2:"Medium",3:"Hard",4:"Very Hard"},brew_temperature:{0:"Low",1:"Normal",2:"High"}},He={very_mild:"V.Mild",mild:"Mild",medium:"Med",strong:"Strong",very_strong:"V.Strong",extra_strong:"X.Strong",cold:"Cold",normal:"Normal",high:"High",none:"None",one:"1",two:"2",three:"3",coffee:"Coffee",milk:"Milk",water:"Water",standard:"Std",intense:"Int+"},Ue={very_mild:1,mild:2,medium:3,strong:4,very_strong:5},je={0:"none",1:"one",2:"two",3:"three"};let Ie=class extends le{constructor(){super(...arguments),this._resolvedPrefix=null,this._fsName="Custom",this._fsProcess1="coffee",this._fsIntensity1="medium",this._fsAroma1="standard",this._fsPortion1=40,this._fsTemp1="normal",this._fsShots1="one",this._fsProcess2="none",this._fsIntensity2="medium",this._fsAroma2="standard",this._fsPortion2=0,this._fsTemp2="normal",this._fsShots2="none",this._selectedDk=null,this._twoCups=!1,this._editDk=null,this._editState=null,this._editSaving=!1,this._confirmKey=null,this._busyKey=null,this._somFavorites=[],this._somHoppers={hopper1:null,hopper2:null},this._somLoaded=!1,this._somGenerating=!1,this._somQuickRecipe=null,this._dkLongPressTimer=null,this._dkLongPressTriggered=!1}static getConfigElement(){return document.createElement("melitta-barista-card-editor")}static getStubConfig(e){const t=Me(e);return{entity_prefix:t.length>0?t[0].prefix:"",name:t.length>0?t[0].name:"Melitta Barista",show_recipes:!0,show_settings:!1,compact:!1}}setConfig(e){this._config={...e,show_header:!1!==e.show_header,show_status:!1!==e.show_status,show_recipes:!1!==e.show_recipes,show_profiles:!1!==e.show_profiles,show_freestyle:e.show_freestyle||!1,show_settings:e.show_settings||!1,show_stats:e.show_stats||!1,show_maintenance:e.show_maintenance||!1,compact:e.compact||!1},this._resolvedPrefix=null}getCardSize(){return this._config?.compact?3:5}getGridOptions(){return{rows:this._config?.compact?3:5,columns:6,min_rows:2,min_columns:3}}_getPrefix(){if(this._config.entity_prefix)return this._config.entity_prefix;if(this._resolvedPrefix)return this._resolvedPrefix;if(this.hass){const e=Me(this.hass);if(e.length>0)return this._resolvedPrefix=e[0].prefix,this._config.name||(this._config={...this._config,name:e[0].name}),this._resolvedPrefix}return null}shouldUpdate(e){if(e.has("_config")||e.has("_resolvedPrefix"))return!0;for(const t of e.keys())if("string"==typeof t&&(t.startsWith("_fs")||t.startsWith("_selected")||t.startsWith("_two")||t.startsWith("_edit")||t.startsWith("_confirm")||t.startsWith("_busy")))return!0;const t=e.get("hass");if(!t)return!0;const i=this._getPrefix();if(!i)return!0;for(const[e,s]of Object.entries(this.hass.states))if(e.includes(i)&&t.states[e]!==s)return!0;return!1}_entity(e,t){const i=this._getPrefix();if(i)return this.hass.states[`${e}.${i}_${t}`]}_state(e){const t=this._getPrefix();if(!t)return null;for(const i of["sensor","button","select","number","switch"]){const s=this.hass.states[`${i}.${t}_${e}`];if(s)return s.state}return null}_recipeEntity(){return this._entity("select","recipe")}_recipeOptions(){return this._recipeEntity()?.attributes?.options||[]}_selectedRecipe(){const e=this._recipeEntity()?.state;return e&&"unknown"!==e&&"unavailable"!==e?e:null}_selectRecipe(e){const t=this._getPrefix();t&&(this._selectedDk=null,this.hass.callService("select","select_option",{entity_id:`select.${t}_recipe`,option:e}))}_profileEntity(){return this._entity("select","profile")}_profileOptions(){return this._profileEntity()?.attributes?.options||[]}_selectedProfile(){const e=this._profileEntity()?.state;return e&&"unknown"!==e&&"unavailable"!==e?e:null}_selectProfile(e){const t=this._getPrefix();t&&this.hass.callService("select","select_option",{entity_id:`select.${t}_profile`,option:e})}_getDirectKeyData(){const e=this._profileEntity();if(!e?.attributes)return null;const t=e.attributes.directkey_recipes,i=e.attributes.active_profile??0;if(!t)return null;const s={};for(const[e,i]of Object.entries(t)){const t=Number(e);s[t]={};for(const[e,r]of Object.entries(i)){const i=ke[e]||e;s[t][i]=r}}return{activeProfile:i,profiles:s}}_brew(){const e=this._getPrefix();e&&this.hass.callService("button","press",{entity_id:`button.${e}_brew`})}_brewDirectkey(e){const t=this._getPrefix();t&&this.hass.callService("melitta_barista","brew_directkey",{entity_id:`button.${t}_brew`,category:e,two_cups:this._twoCups})}_brewFreestyle(){const e=this._getPrefix();e&&this.hass.callService("melitta_barista","brew_freestyle",{entity_id:`button.${e}_brew`,name:this._fsName,process1:this._fsProcess1,intensity1:this._fsIntensity1,aroma1:this._fsAroma1,portion1_ml:this._fsPortion1,temperature1:this._fsTemp1,shots1:this._fsShots1,process2:this._fsProcess2,intensity2:this._fsIntensity2,aroma2:this._fsAroma2,portion2_ml:this._fsPortion2,temperature2:this._fsTemp2,shots2:this._fsShots2})}_toggleSwitch(e,t){const i=this._getPrefix();i&&this.hass.callService("switch",t?"turn_on":"turn_off",{entity_id:`switch.${i}_${e}`})}_saveDirectkey(){if(!this._editDk||!this._editState)return;const e=this._getPrefix();if(!e)return;this._editSaving=!0;const t=this._getDirectKeyData();this.hass.callService("melitta_barista","save_directkey",{entity_id:`button.${e}_brew`,category:this._editDk.category,profile_id:t?.activeProfile??0,process1:this._editState.process1,intensity1:this._editState.intensity1,aroma1:this._editState.aroma1,portion1_ml:this._editState.portion1,temperature1:this._editState.temperature1,shots1:this._editState.shots1,process2:this._editState.process2,intensity2:this._editState.intensity2,aroma2:this._editState.aroma2,portion2_ml:this._editState.portion2,temperature2:this._editState.temperature2,shots2:this._editState.shots2}).then(()=>{this._editDk=null,this._editState=null,this._editSaving=!1}).catch(()=>{this._editSaving=!1})}_pressMaintenanceButton(e){if(e.confirm&&this._confirmKey!==e.key)return void(this._confirmKey=e.key);this._confirmKey=null,this._busyKey=e.key;const t=this._getPrefix();t&&this.hass.callService("button","press",{entity_id:`button.${t}_${e.suffix}`}).finally(()=>{setTimeout(()=>{this._busyKey=null},2e3)})}_startDkLongPress(e,t){this._dkLongPressTriggered=!1,this._dkLongPressTimer=setTimeout(()=>{this._dkLongPressTriggered=!0,this._openEditDialog(e,t)},500)}_cancelDkLongPress(){this._dkLongPressTimer&&(clearTimeout(this._dkLongPressTimer),this._dkLongPressTimer=null)}_handleDkClick(e){this._dkLongPressTriggered||(this._selectedDk===e?this._brewDirectkey(e):this._selectedDk=e)}_openEditDialog(e,t){this._editDk={category:e,recipe:t},this._editState={process1:t.c1_process||"coffee",intensity1:t.c1_intensity||"medium",aroma1:t.c1_aroma||"standard",temperature1:t.c1_temperature||"normal",shots1:je[t.c1_shots]||"one",portion1:t.c1_portion_ml||40,process2:t.c2_process||"none",intensity2:t.c2_intensity||"medium",aroma2:t.c2_aroma||"standard",temperature2:t.c2_temperature||"normal",shots2:je[t.c2_shots]||"none",portion2:t.c2_portion_ml||0},this._editSaving=!1}render(){if(!this.hass||!this._config)return G;const e=this._getPrefix();if(!e)return W`<ha-card>
         <div class="no-device">
           <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
           <p>No Melitta Barista device found.</p>
           <p class="hint">Make sure the integration is installed and configured.</p>
         </div>
-      </ha-card>`;const e=this._state("state")||"unavailable",i=this._state("activity")||"Idle",s=this._state("progress"),r=this._state("action_required"),o="Connected"===(this._state("connection")||"Disconnected"),n="unavailable"===e||"unknown"===e,a="Brewing"===e,c="Ready"===e,l=!!r&&"None"!==r&&"unknown"!==r,d=!!s&&"unknown"!==s&&"None"!==s,p=d?Math.max(0,Math.min(100,parseFloat(s)||0)):0,h=St[e.toLowerCase()]||"var(--primary-text-color)",f=this._config.name||"Melitta Barista",m=this._config.show_header,g=this._config.show_status;return n?K`<ha-card>
-        ${m?K`
+      </ha-card>`;const t=this._state("state")||"unavailable",i=this._state("activity")||"Idle",s=this._state("progress"),r=this._state("action_required"),o="Connected"===(this._state("connection")||"Disconnected"),n="unavailable"===t||"unknown"===t,a="Brewing"===t,c="Ready"===t,l=!!r&&"None"!==r&&"unknown"!==r,d=!!s&&"unknown"!==s&&"None"!==s,p=d?Math.max(0,Math.min(100,parseFloat(s)||0)):0,h=Se[t.toLowerCase()]||"var(--primary-text-color)",m=this._config.name||"Melitta Barista",f=this._config.show_header,g=this._config.show_status;return n?W`<ha-card>
+        ${f?W`
           <div class="card-header">
-            <span class="machine-name">${f}</span>
+            <span class="machine-name">${m}</span>
             <div class="connection-dot" style="background: var(--mbc-error)"></div>
           </div>
-        `:V}
+        `:G}
         <div class="offline-section">
           <ha-icon icon="mdi:bluetooth-off"></ha-icon>
           <span>Machine offline</span>
         </div>
-      </ha-card>`:K`<ha-card>
-      ${m?K`
+      </ha-card>`:W`<ha-card>
+      ${f?W`
         <div class="card-header">
-          <span class="machine-name">${f}</span>
+          <span class="machine-name">${m}</span>
           <div class="connection-dot" style="background: ${o?"var(--mbc-success)":"var(--mbc-error)"}"></div>
         </div>
-      `:V}
+      `:G}
 
-      ${g&&!a?K`
+      ${g&&!a?W`
         <div class="status-section">
           <div class="state-row">
             <span class="state-badge" style="background: ${h}18; color: ${h}">
-              ${e}
+              ${t}
             </span>
           </div>
         </div>
 
-        ${l?K`
+        ${l?W`
           <div class="action-alert">
             <ha-icon icon="mdi:alert-circle"></ha-icon>
             <span>${r}</span>
           </div>
-        `:V}
-      `:V}
+        `:G}
+      `:G}
 
-      ${a?K`
+      ${a?W`
         <div class="brewing-view">
           <div class="brewing-icon-wrap">
-            ${Lt(this._selectedRecipe()||"Espresso",64,"brew-active")}
+            ${Re(this._selectedRecipe()||"Espresso",64,"brew-active")}
           </div>
           <div class="brewing-info">
             <span class="brewing-recipe">${this._selectedRecipe()||"Brewing"}</span>
             <span class="brewing-activity">${i}</span>
-            ${d?K`
+            ${d?W`
               <div class="brewing-progress">
                 <div class="brewing-progress-fill" style="width: ${p}%"></div>
               </div>
               <span class="brewing-percent">${Math.round(p)}%</span>
-            `:V}
+            `:G}
           </div>
-          <button class="brewing-cancel" @click=${()=>this.hass.callService("button","press",{entity_id:`button.${t}_cancel`})}>
+          <button class="brewing-cancel" @click=${()=>this.hass.callService("button","press",{entity_id:`button.${e}_cancel`})}>
             <ha-icon icon="mdi:close"></ha-icon>
           </button>
         </div>
-      `:V}
+      `:G}
 
-      ${!a&&this._config.show_profiles&&c&&this._profileOptions().length>1?this._renderProfileTabs():V}
+      ${!a&&this._config.show_profiles&&c&&this._profileOptions().length>1?this._renderProfileTabs():G}
 
-      ${!a&&c?this._renderDirectKey():V}
+      ${!a&&c?this._renderDirectKey():G}
 
-      ${!a&&this._config.show_recipes&&this._recipeOptions().length>0?this._renderRecipes():V}
+      ${!a&&this._config.show_recipes&&this._recipeOptions().length>0?this._renderRecipes():G}
 
-      ${!a&&this._config.show_freestyle&&c?this._renderFreestyle():V}
+      ${!a&&this._config.show_freestyle&&c?this._renderFreestyle():G}
 
-      ${this._config.show_stats?this._renderStats():V}
+      ${this._config.show_sommelier?this._renderSommelier():G}
 
-      ${this._config.show_maintenance?this._renderMaintenance():V}
+      ${this._config.show_stats?this._renderStats():G}
 
-      ${this._config.show_settings?this._renderSettings():V}
+      ${this._config.show_maintenance?this._renderMaintenance():G}
 
-      ${this._editDk?this._renderEditDialog():V}
-    </ha-card>`}_renderProfileTabs(){const t=this._profileOptions(),e=this._selectedProfile();return K`
+      ${this._config.show_settings?this._renderSettings():G}
+
+      ${this._editDk?this._renderEditDialog():G}
+    </ha-card>`}_renderProfileTabs(){const e=this._profileOptions(),t=this._selectedProfile();return W`
       <div class="profile-tabs">
-        ${t.map(t=>K`
-          <button class="profile-tab" ?data-active=${t===e}
-            @click=${()=>{t!==e&&this._selectProfile(t)}}>
-            ${t}
-            ${t===e?K`<span class="profile-tab-indicator"></span>`:V}
+        ${e.map(e=>W`
+          <button class="profile-tab" ?data-active=${e===t}
+            @click=${()=>{e!==t&&this._selectProfile(e)}}>
+            ${e}
+            ${e===t?W`<span class="profile-tab-indicator"></span>`:G}
           </button>
         `)}
       </div>
-    `}_renderDirectKey(){const t=this._getDirectKeyData();if(!t)return V;const e=t.profiles[t.activeProfile]??{};return 0===Object.keys(e).length?V:K`
+    `}_renderDirectKey(){const e=this._getDirectKeyData();if(!e)return G;const t=e.profiles[e.activeProfile]??{};return 0===Object.keys(t).length?G:W`
       <div class="dk-grid">
-        ${yt.map(t=>{const i=e[t];if(!i)return V;const s=this._selectedDk===t,r=void 0!==i.c1_process&&"none"!==i.c1_process;return K`
+        ${ye.map(e=>{const i=t[e];if(!i)return G;const s=this._selectedDk===e,r=void 0!==i.c1_process&&"none"!==i.c1_process;return W`
             <button class="dk-card" ?data-selected=${s}
-              @click=${()=>this._handleDkClick(t)}
-              @dblclick=${()=>this._openEditDialog(t,i)}
-              @pointerdown=${()=>this._startDkLongPress(t,i)}
+              @click=${()=>this._handleDkClick(e)}
+              @dblclick=${()=>this._openEditDialog(e,i)}
+              @pointerdown=${()=>this._startDkLongPress(e,i)}
               @pointerup=${()=>this._cancelDkLongPress()}
               @pointerleave=${()=>this._cancelDkLongPress()}
-              @contextmenu=${t=>t.preventDefault()}>
+              @contextmenu=${e=>e.preventDefault()}>
               <div style="${s&&r?"opacity: 0.15":""}">
-                ${Lt(wt[t],48,`dk-${t}`)}
+                ${Re(we[e],48,`dk-${e}`)}
               </div>
-              ${s&&r?K`
+              ${s&&r?W`
                 <div class="dk-card-overlay">
                   ${this._renderDkRecipeInfo(i)}
                 </div>
-              `:V}
+              `:G}
               <span class="dk-card-label">
-                ${s?`Brew ${wt[t]}`:wt[t]}
+                ${s?`Brew ${we[e]}`:we[e]}
               </span>
             </button>
           `})}
@@ -1212,87 +1304,87 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
         </button>
 
       </div>
-    `}_renderDkRecipeInfo(t){const e=[];return t.c1_process&&"none"!==t.c1_process&&e.push({process:t.c1_process,intensity:t.c1_intensity,ml:t.c1_portion_ml}),t.c2_process&&"none"!==t.c2_process&&e.push({process:t.c2_process,intensity:t.c2_intensity,ml:t.c2_portion_ml}),0===e.length?V:K`
+    `}_renderDkRecipeInfo(e){const t=[];return e.c1_process&&"none"!==e.c1_process&&t.push({process:e.c1_process,intensity:e.c1_intensity,ml:e.c1_portion_ml}),e.c2_process&&"none"!==e.c2_process&&t.push({process:e.c2_process,intensity:e.c2_intensity,ml:e.c2_portion_ml}),0===t.length?G:W`
       <div class="dk-recipe-info">
-        ${e.map(t=>K`
+        ${t.map(e=>W`
           <div class="dk-recipe-row">
-            <span class="dk-recipe-ml">${t.ml}<span class="dk-recipe-ml-unit">ml</span></span>
-            ${"coffee"===t.process?K`
+            <span class="dk-recipe-ml">${e.ml}<span class="dk-recipe-ml-unit">ml</span></span>
+            ${"coffee"===e.process?W`
               <span class="intensity-dots">
-                ${[1,2,3,4,5].map(e=>K`
-                  <span class="intensity-dot" style="background:${e<=(Ht[t.intensity]||3)?"var(--mbc-text)":"rgba(255,255,255,0.2)"}"></span>
+                ${[1,2,3,4,5].map(t=>W`
+                  <span class="intensity-dot" style="background:${t<=(Ue[e.intensity]||3)?"var(--mbc-text)":"rgba(255,255,255,0.2)"}"></span>
                 `)}
               </span>
-            `:V}
+            `:G}
           </div>
         `)}
       </div>
-    `}_renderRecipes(){const t=this._recipeOptions(),e=this._selectedRecipe(),i=this._getDirectKeyData(),s=i&&Object.keys(i.profiles[i.activeProfile]??{}).length>0;return K`
-      ${s?K`
+    `}_renderRecipes(){const e=this._recipeOptions(),t=this._selectedRecipe(),i=this._getDirectKeyData(),s=i&&Object.keys(i.profiles[i.activeProfile]??{}).length>0;return W`
+      ${s?W`
         <div class="recipes-divider">
           <span class="recipes-divider-line"></span>
           <span class="recipes-divider-text">All Recipes</span>
           <span class="recipes-divider-line"></span>
         </div>
-      `:K`<div class="section-title">Recipe</div>`}
+      `:W`<div class="section-title">Recipe</div>`}
       <div class="recipe-grid">
-        ${t.map(t=>{const i=t.replace(/[^a-zA-Z0-9]/g,"");return K`
+        ${e.map(e=>{const i=e.replace(/[^a-zA-Z0-9]/g,"");return W`
             <div class="recipe-card"
-              ?data-selected=${t===e&&!this._selectedDk}
-              @click=${()=>{t!==e||this._selectedDk?this._selectRecipe(t):this._brew()}}>
-              ${Lt(t,48,`r-${i}`)}
-              <span class="recipe-name">${t}</span>
+              ?data-selected=${e===t&&!this._selectedDk}
+              @click=${()=>{e!==t||this._selectedDk?this._selectRecipe(e):this._brew()}}>
+              ${Re(e,48,`r-${i}`)}
+              <span class="recipe-name">${e}</span>
             </div>
           `})}
       </div>
-    `}_renderSegment(t,e,i,s,r=!1){return K`
+    `}_renderSegment(e,t,i,s,r=!1){return W`
       <div class="segment-picker ${r?"freestyle-disabled":""}">
-        <span class="segment-label">${t}</span>
+        <span class="segment-label">${e}</span>
         <div class="segment-options">
-          ${e.map(t=>K`
-            <button class="segment-opt" ?data-active=${t===i}
-              @click=${()=>s(t)}>${function(t){return Bt[t]||t.charAt(0).toUpperCase()+t.slice(1).replace(/_/g," ")}(t)}</button>
+          ${t.map(e=>W`
+            <button class="segment-opt" ?data-active=${e===i}
+              @click=${()=>s(e)}>${function(e){return He[e]||e.charAt(0).toUpperCase()+e.slice(1).replace(/_/g," ")}(e)}</button>
           `)}
         </div>
       </div>
-    `}_renderPortion(t,e,i,s,r,o,n=!1){return K`
+    `}_renderPortion(e,t,i,s,r,o,n=!1){return W`
       <div class="portion-row ${n?"freestyle-disabled":""}">
         <div class="portion-header">
-          <span class="portion-label">${t}</span>
-          <span class="portion-value">${e} ml</span>
+          <span class="portion-label">${e}</span>
+          <span class="portion-value">${t} ml</span>
         </div>
         <input type="range" class="portion-slider"
-          min=${i} max=${s} step=${r} .value=${String(e)}
-          @input=${t=>o(parseInt(t.target.value)||0)} />
+          min=${i} max=${s} step=${r} .value=${String(t)}
+          @input=${e=>o(parseInt(e.target.value)||0)} />
       </div>
-    `}_renderFreestyle(){const t="coffee"===this._fsProcess1,e="none"===this._fsProcess2,i="coffee"===this._fsProcess2;return K`
+    `}_renderFreestyle(){const e="coffee"===this._fsProcess1,t="none"===this._fsProcess2,i="coffee"===this._fsProcess2;return W`
       <div class="section-title">Freestyle</div>
       <div class="freestyle-section">
         <div class="freestyle-name-row">
           <input class="freestyle-name-input" type="text" placeholder="Drink name"
             .value=${this._fsName}
-            @input=${t=>{this._fsName=t.target.value}} />
+            @input=${e=>{this._fsName=e.target.value}} />
         </div>
 
         <div class="freestyle-components">
           <div class="freestyle-component">
             <div class="component-title">Component 1</div>
-            ${this._renderSegment("Process",ut,this._fsProcess1,t=>{this._fsProcess1=t})}
-            ${this._renderPortion("Portion",this._fsPortion1,5,250,5,t=>{this._fsPortion1=t})}
-            ${this._renderSegment("Intensity",_t,this._fsIntensity1,t=>{this._fsIntensity1=t},!t)}
-            ${this._renderSegment("Aroma",vt,this._fsAroma1,t=>{this._fsAroma1=t},!t)}
-            ${this._renderSegment("Temp",$t,this._fsTemp1,t=>{this._fsTemp1=t})}
-            ${this._renderSegment("Shots",xt,this._fsShots1,t=>{this._fsShots1=t},!t)}
+            ${this._renderSegment("Process",ue,this._fsProcess1,e=>{this._fsProcess1=e})}
+            ${this._renderPortion("Portion",this._fsPortion1,5,250,5,e=>{this._fsPortion1=e})}
+            ${this._renderSegment("Intensity",_e,this._fsIntensity1,e=>{this._fsIntensity1=e},!e)}
+            ${this._renderSegment("Aroma",ve,this._fsAroma1,e=>{this._fsAroma1=e},!e)}
+            ${this._renderSegment("Temp",$e,this._fsTemp1,e=>{this._fsTemp1=e})}
+            ${this._renderSegment("Shots",xe,this._fsShots1,e=>{this._fsShots1=e},!e)}
           </div>
 
           <div class="freestyle-component">
             <div class="component-title">Component 2</div>
-            ${this._renderSegment("Process",bt,this._fsProcess2,t=>{this._fsProcess2=t})}
-            ${this._renderPortion("Portion",this._fsPortion2,0,250,5,t=>{this._fsPortion2=t},e)}
-            ${this._renderSegment("Intensity",_t,this._fsIntensity2,t=>{this._fsIntensity2=t},!i)}
-            ${this._renderSegment("Aroma",vt,this._fsAroma2,t=>{this._fsAroma2=t},!i)}
-            ${this._renderSegment("Temp",$t,this._fsTemp2,t=>{this._fsTemp2=t},e)}
-            ${this._renderSegment("Shots",xt,this._fsShots2,t=>{this._fsShots2=t},!i)}
+            ${this._renderSegment("Process",be,this._fsProcess2,e=>{this._fsProcess2=e})}
+            ${this._renderPortion("Portion",this._fsPortion2,0,250,5,e=>{this._fsPortion2=e},t)}
+            ${this._renderSegment("Intensity",_e,this._fsIntensity2,e=>{this._fsIntensity2=e},!i)}
+            ${this._renderSegment("Aroma",ve,this._fsAroma2,e=>{this._fsAroma2=e},!i)}
+            ${this._renderSegment("Temp",$e,this._fsTemp2,e=>{this._fsTemp2=e},t)}
+            ${this._renderSegment("Shots",xe,this._fsShots2,e=>{this._fsShots2=e},!i)}
           </div>
         </div>
 
@@ -1303,51 +1395,99 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
           </button>
         </div>
       </div>
-    `}_renderStats(){const t=this._entity("sensor","total_cups"),e=t?.state?parseInt(t.state,10):null;if(null===e||isNaN(e))return K`
-        <div class="section-title">Stats</div>
-        <div class="stats-unavailable">Cup statistics not available.</div>
-      `;const i=t.attributes||{},s=[];for(const[t,e]of Object.entries(i))"number"!=typeof e||["friendly_name","unit_of_measurement","state_class","icon"].includes(t)||s.push({name:t,count:e});return s.sort((t,e)=>e.count-t.count),K`
-      <div class="section-title">Stats</div>
-      <div class="stats-section">
-        <div class="stats-total">
-          <span class="stats-total-number">${e.toLocaleString()}</span>
-          <span class="stats-total-label">Total Cups</span>
-        </div>
-        ${s.length>0?K`
-          <div class="stats-grid">
-            ${s.map(({name:t,count:e},i)=>K`
-              <div class="stats-card" ?data-top=${0===i}>
-                ${Lt(t,40,`stat-${t.replace(/[^a-zA-Z0-9]/g,"")}`)}
-                <span class="stats-recipe-name">${t}</span>
-                <span class="stats-recipe-count">${e}</span>
+    `}async _somLoadData(){if(!this._somLoaded&&this.hass)try{const[e,t]=await Promise.all([this.hass.callWS({type:"melitta_barista/sommelier/favorites/list"}),this.hass.callWS({type:"melitta_barista/sommelier/hoppers/get"})]);this._somFavorites=e.favorites.slice(0,3),this._somHoppers=t,this._somLoaded=!0}catch(e){console.warn("[melitta-card] Sommelier not available:",e),this._somLoaded=!0}}async _somSurpriseMe(){if(this.hass&&!this._somGenerating){this._somGenerating=!0,this._somQuickRecipe=null;try{const e=await this.hass.callWS({type:"melitta_barista/sommelier/generate",mode:"surprise_me",count:1});e.session.recipes.length>0&&(this._somQuickRecipe=e.session.recipes[0])}catch(e){console.error("[melitta-card] Generate failed:",e)}finally{this._somGenerating=!1}}}async _somBrewRecipe(e){if(this.hass)try{await this.hass.callWS({type:"melitta_barista/sommelier/brew",recipe_id:e}),this._somQuickRecipe=null}catch(e){console.error("[melitta-card] Brew failed:",e)}}async _somBrewFavorite(e){if(this.hass)try{await this.hass.callWS({type:"melitta_barista/sommelier/favorites/brew",favorite_id:e}),this._somFavorites=this._somFavorites.map(t=>t.id===e?{...t,brew_count:t.brew_count+1}:t)}catch(e){console.error("[melitta-card] Brew favorite failed:",e)}}_renderSommelier(){if(!this._somLoaded)return this._somLoadData(),W`<div class="section-title">
+        <ha-icon icon="mdi:coffee-maker-check-outline"></ha-icon> Sommelier
+      </div>
+      <div class="mbc-section"><span style="opacity:0.5">Loading...</span></div>`;const e=this._somHoppers.hopper1?.bean,t=this._somHoppers.hopper2?.bean;return W`
+      <div class="section-title">
+        <ha-icon icon="mdi:coffee-maker-check-outline"></ha-icon> AI Sommelier
+      </div>
+      <div class="mbc-section">
+        ${e||t?W`
+          <div class="som-hoppers">
+            ${e?W`<span class="som-hopper-tag">H1: ${e.brand} ${e.product}</span>`:G}
+            ${t?W`<span class="som-hopper-tag">H2: ${t.brand} ${t.product}</span>`:G}
+          </div>
+        `:G}
+
+        ${this._somFavorites.length>0?W`
+          <div class="som-favorites">
+            ${this._somFavorites.map(e=>W`
+              <div class="som-fav-row">
+                <div class="som-fav-info">
+                  <span class="som-fav-name">★ ${e.name}</span>
+                  <span class="som-fav-count">${e.brew_count}×</span>
+                </div>
+                <button class="som-brew-btn" @click=${()=>this._somBrewFavorite(e.id)}>
+                  <ha-icon icon="mdi:coffee"></ha-icon>
+                </button>
               </div>
             `)}
           </div>
-        `:K`<div class="stats-empty">No cups brewed yet</div>`}
+        `:G}
+
+        ${this._somQuickRecipe?W`
+          <div class="som-quick-recipe">
+            <div class="som-quick-name">${this._somQuickRecipe.name}</div>
+            <div class="som-quick-desc">${this._somQuickRecipe.description}</div>
+            <button class="som-brew-btn full" @click=${()=>this._somBrewRecipe(this._somQuickRecipe.id)}>
+              <ha-icon icon="mdi:coffee"></ha-icon> Brew
+            </button>
+          </div>
+        `:G}
+
+        <div class="som-actions">
+          <button class="som-surprise-btn" @click=${()=>this._somSurpriseMe()}
+            ?disabled=${this._somGenerating}>
+            ${this._somGenerating?W`<ha-icon icon="mdi:loading" class="spin"></ha-icon> Generating...`:W`<ha-icon icon="mdi:auto-fix"></ha-icon> Surprise me`}
+          </button>
+        </div>
       </div>
-    `}_renderMaintenance(){const t=this._getPrefix();if(!t)return V;const e=this._state("state")||"unknown",i="Connected"===(this._state("connection")||"Disconnected"),s="Ready"===e,r=(e,r)=>{const o=r.map(e=>{if(!this.hass.states[`button.${t}_${e.suffix}`])return V;const r=this._confirmKey===e.key,o=this._busyKey===e.key,n=!i||!s||o;return K`
+    `}_renderStats(){const e=this._entity("sensor","total_cups"),t=e?.state?parseInt(e.state,10):null;if(null===t||isNaN(t))return W`
+        <div class="section-title">Stats</div>
+        <div class="stats-unavailable">Cup statistics not available.</div>
+      `;const i=e.attributes||{},s=[];for(const[e,t]of Object.entries(i))"number"!=typeof t||["friendly_name","unit_of_measurement","state_class","icon"].includes(e)||s.push({name:e,count:t});return s.sort((e,t)=>t.count-e.count),W`
+      <div class="section-title">Stats</div>
+      <div class="stats-section">
+        <div class="stats-total">
+          <span class="stats-total-number">${t.toLocaleString()}</span>
+          <span class="stats-total-label">Total Cups</span>
+        </div>
+        ${s.length>0?W`
+          <div class="stats-grid">
+            ${s.map(({name:e,count:t},i)=>W`
+              <div class="stats-card" ?data-top=${0===i}>
+                ${Re(e,40,`stat-${e.replace(/[^a-zA-Z0-9]/g,"")}`)}
+                <span class="stats-recipe-name">${e}</span>
+                <span class="stats-recipe-count">${t}</span>
+              </div>
+            `)}
+          </div>
+        `:W`<div class="stats-empty">No cups brewed yet</div>`}
+      </div>
+    `}_renderMaintenance(){const e=this._getPrefix();if(!e)return G;const t=this._state("state")||"unknown",i="Connected"===(this._state("connection")||"Disconnected"),s="Ready"===t,r=(t,r)=>{const o=r.map(t=>{if(!this.hass.states[`button.${e}_${t.suffix}`])return G;const r=this._confirmKey===t.key,o=this._busyKey===t.key,n=!i||!s||o;return W`
           <div class="maint-card" ?data-confirming=${r}>
-            <ha-icon class="maint-icon" icon="${e.icon}"></ha-icon>
+            <ha-icon class="maint-icon" icon="${t.icon}"></ha-icon>
             <div class="maint-info">
-              <div class="maint-label">${e.label}</div>
-              <div class="maint-desc">${e.desc}</div>
+              <div class="maint-label">${t.label}</div>
+              <div class="maint-desc">${t.desc}</div>
             </div>
             <button class="maint-btn" ?data-confirm=${r} ?disabled=${n}
-              @click=${()=>this._pressMaintenanceButton(e)}>
+              @click=${()=>this._pressMaintenanceButton(t)}>
               ${o?"...":r?"Confirm":"Start"}
             </button>
           </div>
-        `}).filter(t=>t!==V);return 0===o.length?V:K`
-        <div class="maint-group-title">${e}</div>
+        `}).filter(e=>e!==G);return 0===o.length?G:W`
+        <div class="maint-group-title">${t}</div>
         <div class="maint-grid">${o}</div>
-      `};return K`
+      `};return W`
       <div class="section-title">Maintenance</div>
       <div class="maint-section" @click=${()=>{this._confirmKey&&(this._confirmKey=null)}}>
-        ${r("Cleaning & Descaling",Et)}
-        ${r("Water Filter",Pt)}
-        ${r("Other",Dt)}
+        ${r("Cleaning & Descaling",Ee)}
+        ${r("Water Filter",Pe)}
+        ${r("Other",De)}
       </div>
-    `}_renderSettings(){const t=this._getPrefix();if(!t)return V;const e=At.map(e=>{const i=this.hass.states[`switch.${t}_${e}`];if(!i)return V;const s="on"===i.state,r=Nt[e];return K`
+    `}_renderSettings(){const e=this._getPrefix();if(!e)return G;const t=Ae.map(t=>{const i=this.hass.states[`switch.${e}_${t}`];if(!i)return G;const s="on"===i.state,r=Ne[t];return W`
         <div class="setting-card">
           <ha-icon class="setting-icon" icon="${r.icon}"></ha-icon>
           <div class="setting-info">
@@ -1355,11 +1495,11 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
             <div class="setting-desc">${r.desc}</div>
           </div>
           <button class="toggle-track" ?data-on=${s}
-            @click=${()=>this._toggleSwitch(e,!s)}>
+            @click=${()=>this._toggleSwitch(t,!s)}>
             <span class="toggle-thumb"></span>
           </button>
         </div>
-      `}),i=Ct.map(e=>{const i=this.hass.states[`number.${t}_${e}`];if(!i)return V;const s=Ft[e],r=parseFloat(i.state)||0;let o;return o="level"===s.format?Ut[e]?.[r]??String(r):`${r} min`,K`
+      `}),i=Ce.map(t=>{const i=this.hass.states[`number.${e}_${t}`];if(!i)return G;const s=Fe[t],r=parseFloat(i.state)||0;let o;return o="level"===s.format?Be[t]?.[r]??String(r):`${r} min`,W`
         <div class="setting-card">
           <ha-icon class="setting-icon" icon="${s.icon}"></ha-icon>
           <div class="setting-info">
@@ -1368,17 +1508,17 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
           </div>
           <span class="setting-value">${o}</span>
         </div>
-      `});return e.every(t=>t===V)&&i.every(t=>t===V)?V:K`
+      `});return t.every(e=>e===G)&&i.every(e=>e===G)?G:W`
       <div class="section-title">Settings</div>
       <div class="settings-grid">
-        ${e}
+        ${t}
         ${i}
       </div>
-    `}_renderEditDialog(){if(!this._editDk||!this._editState)return V;const t=this._editState,e=this._editDk.category,i="coffee"===t.process1,s="none"===t.process2,r="coffee"===t.process2,o=(t,e)=>{this._editState={...this._editState,[t]:e}};return K`
+    `}_renderEditDialog(){if(!this._editDk||!this._editState)return G;const e=this._editState,t=this._editDk.category,i="coffee"===e.process1,s="none"===e.process2,r="coffee"===e.process2,o=(e,t)=>{this._editState={...this._editState,[e]:t}};return W`
       <div class="edit-overlay" @click=${()=>{this._editDk=null,this._editState=null}}>
-        <div class="edit-dialog" @click=${t=>t.stopPropagation()}>
+        <div class="edit-dialog" @click=${e=>e.stopPropagation()}>
           <div class="edit-header">
-            <span class="edit-title">Edit: ${wt[e]}</span>
+            <span class="edit-title">Edit: ${we[t]}</span>
             <button class="edit-close" @click=${()=>{this._editDk=null,this._editState=null}}>
               <ha-icon icon="mdi:close"></ha-icon>
             </button>
@@ -1386,21 +1526,21 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
           <div class="edit-body">
             <div class="edit-component">
               <div class="component-title">Component 1</div>
-              ${this._renderSegment("Process",ut,t.process1,t=>o("process1",t))}
-              ${this._renderPortion("Portion",t.portion1,5,250,5,t=>o("portion1",t))}
-              ${this._renderSegment("Intensity",_t,t.intensity1,t=>o("intensity1",t),!i)}
-              ${this._renderSegment("Aroma",vt,t.aroma1,t=>o("aroma1",t),!i)}
-              ${this._renderSegment("Temperature",$t,t.temperature1,t=>o("temperature1",t))}
-              ${this._renderSegment("Shots",xt,t.shots1,t=>o("shots1",t),!i)}
+              ${this._renderSegment("Process",ue,e.process1,e=>o("process1",e))}
+              ${this._renderPortion("Portion",e.portion1,5,250,5,e=>o("portion1",e))}
+              ${this._renderSegment("Intensity",_e,e.intensity1,e=>o("intensity1",e),!i)}
+              ${this._renderSegment("Aroma",ve,e.aroma1,e=>o("aroma1",e),!i)}
+              ${this._renderSegment("Temperature",$e,e.temperature1,e=>o("temperature1",e))}
+              ${this._renderSegment("Shots",xe,e.shots1,e=>o("shots1",e),!i)}
             </div>
             <div class="edit-component">
               <div class="component-title">Component 2</div>
-              ${this._renderSegment("Process",bt,t.process2,t=>o("process2",t))}
-              ${this._renderPortion("Portion",t.portion2,0,250,5,t=>o("portion2",t),s)}
-              ${this._renderSegment("Intensity",_t,t.intensity2,t=>o("intensity2",t),!r)}
-              ${this._renderSegment("Aroma",vt,t.aroma2,t=>o("aroma2",t),!r)}
-              ${this._renderSegment("Temperature",$t,t.temperature2,t=>o("temperature2",t),s)}
-              ${this._renderSegment("Shots",xt,t.shots2,t=>o("shots2",t),!r)}
+              ${this._renderSegment("Process",be,e.process2,e=>o("process2",e))}
+              ${this._renderPortion("Portion",e.portion2,0,250,5,e=>o("portion2",e),s)}
+              ${this._renderSegment("Intensity",_e,e.intensity2,e=>o("intensity2",e),!r)}
+              ${this._renderSegment("Aroma",ve,e.aroma2,e=>o("aroma2",e),!r)}
+              ${this._renderSegment("Temperature",$e,e.temperature2,e=>o("temperature2",e),s)}
+              ${this._renderSegment("Shots",xe,e.shots2,e=>o("shots2",e),!r)}
             </div>
           </div>
           <div class="edit-footer">
@@ -1413,4 +1553,4 @@ function t(t,e,i,s){var r,o=arguments.length,n=o<3?e:null===s?s=Object.getOwnPro
           </div>
         </div>
       </div>
-    `}static get styles(){return Ot}};t([mt({attribute:!1})],It.prototype,"hass",void 0),t([gt()],It.prototype,"_config",void 0),t([gt()],It.prototype,"_resolvedPrefix",void 0),t([gt()],It.prototype,"_fsName",void 0),t([gt()],It.prototype,"_fsProcess1",void 0),t([gt()],It.prototype,"_fsIntensity1",void 0),t([gt()],It.prototype,"_fsAroma1",void 0),t([gt()],It.prototype,"_fsPortion1",void 0),t([gt()],It.prototype,"_fsTemp1",void 0),t([gt()],It.prototype,"_fsShots1",void 0),t([gt()],It.prototype,"_fsProcess2",void 0),t([gt()],It.prototype,"_fsIntensity2",void 0),t([gt()],It.prototype,"_fsAroma2",void 0),t([gt()],It.prototype,"_fsPortion2",void 0),t([gt()],It.prototype,"_fsTemp2",void 0),t([gt()],It.prototype,"_fsShots2",void 0),t([gt()],It.prototype,"_selectedDk",void 0),t([gt()],It.prototype,"_twoCups",void 0),t([gt()],It.prototype,"_editDk",void 0),t([gt()],It.prototype,"_editState",void 0),t([gt()],It.prototype,"_editSaving",void 0),t([gt()],It.prototype,"_confirmKey",void 0),t([gt()],It.prototype,"_busyKey",void 0),It=t([pt("melitta-barista-card")],It),window.customCards=window.customCards||[],window.customCards.push({type:"melitta-barista-card",name:"Melitta Barista Card",description:"Premium control card for Melitta Barista coffee machines",preview:!0,documentationURL:"https://github.com/dzerik/melitta-barista-card"}),console.info("%c MELITTA-BARISTA-CARD %c v2.1.0 ","color: white; background: #795548; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;","color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;");export{It as MelittaBaristaCard};
+    `}static get styles(){return Te}};e([fe({attribute:!1})],Ie.prototype,"hass",void 0),e([ge()],Ie.prototype,"_config",void 0),e([ge()],Ie.prototype,"_resolvedPrefix",void 0),e([ge()],Ie.prototype,"_fsName",void 0),e([ge()],Ie.prototype,"_fsProcess1",void 0),e([ge()],Ie.prototype,"_fsIntensity1",void 0),e([ge()],Ie.prototype,"_fsAroma1",void 0),e([ge()],Ie.prototype,"_fsPortion1",void 0),e([ge()],Ie.prototype,"_fsTemp1",void 0),e([ge()],Ie.prototype,"_fsShots1",void 0),e([ge()],Ie.prototype,"_fsProcess2",void 0),e([ge()],Ie.prototype,"_fsIntensity2",void 0),e([ge()],Ie.prototype,"_fsAroma2",void 0),e([ge()],Ie.prototype,"_fsPortion2",void 0),e([ge()],Ie.prototype,"_fsTemp2",void 0),e([ge()],Ie.prototype,"_fsShots2",void 0),e([ge()],Ie.prototype,"_selectedDk",void 0),e([ge()],Ie.prototype,"_twoCups",void 0),e([ge()],Ie.prototype,"_editDk",void 0),e([ge()],Ie.prototype,"_editState",void 0),e([ge()],Ie.prototype,"_editSaving",void 0),e([ge()],Ie.prototype,"_confirmKey",void 0),e([ge()],Ie.prototype,"_busyKey",void 0),e([ge()],Ie.prototype,"_somFavorites",void 0),e([ge()],Ie.prototype,"_somHoppers",void 0),e([ge()],Ie.prototype,"_somLoaded",void 0),e([ge()],Ie.prototype,"_somGenerating",void 0),e([ge()],Ie.prototype,"_somQuickRecipe",void 0),Ie=e([pe("melitta-barista-card")],Ie),window.customCards=window.customCards||[],window.customCards.push({type:"melitta-barista-card",name:"Melitta Barista Card",description:"Premium control card for Melitta Barista coffee machines",preview:!0,documentationURL:"https://github.com/dzerik/melitta-barista-card"}),console.info("%c MELITTA-BARISTA-CARD %c v2.1.0 ","color: white; background: #795548; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;","color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;");export{Ie as MelittaBaristaCard};

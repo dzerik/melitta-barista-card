@@ -98,6 +98,13 @@ export class MelittaBaristaCard extends LitElement {
   @state() private _confirmKey: string | null = null;
   @state() private _busyKey: string | null = null;
 
+  // Sommelier
+  @state() private _somFavorites: import("./types").SommelierFavorite[] = [];
+  @state() private _somHoppers: import("./types").SommelierHoppers = { hopper1: null, hopper2: null };
+  @state() private _somLoaded = false;
+  @state() private _somGenerating = false;
+  @state() private _somQuickRecipe: { name: string; description: string; id: string } | null = null;
+
   // Long press
   private _dkLongPressTimer: ReturnType<typeof setTimeout> | null = null;
   private _dkLongPressTriggered = false;
@@ -508,6 +515,10 @@ export class MelittaBaristaCard extends LitElement {
         ? this._renderFreestyle()
         : nothing}
 
+      ${this._config.show_sommelier
+        ? this._renderSommelier()
+        : nothing}
+
       ${this._config.show_stats
         ? this._renderStats()
         : nothing}
@@ -750,6 +761,135 @@ export class MelittaBaristaCard extends LitElement {
           <button class="brew-btn" @click=${() => this._brewFreestyle()}>
             <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
             Brew ${this._fsName}
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // -- Sommelier --
+
+  private async _somLoadData() {
+    if (this._somLoaded || !this.hass) return;
+    try {
+      const [favsRes, hoppersRes] = await Promise.all([
+        this.hass.callWS<{ favorites: import("./types").SommelierFavorite[] }>({
+          type: "melitta_barista/sommelier/favorites/list",
+        }),
+        this.hass.callWS<import("./types").SommelierHoppers>({
+          type: "melitta_barista/sommelier/hoppers/get",
+        }),
+      ]);
+      this._somFavorites = favsRes.favorites.slice(0, 3);
+      this._somHoppers = hoppersRes;
+      this._somLoaded = true;
+    } catch (e) {
+      console.warn("[melitta-card] Sommelier not available:", e);
+      this._somLoaded = true;
+    }
+  }
+
+  private async _somSurpriseMe() {
+    if (!this.hass || this._somGenerating) return;
+    this._somGenerating = true;
+    this._somQuickRecipe = null;
+    try {
+      const res = await this.hass.callWS<{
+        session: { recipes: Array<{ id: string; name: string; description: string }> };
+      }>({
+        type: "melitta_barista/sommelier/generate",
+        mode: "surprise_me",
+        count: 1,
+      });
+      if (res.session.recipes.length > 0) {
+        this._somQuickRecipe = res.session.recipes[0];
+      }
+    } catch (e) {
+      console.error("[melitta-card] Generate failed:", e);
+    } finally {
+      this._somGenerating = false;
+    }
+  }
+
+  private async _somBrewRecipe(recipeId: string) {
+    if (!this.hass) return;
+    try {
+      await this.hass.callWS({ type: "melitta_barista/sommelier/brew", recipe_id: recipeId });
+      this._somQuickRecipe = null;
+    } catch (e) {
+      console.error("[melitta-card] Brew failed:", e);
+    }
+  }
+
+  private async _somBrewFavorite(favId: string) {
+    if (!this.hass) return;
+    try {
+      await this.hass.callWS({ type: "melitta_barista/sommelier/favorites/brew", favorite_id: favId });
+      // Update brew count locally
+      this._somFavorites = this._somFavorites.map(f =>
+        f.id === favId ? { ...f, brew_count: f.brew_count + 1 } : f
+      );
+    } catch (e) {
+      console.error("[melitta-card] Brew favorite failed:", e);
+    }
+  }
+
+  private _renderSommelier() {
+    if (!this._somLoaded) {
+      this._somLoadData();
+      return html`<div class="section-title">
+        <ha-icon icon="mdi:coffee-maker-check-outline"></ha-icon> Sommelier
+      </div>
+      <div class="mbc-section"><span style="opacity:0.5">Loading...</span></div>`;
+    }
+
+    const h1 = this._somHoppers.hopper1?.bean;
+    const h2 = this._somHoppers.hopper2?.bean;
+
+    return html`
+      <div class="section-title">
+        <ha-icon icon="mdi:coffee-maker-check-outline"></ha-icon> AI Sommelier
+      </div>
+      <div class="mbc-section">
+        ${h1 || h2 ? html`
+          <div class="som-hoppers">
+            ${h1 ? html`<span class="som-hopper-tag">H1: ${h1.brand} ${h1.product}</span>` : nothing}
+            ${h2 ? html`<span class="som-hopper-tag">H2: ${h2.brand} ${h2.product}</span>` : nothing}
+          </div>
+        ` : nothing}
+
+        ${this._somFavorites.length > 0 ? html`
+          <div class="som-favorites">
+            ${this._somFavorites.map(fav => html`
+              <div class="som-fav-row">
+                <div class="som-fav-info">
+                  <span class="som-fav-name">★ ${fav.name}</span>
+                  <span class="som-fav-count">${fav.brew_count}×</span>
+                </div>
+                <button class="som-brew-btn" @click=${() => this._somBrewFavorite(fav.id)}>
+                  <ha-icon icon="mdi:coffee"></ha-icon>
+                </button>
+              </div>
+            `)}
+          </div>
+        ` : nothing}
+
+        ${this._somQuickRecipe ? html`
+          <div class="som-quick-recipe">
+            <div class="som-quick-name">${this._somQuickRecipe.name}</div>
+            <div class="som-quick-desc">${this._somQuickRecipe.description}</div>
+            <button class="som-brew-btn full" @click=${() => this._somBrewRecipe(this._somQuickRecipe!.id)}>
+              <ha-icon icon="mdi:coffee"></ha-icon> Brew
+            </button>
+          </div>
+        ` : nothing}
+
+        <div class="som-actions">
+          <button class="som-surprise-btn" @click=${() => this._somSurpriseMe()}
+            ?disabled=${this._somGenerating}>
+            ${this._somGenerating
+              ? html`<ha-icon icon="mdi:loading" class="spin"></ha-icon> Generating...`
+              : html`<ha-icon icon="mdi:auto-fix"></ha-icon> Surprise me`}
           </button>
         </div>
       </div>
