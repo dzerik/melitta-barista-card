@@ -8,7 +8,6 @@ import {
   NUMBER_KEYS,
   DIRECTKEY_CATEGORIES,
   DK_LABELS,
-  DIRECTKEY_DISPLAY_TO_KEY,
   CLEANING_ACTIONS,
   FILTER_ACTIONS,
   OTHER_ACTIONS,
@@ -33,11 +32,12 @@ import { LEVEL_LABELS, INTENSITY_DOTS } from "./format";
 import {
   defaultRecipe,
   fromDkRecipe,
-  toServicePayload,
   type RecipeComponents,
   type ComponentSpec,
 } from "./recipe";
 import { renderComponentForm } from "./sections/controls";
+import * as api from "./api";
+import { parseDirectKeyData } from "./directkey";
 import { detectMelittaDevices } from "./utils";
 import { coffeeIconSvg } from "./icons";
 import { cardStyles } from "./styles";
@@ -183,9 +183,7 @@ export class MelittaBaristaCard extends LitElement {
     const prefix = this._getPrefix();
     if (!prefix) return;
     this._selectedDk = null;
-    this.hass.callService("select", "select_option", {
-      entity_id: `select.${prefix}_recipe`, option,
-    });
+    api.selectOption(this.hass, prefix, "recipe", option);
   }
 
   // -- Profile helpers --
@@ -206,30 +204,13 @@ export class MelittaBaristaCard extends LitElement {
   private _selectProfile(option: string): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
-    this.hass.callService("select", "select_option", {
-      entity_id: `select.${prefix}_profile`, option,
-    });
+    api.selectOption(this.hass, prefix, "profile", option);
   }
 
   // -- DirectKey helpers --
 
   private _getDirectKeyData(): DirectKeyData | null {
-    const profileEntity = this._profileEntity();
-    if (!profileEntity?.attributes) return null;
-    const rawDk = profileEntity.attributes.directkey_recipes as
-      Record<number, Record<string, DirectKeyRecipe>> | undefined;
-    const activeProfile = (profileEntity.attributes.active_profile as number) ?? 0;
-    if (!rawDk) return null;
-    const profiles: DirectKeyData["profiles"] = {};
-    for (const [pidStr, categories] of Object.entries(rawDk)) {
-      const pid = Number(pidStr);
-      profiles[pid] = {};
-      for (const [dName, recipe] of Object.entries(categories as Record<string, DirectKeyRecipe>)) {
-        const key = DIRECTKEY_DISPLAY_TO_KEY[dName] || dName;
-        profiles[pid][key] = recipe;
-      }
-    }
-    return { activeProfile, profiles };
+    return parseDirectKeyData(this._profileEntity()?.attributes);
   }
 
   // -- Actions --
@@ -237,35 +218,31 @@ export class MelittaBaristaCard extends LitElement {
   private _brew(): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
-    this.hass.callService("button", "press", { entity_id: `button.${prefix}_brew` });
+    api.pressButton(this.hass, prefix, "brew");
+  }
+
+  private _cancelBrew(): void {
+    const prefix = this._getPrefix();
+    if (!prefix) return;
+    api.pressButton(this.hass, prefix, "cancel");
   }
 
   private _brewDirectkey(category: DirectKeyCategory): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
-    this.hass.callService("melitta_barista", "brew_directkey", {
-      entity_id: `button.${prefix}_brew`,
-      category,
-      two_cups: this._twoCups,
-    });
+    api.brewDirectkey(this.hass, prefix, category, this._twoCups);
   }
 
   private _brewFreestyle(): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
-    this.hass.callService("melitta_barista", "brew_freestyle", {
-      entity_id: `button.${prefix}_brew`,
-      name: this._fsName,
-      ...toServicePayload(this._fsRecipe),
-    });
+    api.brewFreestyle(this.hass, prefix, this._fsName, this._fsRecipe);
   }
 
   private _toggleSwitch(key: string, turnOn: boolean): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
-    this.hass.callService("switch", turnOn ? "turn_on" : "turn_off", {
-      entity_id: `switch.${prefix}_${key}`,
-    });
+    api.toggleSwitch(this.hass, prefix, key, turnOn);
   }
 
   private _saveDirectkey(): void {
@@ -274,18 +251,14 @@ export class MelittaBaristaCard extends LitElement {
     if (!prefix) return;
     this._editSaving = true;
     const dk = this._getDirectKeyData();
-    this.hass.callService("melitta_barista", "save_directkey", {
-      entity_id: `button.${prefix}_brew`,
-      category: this._editDk.category,
-      profile_id: dk?.activeProfile ?? 0,
-      ...toServicePayload(this._editState),
-    }).then(() => {
-      this._editDk = null;
-      this._editState = null;
-      this._editSaving = false;
-    }).catch(() => {
-      this._editSaving = false;
-    });
+    api.saveDirectkey(this.hass, prefix, this._editDk.category, dk?.activeProfile ?? 0, this._editState)
+      .then(() => {
+        this._editDk = null;
+        this._editState = null;
+        this._editSaving = false;
+      }).catch(() => {
+        this._editSaving = false;
+      });
   }
 
   private _pressMaintenanceButton(action: MaintenanceAction): void {
@@ -293,13 +266,11 @@ export class MelittaBaristaCard extends LitElement {
       this._confirmKey = action.key;
       return;
     }
-    this._confirmKey = null;
-    this._busyKey = action.key;
     const prefix = this._getPrefix();
     if (!prefix) return;
-    this.hass.callService("button", "press", {
-      entity_id: `button.${prefix}_${action.suffix}`,
-    }).finally(() => {
+    this._confirmKey = null;
+    this._busyKey = action.key;
+    api.pressButton(this.hass, prefix, action.suffix).finally(() => {
       setTimeout(() => { this._busyKey = null; }, MAINT_BUSY_RESET_MS);
     });
   }
@@ -439,7 +410,7 @@ export class MelittaBaristaCard extends LitElement {
               <span class="brewing-percent">${Math.round(progressNum)}%</span>
             ` : nothing}
           </div>
-          <button class="brewing-cancel" @click=${() => this.hass.callService("button", "press", { entity_id: `button.${prefix}_cancel` })}>
+          <button class="brewing-cancel" @click=${() => this._cancelBrew()}>
             <ha-icon icon="mdi:close"></ha-icon>
           </button>
         </div>
@@ -659,16 +630,12 @@ export class MelittaBaristaCard extends LitElement {
   private async _somLoadData() {
     if (this._somLoaded || !this.hass) return;
     try {
-      const [favsRes, hoppersRes] = await Promise.all([
-        this.hass.callWS<{ favorites: SommelierFavorite[] }>({
-          type: "melitta_barista/sommelier/favorites/list",
-        }),
-        this.hass.callWS<SommelierHoppers>({
-          type: "melitta_barista/sommelier/hoppers/get",
-        }),
+      const [favorites, hoppers] = await Promise.all([
+        api.somListFavorites(this.hass),
+        api.somGetHoppers(this.hass),
       ]);
-      this._somFavorites = favsRes.favorites.slice(0, SOM_FAVORITES_LIMIT);
-      this._somHoppers = hoppersRes;
+      this._somFavorites = favorites.slice(0, SOM_FAVORITES_LIMIT);
+      this._somHoppers = hoppers;
       this._somLoaded = true;
     } catch (e) {
       console.warn("[melitta-card] Sommelier not available:", e);
@@ -681,16 +648,7 @@ export class MelittaBaristaCard extends LitElement {
     this._somGenerating = true;
     this._somQuickRecipe = null;
     try {
-      const res = await this.hass.callWS<{
-        session: { recipes: Array<{ id: string; name: string; description: string }> };
-      }>({
-        type: "melitta_barista/sommelier/generate",
-        mode: "surprise_me",
-        count: 1,
-      });
-      if (res.session.recipes.length > 0) {
-        this._somQuickRecipe = res.session.recipes[0];
-      }
+      this._somQuickRecipe = await api.somGenerateSurprise(this.hass);
     } catch (e) {
       console.error("[melitta-card] Generate failed:", e);
     } finally {
@@ -701,7 +659,7 @@ export class MelittaBaristaCard extends LitElement {
   private async _somBrewRecipe(recipeId: string) {
     if (!this.hass) return;
     try {
-      await this.hass.callWS({ type: "melitta_barista/sommelier/brew", recipe_id: recipeId });
+      await api.somBrew(this.hass, recipeId);
       this._somQuickRecipe = null;
     } catch (e) {
       console.error("[melitta-card] Brew failed:", e);
@@ -711,10 +669,10 @@ export class MelittaBaristaCard extends LitElement {
   private async _somBrewFavorite(favId: string) {
     if (!this.hass) return;
     try {
-      await this.hass.callWS({ type: "melitta_barista/sommelier/favorites/brew", favorite_id: favId });
+      await api.somBrewFavorite(this.hass, favId);
       // Update brew count locally
       this._somFavorites = this._somFavorites.map(f =>
-        f.id === favId ? { ...f, brew_count: f.brew_count + 1 } : f
+        f.id === favId ? { ...f, brew_count: (f.brew_count ?? 0) + 1 } : f
       );
     } catch (e) {
       console.error("[melitta-card] Brew favorite failed:", e);
