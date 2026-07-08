@@ -1,8 +1,16 @@
 # Melitta Barista Card
 
-[![HACS Validation](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
-[![License: MIT](https://img.shields.io/github/license/dzerik/melitta-barista-card)](https://github.com/dzerik/melitta-barista-card/blob/main/LICENSE)
-[![GitHub Release](https://img.shields.io/github/v/release/dzerik/melitta-barista-card)](https://github.com/dzerik/melitta-barista-card/releases)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=dzerik&repository=melitta-barista-card&category=plugin)
+
+[![GitHub Release](https://img.shields.io/github/v/release/dzerik/melitta-barista-card?style=flat-square)](https://github.com/dzerik/melitta-barista-card/releases)
+[![GitHub Downloads](https://img.shields.io/github/downloads/dzerik/melitta-barista-card/total?style=flat-square&label=downloads&cacheSeconds=86400)](https://github.com/dzerik/melitta-barista-card/releases)
+[![Tests](https://img.shields.io/github/actions/workflow/status/dzerik/melitta-barista-card/tests.yml?style=flat-square&label=tests)](https://github.com/dzerik/melitta-barista-card/actions/workflows/tests.yml)
+[![Validate](https://img.shields.io/github/actions/workflow/status/dzerik/melitta-barista-card/validate.yml?style=flat-square&label=HACS%20validate)](https://github.com/dzerik/melitta-barista-card/actions/workflows/validate.yml)
+[![License](https://img.shields.io/github/license/dzerik/melitta-barista-card?style=flat-square)](LICENSE)
+[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5?style=flat-square)](https://hacs.xyz)
+[![Home Assistant](https://img.shields.io/badge/HA-2024.1%2B-blue?style=flat-square)](https://www.home-assistant.io/)
+[![Translations](https://img.shields.io/badge/translations-29_languages-blueviolet?style=flat-square)](#localization)
+[![Built with Lit](https://img.shields.io/badge/built_with-Lit_3-324fff?style=flat-square)](https://lit.dev/)
 
 A custom Lovelace card for the [Melitta Barista Smart](https://github.com/dzerik/melitta-barista-ha) Home Assistant integration. Built with [Lit](https://lit.dev/) and TypeScript.
 
@@ -11,11 +19,13 @@ A custom Lovelace card for the [Melitta Barista Smart](https://github.com/dzerik
 - **Auto-detection** -- automatically finds your Melitta device, no manual configuration needed
 - **Recipe grid** -- all 24 recipes with SVG cup icons, DirectKey quick-access buttons, and user profile tabs
 - **Freestyle builder** -- custom drink with two components, intensity, aroma, temperature, shots, and portion size
+- **AI Sommelier** -- bean hopper overview, favorite recipes with one-tap brew, and a "Surprise me" recipe generator (requires the integration's Sommelier feature)
 - **Cup statistics** -- total counter and per-recipe stats dashboard
 - **Maintenance** -- easy clean, intensive clean, descaling, evaporating, water filter management
 - **Machine settings** -- toggles and sliders for energy saving, auto bean select, rinsing, water hardness, auto-off, brew temperature
 - **Real-time status** -- machine state badge, BLE connection indicator, brewing/cleaning progress bar
 - **Action alerts** -- fill water, empty trays, insert brew unit, and other required actions
+- **29 languages** -- follows your Home Assistant profile language, switches on the fly
 - **Visual editor** -- device dropdown in the card editor UI
 - **Theme-aware** -- light and dark mode styling
 
@@ -85,21 +95,38 @@ All options are optional:
 type: custom:melitta-barista-card
 name: My Coffee Machine
 show_recipes: true
+show_freestyle: true
+show_sommelier: true
+show_stats: true
+show_maintenance: true
 show_settings: false
 compact: false
 ```
 
 ### Options
 
-| Option          | Type    | Default         | Description                                    |
-| --------------- | ------- | --------------- | ---------------------------------------------- |
-| `name`          | string  | auto-detected   | Card title (auto-filled from device name)      |
-| `entity_prefix` | string  | auto-detected   | Entity prefix (auto-detected from integration) |
-| `show_recipes`  | boolean | true            | Show recipe selector when machine is ready     |
-| `show_settings` | boolean | false           | Show machine settings section                  |
-| `compact`       | boolean | false           | Compact layout                                 |
+| Option             | Type    | Default       | Description                                    |
+| ------------------ | ------- | ------------- | ---------------------------------------------- |
+| `name`             | string  | auto-detected | Card title (auto-filled from device name)      |
+| `entity_prefix`    | string  | auto-detected | Entity prefix (auto-detected from integration) |
+| `show_header`      | boolean | true          | Show card header with connection indicator     |
+| `show_status`      | boolean | true          | Show machine state badge and action alerts     |
+| `show_profiles`    | boolean | true          | Show user profile tabs (when >1 profile)       |
+| `show_recipes`     | boolean | true          | Show recipe selector when machine is ready     |
+| `show_freestyle`   | boolean | false         | Show freestyle drink builder                   |
+| `show_sommelier`   | boolean | false         | Show AI Sommelier section                      |
+| `show_stats`       | boolean | false         | Show cup statistics section                    |
+| `show_maintenance` | boolean | false         | Show maintenance section                       |
+| `show_settings`    | boolean | false         | Show machine settings section                  |
+| `compact`          | boolean | false         | Compact layout                                 |
 
 If you have multiple Melitta machines, use the visual editor dropdown to select the desired device, or set `entity_prefix` manually.
+
+## Localization
+
+The card ships with **29 languages**, mirroring the language list of the integration: Bulgarian, Bosnian, Czech, Danish, German, Greek, English, Spanish, Estonian, Finnish, French, Croatian, Hungarian, Italian, Lithuanian, Latvian, Macedonian, Norwegian Bokmål, Dutch, Polish, Portuguese, Romanian, Russian, Slovak, Slovenian, Serbian, Swedish, Turkish and Ukrainian.
+
+The UI language follows your Home Assistant profile setting and switches on the fly. Regional variants fall back to the base language, then to English. Translation files live in [`src/localize/languages/`](src/localize/languages/) — corrections and new languages are welcome (every file must contain the same keys as `en.json`; CI enforces this).
 
 ## Requirements
 
@@ -109,9 +136,12 @@ If you have multiple Melitta machines, use the visual editor dropdown to select 
 
 ```bash
 npm install
-npm run build     # Production build (minified)
+npm run build     # Production build (minified, with source map)
 npm run dev       # Watch mode for development
+npm test          # Unit tests (vitest)
 ```
+
+See [CHANGELOG.md](CHANGELOG.md) for the release history.
 
 ## Disclaimer
 
