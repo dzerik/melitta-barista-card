@@ -18,52 +18,30 @@ import {
   CLEANING_ACTIONS,
   FILTER_ACTIONS,
   OTHER_ACTIONS,
+  SWITCH_META,
+  NUMBER_META,
+  LONG_PRESS_MS,
+  MAINT_BUSY_RESET_MS,
+  SOM_FAVORITES_LIMIT,
+  STATS_EXCLUDED_ATTRS,
   type DirectKeyCategory,
-  type DirectKeyRecipe,
-  type DirectKeyData,
-  type MaintenanceAction,
 } from "./const";
-import type { MelittaCardConfig } from "./types";
+import type {
+  MelittaCardConfig,
+  DirectKeyRecipe,
+  DirectKeyData,
+  MaintenanceAction,
+  SommelierFavorite,
+  SommelierHoppers,
+  SommelierQuickRecipe,
+} from "./types";
+import { LEVEL_LABELS, INTENSITY_DOTS, displayName } from "./format";
 import { detectMelittaDevices } from "./utils";
 import { coffeeIconSvg } from "./icons";
 import { cardStyles } from "./styles";
 import "./editor";
 
-const SWITCH_META: Record<string, { label: string; desc: string; icon: string }> = {
-  energy_saving: { label: "Energy Saving", desc: "Reduce power when idle", icon: "mdi:lightning-bolt" },
-  auto_bean_select: { label: "Auto Bean Select", desc: "Auto-choose bean hopper", icon: "mdi:seed" },
-  rinsing_disabled: { label: "Rinsing Disabled", desc: "Skip auto rinse cycle", icon: "mdi:water-off" },
-};
-
-const NUMBER_META: Record<string, { label: string; desc: string; icon: string; format: "level" | "minutes" }> = {
-  water_hardness: { label: "Water Hardness", desc: "Calibrate for water type", icon: "mdi:water", format: "level" },
-  auto_off_after: { label: "Auto Off", desc: "Minutes until shutdown", icon: "mdi:timer-outline", format: "minutes" },
-  brew_temperature: { label: "Brew Temperature", desc: "Brewing water temp", icon: "mdi:thermometer", format: "level" },
-};
-
-const LEVEL_LABELS: Record<string, Record<number, string>> = {
-  water_hardness: { 1: "Soft", 2: "Medium", 3: "Hard", 4: "Very Hard" },
-  brew_temperature: { 0: "Low", 1: "Normal", 2: "High" },
-};
-
-const DISPLAY: Record<string, string> = {
-  very_mild: "V.Mild", mild: "Mild", medium: "Med", strong: "Strong",
-  very_strong: "V.Strong", extra_strong: "X.Strong",
-  cold: "Cold", normal: "Normal", high: "High",
-  none: "None", one: "1", two: "2", three: "3",
-  coffee: "Coffee", milk: "Milk", water: "Water",
-  standard: "Std", intense: "Int+",
-};
-
-const INTENSITY_DOTS: Record<string, number> = {
-  very_mild: 1, mild: 2, medium: 3, strong: 4, very_strong: 5,
-};
-
 const SHOTS_TO_STRING: Record<number, string> = { 0: "none", 1: "one", 2: "two", 3: "three" };
-
-function displayName(v: string): string {
-  return DISPLAY[v] || v.charAt(0).toUpperCase() + v.slice(1).replace(/_/g, " ");
-}
 
 @customElement("melitta-barista-card")
 export class MelittaBaristaCard extends LitElement {
@@ -99,11 +77,11 @@ export class MelittaBaristaCard extends LitElement {
   @state() private _busyKey: string | null = null;
 
   // Sommelier
-  @state() private _somFavorites: import("./types").SommelierFavorite[] = [];
-  @state() private _somHoppers: import("./types").SommelierHoppers = { hopper1: null, hopper2: null };
+  @state() private _somFavorites: SommelierFavorite[] = [];
+  @state() private _somHoppers: SommelierHoppers = { hopper1: null, hopper2: null };
   @state() private _somLoaded = false;
   @state() private _somGenerating = false;
-  @state() private _somQuickRecipe: { name: string; description: string; id: string } | null = null;
+  @state() private _somQuickRecipe: SommelierQuickRecipe | null = null;
 
   // Long press
   private _dkLongPressTimer: ReturnType<typeof setTimeout> | null = null;
@@ -355,7 +333,7 @@ export class MelittaBaristaCard extends LitElement {
     this.hass.callService("button", "press", {
       entity_id: `button.${prefix}_${action.suffix}`,
     }).finally(() => {
-      setTimeout(() => { this._busyKey = null; }, 2000);
+      setTimeout(() => { this._busyKey = null; }, MAINT_BUSY_RESET_MS);
     });
   }
 
@@ -366,7 +344,7 @@ export class MelittaBaristaCard extends LitElement {
     this._dkLongPressTimer = setTimeout(() => {
       this._dkLongPressTriggered = true;
       this._openEditDialog(cat, recipe);
-    }, 500);
+    }, LONG_PRESS_MS);
   }
 
   private _cancelDkLongPress(): void {
@@ -772,14 +750,14 @@ export class MelittaBaristaCard extends LitElement {
     if (this._somLoaded || !this.hass) return;
     try {
       const [favsRes, hoppersRes] = await Promise.all([
-        this.hass.callWS<{ favorites: import("./types").SommelierFavorite[] }>({
+        this.hass.callWS<{ favorites: SommelierFavorite[] }>({
           type: "melitta_barista/sommelier/favorites/list",
         }),
-        this.hass.callWS<import("./types").SommelierHoppers>({
+        this.hass.callWS<SommelierHoppers>({
           type: "melitta_barista/sommelier/hoppers/get",
         }),
       ]);
-      this._somFavorites = favsRes.favorites.slice(0, 3);
+      this._somFavorites = favsRes.favorites.slice(0, SOM_FAVORITES_LIMIT);
       this._somHoppers = hoppersRes;
       this._somLoaded = true;
     } catch (e) {
@@ -911,7 +889,7 @@ export class MelittaBaristaCard extends LitElement {
     const attrs = entity!.attributes || {};
     const counters: { name: string; count: number }[] = [];
     for (const [name, val] of Object.entries(attrs)) {
-      if (typeof val === "number" && !["friendly_name", "unit_of_measurement", "state_class", "icon"].includes(name)) {
+      if (typeof val === "number" && !STATS_EXCLUDED_ATTRS.includes(name)) {
         counters.push({ name, count: val });
       }
     }
@@ -1123,15 +1101,17 @@ export class MelittaBaristaCard extends LitElement {
   }
 }
 
-// Register in card picker
-(window as any).customCards = (window as any).customCards || [];
-(window as any).customCards.push({
-  type: "melitta-barista-card",
-  name: "Melitta Barista Card",
-  description: "Premium control card for Melitta Barista coffee machines",
-  preview: true,
-  documentationURL: "https://github.com/dzerik/melitta-barista-card",
-});
+// Register in card picker (guard against double-loading of the resource)
+window.customCards = window.customCards || [];
+if (!window.customCards.some((c) => c.type === "melitta-barista-card")) {
+  window.customCards.push({
+    type: "melitta-barista-card",
+    name: "Melitta Barista Card",
+    description: "Premium control card for Melitta Barista coffee machines",
+    preview: true,
+    documentationURL: "https://github.com/dzerik/melitta-barista-card",
+  });
+}
 
 console.info(
   `%c MELITTA-BARISTA-CARD %c v${CARD_VERSION} `,

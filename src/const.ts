@@ -1,4 +1,20 @@
-export const CARD_VERSION = "2.1.3";
+import pkg from "../package.json";
+import type { MaintenanceAction } from "./types";
+
+export const CARD_VERSION: string = pkg.version;
+
+export const SERVICE_DOMAIN = "melitta_barista";
+
+export const LONG_PRESS_MS = 500;
+export const MAINT_BUSY_RESET_MS = 2000;
+export const SOM_FAVORITES_LIMIT = 3;
+
+export const STATS_EXCLUDED_ATTRS = [
+  "friendly_name",
+  "unit_of_measurement",
+  "state_class",
+  "icon",
+];
 
 export const FREESTYLE_PROCESSES = ["coffee", "milk", "water"] as const;
 export const FREESTYLE_PROCESSES_WITH_NONE = ["none", ...FREESTYLE_PROCESSES] as const;
@@ -6,6 +22,17 @@ export const FREESTYLE_INTENSITIES = ["very_mild", "mild", "medium", "strong", "
 export const FREESTYLE_AROMAS = ["standard", "intense"] as const;
 export const FREESTYLE_TEMPERATURES = ["cold", "normal", "high"] as const;
 export const FREESTYLE_SHOTS = ["none", "one", "two", "three"] as const;
+
+export type Process = (typeof FREESTYLE_PROCESSES_WITH_NONE)[number];
+export type Intensity = (typeof FREESTYLE_INTENSITIES)[number];
+export type Aroma = (typeof FREESTYLE_AROMAS)[number];
+export type Temperature = (typeof FREESTYLE_TEMPERATURES)[number];
+export type Shots = (typeof FREESTYLE_SHOTS)[number];
+
+export const PORTION_LIMITS = {
+  c1: { min: 5, max: 250, step: 5 },
+  c2: { min: 0, max: 250, step: 5 },
+} as const;
 
 export const DIRECTKEY_CATEGORIES = [
   "espresso",
@@ -28,7 +55,6 @@ export const DK_LABELS: Record<DirectKeyCategory, string> = {
   milk_froth: "Milk Froth",
   water: "Hot Water",
 };
-
 
 export const DIRECTKEY_DISPLAY_TO_KEY: Record<string, DirectKeyCategory> = {
   "Espresso": "espresso",
@@ -63,35 +89,23 @@ export const NUMBER_KEYS = [
   "brew_temperature",
 ] as const;
 
-export interface DirectKeyRecipe {
-  category: number;
-  c1_process: string;
-  c1_intensity: string;
-  c1_aroma: string;
-  c1_temperature: string;
-  c1_shots: number;
-  c1_portion_ml: number;
-  c2_process: string;
-  c2_intensity: string;
-  c2_aroma: string;
-  c2_temperature: string;
-  c2_shots: number;
-  c2_portion_ml: number;
-}
+export const SWITCH_META: Record<
+  (typeof SWITCH_KEYS)[number],
+  { label: string; desc: string; icon: string }
+> = {
+  energy_saving: { label: "Energy Saving", desc: "Reduce power when idle", icon: "mdi:lightning-bolt" },
+  auto_bean_select: { label: "Auto Bean Select", desc: "Auto-choose bean hopper", icon: "mdi:seed" },
+  rinsing_disabled: { label: "Rinsing Disabled", desc: "Skip auto rinse cycle", icon: "mdi:water-off" },
+};
 
-export interface DirectKeyData {
-  activeProfile: number;
-  profiles: Record<number, Record<string, DirectKeyRecipe>>;
-}
-
-export interface MaintenanceAction {
-  key: string;
-  suffix: string;
-  label: string;
-  desc: string;
-  icon: string;
-  confirm?: boolean;
-}
+export const NUMBER_META: Record<
+  (typeof NUMBER_KEYS)[number],
+  { label: string; desc: string; icon: string; format: "level" | "minutes" }
+> = {
+  water_hardness: { label: "Water Hardness", desc: "Calibrate for water type", icon: "mdi:water", format: "level" },
+  auto_off_after: { label: "Auto Off", desc: "Minutes until shutdown", icon: "mdi:timer-outline", format: "minutes" },
+  brew_temperature: { label: "Brew Temperature", desc: "Brewing water temp", icon: "mdi:thermometer", format: "level" },
+};
 
 export const CLEANING_ACTIONS: MaintenanceAction[] = [
   { key: "easy_clean", suffix: "easy_clean", label: "Easy Clean", desc: "Quick rinse of the brew unit", icon: "mdi:broom", confirm: true },
