@@ -1,6 +1,7 @@
 // Recipe selector grid and profile tab bar.
 
 import { html, nothing, TemplateResult } from "lit";
+import { CARD_VERSION } from "../const";
 import { coffeeIconSvg } from "../icons";
 import { localize } from "../localize/localize";
 
@@ -63,6 +64,7 @@ export function renderProfileTabs(props: ProfileTabsProps): TemplateResult {
           ${o === props.selected ? html`<span class="profile-tab-indicator"></span>` : nothing}
         </button>
       `)}
+      <span class="profile-tabs-version">v${CARD_VERSION}</span>
     </div>
   `;
 }

@@ -231,6 +231,19 @@ export const cardStyles = css`
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
   }
+  .profile-tabs-version {
+    flex: 0 0 auto;
+    align-self: center;
+    margin-left: auto;
+    padding: 0 12px;
+    font-size: 0.55em;
+    letter-spacing: 0.08em;
+    color: var(--mbc-text2);
+    opacity: 0.5;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    user-select: none;
+  }
 
   /* -- DirectKey grid -- */
   .dk-grid {
