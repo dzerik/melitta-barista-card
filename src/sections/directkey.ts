@@ -34,7 +34,7 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
             @pointerup=${() => props.onLongPressCancel()}
             @pointerleave=${() => props.onLongPressCancel()}
             @contextmenu=${(e: Event) => e.preventDefault()}>
-            <div style="${isSelected && hasDetails ? "opacity: 0.15" : ""}">
+            <div class="${isSelected && hasDetails ? "dk-icon-dimmed" : ""}">
               ${coffeeIconSvg(DK_LABELS[cat], 48, `dk-${cat}`)}
             </div>
             ${isSelected && hasDetails ? html`
@@ -52,9 +52,7 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
       <!-- 2x toggle -->
       <button class="dk-card" ?data-selected=${props.twoCups}
         @click=${() => props.onToggleTwoCups()}>
-        <div style="display:flex;align-items:center;justify-content:center;width:48px;height:55px;font-size:1.6em;font-weight:700;color:var(--mbc-text);opacity:${props.twoCups ? "1" : "0.35"}">
-          2x
-        </div>
+        <div class="dk-2x">2x</div>
         <span class="dk-card-label">${props.twoCups ? "2x ON" : "2x"}</span>
       </button>
 

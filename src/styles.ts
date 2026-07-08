@@ -86,28 +86,6 @@ export const cardStyles = css`
     letter-spacing: 0.03em;
   }
 
-  /* Progress bar */
-  .progress-container {
-    height: 3px;
-    background: var(--mbc-border);
-    border-radius: 2px;
-    margin: 10px 0 2px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.5s ease;
-    position: relative;
-  }
-  .progress-fill::after {
-    content: "";
-    position: absolute;
-    top: 0; right: 0; bottom: 0;
-    width: 40px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
-    animation: progress-shimmer 1.5s infinite;
-  }
   @keyframes progress-shimmer {
     0% { opacity: 0; transform: translateX(-40px); }
     50% { opacity: 1; }
@@ -279,6 +257,19 @@ export const cardStyles = css`
   .dk-card[data-selected] {
     background: rgba(255,255,255,0.08);
   }
+  .dk-icon-dimmed { opacity: 0.15; }
+  .dk-2x {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 55px;
+    font-size: 1.6em;
+    font-weight: 700;
+    color: var(--mbc-text);
+    opacity: 0.35;
+  }
+  .dk-card[data-selected] .dk-2x { opacity: 1; }
   .dk-card-label {
     position: absolute;
     bottom: 0;
@@ -421,7 +412,6 @@ export const cardStyles = css`
   }
 
   /* -- Brew button -- */
-  .brew-row { padding: 4px 12px 12px; }
   .brew-btn {
     display: flex;
     align-items: center;

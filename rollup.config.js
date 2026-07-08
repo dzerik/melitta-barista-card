@@ -12,6 +12,7 @@ export default {
     file: "dist/melitta-barista-card.js",
     format: "es",
     inlineDynamicImports: true,
+    sourcemap: true,
   },
   plugins: [
     nodeResolve(),
