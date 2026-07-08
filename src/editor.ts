@@ -2,12 +2,33 @@ import { LitElement, html, css, nothing, CSSResultGroup } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
 import type { MelittaCardConfig } from "./types";
+import { localize, setLanguage } from "./localize/localize";
 import { detectMelittaDevices, DetectedDevice } from "./utils";
+
+interface ToggleOption {
+  key: keyof MelittaCardConfig;
+  /** Options that are on unless explicitly disabled in the config. */
+  defaultOn: boolean;
+}
+
+const TOGGLES: ToggleOption[] = [
+  { key: "show_header", defaultOn: true },
+  { key: "show_status", defaultOn: true },
+  { key: "show_profiles", defaultOn: true },
+  { key: "show_recipes", defaultOn: true },
+  { key: "show_freestyle", defaultOn: false },
+  { key: "show_sommelier", defaultOn: false },
+  { key: "show_stats", defaultOn: false },
+  { key: "show_maintenance", defaultOn: false },
+  { key: "show_settings", defaultOn: false },
+  { key: "compact", defaultOn: false },
+];
 
 @customElement("melitta-barista-card-editor")
 export class MelittaBaristaCardEditor extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
   @state() private _config!: MelittaCardConfig;
+  @state() private _manualMode = false;
 
   public setConfig(config: MelittaCardConfig): void {
     this._config = config;
@@ -32,16 +53,24 @@ export class MelittaBaristaCardEditor extends LitElement {
     this._fireConfigChanged();
   }
 
+  private _prefixChanged(ev: Event): void {
+    const raw = (ev.target as HTMLInputElement).value;
+    this._config = { ...this._config, entity_prefix: raw.trim() };
+    this._fireConfigChanged();
+  }
+
   private _deviceSelected(ev: Event): void {
     const select = ev.target as HTMLSelectElement;
     const prefix = select.value;
 
     if (prefix === "__manual__") {
+      this._manualMode = true;
       this._config = { ...this._config, entity_prefix: "" };
       this._fireConfigChanged();
       return;
     }
 
+    this._manualMode = false;
     const devices = this.hass ? detectMelittaDevices(this.hass) : [];
     const device = devices.find((d) => d.prefix === prefix);
     this._config = {
@@ -54,6 +83,7 @@ export class MelittaBaristaCardEditor extends LitElement {
 
   protected render() {
     if (!this._config) return nothing;
+    setLanguage(this.hass);
 
     const devices: DetectedDevice[] = this.hass
       ? detectMelittaDevices(this.hass)
@@ -61,121 +91,72 @@ export class MelittaBaristaCardEditor extends LitElement {
 
     const currentPrefix = this._config.entity_prefix || "";
     const isKnownDevice = devices.some((d) => d.prefix === currentPrefix);
-    const showManualInput = currentPrefix && !isKnownDevice && devices.length > 0;
+    const manualSelected = this._manualMode || (!!currentPrefix && !isKnownDevice);
+    const showManualInput = devices.length > 0 && manualSelected;
 
     return html`
       ${devices.length > 0
         ? html`
             <div class="editor-row">
-              <label for="device">Device</label>
+              <label for="device">${localize("editor.device")}</label>
               <select id="device" @change=${this._deviceSelected}>
                 ${devices.map(
                   (d) => html`
-                    <option value=${d.prefix} ?selected=${d.prefix === currentPrefix}>
+                    <option value=${d.prefix}
+                      ?selected=${!manualSelected && d.prefix === currentPrefix}>
                       ${d.name}
                     </option>
                   `
                 )}
-                <option value="__manual__" ?selected=${showManualInput}>
-                  Enter manually...
+                <option value="__manual__" ?selected=${manualSelected}>
+                  ${localize("editor.enter_manually")}
                 </option>
               </select>
             </div>
           `
         : html`
             <div class="editor-row">
-              <label for="entity_prefix">Entity Prefix</label>
+              <label for="entity_prefix">${localize("editor.entity_prefix")}</label>
               <input
                 id="entity_prefix"
                 .value=${currentPrefix}
-                placeholder="Auto-detected if integration is running"
-                @input=${(ev: Event) => this._valueChanged("entity_prefix", ev)}
+                placeholder=${localize("editor.entity_prefix_placeholder")}
+                @input=${(ev: Event) => this._prefixChanged(ev)}
               />
-              <span class="hint">No Melitta devices detected. Enter prefix manually or check that the integration is configured.</span>
+              <span class="hint">${localize("editor.no_devices_hint")}</span>
             </div>
           `}
 
       ${showManualInput
         ? html`
             <div class="editor-row">
-              <label for="entity_prefix">Entity Prefix</label>
+              <label for="entity_prefix">${localize("editor.entity_prefix")}</label>
               <input
                 id="entity_prefix"
                 .value=${currentPrefix}
-                @input=${(ev: Event) => this._valueChanged("entity_prefix", ev)}
+                @input=${(ev: Event) => this._prefixChanged(ev)}
               />
             </div>
           `
         : ""}
 
       <div class="editor-row">
-        <label for="name">Name</label>
+        <label for="name">${localize("editor.name")}</label>
         <input
           id="name"
-          .value=${this._config.name || "Melitta Barista"}
+          .value=${this._config.name || localize("common.default_name")}
           @input=${(ev: Event) => this._valueChanged("name", ev)}
         />
       </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="show_header"
-          .checked=${this._config.show_header !== false}
-          @change=${(ev: Event) => this._valueChanged("show_header", ev)} />
-        <label for="show_header">Show header</label>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="show_status"
-          .checked=${this._config.show_status !== false}
-          @change=${(ev: Event) => this._valueChanged("show_status", ev)} />
-        <label for="show_status">Show status</label>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="show_profiles"
-          .checked=${this._config.show_profiles !== false}
-          @change=${(ev: Event) => this._valueChanged("show_profiles", ev)} />
-        <label for="show_profiles">Show profile selector</label>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="show_recipes"
-          .checked=${this._config.show_recipes !== false}
-          @change=${(ev: Event) => this._valueChanged("show_recipes", ev)} />
-        <label for="show_recipes">Show recipe selector</label>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="show_freestyle"
-          .checked=${this._config.show_freestyle || false}
-          @change=${(ev: Event) => this._valueChanged("show_freestyle", ev)} />
-        <label for="show_freestyle">Show freestyle recipe</label>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="show_sommelier"
-          .checked=${this._config.show_sommelier || false}
-          @change=${(ev: Event) => this._valueChanged("show_sommelier", ev)} />
-        <label for="show_sommelier">Show AI Sommelier</label>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="show_stats"
-          .checked=${this._config.show_stats || false}
-          @change=${(ev: Event) => this._valueChanged("show_stats", ev)} />
-        <label for="show_stats">Show cup statistics</label>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="show_maintenance"
-          .checked=${this._config.show_maintenance || false}
-          @change=${(ev: Event) => this._valueChanged("show_maintenance", ev)} />
-        <label for="show_maintenance">Show maintenance</label>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="show_settings"
-          .checked=${this._config.show_settings || false}
-          @change=${(ev: Event) => this._valueChanged("show_settings", ev)} />
-        <label for="show_settings">Show settings</label>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="compact"
-          .checked=${this._config.compact || false}
-          @change=${(ev: Event) => this._valueChanged("compact", ev)} />
-        <label for="compact">Compact mode</label>
-      </div>
+
+      ${TOGGLES.map(({ key, defaultOn }) => html`
+        <div class="checkbox-row">
+          <input type="checkbox" id=${key}
+            .checked=${defaultOn ? this._config[key] !== false : this._config[key] === true}
+            @change=${(ev: Event) => this._valueChanged(key, ev)} />
+          <label for=${key}>${localize(`editor.${key}`)}</label>
+        </div>
+      `)}
     `;
   }
 

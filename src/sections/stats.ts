@@ -3,6 +3,7 @@
 import { html, TemplateResult } from "lit";
 import { STATS_EXCLUDED_ATTRS } from "../const";
 import { coffeeIconSvg } from "../icons";
+import { localize, currentLanguage } from "../localize/localize";
 
 interface EntityLike {
   state: string;
@@ -14,8 +15,8 @@ export function renderStats(entity: EntityLike | undefined): TemplateResult {
 
   if (total === null || isNaN(total)) {
     return html`
-      <div class="section-title">Stats</div>
-      <div class="stats-unavailable">Cup statistics not available.</div>
+      <div class="section-title">${localize("stats.title")}</div>
+      <div class="stats-unavailable">${localize("stats.unavailable")}</div>
     `;
   }
 
@@ -29,11 +30,11 @@ export function renderStats(entity: EntityLike | undefined): TemplateResult {
   counters.sort((a, b) => b.count - a.count);
 
   return html`
-    <div class="section-title">Stats</div>
+    <div class="section-title">${localize("stats.title")}</div>
     <div class="stats-section">
       <div class="stats-total">
-        <span class="stats-total-number">${total.toLocaleString()}</span>
-        <span class="stats-total-label">Total Cups</span>
+        <span class="stats-total-number">${total.toLocaleString(currentLanguage())}</span>
+        <span class="stats-total-label">${localize("stats.total_cups")}</span>
       </div>
       ${counters.length > 0 ? html`
         <div class="stats-grid">
@@ -45,7 +46,7 @@ export function renderStats(entity: EntityLike | undefined): TemplateResult {
             </div>
           `)}
         </div>
-      ` : html`<div class="stats-empty">No cups brewed yet</div>`}
+      ` : html`<div class="stats-empty">${localize("stats.empty")}</div>`}
     </div>
   `;
 }

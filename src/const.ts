@@ -89,37 +89,39 @@ export const NUMBER_KEYS = [
   "brew_temperature",
 ] as const;
 
+// Visible labels/descriptions live in the translation files
+// (settings.switches.*, settings.numbers.*, maintenance.actions.*).
 export const SWITCH_META: Record<
   (typeof SWITCH_KEYS)[number],
-  { label: string; desc: string; icon: string }
+  { icon: string }
 > = {
-  energy_saving: { label: "Energy Saving", desc: "Reduce power when idle", icon: "mdi:lightning-bolt" },
-  auto_bean_select: { label: "Auto Bean Select", desc: "Auto-choose bean hopper", icon: "mdi:seed" },
-  rinsing_disabled: { label: "Rinsing Disabled", desc: "Skip auto rinse cycle", icon: "mdi:water-off" },
+  energy_saving: { icon: "mdi:lightning-bolt" },
+  auto_bean_select: { icon: "mdi:seed" },
+  rinsing_disabled: { icon: "mdi:water-off" },
 };
 
 export const NUMBER_META: Record<
   (typeof NUMBER_KEYS)[number],
-  { label: string; desc: string; icon: string; format: "level" | "minutes" }
+  { icon: string; format: "level" | "minutes" }
 > = {
-  water_hardness: { label: "Water Hardness", desc: "Calibrate for water type", icon: "mdi:water", format: "level" },
-  auto_off_after: { label: "Auto Off", desc: "Minutes until shutdown", icon: "mdi:timer-outline", format: "minutes" },
-  brew_temperature: { label: "Brew Temperature", desc: "Brewing water temp", icon: "mdi:thermometer", format: "level" },
+  water_hardness: { icon: "mdi:water", format: "level" },
+  auto_off_after: { icon: "mdi:timer-outline", format: "minutes" },
+  brew_temperature: { icon: "mdi:thermometer", format: "level" },
 };
 
 export const CLEANING_ACTIONS: MaintenanceAction[] = [
-  { key: "easy_clean", suffix: "easy_clean", label: "Easy Clean", desc: "Quick rinse of the brew unit", icon: "mdi:broom", confirm: true },
-  { key: "intensive_clean", suffix: "intensive_clean", label: "Intensive Clean", desc: "Deep cleaning with tablet", icon: "mdi:spray-bottle", confirm: true },
-  { key: "descaling", suffix: "descaling", label: "Descaling", desc: "Remove limescale buildup", icon: "mdi:water-alert", confirm: true },
-  { key: "evaporating", suffix: "evaporating", label: "Evaporating", desc: "Purge the steam system", icon: "mdi:weather-fog", confirm: true },
+  { key: "easy_clean", suffix: "easy_clean", icon: "mdi:broom", confirm: true },
+  { key: "intensive_clean", suffix: "intensive_clean", icon: "mdi:spray-bottle", confirm: true },
+  { key: "descaling", suffix: "descaling", icon: "mdi:water-alert", confirm: true },
+  { key: "evaporating", suffix: "evaporating", icon: "mdi:weather-fog", confirm: true },
 ];
 
 export const FILTER_ACTIONS: MaintenanceAction[] = [
-  { key: "filter_insert", suffix: "filter_insert", label: "Insert Filter", desc: "Start using a new water filter", icon: "mdi:filter-plus" },
-  { key: "filter_replace", suffix: "filter_replace", label: "Replace Filter", desc: "Replace the current water filter", icon: "mdi:filter" },
-  { key: "filter_remove", suffix: "filter_remove", label: "Remove Filter", desc: "Stop using the water filter", icon: "mdi:filter-remove" },
+  { key: "filter_insert", suffix: "filter_insert", icon: "mdi:filter-plus" },
+  { key: "filter_replace", suffix: "filter_replace", icon: "mdi:filter" },
+  { key: "filter_remove", suffix: "filter_remove", icon: "mdi:filter-remove" },
 ];
 
 export const OTHER_ACTIONS: MaintenanceAction[] = [
-  { key: "switch_off", suffix: "switch_off", label: "Switch Off", desc: "Turn off the machine", icon: "mdi:power", confirm: true },
+  { key: "switch_off", suffix: "switch_off", icon: "mdi:power", confirm: true },
 ];

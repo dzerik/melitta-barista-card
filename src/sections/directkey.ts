@@ -3,6 +3,7 @@
 import { html, nothing, TemplateResult } from "lit";
 import { DIRECTKEY_CATEGORIES, DK_LABELS, type DirectKeyCategory } from "../const";
 import { INTENSITY_DOTS } from "../format";
+import { localize } from "../localize/localize";
 import { coffeeIconSvg } from "../icons";
 import type { DirectKeyData, DirectKeyRecipe } from "../types";
 
@@ -43,7 +44,9 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
               </div>
             ` : nothing}
             <span class="dk-card-label">
-              ${isSelected ? `Brew ${DK_LABELS[cat]}` : DK_LABELS[cat]}
+              ${isSelected
+                ? localize("directkey.brew_drink", { drink: localize(`drinks.${cat}`) })
+                : localize(`drinks.${cat}`)}
             </span>
           </button>
         `;
@@ -53,7 +56,9 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
       <button class="dk-card" ?data-selected=${props.twoCups}
         @click=${() => props.onToggleTwoCups()}>
         <div class="dk-2x">2x</div>
-        <span class="dk-card-label">${props.twoCups ? "2x ON" : "2x"}</span>
+        <span class="dk-card-label">
+          ${props.twoCups ? localize("directkey.two_cups_on") : localize("directkey.two_cups")}
+        </span>
       </button>
 
     </div>

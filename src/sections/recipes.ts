@@ -2,6 +2,7 @@
 
 import { html, nothing, TemplateResult } from "lit";
 import { coffeeIconSvg } from "../icons";
+import { localize } from "../localize/localize";
 
 export interface RecipesSectionProps {
   options: string[];
@@ -19,10 +20,10 @@ export function renderRecipes(props: RecipesSectionProps): TemplateResult {
     ${props.hasDk ? html`
       <div class="recipes-divider">
         <span class="recipes-divider-line"></span>
-        <span class="recipes-divider-text">All Recipes</span>
+        <span class="recipes-divider-text">${localize("recipes.all_recipes")}</span>
         <span class="recipes-divider-line"></span>
       </div>
-    ` : html`<div class="section-title">Recipe</div>`}
+    ` : html`<div class="section-title">${localize("recipes.title")}</div>`}
     <div class="recipe-grid">
       ${props.options.map((name) => {
         const uid = name.replace(/[^a-zA-Z0-9]/g, "");

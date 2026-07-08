@@ -2,7 +2,7 @@
 
 import { html, nothing, TemplateResult } from "lit";
 import { SWITCH_KEYS, NUMBER_KEYS, SWITCH_META, NUMBER_META } from "../const";
-import { LEVEL_LABELS } from "../format";
+import { localize, localizeOptional } from "../localize/localize";
 import { isRealState } from "../machine-state";
 
 interface EntityLike {
@@ -25,8 +25,8 @@ export function renderSettings(props: SettingsSectionProps): TemplateResult | ty
       <div class="setting-card">
         <ha-icon class="setting-icon" icon="${meta.icon}"></ha-icon>
         <div class="setting-info">
-          <div class="setting-label">${meta.label}</div>
-          <div class="setting-desc">${meta.desc}</div>
+          <div class="setting-label">${localize(`settings.switches.${key}.label`)}</div>
+          <div class="setting-desc">${localize(`settings.switches.${key}.desc`)}</div>
         </div>
         <button class="toggle-track" ?data-on=${isOn}
           @click=${() => props.onToggle(key, !isOn)}>
@@ -45,16 +45,16 @@ export function renderSettings(props: SettingsSectionProps): TemplateResult | ty
     if (Number.isNaN(val)) {
       display = "—";
     } else if (meta.format === "level") {
-      display = LEVEL_LABELS[key]?.[val] ?? String(val);
+      display = localizeOptional(`settings.levels.${key}.${val}`) ?? String(val);
     } else {
-      display = `${val} min`;
+      display = localize("settings.minutes", { value: val });
     }
     return html`
       <div class="setting-card">
         <ha-icon class="setting-icon" icon="${meta.icon}"></ha-icon>
         <div class="setting-info">
-          <div class="setting-label">${meta.label}</div>
-          <div class="setting-desc">${meta.desc}</div>
+          <div class="setting-label">${localize(`settings.numbers.${key}.label`)}</div>
+          <div class="setting-desc">${localize(`settings.numbers.${key}.desc`)}</div>
         </div>
         <span class="setting-value">${display}</span>
       </div>
@@ -66,7 +66,7 @@ export function renderSettings(props: SettingsSectionProps): TemplateResult | ty
   }
 
   return html`
-    <div class="section-title">Settings</div>
+    <div class="section-title">${localize("settings.title")}</div>
     <div class="settings-grid">
       ${switchCards}
       ${numberCards}

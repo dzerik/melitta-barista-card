@@ -38,8 +38,6 @@ export interface DirectKeyData {
 export interface MaintenanceAction {
   key: string;
   suffix: string;
-  label: string;
-  desc: string;
   icon: string;
   confirm?: boolean;
 }

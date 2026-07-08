@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Brühen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "confirm": "Bestätigen",
+    "start": "Start",
+    "loading": "Laden...",
+    "retry": "Erneut versuchen",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Keine Melitta Barista gefunden.",
+    "no_device_hint": "Stellen Sie sicher, dass die Integration installiert und konfiguriert ist.",
+    "machine_offline": "Maschine offline"
+  },
+  "state": {
+    "ready": "Bereit",
+    "brewing": "Brüht",
+    "cleaning": "Reinigung",
+    "descaling": "Entkalkung",
+    "off": "Aus",
+    "busy": "Beschäftigt",
+    "idle": "Leerlauf",
+    "unavailable": "Nicht verfügbar",
+    "unknown": "Unbekannt"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Milch",
+    "milk_froth": "Milchschaum",
+    "water": "Heißwasser"
+  },
+  "values": {
+    "very_mild": "S.Mild",
+    "mild": "Mild",
+    "medium": "Mittel",
+    "strong": "Stark",
+    "very_strong": "S.Stark",
+    "extra_strong": "X.Stark",
+    "cold": "Kalt",
+    "normal": "Normal",
+    "high": "Hoch",
+    "none": "Ohne",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kaffee",
+    "milk": "Milch",
+    "water": "Wasser",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "{drink} brühen",
+    "two_cups": "2x",
+    "two_cups_on": "2x AN"
+  },
+  "recipes": {
+    "title": "Rezept",
+    "all_recipes": "Alle Rezepte"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Getränkename",
+    "component": "Komponente {n}",
+    "process": "Prozess",
+    "portion": "Menge",
+    "intensity": "Intensität",
+    "aroma": "Aroma",
+    "temp": "Temp.",
+    "temperature": "Temperatur",
+    "shots": "Shots",
+    "portion_value": "{value} ml",
+    "brew_named": "{name} brühen"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Sommelier ist nicht verfügbar.",
+    "generating": "Generiere...",
+    "surprise_me": "Überrasch mich",
+    "error_generate": "Sommelier: Rezept-Generierung fehlgeschlagen",
+    "error_brew": "Sommelier: Brühen fehlgeschlagen"
+  },
+  "stats": {
+    "title": "Statistik",
+    "total_cups": "Tassen gesamt",
+    "unavailable": "Tassenstatistik nicht verfügbar.",
+    "empty": "Noch keine Tassen gebrüht"
+  },
+  "maintenance": {
+    "title": "Wartung",
+    "groups": {
+      "cleaning": "Reinigung & Entkalkung",
+      "filter": "Wasserfilter",
+      "other": "Sonstiges"
+    },
+    "actions": {
+      "easy_clean": { "label": "Easy Clean", "desc": "Schnellspülung der Brüheinheit" },
+      "intensive_clean": { "label": "Intensivreinigung", "desc": "Gründliche Reinigung mit Tab" },
+      "descaling": { "label": "Entkalkung", "desc": "Kalkablagerungen entfernen" },
+      "evaporating": { "label": "Ausdampfen", "desc": "Dampfsystem entleeren" },
+      "filter_insert": { "label": "Filter einsetzen", "desc": "Neuen Wasserfilter aktivieren" },
+      "filter_replace": { "label": "Filter wechseln", "desc": "Aktuellen Wasserfilter ersetzen" },
+      "filter_remove": { "label": "Filter entfernen", "desc": "Wasserfilter nicht mehr verwenden" },
+      "switch_off": { "label": "Ausschalten", "desc": "Maschine ausschalten" }
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "switches": {
+      "energy_saving": { "label": "Energiesparen", "desc": "Weniger Strom im Leerlauf" },
+      "auto_bean_select": { "label": "Auto-Bohnenwahl", "desc": "Bohnenbehälter automatisch wählen" },
+      "rinsing_disabled": { "label": "Spülung deaktiviert", "desc": "Automatische Spülung überspringen" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Wasserhärte", "desc": "An den Wassertyp anpassen" },
+      "auto_off_after": { "label": "Auto-Aus", "desc": "Minuten bis zum Ausschalten" },
+      "brew_temperature": { "label": "Brühtemperatur", "desc": "Temperatur des Brühwassers" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Weich", "2": "Mittel", "3": "Hart", "4": "Sehr hart" },
+      "brew_temperature": { "0": "Niedrig", "1": "Normal", "2": "Hoch" }
+    },
+    "minutes": "{value} Min."
+  },
+  "edit_dialog": {
+    "title": "Bearbeiten: {drink}"
+  },
+  "editor": {
+    "device": "Gerät",
+    "enter_manually": "Manuell eingeben...",
+    "entity_prefix": "Entity-Präfix",
+    "entity_prefix_placeholder": "Wird automatisch erkannt, wenn die Integration läuft",
+    "no_devices_hint": "Keine Melitta-Geräte gefunden. Präfix manuell eingeben oder Integration prüfen.",
+    "name": "Name",
+    "show_header": "Kopfzeile anzeigen",
+    "show_status": "Status anzeigen",
+    "show_profiles": "Profilauswahl anzeigen",
+    "show_recipes": "Rezeptauswahl anzeigen",
+    "show_freestyle": "Freestyle anzeigen",
+    "show_sommelier": "AI Sommelier anzeigen",
+    "show_stats": "Tassenstatistik anzeigen",
+    "show_maintenance": "Wartung anzeigen",
+    "show_settings": "Einstellungen anzeigen",
+    "compact": "Kompaktmodus"
+  }
+}

@@ -16,6 +16,7 @@ import {
   type Shots,
 } from "../const";
 import { displayName } from "../format";
+import { localize } from "../localize/localize";
 import type { ComponentSpec } from "../recipe";
 
 export function renderSegment(
@@ -46,7 +47,7 @@ export function renderPortion(
     <div class="portion-row ${disabled ? "freestyle-disabled" : ""}">
       <div class="portion-header">
         <span class="portion-label">${label}</span>
-        <span class="portion-value">${value} ml</span>
+        <span class="portion-value">${localize("freestyle.portion_value", { value })}</span>
       </div>
       <input type="range" class="portion-slider"
         min=${min} max=${max} step=${step} .value=${String(value)}
@@ -62,7 +63,8 @@ export interface ComponentFormOptions {
   onChange: (patch: Partial<ComponentSpec>) => void;
   /** Second component: allows process "none", portion may go down to 0. */
   allowNoneProcess: boolean;
-  temperatureLabel?: string;
+  /** Dialog uses the long "Temperature" label, freestyle the short "Temp". */
+  longTemperatureLabel?: boolean;
 }
 
 export function renderComponentForm(opts: ComponentFormOptions): TemplateResult {
@@ -75,17 +77,18 @@ export function renderComponentForm(opts: ComponentFormOptions): TemplateResult 
   return html`
     <div class="${opts.containerClass}">
       <div class="component-title">${opts.title}</div>
-      ${renderSegment("Process", processes, spec.process,
+      ${renderSegment(localize("freestyle.process"), processes, spec.process,
         (v) => onChange({ process: v as Process }))}
-      ${renderPortion("Portion", spec.portion_ml, limits.min, limits.max, limits.step,
+      ${renderPortion(localize("freestyle.portion"), spec.portion_ml, limits.min, limits.max, limits.step,
         (v) => onChange({ portion_ml: v }), allowNoneProcess && isNone)}
-      ${renderSegment("Intensity", FREESTYLE_INTENSITIES, spec.intensity,
+      ${renderSegment(localize("freestyle.intensity"), FREESTYLE_INTENSITIES, spec.intensity,
         (v) => onChange({ intensity: v as Intensity }), !isCoffee)}
-      ${renderSegment("Aroma", FREESTYLE_AROMAS, spec.aroma,
+      ${renderSegment(localize("freestyle.aroma"), FREESTYLE_AROMAS, spec.aroma,
         (v) => onChange({ aroma: v as Aroma }), !isCoffee)}
-      ${renderSegment(opts.temperatureLabel ?? "Temp", FREESTYLE_TEMPERATURES, spec.temperature,
+      ${renderSegment(localize(opts.longTemperatureLabel ? "freestyle.temperature" : "freestyle.temp"),
+        FREESTYLE_TEMPERATURES, spec.temperature,
         (v) => onChange({ temperature: v as Temperature }), allowNoneProcess && isNone)}
-      ${renderSegment("Shots", FREESTYLE_SHOTS, spec.shots,
+      ${renderSegment(localize("freestyle.shots"), FREESTYLE_SHOTS, spec.shots,
         (v) => onChange({ shots: v as Shots }), !isCoffee)}
     </div>
   `;

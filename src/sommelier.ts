@@ -4,6 +4,7 @@ import { LitElement, html, css, nothing, PropertyValues, CSSResultGroup } from "
 import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
 import { SOM_FAVORITES_LIMIT } from "./const";
+import { localize, setLanguage } from "./localize/localize";
 import * as api from "./api";
 import type { SommelierFavorite, SommelierHoppers, SommelierQuickRecipe } from "./types";
 
@@ -21,6 +22,7 @@ export class MbcSommelier extends LitElement {
   private _loading = false;
 
   protected willUpdate(_changedProps: PropertyValues): void {
+    setLanguage(this.hass);
     if (this.hass && !this._loaded && !this._loading && !this._error) {
       this._loadData();
     }
@@ -65,7 +67,7 @@ export class MbcSommelier extends LitElement {
       this._quickRecipe = await api.somGenerateSurprise(this.hass);
     } catch (e) {
       console.error("[melitta-card] Generate failed:", e);
-      this._notify("Sommelier: recipe generation failed");
+      this._notify(localize("sommelier.error_generate"));
     } finally {
       this._generating = false;
     }
@@ -78,7 +80,7 @@ export class MbcSommelier extends LitElement {
       this._quickRecipe = null;
     } catch (e) {
       console.error("[melitta-card] Brew failed:", e);
-      this._notify("Sommelier: brew failed");
+      this._notify(localize("sommelier.error_brew"));
     }
   }
 
@@ -92,14 +94,14 @@ export class MbcSommelier extends LitElement {
       );
     } catch (e) {
       console.error("[melitta-card] Brew favorite failed:", e);
-      this._notify("Sommelier: brew failed");
+      this._notify(localize("sommelier.error_brew"));
     }
   }
 
   protected render() {
     return html`
       <div class="section-title">
-        <ha-icon icon="mdi:coffee-maker-check-outline"></ha-icon> AI Sommelier
+        <ha-icon icon="mdi:coffee-maker-check-outline"></ha-icon> ${localize("sommelier.title")}
       </div>
       <div class="mbc-section">${this._renderBody()}</div>
     `;
@@ -109,13 +111,13 @@ export class MbcSommelier extends LitElement {
     if (this._error) {
       return html`
         <div class="som-error">
-          <span>Sommelier is not available.</span>
-          <button class="som-retry-btn" @click=${() => this._retry()}>Retry</button>
+          <span>${localize("sommelier.unavailable")}</span>
+          <button class="som-retry-btn" @click=${() => this._retry()}>${localize("common.retry")}</button>
         </div>
       `;
     }
     if (!this._loaded) {
-      return html`<span class="som-loading">Loading...</span>`;
+      return html`<span class="som-loading">${localize("common.loading")}</span>`;
     }
 
     const h1 = this._hoppers.hopper1?.bean;
@@ -150,7 +152,7 @@ export class MbcSommelier extends LitElement {
           <div class="som-quick-name">${this._quickRecipe.name}</div>
           <div class="som-quick-desc">${this._quickRecipe.description}</div>
           <button class="som-brew-btn full" @click=${() => this._brewRecipe(this._quickRecipe!.id)}>
-            <ha-icon icon="mdi:coffee"></ha-icon> Brew
+            <ha-icon icon="mdi:coffee"></ha-icon> ${localize("common.brew")}
           </button>
         </div>
       ` : nothing}
@@ -159,8 +161,8 @@ export class MbcSommelier extends LitElement {
         <button class="som-surprise-btn" @click=${() => this._surpriseMe()}
           ?disabled=${this._generating}>
           ${this._generating
-            ? html`<ha-icon icon="mdi:loading" class="spin"></ha-icon> Generating...`
-            : html`<ha-icon icon="mdi:auto-fix"></ha-icon> Surprise me`}
+            ? html`<ha-icon icon="mdi:loading" class="spin"></ha-icon> ${localize("sommelier.generating")}`
+            : html`<ha-icon icon="mdi:auto-fix"></ha-icon> ${localize("sommelier.surprise_me")}`}
         </button>
       </div>
     `;

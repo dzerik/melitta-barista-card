@@ -5,7 +5,6 @@ import {
   CARD_VERSION,
   SWITCH_KEYS,
   NUMBER_KEYS,
-  DK_LABELS,
   CLEANING_ACTIONS,
   FILTER_ACTIONS,
   OTHER_ACTIONS,
@@ -41,6 +40,7 @@ import { renderSettings } from "./sections/settings";
 import { computeMachineStatus, type MachineStatus } from "./machine-state";
 import * as api from "./api";
 import { parseDirectKeyData } from "./directkey";
+import { localize, setLanguage } from "./localize/localize";
 import { detectMelittaDevices } from "./utils";
 import { cardStyles } from "./styles";
 import "./editor";
@@ -153,6 +153,7 @@ export class MelittaBaristaCard extends LitElement {
 
   protected willUpdate(changedProps: PropertyValues): void {
     if (!this.hass || !this._config) return;
+    setLanguage(this.hass);
     // Resolve device prefix once (auto-detect when not configured).
     if (!this._config.entity_prefix && !this._resolvedPrefix && changedProps.has("hass")) {
       const devices = detectMelittaDevices(this.hass);
@@ -366,7 +367,7 @@ export class MelittaBaristaCard extends LitElement {
     }
 
     const st = computeMachineStatus((s) => this._state(s));
-    const cardName = this._config.name || this._detectedName || "Melitta Barista";
+    const cardName = this._config.name || this._detectedName || localize("common.default_name");
     const showHeader = this._config.show_header;
 
     if (st.isUnavailable) {
@@ -462,24 +463,25 @@ export class MelittaBaristaCard extends LitElement {
 
   private _renderFreestyle() {
     return html`
-      <div class="section-title">Freestyle</div>
+      <div class="section-title">${localize("freestyle.title")}</div>
       <div class="freestyle-section">
         <div class="freestyle-name-row">
-          <input class="freestyle-name-input" type="text" placeholder="Drink name"
+          <input class="freestyle-name-input" type="text"
+            placeholder=${localize("freestyle.drink_name_placeholder")}
             .value=${this._fsName}
             @input=${(e: Event) => { this._fsName = (e.target as HTMLInputElement).value; }} />
         </div>
 
         <div class="freestyle-components">
           ${renderComponentForm({
-            title: "Component 1",
+            title: localize("freestyle.component", { n: 1 }),
             containerClass: "freestyle-component",
             spec: this._fsRecipe.c1,
             allowNoneProcess: false,
             onChange: (patch) => this._updateFs("c1", patch),
           })}
           ${renderComponentForm({
-            title: "Component 2",
+            title: localize("freestyle.component", { n: 2 }),
             containerClass: "freestyle-component",
             spec: this._fsRecipe.c2,
             allowNoneProcess: true,
@@ -490,7 +492,7 @@ export class MelittaBaristaCard extends LitElement {
         <div class="freestyle-brew-row">
           <button class="brew-btn" @click=${() => this._brewFreestyle()}>
             <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
-            Brew ${this._fsName}
+            ${localize("freestyle.brew_named", { name: this._fsName })}
           </button>
         </div>
       </div>
@@ -534,35 +536,37 @@ export class MelittaBaristaCard extends LitElement {
       <div class="edit-overlay" @click=${() => this._closeEditDialog()}>
         <div class="edit-dialog" @click=${(e: Event) => e.stopPropagation()}>
           <div class="edit-header">
-            <span class="edit-title">Edit: ${DK_LABELS[cat]}</span>
+            <span class="edit-title">
+              ${localize("edit_dialog.title", { drink: localize(`drinks.${cat}`) })}
+            </span>
             <button class="edit-close" @click=${() => this._closeEditDialog()}>
               <ha-icon icon="mdi:close"></ha-icon>
             </button>
           </div>
           <div class="edit-body">
             ${renderComponentForm({
-              title: "Component 1",
+              title: localize("freestyle.component", { n: 1 }),
               containerClass: "edit-component",
               spec: s.c1,
               allowNoneProcess: false,
-              temperatureLabel: "Temperature",
+              longTemperatureLabel: true,
               onChange: (patch) => this._updateEdit("c1", patch),
             })}
             ${renderComponentForm({
-              title: "Component 2",
+              title: localize("freestyle.component", { n: 2 }),
               containerClass: "edit-component",
               spec: s.c2,
               allowNoneProcess: true,
-              temperatureLabel: "Temperature",
+              longTemperatureLabel: true,
               onChange: (patch) => this._updateEdit("c2", patch),
             })}
           </div>
           <div class="edit-footer">
             <button class="edit-btn-cancel" @click=${() => this._closeEditDialog()}>
-              Cancel
+              ${localize("common.cancel")}
             </button>
             <button class="edit-btn-save" ?disabled=${this._editSaving} @click=${() => this._saveDirectkey()}>
-              ${this._editSaving ? "..." : "Save"}
+              ${this._editSaving ? "..." : localize("common.save")}
             </button>
           </div>
         </div>
