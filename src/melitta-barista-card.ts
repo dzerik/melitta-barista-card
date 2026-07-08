@@ -3,7 +3,6 @@ import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
 import {
   CARD_VERSION,
-  STATE_COLORS,
   SWITCH_KEYS,
   NUMBER_KEYS,
   DIRECTKEY_CATEGORIES,
@@ -36,6 +35,14 @@ import {
   type ComponentSpec,
 } from "./recipe";
 import { renderComponentForm } from "./sections/controls";
+import {
+  renderNoDevice,
+  renderHeader,
+  renderOfflineBody,
+  renderStatus,
+  renderBrewingView,
+} from "./sections/status";
+import { computeMachineStatus, type MachineStatus } from "./machine-state";
 import * as api from "./api";
 import { parseDirectKeyData } from "./directkey";
 import { detectMelittaDevices } from "./utils";
@@ -76,6 +83,11 @@ export class MelittaBaristaCard extends LitElement {
   private _dkLongPressTimer: ReturnType<typeof setTimeout> | null = null;
   private _dkLongPressTriggered = false;
 
+  // Derived (non-reactive) device info
+  private _detectedName: string | null = null;
+  private _trackedIds: string[] = [];
+  private _trackedPrefix: string | null = null;
+
   public static getConfigElement(): HTMLElement {
     return document.createElement("melitta-barista-card-editor");
   }
@@ -105,6 +117,9 @@ export class MelittaBaristaCard extends LitElement {
       compact: config.compact || false,
     };
     this._resolvedPrefix = null;
+    this._detectedName = null;
+    this._trackedIds = [];
+    this._trackedPrefix = null;
   }
 
   public getCardSize(): number {
@@ -115,37 +130,55 @@ export class MelittaBaristaCard extends LitElement {
     return { rows: this._config?.compact ? 3 : 5, columns: 6, min_rows: 2, min_columns: 3 };
   }
 
+  /** Pure: never mutates state. Resolution happens in willUpdate(). */
   private _getPrefix(): string | null {
-    if (this._config.entity_prefix) return this._config.entity_prefix;
-    if (this._resolvedPrefix) return this._resolvedPrefix;
-    if (this.hass) {
-      const devices = detectMelittaDevices(this.hass);
-      if (devices.length > 0) {
-        this._resolvedPrefix = devices[0].prefix;
-        if (!this._config.name) {
-          this._config = { ...this._config, name: devices[0].name };
-        }
-        return this._resolvedPrefix;
-      }
-    }
-    return null;
+    return this._config?.entity_prefix || this._resolvedPrefix;
   }
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
-    if (changedProps.has("_config") || changedProps.has("_resolvedPrefix")) return true;
-    for (const key of changedProps.keys()) {
-      if (typeof key === "string" && (key.startsWith("_fs") || key.startsWith("_selected") ||
-          key.startsWith("_two") || key.startsWith("_edit") ||
-          key.startsWith("_confirm") || key.startsWith("_busy"))) return true;
-    }
+    // Any config or internal @state change always renders — no fragile
+    // per-property whitelist.
+    if (changedProps.size > 1 || !changedProps.has("hass")) return true;
     const oldHass = changedProps.get("hass") as HomeAssistant | undefined;
     if (!oldHass) return true;
-    const prefix = this._getPrefix();
-    if (!prefix) return true;
-    for (const [id, stateObj] of Object.entries(this.hass.states)) {
-      if (id.includes(prefix) && oldHass.states[id] !== stateObj) return true;
+    if (oldHass.locale?.language !== this.hass.locale?.language) return true;
+    if (this._trackedIds.length === 0) return true;
+    // Only hass changed: re-render only when one of our entities changed.
+    return this._trackedIds.some(
+      (id) => oldHass.states[id] !== this.hass.states[id],
+    );
+  }
+
+  protected willUpdate(changedProps: PropertyValues): void {
+    if (!this.hass || !this._config) return;
+    // Resolve device prefix once (auto-detect when not configured).
+    if (!this._config.entity_prefix && !this._resolvedPrefix && changedProps.has("hass")) {
+      const devices = detectMelittaDevices(this.hass);
+      if (devices.length > 0) {
+        this._resolvedPrefix = devices[0].prefix;
+        this._detectedName = devices[0].name;
+      }
     }
-    return false;
+    const prefix = this._getPrefix();
+    if (prefix && this._trackedPrefix !== prefix) {
+      this._trackedPrefix = prefix;
+      this._trackedIds = this._buildTrackedIds(prefix);
+    }
+  }
+
+  private _buildTrackedIds(prefix: string): string[] {
+    return [
+      ...["state", "activity", "progress", "action_required", "connection", "total_cups"]
+        .map((s) => `sensor.${prefix}_${s}`),
+      `select.${prefix}_recipe`,
+      `select.${prefix}_profile`,
+      ...SWITCH_KEYS.map((k) => `switch.${prefix}_${k}`),
+      ...NUMBER_KEYS.map((k) => `number.${prefix}_${k}`),
+      ...[...CLEANING_ACTIONS, ...FILTER_ACTIONS, ...OTHER_ACTIONS]
+        .map((a) => `button.${prefix}_${a.suffix}`),
+      `button.${prefix}_brew`,
+      `button.${prefix}_cancel`,
+    ];
   }
 
   private _entity(domain: string, suffix: string) {
@@ -327,108 +360,42 @@ export class MelittaBaristaCard extends LitElement {
     if (!this.hass || !this._config) return nothing;
     const prefix = this._getPrefix();
     if (!prefix) {
-      return html`<ha-card>
-        <div class="no-device">
-          <ha-icon icon="mdi:coffee-maker-outline"></ha-icon>
-          <p>No Melitta Barista device found.</p>
-          <p class="hint">Make sure the integration is installed and configured.</p>
-        </div>
-      </ha-card>`;
+      return html`<ha-card>${renderNoDevice()}</ha-card>`;
     }
 
-    const machineState = this._state("state") || "unavailable";
-    const activity = this._state("activity") || "Idle";
-    const progress = this._state("progress");
-    const actionRequired = this._state("action_required");
-    const connection = this._state("connection") || "Disconnected";
-
-    const isConnected = connection === "Connected";
-    const isUnavailable = machineState === "unavailable" || machineState === "unknown";
-    const isBrewing = machineState === "Brewing";
-    const isReady = machineState === "Ready";
-    const hasAction = !!actionRequired && actionRequired !== "None" && actionRequired !== "unknown";
-    const hasProgress = !!progress && progress !== "unknown" && progress !== "None";
-    const progressNum = hasProgress ? Math.max(0, Math.min(100, parseFloat(progress!) || 0)) : 0;
-    const stateColor = STATE_COLORS[machineState.toLowerCase()] || "var(--primary-text-color)";
-    const cardName = this._config.name || "Melitta Barista";
-
+    const st = computeMachineStatus((s) => this._state(s));
+    const cardName = this._config.name || this._detectedName || "Melitta Barista";
     const showHeader = this._config.show_header;
-    const showStatus = this._config.show_status;
 
-    if (isUnavailable) {
+    if (st.isUnavailable) {
       return html`<ha-card>
-        ${showHeader ? html`
-          <div class="card-header">
-            <span class="machine-name">${cardName}</span>
-            <div class="connection-dot" style="background: var(--mbc-error)"></div>
-          </div>
-        ` : nothing}
-        <div class="offline-section">
-          <ha-icon icon="mdi:bluetooth-off"></ha-icon>
-          <span>Machine offline</span>
-        </div>
+        ${showHeader ? renderHeader(cardName, false) : nothing}
+        ${renderOfflineBody()}
       </ha-card>`;
     }
 
     return html`<ha-card>
-      ${showHeader ? html`
-        <div class="card-header">
-          <span class="machine-name">${cardName}</span>
-          <div class="connection-dot" style="background: ${isConnected ? "var(--mbc-success)" : "var(--mbc-error)"}"></div>
-        </div>
-      ` : nothing}
+      ${showHeader ? renderHeader(cardName, st.isConnected) : nothing}
 
-      ${showStatus && !isBrewing ? html`
-        <div class="status-section">
-          <div class="state-row">
-            <span class="state-badge" style="background: color-mix(in srgb, ${stateColor} 10%, transparent); color: ${stateColor}">
-              ${machineState}
-            </span>
-          </div>
-        </div>
+      ${this._config.show_status && !st.isBrewing ? renderStatus(st) : nothing}
 
-        ${hasAction ? html`
-          <div class="action-alert">
-            <ha-icon icon="mdi:alert-circle"></ha-icon>
-            <span>${actionRequired}</span>
-          </div>
-        ` : nothing}
-      ` : nothing}
+      ${st.isBrewing
+        ? renderBrewingView(this._selectedRecipe(), st, () => this._cancelBrew())
+        : nothing}
 
-      ${isBrewing ? html`
-        <div class="brewing-view">
-          <div class="brewing-icon-wrap">
-            ${coffeeIconSvg(this._selectedRecipe() || "Espresso", 64, "brew-active")}
-          </div>
-          <div class="brewing-info">
-            <span class="brewing-recipe">${this._selectedRecipe() || "Brewing"}</span>
-            <span class="brewing-activity">${activity}</span>
-            ${hasProgress ? html`
-              <div class="brewing-progress">
-                <div class="brewing-progress-fill" style="width: ${progressNum}%"></div>
-              </div>
-              <span class="brewing-percent">${Math.round(progressNum)}%</span>
-            ` : nothing}
-          </div>
-          <button class="brewing-cancel" @click=${() => this._cancelBrew()}>
-            <ha-icon icon="mdi:close"></ha-icon>
-          </button>
-        </div>
-      ` : nothing}
-
-      ${!isBrewing && this._config.show_profiles && isReady && this._profileOptions().length > 1
+      ${!st.isBrewing && this._config.show_profiles && st.isReady && this._profileOptions().length > 1
         ? this._renderProfileTabs()
         : nothing}
 
-      ${!isBrewing && isReady
+      ${!st.isBrewing && st.isReady
         ? this._renderDirectKey()
         : nothing}
 
-      ${!isBrewing && this._config.show_recipes && this._recipeOptions().length > 0
+      ${!st.isBrewing && this._config.show_recipes && this._recipeOptions().length > 0
         ? this._renderRecipes()
         : nothing}
 
-      ${!isBrewing && this._config.show_freestyle && isReady
+      ${!st.isBrewing && this._config.show_freestyle && st.isReady
         ? this._renderFreestyle()
         : nothing}
 
@@ -441,7 +408,7 @@ export class MelittaBaristaCard extends LitElement {
         : nothing}
 
       ${this._config.show_maintenance
-        ? this._renderMaintenance()
+        ? this._renderMaintenance(st)
         : nothing}
 
       ${this._config.show_settings
@@ -787,14 +754,9 @@ export class MelittaBaristaCard extends LitElement {
 
   // -- Maintenance --
 
-  private _renderMaintenance() {
+  private _renderMaintenance(st: MachineStatus) {
     const prefix = this._getPrefix();
     if (!prefix) return nothing;
-
-    const machineState = this._state("state") || "unknown";
-    const connection = this._state("connection") || "Disconnected";
-    const isConnected = connection === "Connected";
-    const isReady = machineState === "Ready";
 
     const renderGroup = (title: string, actions: MaintenanceAction[]) => {
       const cards = actions.map(action => {
@@ -802,7 +764,7 @@ export class MelittaBaristaCard extends LitElement {
         if (!entity) return nothing;
         const isConfirming = this._confirmKey === action.key;
         const isBusy = this._busyKey === action.key;
-        const disabled = !isConnected || !isReady || isBusy;
+        const disabled = !st.isConnected || !st.isReady || isBusy;
         return html`
           <div class="maint-card" ?data-confirming=${isConfirming}>
             <ha-icon class="maint-icon" icon="${action.icon}"></ha-icon>
