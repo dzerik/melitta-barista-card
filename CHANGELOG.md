@@ -2,7 +2,13 @@
 
 All notable changes to the Melitta Barista Card.
 
-## [2.3.2] — Unreleased
+## [2.3.3] — 2026-07-08
+
+### Fixed
+
+- CI builds failed on a fresh install: migrated from the unmaintained `rollup-plugin-typescript2` to the official `@rollup/plugin-typescript` (the old plugin silently skipped TypeScript transformation with current Rollup releases).
+
+## [2.3.2] — 2026-07-08
 
 ### Added
 
