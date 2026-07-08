@@ -696,6 +696,9 @@ function e(e,t,i,s){var r,o=arguments.length,n=o<3?t:null===s?s=Object.getOwnPro
     background: var(--mbc-bg);
   }
 
+  /* -- Generic section wrapper (Sommelier etc.) -- */
+  .mbc-section { padding: 4px 12px 12px; }
+
   /* -- Stats -- */
   .stats-section { padding: 4px 12px 12px; }
   .stats-total {
@@ -969,7 +972,7 @@ function e(e,t,i,s){var r,o=arguments.length,n=o<3?t:null===s?s=Object.getOwnPro
     padding: 3px 8px;
     border-radius: 12px;
     background: var(--mbc-surface);
-    color: var(--mbc-subtext);
+    color: var(--mbc-text2);
     border: 1px solid var(--mbc-border);
   }
   .som-favorites { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
@@ -991,7 +994,7 @@ function e(e,t,i,s){var r,o=arguments.length,n=o<3?t:null===s?s=Object.getOwnPro
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .som-fav-count { font-size: 0.68em; color: var(--mbc-subtext); flex-shrink: 0; }
+  .som-fav-count { font-size: 0.68em; color: var(--mbc-text2); flex-shrink: 0; }
   .som-brew-btn {
     display: flex;
     align-items: center;
@@ -1016,7 +1019,7 @@ function e(e,t,i,s){var r,o=arguments.length,n=o<3?t:null===s?s=Object.getOwnPro
     margin-bottom: 10px;
   }
   .som-quick-name { font-size: 0.82em; font-weight: 600; color: var(--mbc-text); margin-bottom: 4px; }
-  .som-quick-desc { font-size: 0.72em; color: var(--mbc-subtext); line-height: 1.3; }
+  .som-quick-desc { font-size: 0.72em; color: var(--mbc-text2); line-height: 1.3; }
   .som-actions { display: flex; gap: 6px; }
   .som-surprise-btn {
     flex: 1;
@@ -1208,7 +1211,7 @@ function e(e,t,i,s){var r,o=arguments.length,n=o<3?t:null===s?s=Object.getOwnPro
       ${g&&!a?W`
         <div class="status-section">
           <div class="state-row">
-            <span class="state-badge" style="background: ${h}18; color: ${h}">
+            <span class="state-badge" style="background: color-mix(in srgb, ${h} 10%, transparent); color: ${h}">
               ${t}
             </span>
           </div>
@@ -1275,7 +1278,6 @@ function e(e,t,i,s){var r,o=arguments.length,n=o<3?t:null===s?s=Object.getOwnPro
         ${ye.map(e=>{const i=t[e];if(!i)return G;const s=this._selectedDk===e,r=void 0!==i.c1_process&&"none"!==i.c1_process;return W`
             <button class="dk-card" ?data-selected=${s}
               @click=${()=>this._handleDkClick(e)}
-              @dblclick=${()=>this._openEditDialog(e,i)}
               @pointerdown=${()=>this._startDkLongPress(e,i)}
               @pointerup=${()=>this._cancelDkLongPress()}
               @pointerleave=${()=>this._cancelDkLongPress()}
@@ -1473,7 +1475,7 @@ function e(e,t,i,s){var r,o=arguments.length,n=o<3?t:null===s?s=Object.getOwnPro
               <div class="maint-desc">${t.desc}</div>
             </div>
             <button class="maint-btn" ?data-confirm=${r} ?disabled=${n}
-              @click=${()=>this._pressMaintenanceButton(t)}>
+              @click=${e=>{e.stopPropagation(),this._pressMaintenanceButton(t)}}>
               ${o?"...":r?"Confirm":"Start"}
             </button>
           </div>
@@ -1553,4 +1555,4 @@ function e(e,t,i,s){var r,o=arguments.length,n=o<3?t:null===s?s=Object.getOwnPro
           </div>
         </div>
       </div>
-    `}static get styles(){return Te}};e([fe({attribute:!1})],Ie.prototype,"hass",void 0),e([ge()],Ie.prototype,"_config",void 0),e([ge()],Ie.prototype,"_resolvedPrefix",void 0),e([ge()],Ie.prototype,"_fsName",void 0),e([ge()],Ie.prototype,"_fsProcess1",void 0),e([ge()],Ie.prototype,"_fsIntensity1",void 0),e([ge()],Ie.prototype,"_fsAroma1",void 0),e([ge()],Ie.prototype,"_fsPortion1",void 0),e([ge()],Ie.prototype,"_fsTemp1",void 0),e([ge()],Ie.prototype,"_fsShots1",void 0),e([ge()],Ie.prototype,"_fsProcess2",void 0),e([ge()],Ie.prototype,"_fsIntensity2",void 0),e([ge()],Ie.prototype,"_fsAroma2",void 0),e([ge()],Ie.prototype,"_fsPortion2",void 0),e([ge()],Ie.prototype,"_fsTemp2",void 0),e([ge()],Ie.prototype,"_fsShots2",void 0),e([ge()],Ie.prototype,"_selectedDk",void 0),e([ge()],Ie.prototype,"_twoCups",void 0),e([ge()],Ie.prototype,"_editDk",void 0),e([ge()],Ie.prototype,"_editState",void 0),e([ge()],Ie.prototype,"_editSaving",void 0),e([ge()],Ie.prototype,"_confirmKey",void 0),e([ge()],Ie.prototype,"_busyKey",void 0),e([ge()],Ie.prototype,"_somFavorites",void 0),e([ge()],Ie.prototype,"_somHoppers",void 0),e([ge()],Ie.prototype,"_somLoaded",void 0),e([ge()],Ie.prototype,"_somGenerating",void 0),e([ge()],Ie.prototype,"_somQuickRecipe",void 0),Ie=e([pe("melitta-barista-card")],Ie),window.customCards=window.customCards||[],window.customCards.push({type:"melitta-barista-card",name:"Melitta Barista Card",description:"Premium control card for Melitta Barista coffee machines",preview:!0,documentationURL:"https://github.com/dzerik/melitta-barista-card"}),console.info("%c MELITTA-BARISTA-CARD %c v2.1.0 ","color: white; background: #795548; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;","color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;");export{Ie as MelittaBaristaCard};
+    `}static get styles(){return Te}};e([fe({attribute:!1})],Ie.prototype,"hass",void 0),e([ge()],Ie.prototype,"_config",void 0),e([ge()],Ie.prototype,"_resolvedPrefix",void 0),e([ge()],Ie.prototype,"_fsName",void 0),e([ge()],Ie.prototype,"_fsProcess1",void 0),e([ge()],Ie.prototype,"_fsIntensity1",void 0),e([ge()],Ie.prototype,"_fsAroma1",void 0),e([ge()],Ie.prototype,"_fsPortion1",void 0),e([ge()],Ie.prototype,"_fsTemp1",void 0),e([ge()],Ie.prototype,"_fsShots1",void 0),e([ge()],Ie.prototype,"_fsProcess2",void 0),e([ge()],Ie.prototype,"_fsIntensity2",void 0),e([ge()],Ie.prototype,"_fsAroma2",void 0),e([ge()],Ie.prototype,"_fsPortion2",void 0),e([ge()],Ie.prototype,"_fsTemp2",void 0),e([ge()],Ie.prototype,"_fsShots2",void 0),e([ge()],Ie.prototype,"_selectedDk",void 0),e([ge()],Ie.prototype,"_twoCups",void 0),e([ge()],Ie.prototype,"_editDk",void 0),e([ge()],Ie.prototype,"_editState",void 0),e([ge()],Ie.prototype,"_editSaving",void 0),e([ge()],Ie.prototype,"_confirmKey",void 0),e([ge()],Ie.prototype,"_busyKey",void 0),e([ge()],Ie.prototype,"_somFavorites",void 0),e([ge()],Ie.prototype,"_somHoppers",void 0),e([ge()],Ie.prototype,"_somLoaded",void 0),e([ge()],Ie.prototype,"_somGenerating",void 0),e([ge()],Ie.prototype,"_somQuickRecipe",void 0),Ie=e([pe("melitta-barista-card")],Ie),window.customCards=window.customCards||[],window.customCards.push({type:"melitta-barista-card",name:"Melitta Barista Card",description:"Premium control card for Melitta Barista coffee machines",preview:!0,documentationURL:"https://github.com/dzerik/melitta-barista-card"}),console.info("%c MELITTA-BARISTA-CARD %c v2.1.3 ","color: white; background: #795548; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;","color: #795548; background: #efebe9; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;");export{Ie as MelittaBaristaCard};

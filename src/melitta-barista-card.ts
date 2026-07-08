@@ -464,7 +464,7 @@ export class MelittaBaristaCard extends LitElement {
       ${showStatus && !isBrewing ? html`
         <div class="status-section">
           <div class="state-row">
-            <span class="state-badge" style="background: ${stateColor}18; color: ${stateColor}">
+            <span class="state-badge" style="background: color-mix(in srgb, ${stateColor} 10%, transparent); color: ${stateColor}">
               ${machineState}
             </span>
           </div>
@@ -571,7 +571,6 @@ export class MelittaBaristaCard extends LitElement {
           return html`
             <button class="dk-card" ?data-selected=${isSelected}
               @click=${() => this._handleDkClick(cat)}
-              @dblclick=${() => this._openEditDialog(cat, recipe)}
               @pointerdown=${() => this._startDkLongPress(cat, recipe)}
               @pointerup=${() => this._cancelDkLongPress()}
               @pointerleave=${() => this._cancelDkLongPress()}
@@ -966,7 +965,7 @@ export class MelittaBaristaCard extends LitElement {
               <div class="maint-desc">${action.desc}</div>
             </div>
             <button class="maint-btn" ?data-confirm=${isConfirming} ?disabled=${disabled}
-              @click=${() => this._pressMaintenanceButton(action)}>
+              @click=${(e: Event) => { e.stopPropagation(); this._pressMaintenanceButton(action); }}>
               ${isBusy ? "..." : isConfirming ? "Confirm" : "Start"}
             </button>
           </div>

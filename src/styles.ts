@@ -633,6 +633,9 @@ export const cardStyles = css`
     background: var(--mbc-bg);
   }
 
+  /* -- Generic section wrapper (Sommelier etc.) -- */
+  .mbc-section { padding: 4px 12px 12px; }
+
   /* -- Stats -- */
   .stats-section { padding: 4px 12px 12px; }
   .stats-total {
@@ -906,7 +909,7 @@ export const cardStyles = css`
     padding: 3px 8px;
     border-radius: 12px;
     background: var(--mbc-surface);
-    color: var(--mbc-subtext);
+    color: var(--mbc-text2);
     border: 1px solid var(--mbc-border);
   }
   .som-favorites { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
@@ -928,7 +931,7 @@ export const cardStyles = css`
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .som-fav-count { font-size: 0.68em; color: var(--mbc-subtext); flex-shrink: 0; }
+  .som-fav-count { font-size: 0.68em; color: var(--mbc-text2); flex-shrink: 0; }
   .som-brew-btn {
     display: flex;
     align-items: center;
@@ -953,7 +956,7 @@ export const cardStyles = css`
     margin-bottom: 10px;
   }
   .som-quick-name { font-size: 0.82em; font-weight: 600; color: var(--mbc-text); margin-bottom: 4px; }
-  .som-quick-desc { font-size: 0.72em; color: var(--mbc-subtext); line-height: 1.3; }
+  .som-quick-desc { font-size: 0.72em; color: var(--mbc-text2); line-height: 1.3; }
   .som-actions { display: flex; gap: 6px; }
   .som-surprise-btn {
     flex: 1;
