@@ -345,7 +345,9 @@ export const cardStyles = css`
     width: 5px;
     height: 5px;
     border-radius: 50%;
+    background: color-mix(in srgb, var(--mbc-text) 20%, transparent);
   }
+  .intensity-dot[data-on] { background: var(--mbc-text); }
 
   /* -- All Recipes divider -- */
   .recipes-divider {

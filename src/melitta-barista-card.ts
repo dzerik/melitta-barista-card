@@ -5,17 +5,13 @@ import {
   CARD_VERSION,
   SWITCH_KEYS,
   NUMBER_KEYS,
-  DIRECTKEY_CATEGORIES,
   DK_LABELS,
   CLEANING_ACTIONS,
   FILTER_ACTIONS,
   OTHER_ACTIONS,
-  SWITCH_META,
-  NUMBER_META,
   LONG_PRESS_MS,
   MAINT_BUSY_RESET_MS,
   SOM_FAVORITES_LIMIT,
-  STATS_EXCLUDED_ATTRS,
   type DirectKeyCategory,
 } from "./const";
 import type {
@@ -27,7 +23,6 @@ import type {
   SommelierHoppers,
   SommelierQuickRecipe,
 } from "./types";
-import { LEVEL_LABELS, INTENSITY_DOTS } from "./format";
 import {
   defaultRecipe,
   fromDkRecipe,
@@ -42,11 +37,15 @@ import {
   renderStatus,
   renderBrewingView,
 } from "./sections/status";
+import { renderDirectKey } from "./sections/directkey";
+import { renderRecipes, renderProfileTabs } from "./sections/recipes";
+import { renderStats } from "./sections/stats";
+import { renderMaintenance } from "./sections/maintenance";
+import { renderSettings } from "./sections/settings";
 import { computeMachineStatus, type MachineStatus } from "./machine-state";
 import * as api from "./api";
 import { parseDirectKeyData } from "./directkey";
 import { detectMelittaDevices } from "./utils";
-import { coffeeIconSvg } from "./icons";
 import { cardStyles } from "./styles";
 import "./editor";
 
@@ -123,11 +122,19 @@ export class MelittaBaristaCard extends LitElement {
   }
 
   public getCardSize(): number {
-    return this._config?.compact ? 3 : 5;
+    if (!this._config) return 5;
+    if (this._config.compact) return 3;
+    let size = 5;
+    if (this._config.show_freestyle) size += 4;
+    if (this._config.show_sommelier) size += 2;
+    if (this._config.show_stats) size += 3;
+    if (this._config.show_maintenance) size += 4;
+    if (this._config.show_settings) size += 2;
+    return size;
   }
 
   public getGridOptions() {
-    return { rows: this._config?.compact ? 3 : 5, columns: 6, min_rows: 2, min_columns: 3 };
+    return { rows: this.getCardSize(), columns: 6, min_rows: 2, min_columns: 3 };
   }
 
   /** Pure: never mutates state. Resolution happens in willUpdate(). */
@@ -419,138 +426,41 @@ export class MelittaBaristaCard extends LitElement {
     </ha-card>`;
   }
 
-  // -- Profile Tab Bar --
+  // -- Section wrappers (props glue) --
 
   private _renderProfileTabs() {
-    const options = this._profileOptions();
-    const selected = this._selectedProfile();
-    return html`
-      <div class="profile-tabs">
-        ${options.map(o => html`
-          <button class="profile-tab" ?data-active=${o === selected}
-            @click=${() => { if (o !== selected) this._selectProfile(o); }}>
-            ${o}
-            ${o === selected ? html`<span class="profile-tab-indicator"></span>` : nothing}
-          </button>
-        `)}
-      </div>
-    `;
+    return renderProfileTabs({
+      options: this._profileOptions(),
+      selected: this._selectedProfile(),
+      onSelect: (o) => this._selectProfile(o),
+    });
   }
-
-  // -- DirectKey Grid --
 
   private _renderDirectKey() {
     const dk = this._getDirectKeyData();
     if (!dk) return nothing;
-    const activeRecipes = dk.profiles[dk.activeProfile] ?? {};
-    if (Object.keys(activeRecipes).length === 0) return nothing;
-
-    return html`
-      <div class="dk-grid">
-        ${DIRECTKEY_CATEGORIES.map(cat => {
-          const recipe = activeRecipes[cat];
-          if (!recipe) return nothing;
-          const isSelected = this._selectedDk === cat;
-          const hasDetails = recipe.c1_process !== undefined && recipe.c1_process !== "none";
-          return html`
-            <button class="dk-card" ?data-selected=${isSelected}
-              @click=${() => this._handleDkClick(cat)}
-              @pointerdown=${() => this._startDkLongPress(cat, recipe)}
-              @pointerup=${() => this._cancelDkLongPress()}
-              @pointerleave=${() => this._cancelDkLongPress()}
-              @contextmenu=${(e: Event) => e.preventDefault()}>
-              <div style="${isSelected && hasDetails ? "opacity: 0.15" : ""}">
-                ${coffeeIconSvg(DK_LABELS[cat], 48, `dk-${cat}`)}
-              </div>
-              ${isSelected && hasDetails ? html`
-                <div class="dk-card-overlay">
-                  ${this._renderDkRecipeInfo(recipe)}
-                </div>
-              ` : nothing}
-              <span class="dk-card-label">
-                ${isSelected ? `Brew ${DK_LABELS[cat]}` : DK_LABELS[cat]}
-              </span>
-            </button>
-          `;
-        })}
-
-        <!-- 2x toggle -->
-        <button class="dk-card" ?data-selected=${this._twoCups}
-          @click=${() => { this._twoCups = !this._twoCups; }}>
-          <div style="display:flex;align-items:center;justify-content:center;width:48px;height:55px;font-size:1.6em;font-weight:700;color:var(--mbc-text);opacity:${this._twoCups ? "1" : "0.35"}">
-            2x
-          </div>
-          <span class="dk-card-label">${this._twoCups ? "2x ON" : "2x"}</span>
-        </button>
-
-      </div>
-    `;
+    return renderDirectKey({
+      data: dk,
+      selected: this._selectedDk,
+      twoCups: this._twoCups,
+      onCardClick: (cat) => this._handleDkClick(cat),
+      onLongPressStart: (cat, recipe) => this._startDkLongPress(cat, recipe),
+      onLongPressCancel: () => this._cancelDkLongPress(),
+      onToggleTwoCups: () => { this._twoCups = !this._twoCups; },
+    });
   }
-
-  private _renderDkRecipeInfo(recipe: DirectKeyRecipe) {
-    const components: { process: string; intensity: string; ml: number }[] = [];
-    if (recipe.c1_process && recipe.c1_process !== "none") {
-      components.push({ process: recipe.c1_process, intensity: recipe.c1_intensity, ml: recipe.c1_portion_ml });
-    }
-    if (recipe.c2_process && recipe.c2_process !== "none") {
-      components.push({ process: recipe.c2_process, intensity: recipe.c2_intensity, ml: recipe.c2_portion_ml });
-    }
-    if (components.length === 0) return nothing;
-
-    return html`
-      <div class="dk-recipe-info">
-        ${components.map(c => html`
-          <div class="dk-recipe-row">
-            <span class="dk-recipe-ml">${c.ml}<span class="dk-recipe-ml-unit">ml</span></span>
-            ${c.process === "coffee" ? html`
-              <span class="intensity-dots">
-                ${[1, 2, 3, 4, 5].map(n => html`
-                  <span class="intensity-dot" style="background:${n <= (INTENSITY_DOTS[c.intensity] || 3) ? "var(--mbc-text)" : "rgba(255,255,255,0.2)"}"></span>
-                `)}
-              </span>
-            ` : nothing}
-          </div>
-        `)}
-      </div>
-    `;
-  }
-
-  // -- Recipes --
 
   private _renderRecipes() {
-    const options = this._recipeOptions();
-    const selected = this._selectedRecipe();
     const dk = this._getDirectKeyData();
-    const hasDk = dk && Object.keys(dk.profiles[dk.activeProfile] ?? {}).length > 0;
-
-    return html`
-      ${hasDk ? html`
-        <div class="recipes-divider">
-          <span class="recipes-divider-line"></span>
-          <span class="recipes-divider-text">All Recipes</span>
-          <span class="recipes-divider-line"></span>
-        </div>
-      ` : html`<div class="section-title">Recipe</div>`}
-      <div class="recipe-grid">
-        ${options.map((name) => {
-          const uid = name.replace(/[^a-zA-Z0-9]/g, "");
-          return html`
-            <div class="recipe-card"
-              ?data-selected=${name === selected && !this._selectedDk}
-              @click=${() => {
-                if (name === selected && !this._selectedDk) {
-                  this._brew();
-                } else {
-                  this._selectRecipe(name);
-                }
-              }}>
-              ${coffeeIconSvg(name, 48, `r-${uid}`)}
-              <span class="recipe-name">${name}</span>
-            </div>
-          `;
-        })}
-      </div>
-    `;
+    const hasDk = !!dk && Object.keys(dk.profiles[dk.activeProfile] ?? {}).length > 0;
+    return renderRecipes({
+      options: this._recipeOptions(),
+      selected: this._selectedRecipe(),
+      hasDk,
+      dkActive: this._selectedDk !== null,
+      onSelect: (name) => this._selectRecipe(name),
+      onBrew: () => this._brew(),
+    });
   }
 
   // -- Freestyle --
@@ -708,154 +618,30 @@ export class MelittaBaristaCard extends LitElement {
     `;
   }
 
-  // -- Stats --
-
   private _renderStats() {
-    const entity = this._entity("sensor", "total_cups");
-    const total = entity?.state ? parseInt(entity.state, 10) : null;
-
-    if (total === null || isNaN(total)) {
-      return html`
-        <div class="section-title">Stats</div>
-        <div class="stats-unavailable">Cup statistics not available.</div>
-      `;
-    }
-
-    const attrs = entity!.attributes || {};
-    const counters: { name: string; count: number }[] = [];
-    for (const [name, val] of Object.entries(attrs)) {
-      if (typeof val === "number" && !STATS_EXCLUDED_ATTRS.includes(name)) {
-        counters.push({ name, count: val });
-      }
-    }
-    counters.sort((a, b) => b.count - a.count);
-
-    return html`
-      <div class="section-title">Stats</div>
-      <div class="stats-section">
-        <div class="stats-total">
-          <span class="stats-total-number">${total.toLocaleString()}</span>
-          <span class="stats-total-label">Total Cups</span>
-        </div>
-        ${counters.length > 0 ? html`
-          <div class="stats-grid">
-            ${counters.map(({ name, count }, i) => html`
-              <div class="stats-card" ?data-top=${i === 0}>
-                ${coffeeIconSvg(name, 40, `stat-${name.replace(/[^a-zA-Z0-9]/g, "")}`)}
-                <span class="stats-recipe-name">${name}</span>
-                <span class="stats-recipe-count">${count}</span>
-              </div>
-            `)}
-          </div>
-        ` : html`<div class="stats-empty">No cups brewed yet</div>`}
-      </div>
-    `;
+    return renderStats(this._entity("sensor", "total_cups"));
   }
-
-  // -- Maintenance --
 
   private _renderMaintenance(st: MachineStatus) {
     const prefix = this._getPrefix();
     if (!prefix) return nothing;
-
-    const renderGroup = (title: string, actions: MaintenanceAction[]) => {
-      const cards = actions.map(action => {
-        const entity = this.hass.states[`button.${prefix}_${action.suffix}`];
-        if (!entity) return nothing;
-        const isConfirming = this._confirmKey === action.key;
-        const isBusy = this._busyKey === action.key;
-        const disabled = !st.isConnected || !st.isReady || isBusy;
-        return html`
-          <div class="maint-card" ?data-confirming=${isConfirming}>
-            <ha-icon class="maint-icon" icon="${action.icon}"></ha-icon>
-            <div class="maint-info">
-              <div class="maint-label">${action.label}</div>
-              <div class="maint-desc">${action.desc}</div>
-            </div>
-            <button class="maint-btn" ?data-confirm=${isConfirming} ?disabled=${disabled}
-              @click=${(e: Event) => { e.stopPropagation(); this._pressMaintenanceButton(action); }}>
-              ${isBusy ? "..." : isConfirming ? "Confirm" : "Start"}
-            </button>
-          </div>
-        `;
-      }).filter(c => c !== nothing);
-      if (cards.length === 0) return nothing;
-      return html`
-        <div class="maint-group-title">${title}</div>
-        <div class="maint-grid">${cards}</div>
-      `;
-    };
-
-    return html`
-      <div class="section-title">Maintenance</div>
-      <div class="maint-section" @click=${() => { if (this._confirmKey) this._confirmKey = null; }}>
-        ${renderGroup("Cleaning & Descaling", CLEANING_ACTIONS)}
-        ${renderGroup("Water Filter", FILTER_ACTIONS)}
-        ${renderGroup("Other", OTHER_ACTIONS)}
-      </div>
-    `;
+    return renderMaintenance({
+      st,
+      hasEntity: (suffix) => !!this.hass.states[`button.${prefix}_${suffix}`],
+      confirmKey: this._confirmKey,
+      busyKey: this._busyKey,
+      onPress: (action) => this._pressMaintenanceButton(action),
+      onDismissConfirm: () => { if (this._confirmKey) this._confirmKey = null; },
+    });
   }
-
-  // -- Settings --
 
   private _renderSettings() {
     const prefix = this._getPrefix();
     if (!prefix) return nothing;
-
-    const switchCards = SWITCH_KEYS.map((key) => {
-      const entity = this.hass.states[`switch.${prefix}_${key}`];
-      if (!entity) return nothing;
-      const isOn = entity.state === "on";
-      const meta = SWITCH_META[key];
-      return html`
-        <div class="setting-card">
-          <ha-icon class="setting-icon" icon="${meta.icon}"></ha-icon>
-          <div class="setting-info">
-            <div class="setting-label">${meta.label}</div>
-            <div class="setting-desc">${meta.desc}</div>
-          </div>
-          <button class="toggle-track" ?data-on=${isOn}
-            @click=${() => this._toggleSwitch(key, !isOn)}>
-            <span class="toggle-thumb"></span>
-          </button>
-        </div>
-      `;
+    return renderSettings({
+      getEntity: (domain, key) => this.hass.states[`${domain}.${prefix}_${key}`],
+      onToggle: (key, turnOn) => this._toggleSwitch(key, turnOn),
     });
-
-    const numberCards = NUMBER_KEYS.map((key) => {
-      const entity = this.hass.states[`number.${prefix}_${key}`];
-      if (!entity) return nothing;
-      const meta = NUMBER_META[key];
-      const val = parseFloat(entity.state) || 0;
-      let display: string;
-      if (meta.format === "level") {
-        display = LEVEL_LABELS[key]?.[val] ?? String(val);
-      } else {
-        display = `${val} min`;
-      }
-      return html`
-        <div class="setting-card">
-          <ha-icon class="setting-icon" icon="${meta.icon}"></ha-icon>
-          <div class="setting-info">
-            <div class="setting-label">${meta.label}</div>
-            <div class="setting-desc">${meta.desc}</div>
-          </div>
-          <span class="setting-value">${display}</span>
-        </div>
-      `;
-    });
-
-    if (switchCards.every(c => c === nothing) && numberCards.every(c => c === nothing)) {
-      return nothing;
-    }
-
-    return html`
-      <div class="section-title">Settings</div>
-      <div class="settings-grid">
-        ${switchCards}
-        ${numberCards}
-      </div>
-    `;
   }
 
   // -- Recipe Edit Dialog --
