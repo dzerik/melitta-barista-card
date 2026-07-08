@@ -6,12 +6,6 @@ import {
   STATE_COLORS,
   SWITCH_KEYS,
   NUMBER_KEYS,
-  FREESTYLE_PROCESSES,
-  FREESTYLE_PROCESSES_WITH_NONE,
-  FREESTYLE_INTENSITIES,
-  FREESTYLE_AROMAS,
-  FREESTYLE_TEMPERATURES,
-  FREESTYLE_SHOTS,
   DIRECTKEY_CATEGORIES,
   DK_LABELS,
   DIRECTKEY_DISPLAY_TO_KEY,
@@ -35,13 +29,19 @@ import type {
   SommelierHoppers,
   SommelierQuickRecipe,
 } from "./types";
-import { LEVEL_LABELS, INTENSITY_DOTS, displayName } from "./format";
+import { LEVEL_LABELS, INTENSITY_DOTS } from "./format";
+import {
+  defaultRecipe,
+  fromDkRecipe,
+  toServicePayload,
+  type RecipeComponents,
+  type ComponentSpec,
+} from "./recipe";
+import { renderComponentForm } from "./sections/controls";
 import { detectMelittaDevices } from "./utils";
 import { coffeeIconSvg } from "./icons";
 import { cardStyles } from "./styles";
 import "./editor";
-
-const SHOTS_TO_STRING: Record<number, string> = { 0: "none", 1: "one", 2: "two", 3: "three" };
 
 @customElement("melitta-barista-card")
 export class MelittaBaristaCard extends LitElement {
@@ -51,25 +51,14 @@ export class MelittaBaristaCard extends LitElement {
 
   // Freestyle form
   @state() private _fsName = "Custom";
-  @state() private _fsProcess1 = "coffee";
-  @state() private _fsIntensity1 = "medium";
-  @state() private _fsAroma1 = "standard";
-  @state() private _fsPortion1 = 40;
-  @state() private _fsTemp1 = "normal";
-  @state() private _fsShots1 = "one";
-  @state() private _fsProcess2 = "none";
-  @state() private _fsIntensity2 = "medium";
-  @state() private _fsAroma2 = "standard";
-  @state() private _fsPortion2 = 0;
-  @state() private _fsTemp2 = "normal";
-  @state() private _fsShots2 = "none";
+  @state() private _fsRecipe: RecipeComponents = defaultRecipe();
 
   // DirectKey state
   @state() private _selectedDk: DirectKeyCategory | null = null;
   @state() private _twoCups = false;
   // Recipe edit dialog
   @state() private _editDk: { category: DirectKeyCategory; recipe: DirectKeyRecipe } | null = null;
-  @state() private _editState: Record<string, string | number> | null = null;
+  @state() private _editState: RecipeComponents | null = null;
   @state() private _editSaving = false;
 
   // Maintenance
@@ -267,18 +256,7 @@ export class MelittaBaristaCard extends LitElement {
     this.hass.callService("melitta_barista", "brew_freestyle", {
       entity_id: `button.${prefix}_brew`,
       name: this._fsName,
-      process1: this._fsProcess1,
-      intensity1: this._fsIntensity1,
-      aroma1: this._fsAroma1,
-      portion1_ml: this._fsPortion1,
-      temperature1: this._fsTemp1,
-      shots1: this._fsShots1,
-      process2: this._fsProcess2,
-      intensity2: this._fsIntensity2,
-      aroma2: this._fsAroma2,
-      portion2_ml: this._fsPortion2,
-      temperature2: this._fsTemp2,
-      shots2: this._fsShots2,
+      ...toServicePayload(this._fsRecipe),
     });
   }
 
@@ -300,18 +278,7 @@ export class MelittaBaristaCard extends LitElement {
       entity_id: `button.${prefix}_brew`,
       category: this._editDk.category,
       profile_id: dk?.activeProfile ?? 0,
-      process1: this._editState.process1,
-      intensity1: this._editState.intensity1,
-      aroma1: this._editState.aroma1,
-      portion1_ml: this._editState.portion1,
-      temperature1: this._editState.temperature1,
-      shots1: this._editState.shots1,
-      process2: this._editState.process2,
-      intensity2: this._editState.intensity2,
-      aroma2: this._editState.aroma2,
-      portion2_ml: this._editState.portion2,
-      temperature2: this._editState.temperature2,
-      shots2: this._editState.shots2,
+      ...toServicePayload(this._editState),
     }).then(() => {
       this._editDk = null;
       this._editState = null;
@@ -365,21 +332,22 @@ export class MelittaBaristaCard extends LitElement {
 
   private _openEditDialog(cat: DirectKeyCategory, recipe: DirectKeyRecipe): void {
     this._editDk = { category: cat, recipe };
-    this._editState = {
-      process1: recipe.c1_process || "coffee",
-      intensity1: recipe.c1_intensity || "medium",
-      aroma1: recipe.c1_aroma || "standard",
-      temperature1: recipe.c1_temperature || "normal",
-      shots1: SHOTS_TO_STRING[recipe.c1_shots] || "one",
-      portion1: recipe.c1_portion_ml || 40,
-      process2: recipe.c2_process || "none",
-      intensity2: recipe.c2_intensity || "medium",
-      aroma2: recipe.c2_aroma || "standard",
-      temperature2: recipe.c2_temperature || "normal",
-      shots2: SHOTS_TO_STRING[recipe.c2_shots] || "none",
-      portion2: recipe.c2_portion_ml || 0,
-    };
+    this._editState = fromDkRecipe(recipe);
     this._editSaving = false;
+  }
+
+  private _closeEditDialog(): void {
+    this._editDk = null;
+    this._editState = null;
+  }
+
+  private _updateFs(comp: "c1" | "c2", patch: Partial<ComponentSpec>): void {
+    this._fsRecipe = { ...this._fsRecipe, [comp]: { ...this._fsRecipe[comp], ...patch } };
+  }
+
+  private _updateEdit(comp: "c1" | "c2", patch: Partial<ComponentSpec>): void {
+    if (!this._editState) return;
+    this._editState = { ...this._editState, [comp]: { ...this._editState[comp], ...patch } };
   }
 
   // -- Render --
@@ -649,48 +617,7 @@ export class MelittaBaristaCard extends LitElement {
 
   // -- Freestyle --
 
-  private _renderSegment(
-    label: string,
-    options: readonly string[],
-    value: string,
-    onChange: (v: string) => void,
-    disabled = false,
-  ) {
-    return html`
-      <div class="segment-picker ${disabled ? "freestyle-disabled" : ""}">
-        <span class="segment-label">${label}</span>
-        <div class="segment-options">
-          ${options.map(o => html`
-            <button class="segment-opt" ?data-active=${o === value}
-              @click=${() => onChange(o)}>${displayName(o)}</button>
-          `)}
-        </div>
-      </div>
-    `;
-  }
-
-  private _renderPortion(
-    label: string, value: number, min: number, max: number, step: number,
-    onChange: (v: number) => void, disabled = false,
-  ) {
-    return html`
-      <div class="portion-row ${disabled ? "freestyle-disabled" : ""}">
-        <div class="portion-header">
-          <span class="portion-label">${label}</span>
-          <span class="portion-value">${value} ml</span>
-        </div>
-        <input type="range" class="portion-slider"
-          min=${min} max=${max} step=${step} .value=${String(value)}
-          @input=${(e: Event) => onChange(parseInt((e.target as HTMLInputElement).value) || 0)} />
-      </div>
-    `;
-  }
-
   private _renderFreestyle() {
-    const p1Coffee = this._fsProcess1 === "coffee";
-    const p2None = this._fsProcess2 === "none";
-    const p2Coffee = this._fsProcess2 === "coffee";
-
     return html`
       <div class="section-title">Freestyle</div>
       <div class="freestyle-section">
@@ -701,37 +628,20 @@ export class MelittaBaristaCard extends LitElement {
         </div>
 
         <div class="freestyle-components">
-          <div class="freestyle-component">
-            <div class="component-title">Component 1</div>
-            ${this._renderSegment("Process", FREESTYLE_PROCESSES, this._fsProcess1,
-              (v) => { this._fsProcess1 = v; })}
-            ${this._renderPortion("Portion", this._fsPortion1, 5, 250, 5,
-              (v) => { this._fsPortion1 = v; })}
-            ${this._renderSegment("Intensity", FREESTYLE_INTENSITIES, this._fsIntensity1,
-              (v) => { this._fsIntensity1 = v; }, !p1Coffee)}
-            ${this._renderSegment("Aroma", FREESTYLE_AROMAS, this._fsAroma1,
-              (v) => { this._fsAroma1 = v; }, !p1Coffee)}
-            ${this._renderSegment("Temp", FREESTYLE_TEMPERATURES, this._fsTemp1,
-              (v) => { this._fsTemp1 = v; })}
-            ${this._renderSegment("Shots", FREESTYLE_SHOTS, this._fsShots1,
-              (v) => { this._fsShots1 = v; }, !p1Coffee)}
-          </div>
-
-          <div class="freestyle-component">
-            <div class="component-title">Component 2</div>
-            ${this._renderSegment("Process", FREESTYLE_PROCESSES_WITH_NONE, this._fsProcess2,
-              (v) => { this._fsProcess2 = v; })}
-            ${this._renderPortion("Portion", this._fsPortion2, 0, 250, 5,
-              (v) => { this._fsPortion2 = v; }, p2None)}
-            ${this._renderSegment("Intensity", FREESTYLE_INTENSITIES, this._fsIntensity2,
-              (v) => { this._fsIntensity2 = v; }, !p2Coffee)}
-            ${this._renderSegment("Aroma", FREESTYLE_AROMAS, this._fsAroma2,
-              (v) => { this._fsAroma2 = v; }, !p2Coffee)}
-            ${this._renderSegment("Temp", FREESTYLE_TEMPERATURES, this._fsTemp2,
-              (v) => { this._fsTemp2 = v; }, p2None)}
-            ${this._renderSegment("Shots", FREESTYLE_SHOTS, this._fsShots2,
-              (v) => { this._fsShots2 = v; }, !p2Coffee)}
-          </div>
+          ${renderComponentForm({
+            title: "Component 1",
+            containerClass: "freestyle-component",
+            spec: this._fsRecipe.c1,
+            allowNoneProcess: false,
+            onChange: (patch) => this._updateFs("c1", patch),
+          })}
+          ${renderComponentForm({
+            title: "Component 2",
+            containerClass: "freestyle-component",
+            spec: this._fsRecipe.c2,
+            allowNoneProcess: true,
+            onChange: (patch) => this._updateFs("c2", patch),
+          })}
         </div>
 
         <div class="freestyle-brew-row">
@@ -1034,57 +944,36 @@ export class MelittaBaristaCard extends LitElement {
     if (!this._editDk || !this._editState) return nothing;
     const s = this._editState;
     const cat = this._editDk.category;
-    const p1Coffee = s.process1 === "coffee";
-    const p2None = s.process2 === "none";
-    const p2Coffee = s.process2 === "coffee";
-
-    const updateEdit = (key: string, value: string | number) => {
-      this._editState = { ...this._editState!, [key]: value };
-    };
 
     return html`
-      <div class="edit-overlay" @click=${() => { this._editDk = null; this._editState = null; }}>
+      <div class="edit-overlay" @click=${() => this._closeEditDialog()}>
         <div class="edit-dialog" @click=${(e: Event) => e.stopPropagation()}>
           <div class="edit-header">
             <span class="edit-title">Edit: ${DK_LABELS[cat]}</span>
-            <button class="edit-close" @click=${() => { this._editDk = null; this._editState = null; }}>
+            <button class="edit-close" @click=${() => this._closeEditDialog()}>
               <ha-icon icon="mdi:close"></ha-icon>
             </button>
           </div>
           <div class="edit-body">
-            <div class="edit-component">
-              <div class="component-title">Component 1</div>
-              ${this._renderSegment("Process", FREESTYLE_PROCESSES, s.process1 as string,
-                (v) => updateEdit("process1", v))}
-              ${this._renderPortion("Portion", s.portion1 as number, 5, 250, 5,
-                (v) => updateEdit("portion1", v))}
-              ${this._renderSegment("Intensity", FREESTYLE_INTENSITIES, s.intensity1 as string,
-                (v) => updateEdit("intensity1", v), !p1Coffee)}
-              ${this._renderSegment("Aroma", FREESTYLE_AROMAS, s.aroma1 as string,
-                (v) => updateEdit("aroma1", v), !p1Coffee)}
-              ${this._renderSegment("Temperature", FREESTYLE_TEMPERATURES, s.temperature1 as string,
-                (v) => updateEdit("temperature1", v))}
-              ${this._renderSegment("Shots", FREESTYLE_SHOTS, s.shots1 as string,
-                (v) => updateEdit("shots1", v), !p1Coffee)}
-            </div>
-            <div class="edit-component">
-              <div class="component-title">Component 2</div>
-              ${this._renderSegment("Process", FREESTYLE_PROCESSES_WITH_NONE, s.process2 as string,
-                (v) => updateEdit("process2", v))}
-              ${this._renderPortion("Portion", s.portion2 as number, 0, 250, 5,
-                (v) => updateEdit("portion2", v), p2None)}
-              ${this._renderSegment("Intensity", FREESTYLE_INTENSITIES, s.intensity2 as string,
-                (v) => updateEdit("intensity2", v), !p2Coffee)}
-              ${this._renderSegment("Aroma", FREESTYLE_AROMAS, s.aroma2 as string,
-                (v) => updateEdit("aroma2", v), !p2Coffee)}
-              ${this._renderSegment("Temperature", FREESTYLE_TEMPERATURES, s.temperature2 as string,
-                (v) => updateEdit("temperature2", v), p2None)}
-              ${this._renderSegment("Shots", FREESTYLE_SHOTS, s.shots2 as string,
-                (v) => updateEdit("shots2", v), !p2Coffee)}
-            </div>
+            ${renderComponentForm({
+              title: "Component 1",
+              containerClass: "edit-component",
+              spec: s.c1,
+              allowNoneProcess: false,
+              temperatureLabel: "Temperature",
+              onChange: (patch) => this._updateEdit("c1", patch),
+            })}
+            ${renderComponentForm({
+              title: "Component 2",
+              containerClass: "edit-component",
+              spec: s.c2,
+              allowNoneProcess: true,
+              temperatureLabel: "Temperature",
+              onChange: (patch) => this._updateEdit("c2", patch),
+            })}
           </div>
           <div class="edit-footer">
-            <button class="edit-btn-cancel" @click=${() => { this._editDk = null; this._editState = null; }}>
+            <button class="edit-btn-cancel" @click=${() => this._closeEditDialog()}>
               Cancel
             </button>
             <button class="edit-btn-save" ?disabled=${this._editSaving} @click=${() => this._saveDirectkey()}>
