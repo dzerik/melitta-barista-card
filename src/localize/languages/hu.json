@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Főzés",
+    "cancel": "Mégse",
+    "save": "Mentés",
+    "confirm": "Megerősítés",
+    "start": "Indítás",
+    "loading": "Betöltés...",
+    "retry": "Újra",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Nem található Melitta Barista eszköz.",
+    "no_device_hint": "Győződjön meg róla, hogy az integráció telepítve és beállítva van.",
+    "machine_offline": "A gép offline"
+  },
+  "state": {
+    "ready": "Kész",
+    "brewing": "Főzés",
+    "cleaning": "Tisztítás",
+    "descaling": "Vízkőmentesítés",
+    "off": "Ki",
+    "busy": "Foglalt",
+    "idle": "Üresjárat",
+    "unavailable": "Nem elérhető",
+    "unknown": "Ismeretlen"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Tej",
+    "milk_froth": "Tejhab",
+    "water": "Forró víz"
+  },
+  "values": {
+    "very_mild": "N.enyhe",
+    "mild": "Enyhe",
+    "medium": "Közepes",
+    "strong": "Erős",
+    "very_strong": "N.erős",
+    "extra_strong": "X.erős",
+    "cold": "Hideg",
+    "normal": "Normál",
+    "high": "Magas",
+    "none": "Nincs",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kávé",
+    "milk": "Tej",
+    "water": "Víz",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "{drink} főzése",
+    "two_cups": "2x",
+    "two_cups_on": "2x BE"
+  },
+  "recipes": {
+    "title": "Recept",
+    "all_recipes": "Összes recept"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Ital neve",
+    "component": "Összetevő {n}",
+    "process": "Folyamat",
+    "portion": "Adag",
+    "intensity": "Intenzitás",
+    "aroma": "Aroma",
+    "temp": "Hőm.",
+    "temperature": "Hőmérséklet",
+    "shots": "Shot",
+    "portion_value": "{value} ml",
+    "brew_named": "{name} főzése"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "A Sommelier nem érhető el.",
+    "generating": "Generálás...",
+    "surprise_me": "Lepj meg",
+    "error_generate": "Sommelier: a recept generálása sikertelen",
+    "error_brew": "Sommelier: a főzés sikertelen"
+  },
+  "stats": {
+    "title": "Statisztika",
+    "total_cups": "Összes csésze",
+    "unavailable": "A csészestatisztika nem érhető el.",
+    "empty": "Még nincs lefőzött csésze"
+  },
+  "maintenance": {
+    "title": "Karbantartás",
+    "groups": {
+      "cleaning": "Tisztítás és vízkőmentesítés",
+      "filter": "Vízszűrő",
+      "other": "Egyéb"
+    },
+    "actions": {
+      "easy_clean": { "label": "Gyorstisztítás", "desc": "A főzőegység gyors átöblítése" },
+      "intensive_clean": { "label": "Intenzív tisztítás", "desc": "Alapos tisztítás tablettával" },
+      "descaling": { "label": "Vízkőmentesítés", "desc": "Vízkőlerakódás eltávolítása" },
+      "evaporating": { "label": "Párologtatás", "desc": "A gőzrendszer kiürítése" },
+      "filter_insert": { "label": "Szűrő behelyezése", "desc": "Új vízszűrő használatba vétele" },
+      "filter_replace": { "label": "Szűrő cseréje", "desc": "A jelenlegi vízszűrő cseréje" },
+      "filter_remove": { "label": "Szűrő eltávolítása", "desc": "A vízszűrő használatának befejezése" },
+      "switch_off": { "label": "Kikapcsolás", "desc": "A gép kikapcsolása" }
+    }
+  },
+  "settings": {
+    "title": "Beállítások",
+    "switches": {
+      "energy_saving": { "label": "Energiatakarékos", "desc": "Kisebb fogyasztás üresjáratban" },
+      "auto_bean_select": { "label": "Automatikus babválasztás", "desc": "Babtartály automatikus kiválasztása" },
+      "rinsing_disabled": { "label": "Öblítés kikapcsolva", "desc": "Automatikus öblítés kihagyása" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Vízkeménység", "desc": "Kalibrálás a víz típusához" },
+      "auto_off_after": { "label": "Auto kikapcsolás", "desc": "Percek a kikapcsolásig" },
+      "brew_temperature": { "label": "Főzési hőmérséklet", "desc": "A főzővíz hőmérséklete" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Lágy", "2": "Közepes", "3": "Kemény", "4": "Nagyon kemény" },
+      "brew_temperature": { "0": "Alacsony", "1": "Normál", "2": "Magas" }
+    },
+    "minutes": "{value} perc"
+  },
+  "edit_dialog": {
+    "title": "Szerkesztés: {drink}"
+  },
+  "editor": {
+    "device": "Eszköz",
+    "enter_manually": "Kézi megadás...",
+    "entity_prefix": "Entitás-előtag",
+    "entity_prefix_placeholder": "Automatikusan felismerve, ha az integráció fut",
+    "no_devices_hint": "Nem található Melitta eszköz. Adja meg az előtagot kézzel, vagy ellenőrizze, hogy az integráció be van-e állítva.",
+    "name": "Név",
+    "show_header": "Fejléc megjelenítése",
+    "show_status": "Állapot megjelenítése",
+    "show_profiles": "Profilválasztó megjelenítése",
+    "show_recipes": "Receptválasztó megjelenítése",
+    "show_freestyle": "Freestyle recept megjelenítése",
+    "show_sommelier": "AI Sommelier megjelenítése",
+    "show_stats": "Csészestatisztika megjelenítése",
+    "show_maintenance": "Karbantartás megjelenítése",
+    "show_settings": "Beállítások megjelenítése",
+    "compact": "Kompakt mód"
+  }
+}

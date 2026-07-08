@@ -2,11 +2,41 @@
 // by the components on every update), falling back en -> key.
 
 import type { HomeAssistant } from "custom-card-helpers";
-import en from "./languages/en.json";
-import ru from "./languages/ru.json";
+import bg from "./languages/bg.json";
+import bs from "./languages/bs.json";
+import cs from "./languages/cs.json";
+import da from "./languages/da.json";
 import de from "./languages/de.json";
+import el from "./languages/el.json";
+import en from "./languages/en.json";
+import es from "./languages/es.json";
+import et from "./languages/et.json";
+import fi from "./languages/fi.json";
+import fr from "./languages/fr.json";
+import hr from "./languages/hr.json";
+import hu from "./languages/hu.json";
+import it from "./languages/it.json";
+import lt from "./languages/lt.json";
+import lv from "./languages/lv.json";
+import mk from "./languages/mk.json";
+import nb from "./languages/nb.json";
+import nl from "./languages/nl.json";
+import pl from "./languages/pl.json";
+import pt from "./languages/pt.json";
+import ro from "./languages/ro.json";
+import ru from "./languages/ru.json";
+import sk from "./languages/sk.json";
+import sl from "./languages/sl.json";
+import sr from "./languages/sr.json";
+import sv from "./languages/sv.json";
+import tr from "./languages/tr.json";
+import uk from "./languages/uk.json";
 
-const LANGUAGES: Record<string, unknown> = { en, ru, de };
+// Mirrors the language list of the melitta_barista integration.
+const LANGUAGES: Record<string, unknown> = {
+  bg, bs, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv,
+  mk, nb, nl, pl, pt, ro, ru, sk, sl, sr, sv, tr, uk,
+};
 
 let currentLang = "en";
 

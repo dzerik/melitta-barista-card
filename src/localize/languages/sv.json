@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Brygg",
+    "cancel": "Avbryt",
+    "save": "Spara",
+    "confirm": "Bekräfta",
+    "start": "Starta",
+    "loading": "Laddar...",
+    "retry": "Försök igen",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Ingen Melitta Barista-enhet hittades.",
+    "no_device_hint": "Kontrollera att integrationen är installerad och konfigurerad.",
+    "machine_offline": "Maskinen är offline"
+  },
+  "state": {
+    "ready": "Redo",
+    "brewing": "Bryggning",
+    "cleaning": "Rengöring",
+    "descaling": "Avkalkning",
+    "off": "Av",
+    "busy": "Upptagen",
+    "idle": "Inaktiv",
+    "unavailable": "Otillgänglig",
+    "unknown": "Okänd"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Mjölk",
+    "milk_froth": "Mjölkskum",
+    "water": "Varmt vatten"
+  },
+  "values": {
+    "very_mild": "M.Mild",
+    "mild": "Mild",
+    "medium": "Med",
+    "strong": "Stark",
+    "very_strong": "M.Stark",
+    "extra_strong": "X.Stark",
+    "cold": "Kall",
+    "normal": "Normal",
+    "high": "Hög",
+    "none": "Ingen",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kaffe",
+    "milk": "Mjölk",
+    "water": "Vatten",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Brygg {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x PÅ"
+  },
+  "recipes": {
+    "title": "Recept",
+    "all_recipes": "Alla recept"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Dryckens namn",
+    "component": "Komponent {n}",
+    "process": "Process",
+    "portion": "Portion",
+    "intensity": "Intensitet",
+    "aroma": "Arom",
+    "temp": "Temp",
+    "temperature": "Temperatur",
+    "shots": "Shots",
+    "portion_value": "{value} ml",
+    "brew_named": "Brygg {name}"
+  },
+  "sommelier": {
+    "title": "AI-sommelier",
+    "unavailable": "Sommelier är inte tillgänglig.",
+    "generating": "Genererar...",
+    "surprise_me": "Överraska mig",
+    "error_generate": "Sommelier: receptgenerering misslyckades",
+    "error_brew": "Sommelier: bryggning misslyckades"
+  },
+  "stats": {
+    "title": "Statistik",
+    "total_cups": "Totalt antal koppar",
+    "unavailable": "Koppstatistik är inte tillgänglig.",
+    "empty": "Inga koppar bryggda ännu"
+  },
+  "maintenance": {
+    "title": "Underhåll",
+    "groups": {
+      "cleaning": "Rengöring & avkalkning",
+      "filter": "Vattenfilter",
+      "other": "Övrigt"
+    },
+    "actions": {
+      "easy_clean": { "label": "Snabbrengöring", "desc": "Snabb sköljning av bryggenheten" },
+      "intensive_clean": { "label": "Intensiv rengöring", "desc": "Djuprengöring med tablett" },
+      "descaling": { "label": "Avkalkning", "desc": "Ta bort kalkavlagringar" },
+      "evaporating": { "label": "Avdunstning", "desc": "Töm ångsystemet" },
+      "filter_insert": { "label": "Sätt i filter", "desc": "Börja använda ett nytt vattenfilter" },
+      "filter_replace": { "label": "Byt filter", "desc": "Byt ut det aktuella vattenfiltret" },
+      "filter_remove": { "label": "Ta bort filter", "desc": "Sluta använda vattenfiltret" },
+      "switch_off": { "label": "Stäng av", "desc": "Stäng av maskinen" }
+    }
+  },
+  "settings": {
+    "title": "Inställningar",
+    "switches": {
+      "energy_saving": { "label": "Energibesparing", "desc": "Minska effekten vid inaktivitet" },
+      "auto_bean_select": { "label": "Auto bönval", "desc": "Välj bönbehållare automatiskt" },
+      "rinsing_disabled": { "label": "Sköljning avaktiverad", "desc": "Hoppa över automatisk sköljning" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Vattenhårdhet", "desc": "Kalibrera för vattentyp" },
+      "auto_off_after": { "label": "Auto av", "desc": "Minuter till avstängning" },
+      "brew_temperature": { "label": "Bryggtemperatur", "desc": "Bryggvattnets temperatur" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Mjukt", "2": "Medel", "3": "Hårt", "4": "Mycket hårt" },
+      "brew_temperature": { "0": "Låg", "1": "Normal", "2": "Hög" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Redigera: {drink}"
+  },
+  "editor": {
+    "device": "Enhet",
+    "enter_manually": "Ange manuellt...",
+    "entity_prefix": "Entitetsprefix",
+    "entity_prefix_placeholder": "Identifieras automatiskt om integrationen körs",
+    "no_devices_hint": "Inga Melitta-enheter hittades. Ange prefixet manuellt eller kontrollera att integrationen är konfigurerad.",
+    "name": "Namn",
+    "show_header": "Visa rubrik",
+    "show_status": "Visa status",
+    "show_profiles": "Visa profilväljare",
+    "show_recipes": "Visa receptväljare",
+    "show_freestyle": "Visa Freestyle-recept",
+    "show_sommelier": "Visa AI-sommelier",
+    "show_stats": "Visa koppstatistik",
+    "show_maintenance": "Visa underhåll",
+    "show_settings": "Visa inställningar",
+    "compact": "Kompakt läge"
+  }
+}

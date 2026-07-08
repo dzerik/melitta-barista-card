@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Παρασκευή",
+    "cancel": "Ακύρωση",
+    "save": "Αποθήκευση",
+    "confirm": "Επιβεβαίωση",
+    "start": "Έναρξη",
+    "loading": "Φόρτωση...",
+    "retry": "Επανάληψη",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Δεν βρέθηκε συσκευή Melitta Barista.",
+    "no_device_hint": "Βεβαιωθείτε ότι η ενσωμάτωση είναι εγκατεστημένη και ρυθμισμένη.",
+    "machine_offline": "Μηχανή εκτός σύνδεσης"
+  },
+  "state": {
+    "ready": "Έτοιμο",
+    "brewing": "Παρασκευή",
+    "cleaning": "Καθαρισμός",
+    "descaling": "Αφαλάτωση",
+    "off": "Σβηστό",
+    "busy": "Απασχολημένο",
+    "idle": "Αδρανές",
+    "unavailable": "Μη διαθέσιμο",
+    "unknown": "Άγνωστο"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Γάλα",
+    "milk_froth": "Αφρόγαλα",
+    "water": "Ζεστό νερό"
+  },
+  "values": {
+    "very_mild": "Π.Ήπιος",
+    "mild": "Ήπιος",
+    "medium": "Μέτριος",
+    "strong": "Δυνατός",
+    "very_strong": "Π.Δυνατ.",
+    "extra_strong": "X.Δυνατ.",
+    "cold": "Κρύο",
+    "normal": "Κανονικό",
+    "high": "Υψηλό",
+    "none": "Χωρίς",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Καφές",
+    "milk": "Γάλα",
+    "water": "Νερό",
+    "standard": "Στάνταρ",
+    "intense": "Έντονο+"
+  },
+  "directkey": {
+    "brew_drink": "Παρασκευή {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x ON"
+  },
+  "recipes": {
+    "title": "Συνταγή",
+    "all_recipes": "Όλες οι συνταγές"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Όνομα ροφήματος",
+    "component": "Συστατικό {n}",
+    "process": "Διαδικασία",
+    "portion": "Ποσότητα",
+    "intensity": "Ένταση",
+    "aroma": "Άρωμα",
+    "temp": "Θερμ.",
+    "temperature": "Θερμοκρασία",
+    "shots": "Δόσεις",
+    "portion_value": "{value} ml",
+    "brew_named": "Παρασκευή {name}"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Ο Sommelier δεν είναι διαθέσιμος.",
+    "generating": "Δημιουργία...",
+    "surprise_me": "Εξέπληξέ με",
+    "error_generate": "Sommelier: αποτυχία δημιουργίας συνταγής",
+    "error_brew": "Sommelier: αποτυχία παρασκευής"
+  },
+  "stats": {
+    "title": "Στατιστικά",
+    "total_cups": "Σύνολο φλιτζανιών",
+    "unavailable": "Τα στατιστικά φλιτζανιών δεν είναι διαθέσιμα.",
+    "empty": "Δεν έχουν παρασκευαστεί φλιτζάνια ακόμα"
+  },
+  "maintenance": {
+    "title": "Συντήρηση",
+    "groups": {
+      "cleaning": "Καθαρισμός & Αφαλάτωση",
+      "filter": "Φίλτρο νερού",
+      "other": "Άλλα"
+    },
+    "actions": {
+      "easy_clean": { "label": "Γρήγορος καθαρισμός", "desc": "Γρήγορο ξέπλυμα της μονάδας παρασκευής" },
+      "intensive_clean": { "label": "Εντατικός καθαρισμός", "desc": "Βαθύς καθαρισμός με ταμπλέτα" },
+      "descaling": { "label": "Αφαλάτωση", "desc": "Αφαίρεση συσσωρευμένων αλάτων" },
+      "evaporating": { "label": "Εξάτμιση", "desc": "Εκκένωση του συστήματος ατμού" },
+      "filter_insert": { "label": "Τοποθέτηση φίλτρου", "desc": "Έναρξη χρήσης νέου φίλτρου νερού" },
+      "filter_replace": { "label": "Αντικατάσταση φίλτρου", "desc": "Αντικατάσταση του τρέχοντος φίλτρου νερού" },
+      "filter_remove": { "label": "Αφαίρεση φίλτρου", "desc": "Διακοπή χρήσης του φίλτρου νερού" },
+      "switch_off": { "label": "Απενεργοποίηση", "desc": "Απενεργοποίηση της μηχανής" }
+    }
+  },
+  "settings": {
+    "title": "Ρυθμίσεις",
+    "switches": {
+      "energy_saving": { "label": "Εξοικονόμηση ενέργειας", "desc": "Μειωμένη κατανάλωση σε αδράνεια" },
+      "auto_bean_select": { "label": "Αυτόματη επιλογή κόκκων", "desc": "Αυτόματη επιλογή δοχείου κόκκων" },
+      "rinsing_disabled": { "label": "Ξέπλυμα απενεργοποιημένο", "desc": "Παράλειψη αυτόματου ξεπλύματος" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Σκληρότητα νερού", "desc": "Βαθμονόμηση για τον τύπο νερού" },
+      "auto_off_after": { "label": "Αυτόματη απενεργοποίηση", "desc": "Λεπτά έως την απενεργοποίηση" },
+      "brew_temperature": { "label": "Θερμοκρασία παρασκευής", "desc": "Θερμοκρασία νερού παρασκευής" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Μαλακό", "2": "Μέτριο", "3": "Σκληρό", "4": "Πολύ σκληρό" },
+      "brew_temperature": { "0": "Χαμηλή", "1": "Κανονική", "2": "Υψηλή" }
+    },
+    "minutes": "{value} λεπ."
+  },
+  "edit_dialog": {
+    "title": "Επεξεργασία: {drink}"
+  },
+  "editor": {
+    "device": "Συσκευή",
+    "enter_manually": "Χειροκίνητη εισαγωγή...",
+    "entity_prefix": "Πρόθεμα οντότητας",
+    "entity_prefix_placeholder": "Αυτόματος εντοπισμός εάν η ενσωμάτωση εκτελείται",
+    "no_devices_hint": "Δεν εντοπίστηκαν συσκευές Melitta. Εισαγάγετε το πρόθεμα χειροκίνητα ή ελέγξτε ότι η ενσωμάτωση είναι ρυθμισμένη.",
+    "name": "Όνομα",
+    "show_header": "Εμφάνιση κεφαλίδας",
+    "show_status": "Εμφάνιση κατάστασης",
+    "show_profiles": "Εμφάνιση επιλογής προφίλ",
+    "show_recipes": "Εμφάνιση επιλογής συνταγών",
+    "show_freestyle": "Εμφάνιση συνταγής Freestyle",
+    "show_sommelier": "Εμφάνιση AI Sommelier",
+    "show_stats": "Εμφάνιση στατιστικών φλιτζανιών",
+    "show_maintenance": "Εμφάνιση συντήρησης",
+    "show_settings": "Εμφάνιση ρυθμίσεων",
+    "compact": "Συμπαγής λειτουργία"
+  }
+}

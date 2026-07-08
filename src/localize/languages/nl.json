@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Zetten",
+    "cancel": "Annuleren",
+    "save": "Opslaan",
+    "confirm": "Bevestigen",
+    "start": "Starten",
+    "loading": "Laden...",
+    "retry": "Opnieuw",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Geen Melitta Barista-apparaat gevonden.",
+    "no_device_hint": "Controleer of de integratie is geïnstalleerd en geconfigureerd.",
+    "machine_offline": "Machine offline"
+  },
+  "state": {
+    "ready": "Gereed",
+    "brewing": "Zetten",
+    "cleaning": "Reiniging",
+    "descaling": "Ontkalking",
+    "off": "Uit",
+    "busy": "Bezig",
+    "idle": "Inactief",
+    "unavailable": "Niet beschikbaar",
+    "unknown": "Onbekend"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Melk",
+    "milk_froth": "Melkschuim",
+    "water": "Heet water"
+  },
+  "values": {
+    "very_mild": "Z.Mild",
+    "mild": "Mild",
+    "medium": "Med",
+    "strong": "Sterk",
+    "very_strong": "Z.Sterk",
+    "extra_strong": "X.Sterk",
+    "cold": "Koud",
+    "normal": "Normaal",
+    "high": "Hoog",
+    "none": "Geen",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Koffie",
+    "milk": "Melk",
+    "water": "Water",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "{drink} zetten",
+    "two_cups": "2x",
+    "two_cups_on": "2x AAN"
+  },
+  "recipes": {
+    "title": "Recept",
+    "all_recipes": "Alle recepten"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Naam van drank",
+    "component": "Component {n}",
+    "process": "Proces",
+    "portion": "Portie",
+    "intensity": "Intensiteit",
+    "aroma": "Aroma",
+    "temp": "Temp",
+    "temperature": "Temperatuur",
+    "shots": "Shots",
+    "portion_value": "{value} ml",
+    "brew_named": "{name} zetten"
+  },
+  "sommelier": {
+    "title": "AI-sommelier",
+    "unavailable": "Sommelier is niet beschikbaar.",
+    "generating": "Genereren...",
+    "surprise_me": "Verras me",
+    "error_generate": "Sommelier: recept genereren mislukt",
+    "error_brew": "Sommelier: zetten mislukt"
+  },
+  "stats": {
+    "title": "Statistieken",
+    "total_cups": "Totaal kopjes",
+    "unavailable": "Kopjesstatistieken niet beschikbaar.",
+    "empty": "Nog geen kopjes gezet"
+  },
+  "maintenance": {
+    "title": "Onderhoud",
+    "groups": {
+      "cleaning": "Reiniging & ontkalking",
+      "filter": "Waterfilter",
+      "other": "Overig"
+    },
+    "actions": {
+      "easy_clean": { "label": "Snelle reiniging", "desc": "Snelle spoeling van de zetgroep" },
+      "intensive_clean": { "label": "Intensieve reiniging", "desc": "Grondige reiniging met tablet" },
+      "descaling": { "label": "Ontkalking", "desc": "Kalkaanslag verwijderen" },
+      "evaporating": { "label": "Verdampen", "desc": "Stoomsysteem doorspoelen" },
+      "filter_insert": { "label": "Filter plaatsen", "desc": "Nieuw waterfilter in gebruik nemen" },
+      "filter_replace": { "label": "Filter vervangen", "desc": "Huidig waterfilter vervangen" },
+      "filter_remove": { "label": "Filter verwijderen", "desc": "Waterfilter niet meer gebruiken" },
+      "switch_off": { "label": "Uitschakelen", "desc": "Machine uitschakelen" }
+    }
+  },
+  "settings": {
+    "title": "Instellingen",
+    "switches": {
+      "energy_saving": { "label": "Energiebesparing", "desc": "Minder verbruik bij inactiviteit" },
+      "auto_bean_select": { "label": "Auto bonenselectie", "desc": "Bonenreservoir automatisch kiezen" },
+      "rinsing_disabled": { "label": "Spoeling uitgeschakeld", "desc": "Automatische spoeling overslaan" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Waterhardheid", "desc": "Kalibreren voor watertype" },
+      "auto_off_after": { "label": "Auto uit", "desc": "Minuten tot uitschakeling" },
+      "brew_temperature": { "label": "Zettemperatuur", "desc": "Temperatuur van het zetwater" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Zacht", "2": "Gemiddeld", "3": "Hard", "4": "Zeer hard" },
+      "brew_temperature": { "0": "Laag", "1": "Normaal", "2": "Hoog" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Bewerken: {drink}"
+  },
+  "editor": {
+    "device": "Apparaat",
+    "enter_manually": "Handmatig invoeren...",
+    "entity_prefix": "Entiteitsprefix",
+    "entity_prefix_placeholder": "Automatisch gedetecteerd als de integratie actief is",
+    "no_devices_hint": "Geen Melitta-apparaten gevonden. Voer de prefix handmatig in of controleer of de integratie is geconfigureerd.",
+    "name": "Naam",
+    "show_header": "Koptekst tonen",
+    "show_status": "Status tonen",
+    "show_profiles": "Profielkiezer tonen",
+    "show_recipes": "Receptkiezer tonen",
+    "show_freestyle": "Freestyle-recept tonen",
+    "show_sommelier": "AI-sommelier tonen",
+    "show_stats": "Kopjesstatistieken tonen",
+    "show_maintenance": "Onderhoud tonen",
+    "show_settings": "Instellingen tonen",
+    "compact": "Compacte modus"
+  }
+}

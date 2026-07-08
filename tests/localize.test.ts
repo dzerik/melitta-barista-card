@@ -1,5 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import type { HomeAssistant } from "custom-card-helpers";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
   localize,
   localizeOptional,
@@ -8,8 +10,6 @@ import {
   currentLanguage,
 } from "../src/localize/localize";
 import en from "../src/localize/languages/en.json";
-import ru from "../src/localize/languages/ru.json";
-import de from "../src/localize/languages/de.json";
 
 function hassWith(lang: string): HomeAssistant {
   return { locale: { language: lang } } as unknown as HomeAssistant;
@@ -48,7 +48,7 @@ describe("localize", () => {
   });
 
   it("falls back to en, then to the key itself", () => {
-    setLanguage(hassWith("fr"));
+    setLanguage(hassWith("ja"));
     expect(localize("common.cancel")).toBe("Cancel");
     expect(localize("no.such.key")).toBe("no.such.key");
     expect(localizeOptional("no.such.key")).toBeUndefined();
@@ -63,10 +63,27 @@ describe("translation completeness", () => {
     );
   }
 
+  const langDir = join(__dirname, "../src/localize/languages");
   const enKeys = flatten(en).sort();
+  const files = readdirSync(langDir).filter((f) => f.endsWith(".json"));
 
-  it("ru and de contain exactly the same keys as en", () => {
-    expect(flatten(ru).sort()).toEqual(enKeys);
-    expect(flatten(de).sort()).toEqual(enKeys);
+  it("mirrors the integration's language list (29 languages)", () => {
+    expect(files.length).toBe(29);
+  });
+
+  it.each(files)("%s contains exactly the same keys as en.json", (file) => {
+    const data = JSON.parse(readFileSync(join(langDir, file), "utf8"));
+    expect(flatten(data).sort()).toEqual(enKeys);
+  });
+
+  it.each(files)("%s preserves the {placeholders} of en.json", (file) => {
+    const data = JSON.parse(readFileSync(join(langDir, file), "utf8"));
+    const get = (obj: unknown, key: string) =>
+      key.split(".").reduce<any>((o, k) => o?.[k], obj) as string;
+    for (const key of enKeys) {
+      const placeholders = (get(en, key).match(/\{\w+\}/g) ?? []).sort();
+      const translated = (get(data, key).match(/\{\w+\}/g) ?? []).sort();
+      expect(translated, `${file}: ${key}`).toEqual(placeholders);
+    }
   });
 });

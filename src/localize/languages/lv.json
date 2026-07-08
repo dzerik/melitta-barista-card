@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Gatavot",
+    "cancel": "Atcelt",
+    "save": "Saglabāt",
+    "confirm": "Apstiprināt",
+    "start": "Sākt",
+    "loading": "Ielāde...",
+    "retry": "Mēģināt vēlreiz",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Melitta Barista ierīce nav atrasta.",
+    "no_device_hint": "Pārliecinieties, ka integrācija ir instalēta un konfigurēta.",
+    "machine_offline": "Aparāts bezsaistē"
+  },
+  "state": {
+    "ready": "Gatavs",
+    "brewing": "Gatavošana",
+    "cleaning": "Tīrīšana",
+    "descaling": "Atkaļķošana",
+    "off": "Izslēgts",
+    "busy": "Aizņemts",
+    "idle": "Gaidīšana",
+    "unavailable": "Nav pieejams",
+    "unknown": "Nezināms"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Piens",
+    "milk_froth": "Piena putas",
+    "water": "Karsts ūdens"
+  },
+  "values": {
+    "very_mild": "Ļ.maiga",
+    "mild": "Maiga",
+    "medium": "Vidēja",
+    "strong": "Stipra",
+    "very_strong": "Ļ.stipra",
+    "extra_strong": "X.stipra",
+    "cold": "Auksta",
+    "normal": "Normāla",
+    "high": "Augsta",
+    "none": "Nav",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kafija",
+    "milk": "Piens",
+    "water": "Ūdens",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Gatavot {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x IESL."
+  },
+  "recipes": {
+    "title": "Recepte",
+    "all_recipes": "Visas receptes"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Dzēriena nosaukums",
+    "component": "Komponents {n}",
+    "process": "Process",
+    "portion": "Porcija",
+    "intensity": "Stiprums",
+    "aroma": "Aromāts",
+    "temp": "Temp.",
+    "temperature": "Temperatūra",
+    "shots": "Šoti",
+    "portion_value": "{value} ml",
+    "brew_named": "Gatavot {name}"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Sommelier nav pieejams.",
+    "generating": "Ģenerē...",
+    "surprise_me": "Pārsteidz mani",
+    "error_generate": "Sommelier: neizdevās ģenerēt recepti",
+    "error_brew": "Sommelier: neizdevās pagatavot dzērienu"
+  },
+  "stats": {
+    "title": "Statistika",
+    "total_cups": "Kopā tases",
+    "unavailable": "Tašu statistika nav pieejama.",
+    "empty": "Vēl nav pagatavota neviena tase"
+  },
+  "maintenance": {
+    "title": "Apkope",
+    "groups": {
+      "cleaning": "Tīrīšana un atkaļķošana",
+      "filter": "Ūdens filtrs",
+      "other": "Cits"
+    },
+    "actions": {
+      "easy_clean": { "label": "Ātrā tīrīšana", "desc": "Ātra gatavošanas bloka skalošana" },
+      "intensive_clean": { "label": "Intensīvā tīrīšana", "desc": "Pamatīga tīrīšana ar tableti" },
+      "descaling": { "label": "Atkaļķošana", "desc": "Noņem kaļķa nogulsnes" },
+      "evaporating": { "label": "Iztvaikošana", "desc": "Iztukšo tvaika sistēmu" },
+      "filter_insert": { "label": "Ievietot filtru", "desc": "Sākt lietot jaunu ūdens filtru" },
+      "filter_replace": { "label": "Nomainīt filtru", "desc": "Nomainīt pašreizējo ūdens filtru" },
+      "filter_remove": { "label": "Izņemt filtru", "desc": "Pārtraukt ūdens filtra lietošanu" },
+      "switch_off": { "label": "Izslēgt", "desc": "Izslēgt aparātu" }
+    }
+  },
+  "settings": {
+    "title": "Iestatījumi",
+    "switches": {
+      "energy_saving": { "label": "Enerģijas taupīšana", "desc": "Samazina patēriņu gaidīšanas režīmā" },
+      "auto_bean_select": { "label": "Automātiska pupiņu izvēle", "desc": "Automātiski izvēlas pupiņu tvertni" },
+      "rinsing_disabled": { "label": "Skalošana izslēgta", "desc": "Izlaiž automātisko skalošanu" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Ūdens cietība", "desc": "Kalibrēšana atbilstoši ūdens tipam" },
+      "auto_off_after": { "label": "Auto izslēgšana", "desc": "Minūtes līdz izslēgšanai" },
+      "brew_temperature": { "label": "Brūvēšanas temperatūra", "desc": "Gatavošanas ūdens temperatūra" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Mīksts", "2": "Vidējs", "3": "Ciets", "4": "Ļoti ciets" },
+      "brew_temperature": { "0": "Zema", "1": "Normāla", "2": "Augsta" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Rediģēt: {drink}"
+  },
+  "editor": {
+    "device": "Ierīce",
+    "enter_manually": "Ievadīt manuāli...",
+    "entity_prefix": "Entītijas prefikss",
+    "entity_prefix_placeholder": "Tiek noteikts automātiski, ja integrācija darbojas",
+    "no_devices_hint": "Melitta ierīces nav atrastas. Ievadiet prefiksu manuāli vai pārbaudiet, vai integrācija ir konfigurēta.",
+    "name": "Nosaukums",
+    "show_header": "Rādīt galveni",
+    "show_status": "Rādīt statusu",
+    "show_profiles": "Rādīt profila izvēli",
+    "show_recipes": "Rādīt recepšu izvēli",
+    "show_freestyle": "Rādīt Freestyle recepti",
+    "show_sommelier": "Rādīt AI Sommelier",
+    "show_stats": "Rādīt tašu statistiku",
+    "show_maintenance": "Rādīt apkopi",
+    "show_settings": "Rādīt iestatījumus",
+    "compact": "Kompaktais režīms"
+  }
+}

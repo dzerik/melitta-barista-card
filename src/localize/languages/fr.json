@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Préparer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "confirm": "Confirmer",
+    "start": "Démarrer",
+    "loading": "Chargement...",
+    "retry": "Réessayer",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Aucun appareil Melitta Barista trouvé.",
+    "no_device_hint": "Vérifiez que l'intégration est installée et configurée.",
+    "machine_offline": "Machine hors ligne"
+  },
+  "state": {
+    "ready": "Prêt",
+    "brewing": "Préparation",
+    "cleaning": "Nettoyage",
+    "descaling": "Détartrage",
+    "off": "Éteint",
+    "busy": "Occupé",
+    "idle": "Inactif",
+    "unavailable": "Indisponible",
+    "unknown": "Inconnu"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Lait",
+    "milk_froth": "Mousse de lait",
+    "water": "Eau chaude"
+  },
+  "values": {
+    "very_mild": "T.Doux",
+    "mild": "Doux",
+    "medium": "Moyen",
+    "strong": "Fort",
+    "very_strong": "T.Fort",
+    "extra_strong": "X.Fort",
+    "cold": "Froid",
+    "normal": "Normal",
+    "high": "Élevé",
+    "none": "Aucun",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Café",
+    "milk": "Lait",
+    "water": "Eau",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Préparer {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x ON"
+  },
+  "recipes": {
+    "title": "Recette",
+    "all_recipes": "Toutes les recettes"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Nom de la boisson",
+    "component": "Composant {n}",
+    "process": "Processus",
+    "portion": "Portion",
+    "intensity": "Intensité",
+    "aroma": "Arôme",
+    "temp": "Temp.",
+    "temperature": "Température",
+    "shots": "Doses",
+    "portion_value": "{value} ml",
+    "brew_named": "Préparer {name}"
+  },
+  "sommelier": {
+    "title": "Sommelier IA",
+    "unavailable": "Le sommelier n'est pas disponible.",
+    "generating": "Génération...",
+    "surprise_me": "Surprends-moi",
+    "error_generate": "Sommelier : échec de la génération de la recette",
+    "error_brew": "Sommelier : échec de la préparation"
+  },
+  "stats": {
+    "title": "Statistiques",
+    "total_cups": "Tasses au total",
+    "unavailable": "Statistiques des tasses non disponibles.",
+    "empty": "Aucune tasse préparée pour l'instant"
+  },
+  "maintenance": {
+    "title": "Entretien",
+    "groups": {
+      "cleaning": "Nettoyage et détartrage",
+      "filter": "Filtre à eau",
+      "other": "Autre"
+    },
+    "actions": {
+      "easy_clean": { "label": "Nettoyage simple", "desc": "Rinçage rapide de l'unité d'infusion" },
+      "intensive_clean": { "label": "Nettoyage intensif", "desc": "Nettoyage en profondeur avec pastille" },
+      "descaling": { "label": "Détartrage", "desc": "Éliminer les dépôts de calcaire" },
+      "evaporating": { "label": "Évaporation", "desc": "Purger le système de vapeur" },
+      "filter_insert": { "label": "Insertion du filtre", "desc": "Commencer à utiliser un nouveau filtre à eau" },
+      "filter_replace": { "label": "Remplacement du filtre", "desc": "Remplacer le filtre à eau actuel" },
+      "filter_remove": { "label": "Retrait du filtre", "desc": "Ne plus utiliser le filtre à eau" },
+      "switch_off": { "label": "Éteindre", "desc": "Éteindre la machine" }
+    }
+  },
+  "settings": {
+    "title": "Réglages",
+    "switches": {
+      "energy_saving": { "label": "Économie d'énergie", "desc": "Réduire la consommation en veille" },
+      "auto_bean_select": { "label": "Sélection auto des grains", "desc": "Choix automatique du bac à grains" },
+      "rinsing_disabled": { "label": "Rinçage désactivé", "desc": "Ignorer le cycle de rinçage auto" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Dureté de l'eau", "desc": "Calibrer selon le type d'eau" },
+      "auto_off_after": { "label": "Arrêt auto", "desc": "Minutes avant l'extinction" },
+      "brew_temperature": { "label": "Température d'infusion", "desc": "Température de l'eau d'infusion" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Douce", "2": "Moyenne", "3": "Dure", "4": "Très dure" },
+      "brew_temperature": { "0": "Basse", "1": "Normale", "2": "Élevée" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Modifier : {drink}"
+  },
+  "editor": {
+    "device": "Appareil",
+    "enter_manually": "Saisir manuellement...",
+    "entity_prefix": "Préfixe d'entité",
+    "entity_prefix_placeholder": "Détecté automatiquement si l'intégration est active",
+    "no_devices_hint": "Aucun appareil Melitta détecté. Saisissez le préfixe manuellement ou vérifiez que l'intégration est configurée.",
+    "name": "Nom",
+    "show_header": "Afficher l'en-tête",
+    "show_status": "Afficher le statut",
+    "show_profiles": "Afficher le sélecteur de profil",
+    "show_recipes": "Afficher le sélecteur de recettes",
+    "show_freestyle": "Afficher la recette Freestyle",
+    "show_sommelier": "Afficher le Sommelier IA",
+    "show_stats": "Afficher les statistiques de tasses",
+    "show_maintenance": "Afficher l'entretien",
+    "show_settings": "Afficher les réglages",
+    "compact": "Mode compact"
+  }
+}

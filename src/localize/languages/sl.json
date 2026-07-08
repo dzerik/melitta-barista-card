@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Pripravi",
+    "cancel": "Prekliči",
+    "save": "Shrani",
+    "confirm": "Potrdi",
+    "start": "Start",
+    "loading": "Nalaganje...",
+    "retry": "Poskusi znova",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Naprava Melitta Barista ni bila najdena.",
+    "no_device_hint": "Preverite, ali je integracija nameščena in konfigurirana.",
+    "machine_offline": "Aparat ni povezan"
+  },
+  "state": {
+    "ready": "Pripravljen",
+    "brewing": "Priprava",
+    "cleaning": "Čiščenje",
+    "descaling": "Razapnjevanje",
+    "off": "Izklopljeno",
+    "busy": "Zaseden",
+    "idle": "Nedejavno",
+    "unavailable": "Nedostopen",
+    "unknown": "Neznano"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Mleko",
+    "milk_froth": "Mlečna pena",
+    "water": "Vroča voda"
+  },
+  "values": {
+    "very_mild": "Z. blaga",
+    "mild": "Blaga",
+    "medium": "Srednja",
+    "strong": "Močna",
+    "very_strong": "Z. močna",
+    "extra_strong": "Ekstra",
+    "cold": "Hladno",
+    "normal": "Običajno",
+    "high": "Visoko",
+    "none": "Brez",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kava",
+    "milk": "Mleko",
+    "water": "Voda",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Pripravi {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x VKLOP"
+  },
+  "recipes": {
+    "title": "Recept",
+    "all_recipes": "Vsi recepti"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Ime napitka",
+    "component": "Komponenta {n}",
+    "process": "Postopek",
+    "portion": "Porcija",
+    "intensity": "Jakost",
+    "aroma": "Aroma",
+    "temp": "Temp.",
+    "temperature": "Temperatura",
+    "shots": "Šoti",
+    "portion_value": "{value} ml",
+    "brew_named": "Pripravi {name}"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Sommelier ni na voljo.",
+    "generating": "Ustvarjanje...",
+    "surprise_me": "Preseneti me",
+    "error_generate": "Sommelier: ustvarjanje recepta ni uspelo",
+    "error_brew": "Sommelier: priprava ni uspela"
+  },
+  "stats": {
+    "title": "Statistika",
+    "total_cups": "Skupaj skodelic",
+    "unavailable": "Statistika skodelic ni na voljo.",
+    "empty": "Ni še pripravljenih skodelic"
+  },
+  "maintenance": {
+    "title": "Vzdrževanje",
+    "groups": {
+      "cleaning": "Čiščenje in razapnjevanje",
+      "filter": "Vodni filter",
+      "other": "Drugo"
+    },
+    "actions": {
+      "easy_clean": { "label": "Hitro čiščenje", "desc": "Hitro izpiranje kuhalne enote" },
+      "intensive_clean": { "label": "Intenzivno čiščenje", "desc": "Globinsko čiščenje s tableto" },
+      "descaling": { "label": "Razapnjevanje", "desc": "Odstranjevanje vodnega kamna" },
+      "evaporating": { "label": "Izhlapevanje", "desc": "Izpihovanje parnega sistema" },
+      "filter_insert": { "label": "Vstavi filter", "desc": "Začni uporabljati nov vodni filter" },
+      "filter_replace": { "label": "Zamenjaj filter", "desc": "Zamenjaj trenutni vodni filter" },
+      "filter_remove": { "label": "Odstrani filter", "desc": "Prenehaj uporabljati vodni filter" },
+      "switch_off": { "label": "Izklopi", "desc": "Izklopi aparat" }
+    }
+  },
+  "settings": {
+    "title": "Nastavitve",
+    "switches": {
+      "energy_saving": { "label": "Varčevanje z energijo", "desc": "Manjša poraba v mirovanju" },
+      "auto_bean_select": { "label": "Samodejni izbor zrn", "desc": "Samodejna izbira posode za zrna" },
+      "rinsing_disabled": { "label": "Izpiranje izklopljeno", "desc": "Preskoči samodejno izpiranje" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Trdota vode", "desc": "Umerjanje glede na vrsto vode" },
+      "auto_off_after": { "label": "Samodejni izklop", "desc": "Minut do izklopa" },
+      "brew_temperature": { "label": "Temperatura priprave", "desc": "Temperatura vode za pripravo" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Mehka", "2": "Srednja", "3": "Trda", "4": "Zelo trda" },
+      "brew_temperature": { "0": "Nizka", "1": "Običajna", "2": "Visoka" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Uredi: {drink}"
+  },
+  "editor": {
+    "device": "Naprava",
+    "enter_manually": "Vnesi ročno...",
+    "entity_prefix": "Predpona entitet",
+    "entity_prefix_placeholder": "Samodejno zaznano, če integracija deluje",
+    "no_devices_hint": "Ni zaznanih naprav Melitta. Vnesite predpono ročno ali preverite, ali je integracija konfigurirana.",
+    "name": "Ime",
+    "show_header": "Prikaži glavo",
+    "show_status": "Prikaži stanje",
+    "show_profiles": "Prikaži izbiro profila",
+    "show_recipes": "Prikaži izbiro recepta",
+    "show_freestyle": "Prikaži recept Freestyle",
+    "show_sommelier": "Prikaži AI Sommelier",
+    "show_stats": "Prikaži statistiko skodelic",
+    "show_maintenance": "Prikaži vzdrževanje",
+    "show_settings": "Prikaži nastavitve",
+    "compact": "Kompaktni način"
+  }
+}

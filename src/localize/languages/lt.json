@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Ruošti",
+    "cancel": "Atšaukti",
+    "save": "Išsaugoti",
+    "confirm": "Patvirtinti",
+    "start": "Pradėti",
+    "loading": "Įkeliama...",
+    "retry": "Bandyti dar kartą",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Melitta Barista įrenginys nerastas.",
+    "no_device_hint": "Įsitikinkite, kad integracija įdiegta ir sukonfigūruota.",
+    "machine_offline": "Aparatas atsijungęs"
+  },
+  "state": {
+    "ready": "Paruoštas",
+    "brewing": "Ruošimas",
+    "cleaning": "Valymas",
+    "descaling": "Kalkių šalinimas",
+    "off": "Išjungtas",
+    "busy": "Užimtas",
+    "idle": "Laukimas",
+    "unavailable": "Nepasiekiamas",
+    "unknown": "Nežinomas"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Pienas",
+    "milk_froth": "Pieno puta",
+    "water": "Karštas vanduo"
+  },
+  "values": {
+    "very_mild": "L.švelni",
+    "mild": "Švelni",
+    "medium": "Vidut.",
+    "strong": "Stipri",
+    "very_strong": "L.stipri",
+    "extra_strong": "X.stipri",
+    "cold": "Šalta",
+    "normal": "Įprasta",
+    "high": "Aukšta",
+    "none": "Nėra",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kava",
+    "milk": "Pienas",
+    "water": "Vanduo",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Ruošti {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x ĮJ."
+  },
+  "recipes": {
+    "title": "Receptas",
+    "all_recipes": "Visi receptai"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Gėrimo pavadinimas",
+    "component": "Komponentas {n}",
+    "process": "Procesas",
+    "portion": "Porcija",
+    "intensity": "Stiprumas",
+    "aroma": "Aromatas",
+    "temp": "Temp.",
+    "temperature": "Temperatūra",
+    "shots": "Šotai",
+    "portion_value": "{value} ml",
+    "brew_named": "Ruošti {name}"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Sommelier nepasiekiamas.",
+    "generating": "Generuojama...",
+    "surprise_me": "Nustebink mane",
+    "error_generate": "Sommelier: nepavyko sugeneruoti recepto",
+    "error_brew": "Sommelier: nepavyko paruošti gėrimo"
+  },
+  "stats": {
+    "title": "Statistika",
+    "total_cups": "Iš viso puodelių",
+    "unavailable": "Puodelių statistika nepasiekiama.",
+    "empty": "Dar neparuoštas nė vienas puodelis"
+  },
+  "maintenance": {
+    "title": "Priežiūra",
+    "groups": {
+      "cleaning": "Valymas ir kalkių šalinimas",
+      "filter": "Vandens filtras",
+      "other": "Kita"
+    },
+    "actions": {
+      "easy_clean": { "label": "Greitas valymas", "desc": "Greitas ruošimo bloko skalavimas" },
+      "intensive_clean": { "label": "Intensyvus valymas", "desc": "Kruopštus valymas su tablete" },
+      "descaling": { "label": "Kalkių šalinimas", "desc": "Pašalina kalkių nuosėdas" },
+      "evaporating": { "label": "Garinimas", "desc": "Išvalo garų sistemą" },
+      "filter_insert": { "label": "Įdėti filtrą", "desc": "Pradėti naudoti naują vandens filtrą" },
+      "filter_replace": { "label": "Pakeisti filtrą", "desc": "Pakeisti esamą vandens filtrą" },
+      "filter_remove": { "label": "Išimti filtrą", "desc": "Nustoti naudoti vandens filtrą" },
+      "switch_off": { "label": "Išjungti", "desc": "Išjungti aparatą" }
+    }
+  },
+  "settings": {
+    "title": "Nustatymai",
+    "switches": {
+      "energy_saving": { "label": "Energijos taupymas", "desc": "Mažina energijos sąnaudas laukiant" },
+      "auto_bean_select": { "label": "Automatinis pupelių pasirinkimas", "desc": "Automatiškai parenka pupelių talpyklą" },
+      "rinsing_disabled": { "label": "Skalavimas išjungtas", "desc": "Praleidžia automatinį skalavimą" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Vandens kietumas", "desc": "Kalibravimas pagal vandens tipą" },
+      "auto_off_after": { "label": "Auto išjungimas", "desc": "Minutės iki išsijungimo" },
+      "brew_temperature": { "label": "Ruošimo temperatūra", "desc": "Ruošimo vandens temperatūra" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Minkštas", "2": "Vidutinis", "3": "Kietas", "4": "Labai kietas" },
+      "brew_temperature": { "0": "Žema", "1": "Įprasta", "2": "Aukšta" }
+    },
+    "minutes": "{value} min."
+  },
+  "edit_dialog": {
+    "title": "Redaguoti: {drink}"
+  },
+  "editor": {
+    "device": "Įrenginys",
+    "enter_manually": "Įvesti rankiniu būdu...",
+    "entity_prefix": "Esybės prefiksas",
+    "entity_prefix_placeholder": "Aptinkama automatiškai, jei integracija veikia",
+    "no_devices_hint": "Melitta įrenginių neaptikta. Įveskite prefiksą rankiniu būdu arba patikrinkite, ar integracija sukonfigūruota.",
+    "name": "Pavadinimas",
+    "show_header": "Rodyti antraštę",
+    "show_status": "Rodyti būseną",
+    "show_profiles": "Rodyti profilio pasirinkimą",
+    "show_recipes": "Rodyti receptų pasirinkimą",
+    "show_freestyle": "Rodyti Freestyle receptą",
+    "show_sommelier": "Rodyti AI Sommelier",
+    "show_stats": "Rodyti puodelių statistiką",
+    "show_maintenance": "Rodyti priežiūrą",
+    "show_settings": "Rodyti nustatymus",
+    "compact": "Kompaktiškas režimas"
+  }
+}

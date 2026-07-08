@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Valmista",
+    "cancel": "Peruuta",
+    "save": "Tallenna",
+    "confirm": "Vahvista",
+    "start": "Aloita",
+    "loading": "Ladataan...",
+    "retry": "Yritä uudelleen",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Melitta Barista -laitetta ei löytynyt.",
+    "no_device_hint": "Varmista, että integraatio on asennettu ja määritetty.",
+    "machine_offline": "Kone on offline-tilassa"
+  },
+  "state": {
+    "ready": "Valmis",
+    "brewing": "Keittäminen",
+    "cleaning": "Puhdistus",
+    "descaling": "Kalkinpoisto",
+    "off": "Pois",
+    "busy": "Varattu",
+    "idle": "Odottaa",
+    "unavailable": "Ei saatavilla",
+    "unknown": "Tuntematon"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Maito",
+    "milk_froth": "Maitovaahto",
+    "water": "Kuuma vesi"
+  },
+  "values": {
+    "very_mild": "E.Mieto",
+    "mild": "Mieto",
+    "medium": "Keski",
+    "strong": "Vahva",
+    "very_strong": "E.Vahva",
+    "extra_strong": "X.Vahva",
+    "cold": "Kylmä",
+    "normal": "Norm.",
+    "high": "Korkea",
+    "none": "Ei",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kahvi",
+    "milk": "Maito",
+    "water": "Vesi",
+    "standard": "Vakio",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Valmista {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x ON"
+  },
+  "recipes": {
+    "title": "Resepti",
+    "all_recipes": "Kaikki reseptit"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Juoman nimi",
+    "component": "Komponentti {n}",
+    "process": "Prosessi",
+    "portion": "Annos",
+    "intensity": "Vahvuus",
+    "aroma": "Aromi",
+    "temp": "Lämpö",
+    "temperature": "Lämpötila",
+    "shots": "Shotit",
+    "portion_value": "{value} ml",
+    "brew_named": "Valmista {name}"
+  },
+  "sommelier": {
+    "title": "AI-sommelier",
+    "unavailable": "Sommelier ei ole käytettävissä.",
+    "generating": "Luodaan...",
+    "surprise_me": "Yllätä minut",
+    "error_generate": "Sommelier: reseptin luonti epäonnistui",
+    "error_brew": "Sommelier: valmistus epäonnistui"
+  },
+  "stats": {
+    "title": "Tilastot",
+    "total_cups": "Kupit yhteensä",
+    "unavailable": "Kuppitilastot eivät ole saatavilla.",
+    "empty": "Ei vielä valmistettuja kuppeja"
+  },
+  "maintenance": {
+    "title": "Huolto",
+    "groups": {
+      "cleaning": "Puhdistus ja kalkinpoisto",
+      "filter": "Vesisuodatin",
+      "other": "Muut"
+    },
+    "actions": {
+      "easy_clean": { "label": "Pikapuhdistus", "desc": "Keittoyksikön pikahuuhtelu" },
+      "intensive_clean": { "label": "Tehopuhdistus", "desc": "Perusteellinen puhdistus tabletilla" },
+      "descaling": { "label": "Kalkinpoisto", "desc": "Poista kalkkikertymät" },
+      "evaporating": { "label": "Höyrystys", "desc": "Tyhjennä höyryjärjestelmä" },
+      "filter_insert": { "label": "Aseta suodatin", "desc": "Ota uusi vesisuodatin käyttöön" },
+      "filter_replace": { "label": "Vaihda suodatin", "desc": "Vaihda nykyinen vesisuodatin" },
+      "filter_remove": { "label": "Poista suodatin", "desc": "Poista vesisuodatin käytöstä" },
+      "switch_off": { "label": "Sammuta", "desc": "Sammuta kone" }
+    }
+  },
+  "settings": {
+    "title": "Asetukset",
+    "switches": {
+      "energy_saving": { "label": "Energiansäästö", "desc": "Vähennä tehoa lepotilassa" },
+      "auto_bean_select": { "label": "Automaattinen papuvalinta", "desc": "Valitse papusäiliö automaattisesti" },
+      "rinsing_disabled": { "label": "Huuhtelu pois käytöstä", "desc": "Ohita automaattinen huuhtelu" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Veden kovuus", "desc": "Kalibroi vesityypin mukaan" },
+      "auto_off_after": { "label": "Automaattisammutus", "desc": "Minuutit sammutukseen" },
+      "brew_temperature": { "label": "Keittolämpötila", "desc": "Keittoveden lämpötila" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Pehmeä", "2": "Keskikova", "3": "Kova", "4": "Erittäin kova" },
+      "brew_temperature": { "0": "Matala", "1": "Normaali", "2": "Korkea" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Muokkaa: {drink}"
+  },
+  "editor": {
+    "device": "Laite",
+    "enter_manually": "Syötä manuaalisesti...",
+    "entity_prefix": "Entiteettietuliite",
+    "entity_prefix_placeholder": "Tunnistetaan automaattisesti, jos integraatio on käynnissä",
+    "no_devices_hint": "Melitta-laitteita ei löytynyt. Syötä etuliite manuaalisesti tai tarkista, että integraatio on määritetty.",
+    "name": "Nimi",
+    "show_header": "Näytä otsikko",
+    "show_status": "Näytä tila",
+    "show_profiles": "Näytä profiilivalitsin",
+    "show_recipes": "Näytä reseptivalitsin",
+    "show_freestyle": "Näytä Freestyle-resepti",
+    "show_sommelier": "Näytä AI-sommelier",
+    "show_stats": "Näytä kuppitilastot",
+    "show_maintenance": "Näytä huolto",
+    "show_settings": "Näytä asetukset",
+    "compact": "Tiivis tila"
+  }
+}

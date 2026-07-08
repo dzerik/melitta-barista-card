@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Pripraviť",
+    "cancel": "Zrušiť",
+    "save": "Uložiť",
+    "confirm": "Potvrdiť",
+    "start": "Štart",
+    "loading": "Načítava sa...",
+    "retry": "Skúsiť znova",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Kávovar Melitta Barista sa nenašiel.",
+    "no_device_hint": "Uistite sa, že je integrácia nainštalovaná a nakonfigurovaná.",
+    "machine_offline": "Kávovar offline"
+  },
+  "state": {
+    "ready": "Pripravený",
+    "brewing": "Príprava",
+    "cleaning": "Čistenie",
+    "descaling": "Odvápňovanie",
+    "off": "Vypnuté",
+    "busy": "Zaneprázdnený",
+    "idle": "Nečinný",
+    "unavailable": "Nedostupný",
+    "unknown": "Neznámy"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Mlieko",
+    "milk_froth": "Mliečna pena",
+    "water": "Horúca voda"
+  },
+  "values": {
+    "very_mild": "V.jemná",
+    "mild": "Jemná",
+    "medium": "Stredná",
+    "strong": "Silná",
+    "very_strong": "V.silná",
+    "extra_strong": "Extra",
+    "cold": "Studená",
+    "normal": "Norm.",
+    "high": "Vysoká",
+    "none": "Žiadna",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Káva",
+    "milk": "Mlieko",
+    "water": "Voda",
+    "standard": "Štd",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Pripraviť: {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x ZAP"
+  },
+  "recipes": {
+    "title": "Recept",
+    "all_recipes": "Všetky recepty"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Názov nápoja",
+    "component": "Zložka {n}",
+    "process": "Proces",
+    "portion": "Porcia",
+    "intensity": "Sila",
+    "aroma": "Aróma",
+    "temp": "Tepl.",
+    "temperature": "Teplota",
+    "shots": "Shoty",
+    "portion_value": "{value} ml",
+    "brew_named": "Pripraviť {name}"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Sommelier nie je dostupný.",
+    "generating": "Generovanie...",
+    "surprise_me": "Prekvap ma",
+    "error_generate": "Sommelier: generovanie receptu zlyhalo",
+    "error_brew": "Sommelier: prípravu sa nepodarilo spustiť"
+  },
+  "stats": {
+    "title": "Štatistiky",
+    "total_cups": "Celkom šálok",
+    "unavailable": "Štatistiky šálok nie sú dostupné.",
+    "empty": "Zatiaľ žiadne pripravené šálky"
+  },
+  "maintenance": {
+    "title": "Údržba",
+    "groups": {
+      "cleaning": "Čistenie a odvápňovanie",
+      "filter": "Vodný filter",
+      "other": "Ostatné"
+    },
+    "actions": {
+      "easy_clean": { "label": "Rýchle čistenie", "desc": "Rýchle prepláchnutie sparovacej jednotky" },
+      "intensive_clean": { "label": "Intenzívne čistenie", "desc": "Hĺbkové čistenie s tabletou" },
+      "descaling": { "label": "Odvápnenie", "desc": "Odstránenie vodného kameňa" },
+      "evaporating": { "label": "Odparovanie", "desc": "Prefúknutie parného systému" },
+      "filter_insert": { "label": "Vložiť filter", "desc": "Začať používať nový vodný filter" },
+      "filter_replace": { "label": "Vymeniť filter", "desc": "Vymeniť aktuálny vodný filter" },
+      "filter_remove": { "label": "Odobrať filter", "desc": "Prestať používať vodný filter" },
+      "switch_off": { "label": "Vypnúť", "desc": "Vypnúť kávovar" }
+    }
+  },
+  "settings": {
+    "title": "Nastavenia",
+    "switches": {
+      "energy_saving": { "label": "Úspora energie", "desc": "Znížiť spotrebu v nečinnosti" },
+      "auto_bean_select": { "label": "Automatický výber zŕn", "desc": "Automatická voľba zásobníka zŕn" },
+      "rinsing_disabled": { "label": "Oplach vypnutý", "desc": "Preskočiť automatický oplach" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Tvrdosť vody", "desc": "Kalibrácia podľa typu vody" },
+      "auto_off_after": { "label": "Automatické vypnutie", "desc": "Minút do vypnutia" },
+      "brew_temperature": { "label": "Teplota prípravy", "desc": "Teplota vody pri príprave" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Mäkká", "2": "Stredná", "3": "Tvrdá", "4": "Veľmi tvrdá" },
+      "brew_temperature": { "0": "Nízka", "1": "Normálna", "2": "Vysoká" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Upraviť: {drink}"
+  },
+  "editor": {
+    "device": "Zariadenie",
+    "enter_manually": "Zadať ručne...",
+    "entity_prefix": "Prefix entít",
+    "entity_prefix_placeholder": "Zistí sa automaticky, ak integrácia beží",
+    "no_devices_hint": "Nenašli sa žiadne zariadenia Melitta. Zadajte prefix ručne alebo skontrolujte, či je integrácia nakonfigurovaná.",
+    "name": "Názov",
+    "show_header": "Zobraziť hlavičku",
+    "show_status": "Zobraziť stav",
+    "show_profiles": "Zobraziť výber profilu",
+    "show_recipes": "Zobraziť výber receptu",
+    "show_freestyle": "Zobraziť Freestyle",
+    "show_sommelier": "Zobraziť AI Sommelier",
+    "show_stats": "Zobraziť štatistiky šálok",
+    "show_maintenance": "Zobraziť údržbu",
+    "show_settings": "Zobraziť nastavenia",
+    "compact": "Kompaktný režim"
+  }
+}

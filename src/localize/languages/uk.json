@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Приготувати",
+    "cancel": "Скасувати",
+    "save": "Зберегти",
+    "confirm": "Підтвердити",
+    "start": "Старт",
+    "loading": "Завантаження...",
+    "retry": "Повторити",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Кавомашину Melitta Barista не знайдено.",
+    "no_device_hint": "Переконайтеся, що інтеграція встановлена і налаштована.",
+    "machine_offline": "Машина не в мережі"
+  },
+  "state": {
+    "ready": "Готова",
+    "brewing": "Приготування",
+    "cleaning": "Очищення",
+    "descaling": "Декальцинація",
+    "off": "Вимкнено",
+    "busy": "Зайнята",
+    "idle": "Очікування",
+    "unavailable": "Недоступна",
+    "unknown": "Невідомо"
+  },
+  "drinks": {
+    "espresso": "Еспресо",
+    "cafe_creme": "Кафе крем",
+    "cappuccino": "Капучино",
+    "latte_macchiato": "Лате макіато",
+    "milk": "Молоко",
+    "milk_froth": "Молочна пінка",
+    "water": "Гаряча вода"
+  },
+  "values": {
+    "very_mild": "Д.м'яка",
+    "mild": "М'яка",
+    "medium": "Серед.",
+    "strong": "Міцна",
+    "very_strong": "Д.міцна",
+    "extra_strong": "Екстра",
+    "cold": "Холодна",
+    "normal": "Норм.",
+    "high": "Вис.",
+    "none": "Немає",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Кава",
+    "milk": "Молоко",
+    "water": "Вода",
+    "standard": "Стд",
+    "intense": "Інт+"
+  },
+  "directkey": {
+    "brew_drink": "Готувати: {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x УВІМК"
+  },
+  "recipes": {
+    "title": "Рецепт",
+    "all_recipes": "Усі рецепти"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Назва напою",
+    "component": "Компонент {n}",
+    "process": "Процес",
+    "portion": "Порція",
+    "intensity": "Міцність",
+    "aroma": "Аромат",
+    "temp": "Темп.",
+    "temperature": "Температура",
+    "shots": "Шоти",
+    "portion_value": "{value} мл",
+    "brew_named": "Готувати {name}"
+  },
+  "sommelier": {
+    "title": "AI Сомельє",
+    "unavailable": "Сомельє недоступний.",
+    "generating": "Генерація...",
+    "surprise_me": "Здивуй мене",
+    "error_generate": "Сомельє: не вдалося згенерувати рецепт",
+    "error_brew": "Сомельє: не вдалося запустити приготування"
+  },
+  "stats": {
+    "title": "Статистика",
+    "total_cups": "Усього чашок",
+    "unavailable": "Статистика чашок недоступна.",
+    "empty": "Ще немає приготованих чашок"
+  },
+  "maintenance": {
+    "title": "Обслуговування",
+    "groups": {
+      "cleaning": "Очищення та декальцинація",
+      "filter": "Фільтр води",
+      "other": "Інше"
+    },
+    "actions": {
+      "easy_clean": { "label": "Швидке очищення", "desc": "Швидке промивання заварювального блока" },
+      "intensive_clean": { "label": "Інтенсивне очищення", "desc": "Глибоке очищення з таблеткою" },
+      "descaling": { "label": "Декальцинація", "desc": "Видалення вапняного нальоту" },
+      "evaporating": { "label": "Випаровування", "desc": "Продування парової системи" },
+      "filter_insert": { "label": "Встановити фільтр", "desc": "Почати використовувати новий фільтр води" },
+      "filter_replace": { "label": "Замінити фільтр", "desc": "Замінити поточний фільтр води" },
+      "filter_remove": { "label": "Видалити фільтр", "desc": "Припинити використання фільтра" },
+      "switch_off": { "label": "Вимкнути", "desc": "Вимкнути машину" }
+    }
+  },
+  "settings": {
+    "title": "Налаштування",
+    "switches": {
+      "energy_saving": { "label": "Енергозбереження", "desc": "Економія енергії в режимі очікування" },
+      "auto_bean_select": { "label": "Автовибір зерен", "desc": "Автовибір бункера із зернами" },
+      "rinsing_disabled": { "label": "Ополіскування вимкнено", "desc": "Пропускати автоматичне ополіскування" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Жорсткість води", "desc": "Калібрування під тип води" },
+      "auto_off_after": { "label": "Автовимкнення", "desc": "Хвилин до вимкнення" },
+      "brew_temperature": { "label": "Температура", "desc": "Температура води при заварюванні" }
+    },
+    "levels": {
+      "water_hardness": { "1": "М'яка", "2": "Середня", "3": "Жорстка", "4": "Дуже жорстка" },
+      "brew_temperature": { "0": "Низька", "1": "Норм.", "2": "Висока" }
+    },
+    "minutes": "{value} хв"
+  },
+  "edit_dialog": {
+    "title": "Змінити: {drink}"
+  },
+  "editor": {
+    "device": "Пристрій",
+    "enter_manually": "Ввести вручну...",
+    "entity_prefix": "Префікс сутностей",
+    "entity_prefix_placeholder": "Визначається автоматично, якщо інтеграція запущена",
+    "no_devices_hint": "Пристрої Melitta не знайдено. Введіть префікс вручну або перевірте налаштування інтеграції.",
+    "name": "Назва",
+    "show_header": "Показувати заголовок",
+    "show_status": "Показувати статус",
+    "show_profiles": "Показувати вибір профілю",
+    "show_recipes": "Показувати вибір рецепта",
+    "show_freestyle": "Показувати Freestyle",
+    "show_sommelier": "Показувати AI Сомельє",
+    "show_stats": "Показувати статистику чашок",
+    "show_maintenance": "Показувати обслуговування",
+    "show_settings": "Показувати налаштування",
+    "compact": "Компактний режим"
+  }
+}

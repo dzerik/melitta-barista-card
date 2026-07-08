@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Demle",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "confirm": "Onayla",
+    "start": "Başlat",
+    "loading": "Yükleniyor...",
+    "retry": "Tekrar dene",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Melitta Barista cihazı bulunamadı.",
+    "no_device_hint": "Entegrasyonun kurulu ve yapılandırılmış olduğundan emin olun.",
+    "machine_offline": "Makine çevrimdışı"
+  },
+  "state": {
+    "ready": "Hazır",
+    "brewing": "Demleme",
+    "cleaning": "Temizlik",
+    "descaling": "Kireç çözme",
+    "off": "Kapalı",
+    "busy": "Meşgul",
+    "idle": "Boşta",
+    "unavailable": "Kullanılamaz",
+    "unknown": "Bilinmiyor"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Süt",
+    "milk_froth": "Süt köpüğü",
+    "water": "Sıcak su"
+  },
+  "values": {
+    "very_mild": "Ç.Hafif",
+    "mild": "Hafif",
+    "medium": "Orta",
+    "strong": "Sert",
+    "very_strong": "Ç.Sert",
+    "extra_strong": "X.Sert",
+    "cold": "Soğuk",
+    "normal": "Normal",
+    "high": "Yüksek",
+    "none": "Yok",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kahve",
+    "milk": "Süt",
+    "water": "Su",
+    "standard": "Std",
+    "intense": "Yoğun+"
+  },
+  "directkey": {
+    "brew_drink": "{drink} demle",
+    "two_cups": "2x",
+    "two_cups_on": "2x AÇIK"
+  },
+  "recipes": {
+    "title": "Tarif",
+    "all_recipes": "Tüm tarifler"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "İçecek adı",
+    "component": "Bileşen {n}",
+    "process": "İşlem",
+    "portion": "Porsiyon",
+    "intensity": "Yoğunluk",
+    "aroma": "Aroma",
+    "temp": "Sıc.",
+    "temperature": "Sıcaklık",
+    "shots": "Shot",
+    "portion_value": "{value} ml",
+    "brew_named": "{name} demle"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Sommelier kullanılamıyor.",
+    "generating": "Oluşturuluyor...",
+    "surprise_me": "Beni şaşırt",
+    "error_generate": "Sommelier: tarif oluşturma başarısız",
+    "error_brew": "Sommelier: demleme başarısız"
+  },
+  "stats": {
+    "title": "İstatistik",
+    "total_cups": "Toplam fincan",
+    "unavailable": "Fincan istatistikleri mevcut değil.",
+    "empty": "Henüz fincan demlenmedi"
+  },
+  "maintenance": {
+    "title": "Bakım",
+    "groups": {
+      "cleaning": "Temizlik ve kireç çözme",
+      "filter": "Su filtresi",
+      "other": "Diğer"
+    },
+    "actions": {
+      "easy_clean": { "label": "Hızlı temizlik", "desc": "Demleme ünitesinin hızlı durulanması" },
+      "intensive_clean": { "label": "Yoğun temizlik", "desc": "Tabletle derinlemesine temizlik" },
+      "descaling": { "label": "Kireç çözme", "desc": "Kireç birikintilerini giderir" },
+      "evaporating": { "label": "Buharlaştırma", "desc": "Buhar sistemini boşaltır" },
+      "filter_insert": { "label": "Filtre tak", "desc": "Yeni bir su filtresi kullanmaya başlayın" },
+      "filter_replace": { "label": "Filtre değiştir", "desc": "Mevcut su filtresini değiştirin" },
+      "filter_remove": { "label": "Filtre çıkar", "desc": "Su filtresini kullanmayı bırakın" },
+      "switch_off": { "label": "Kapat", "desc": "Makineyi kapatın" }
+    }
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "switches": {
+      "energy_saving": { "label": "Enerji tasarrufu", "desc": "Boştayken gücü azaltır" },
+      "auto_bean_select": { "label": "Otomatik çekirdek seçimi", "desc": "Çekirdek haznesini otomatik seçer" },
+      "rinsing_disabled": { "label": "Durulama kapalı", "desc": "Otomatik durulamayı atlar" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Su sertliği", "desc": "Su tipine göre kalibre edin" },
+      "auto_off_after": { "label": "Otomatik kapanma", "desc": "Kapanmaya kadar dakika" },
+      "brew_temperature": { "label": "Demleme sıcaklığı", "desc": "Demleme suyu sıcaklığı" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Yumuşak", "2": "Orta", "3": "Sert", "4": "Çok sert" },
+      "brew_temperature": { "0": "Düşük", "1": "Normal", "2": "Yüksek" }
+    },
+    "minutes": "{value} dk"
+  },
+  "edit_dialog": {
+    "title": "Düzenle: {drink}"
+  },
+  "editor": {
+    "device": "Cihaz",
+    "enter_manually": "Elle gir...",
+    "entity_prefix": "Varlık öneki",
+    "entity_prefix_placeholder": "Entegrasyon çalışıyorsa otomatik algılanır",
+    "no_devices_hint": "Melitta cihazı algılanmadı. Öneki elle girin veya entegrasyonun yapılandırıldığını kontrol edin.",
+    "name": "Ad",
+    "show_header": "Başlığı göster",
+    "show_status": "Durumu göster",
+    "show_profiles": "Profil seçiciyi göster",
+    "show_recipes": "Tarif seçiciyi göster",
+    "show_freestyle": "Freestyle tarifini göster",
+    "show_sommelier": "AI Sommelier'i göster",
+    "show_stats": "Fincan istatistiklerini göster",
+    "show_maintenance": "Bakımı göster",
+    "show_settings": "Ayarları göster",
+    "compact": "Kompakt mod"
+  }
+}

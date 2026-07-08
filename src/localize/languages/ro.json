@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Prepară",
+    "cancel": "Anulare",
+    "save": "Salvează",
+    "confirm": "Confirmă",
+    "start": "Pornește",
+    "loading": "Se încarcă...",
+    "retry": "Reîncearcă",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Nu s-a găsit niciun dispozitiv Melitta Barista.",
+    "no_device_hint": "Asigurați-vă că integrarea este instalată și configurată.",
+    "machine_offline": "Aparat offline"
+  },
+  "state": {
+    "ready": "Pregătit",
+    "brewing": "Preparare",
+    "cleaning": "Curățare",
+    "descaling": "Decalcifiere",
+    "off": "Oprit",
+    "busy": "Ocupat",
+    "idle": "Inactiv",
+    "unavailable": "Indisponibil",
+    "unknown": "Necunoscut"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Lapte",
+    "milk_froth": "Spumă de lapte",
+    "water": "Apă fierbinte"
+  },
+  "values": {
+    "very_mild": "F.Slabă",
+    "mild": "Slabă",
+    "medium": "Medie",
+    "strong": "Tare",
+    "very_strong": "F.Tare",
+    "extra_strong": "X.Tare",
+    "cold": "Rece",
+    "normal": "Normal",
+    "high": "Ridicat",
+    "none": "Fără",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Cafea",
+    "milk": "Lapte",
+    "water": "Apă",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Prepară {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x ON"
+  },
+  "recipes": {
+    "title": "Rețetă",
+    "all_recipes": "Toate rețetele"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Numele băuturii",
+    "component": "Componentă {n}",
+    "process": "Proces",
+    "portion": "Porție",
+    "intensity": "Intensitate",
+    "aroma": "Aromă",
+    "temp": "Temp.",
+    "temperature": "Temperatură",
+    "shots": "Doze",
+    "portion_value": "{value} ml",
+    "brew_named": "Prepară {name}"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Sommelierul nu este disponibil.",
+    "generating": "Se generează...",
+    "surprise_me": "Surprinde-mă",
+    "error_generate": "Sommelier: generarea rețetei a eșuat",
+    "error_brew": "Sommelier: prepararea a eșuat"
+  },
+  "stats": {
+    "title": "Statistici",
+    "total_cups": "Total cești",
+    "unavailable": "Statisticile ceștilor nu sunt disponibile.",
+    "empty": "Nicio ceașcă preparată încă"
+  },
+  "maintenance": {
+    "title": "Întreținere",
+    "groups": {
+      "cleaning": "Curățare și decalcifiere",
+      "filter": "Filtru de apă",
+      "other": "Altele"
+    },
+    "actions": {
+      "easy_clean": { "label": "Curățare rapidă", "desc": "Clătire rapidă a unității de preparare" },
+      "intensive_clean": { "label": "Curățare intensivă", "desc": "Curățare profundă cu tabletă" },
+      "descaling": { "label": "Decalcifiere", "desc": "Îndepărtarea depunerilor de calcar" },
+      "evaporating": { "label": "Evaporare", "desc": "Golirea sistemului de abur" },
+      "filter_insert": { "label": "Inserare filtru", "desc": "Începeți utilizarea unui filtru de apă nou" },
+      "filter_replace": { "label": "Înlocuire filtru", "desc": "Înlocuiți filtrul de apă actual" },
+      "filter_remove": { "label": "Eliminare filtru", "desc": "Opriți utilizarea filtrului de apă" },
+      "switch_off": { "label": "Oprire", "desc": "Opriți aparatul" }
+    }
+  },
+  "settings": {
+    "title": "Setări",
+    "switches": {
+      "energy_saving": { "label": "Economie energie", "desc": "Reduce consumul în repaus" },
+      "auto_bean_select": { "label": "Selectare automată boabe", "desc": "Alegere automată a recipientului de boabe" },
+      "rinsing_disabled": { "label": "Clătire dezactivată", "desc": "Omite ciclul de clătire automată" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Duritate apă", "desc": "Calibrare pentru tipul de apă" },
+      "auto_off_after": { "label": "Oprire automată", "desc": "Minute până la oprire" },
+      "brew_temperature": { "label": "Temperatură preparare", "desc": "Temperatura apei de preparare" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Moale", "2": "Medie", "3": "Dură", "4": "Foarte dură" },
+      "brew_temperature": { "0": "Scăzută", "1": "Normală", "2": "Ridicată" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Editare: {drink}"
+  },
+  "editor": {
+    "device": "Dispozitiv",
+    "enter_manually": "Introduceți manual...",
+    "entity_prefix": "Prefix entitate",
+    "entity_prefix_placeholder": "Detectat automat dacă integrarea rulează",
+    "no_devices_hint": "Nu au fost detectate dispozitive Melitta. Introduceți prefixul manual sau verificați dacă integrarea este configurată.",
+    "name": "Nume",
+    "show_header": "Afișează antetul",
+    "show_status": "Afișează starea",
+    "show_profiles": "Afișează selectorul de profil",
+    "show_recipes": "Afișează selectorul de rețete",
+    "show_freestyle": "Afișează rețeta Freestyle",
+    "show_sommelier": "Afișează AI Sommelier",
+    "show_stats": "Afișează statisticile ceștilor",
+    "show_maintenance": "Afișează întreținerea",
+    "show_settings": "Afișează setările",
+    "compact": "Mod compact"
+  }
+}

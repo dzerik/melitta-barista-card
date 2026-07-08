@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Zaparz",
+    "cancel": "Anuluj",
+    "save": "Zapisz",
+    "confirm": "Potwierdź",
+    "start": "Start",
+    "loading": "Ładowanie...",
+    "retry": "Ponów",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Nie znaleziono ekspresu Melitta Barista.",
+    "no_device_hint": "Upewnij się, że integracja jest zainstalowana i skonfigurowana.",
+    "machine_offline": "Ekspres offline"
+  },
+  "state": {
+    "ready": "Gotowy",
+    "brewing": "Parzenie",
+    "cleaning": "Czyszczenie",
+    "descaling": "Odkamienianie",
+    "off": "Wyłączony",
+    "busy": "Zajęty",
+    "idle": "Bezczynny",
+    "unavailable": "Niedostępny",
+    "unknown": "Nieznany"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Mleko",
+    "milk_froth": "Pianka mleczna",
+    "water": "Gorąca woda"
+  },
+  "values": {
+    "very_mild": "B.łag.",
+    "mild": "Łagodna",
+    "medium": "Średnia",
+    "strong": "Mocna",
+    "very_strong": "B.mocna",
+    "extra_strong": "Ekstra",
+    "cold": "Zimna",
+    "normal": "Norm.",
+    "high": "Wysoka",
+    "none": "Brak",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kawa",
+    "milk": "Mleko",
+    "water": "Woda",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Zaparz: {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x WŁ"
+  },
+  "recipes": {
+    "title": "Przepis",
+    "all_recipes": "Wszystkie przepisy"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Nazwa napoju",
+    "component": "Składnik {n}",
+    "process": "Proces",
+    "portion": "Porcja",
+    "intensity": "Moc",
+    "aroma": "Aromat",
+    "temp": "Temp.",
+    "temperature": "Temperatura",
+    "shots": "Shoty",
+    "portion_value": "{value} ml",
+    "brew_named": "Zaparz {name}"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Sommelier jest niedostępny.",
+    "generating": "Generowanie...",
+    "surprise_me": "Zaskocz mnie",
+    "error_generate": "Sommelier: nie udało się wygenerować przepisu",
+    "error_brew": "Sommelier: nie udało się rozpocząć parzenia"
+  },
+  "stats": {
+    "title": "Statystyki",
+    "total_cups": "Łącznie filiżanek",
+    "unavailable": "Statystyki filiżanek są niedostępne.",
+    "empty": "Brak zaparzonych filiżanek"
+  },
+  "maintenance": {
+    "title": "Konserwacja",
+    "groups": {
+      "cleaning": "Czyszczenie i odkamienianie",
+      "filter": "Filtr wody",
+      "other": "Inne"
+    },
+    "actions": {
+      "easy_clean": { "label": "Szybkie czyszczenie", "desc": "Szybkie płukanie bloku parzącego" },
+      "intensive_clean": { "label": "Intensywne czyszczenie", "desc": "Głębokie czyszczenie z tabletką" },
+      "descaling": { "label": "Odkamienianie", "desc": "Usuwanie osadów kamienia" },
+      "evaporating": { "label": "Odparowywanie", "desc": "Przedmuchanie układu pary" },
+      "filter_insert": { "label": "Włóż filtr", "desc": "Rozpocznij używanie nowego filtra wody" },
+      "filter_replace": { "label": "Wymień filtr", "desc": "Wymień bieżący filtr wody" },
+      "filter_remove": { "label": "Usuń filtr", "desc": "Przestań używać filtra wody" },
+      "switch_off": { "label": "Wyłącz", "desc": "Wyłącz ekspres" }
+    }
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "switches": {
+      "energy_saving": { "label": "Oszczędzanie energii", "desc": "Ogranicz pobór mocy w spoczynku" },
+      "auto_bean_select": { "label": "Automatyczny wybór ziaren", "desc": "Automatyczny wybór pojemnika na ziarna" },
+      "rinsing_disabled": { "label": "Płukanie wyłączone", "desc": "Pomiń automatyczne płukanie" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Twardość wody", "desc": "Kalibracja pod rodzaj wody" },
+      "auto_off_after": { "label": "Automatyczne wyłączenie", "desc": "Minuty do wyłączenia" },
+      "brew_temperature": { "label": "Temperatura parzenia", "desc": "Temperatura wody parzenia" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Miękka", "2": "Średnia", "3": "Twarda", "4": "Bardzo twarda" },
+      "brew_temperature": { "0": "Niska", "1": "Normalna", "2": "Wysoka" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Edytuj: {drink}"
+  },
+  "editor": {
+    "device": "Urządzenie",
+    "enter_manually": "Wprowadź ręcznie...",
+    "entity_prefix": "Prefiks encji",
+    "entity_prefix_placeholder": "Wykrywany automatycznie, jeśli integracja działa",
+    "no_devices_hint": "Nie wykryto urządzeń Melitta. Wprowadź prefiks ręcznie lub sprawdź, czy integracja jest skonfigurowana.",
+    "name": "Nazwa",
+    "show_header": "Pokaż nagłówek",
+    "show_status": "Pokaż status",
+    "show_profiles": "Pokaż wybór profilu",
+    "show_recipes": "Pokaż wybór przepisu",
+    "show_freestyle": "Pokaż Freestyle",
+    "show_sommelier": "Pokaż AI Sommelier",
+    "show_stats": "Pokaż statystyki filiżanek",
+    "show_maintenance": "Pokaż konserwację",
+    "show_settings": "Pokaż ustawienia",
+    "compact": "Tryb kompaktowy"
+  }
+}

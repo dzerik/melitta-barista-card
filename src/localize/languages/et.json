@@ -1,0 +1,151 @@
+{
+  "common": {
+    "brew": "Valmista",
+    "cancel": "Tühista",
+    "save": "Salvesta",
+    "confirm": "Kinnita",
+    "start": "Alusta",
+    "loading": "Laadimine...",
+    "retry": "Proovi uuesti",
+    "default_name": "Melitta Barista"
+  },
+  "card": {
+    "no_device": "Melitta Barista seadet ei leitud.",
+    "no_device_hint": "Veenduge, et integratsioon on paigaldatud ja seadistatud.",
+    "machine_offline": "Masin on võrguühenduseta"
+  },
+  "state": {
+    "ready": "Valmis",
+    "brewing": "Valmistamine",
+    "cleaning": "Puhastus",
+    "descaling": "Katlakivi eemaldamine",
+    "off": "Väljas",
+    "busy": "Hõivatud",
+    "idle": "Ootel",
+    "unavailable": "Pole saadaval",
+    "unknown": "Tundmatu"
+  },
+  "drinks": {
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
+    "milk": "Piim",
+    "milk_froth": "Piimavaht",
+    "water": "Kuum vesi"
+  },
+  "values": {
+    "very_mild": "V.mahe",
+    "mild": "Mahe",
+    "medium": "Keskm.",
+    "strong": "Kange",
+    "very_strong": "V.kange",
+    "extra_strong": "X.kange",
+    "cold": "Külm",
+    "normal": "Tavaline",
+    "high": "Kõrge",
+    "none": "Puudub",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "coffee": "Kohv",
+    "milk": "Piim",
+    "water": "Vesi",
+    "standard": "Std",
+    "intense": "Int+"
+  },
+  "directkey": {
+    "brew_drink": "Valmista {drink}",
+    "two_cups": "2x",
+    "two_cups_on": "2x SEES"
+  },
+  "recipes": {
+    "title": "Retsept",
+    "all_recipes": "Kõik retseptid"
+  },
+  "freestyle": {
+    "title": "Freestyle",
+    "drink_name_placeholder": "Joogi nimi",
+    "component": "Komponent {n}",
+    "process": "Protsess",
+    "portion": "Kogus",
+    "intensity": "Intensiivsus",
+    "aroma": "Aroom",
+    "temp": "Temp.",
+    "temperature": "Temperatuur",
+    "shots": "Šotid",
+    "portion_value": "{value} ml",
+    "brew_named": "Valmista {name}"
+  },
+  "sommelier": {
+    "title": "AI Sommelier",
+    "unavailable": "Sommelier pole saadaval.",
+    "generating": "Genereerimine...",
+    "surprise_me": "Üllata mind",
+    "error_generate": "Sommelier: retsepti loomine ebaõnnestus",
+    "error_brew": "Sommelier: valmistamine ebaõnnestus"
+  },
+  "stats": {
+    "title": "Statistika",
+    "total_cups": "Tasse kokku",
+    "unavailable": "Tassistatistika pole saadaval.",
+    "empty": "Ühtegi tassi pole veel valmistatud"
+  },
+  "maintenance": {
+    "title": "Hooldus",
+    "groups": {
+      "cleaning": "Puhastus ja katlakivi eemaldamine",
+      "filter": "Veefilter",
+      "other": "Muu"
+    },
+    "actions": {
+      "easy_clean": { "label": "Kiirpuhastus", "desc": "Valmistusüksuse kiire loputus" },
+      "intensive_clean": { "label": "Intensiivne puhastus", "desc": "Põhjalik puhastus tabletiga" },
+      "descaling": { "label": "Katlakivi eemaldamine", "desc": "Eemaldab katlakivi ladestused" },
+      "evaporating": { "label": "Aurustumine", "desc": "Aurusüsteemi tühjendamine" },
+      "filter_insert": { "label": "Sisesta filter", "desc": "Uue veefiltri kasutuselevõtt" },
+      "filter_replace": { "label": "Vaheta filter", "desc": "Praeguse veefiltri vahetamine" },
+      "filter_remove": { "label": "Eemalda filter", "desc": "Veefiltri kasutamise lõpetamine" },
+      "switch_off": { "label": "Lülita välja", "desc": "Masina väljalülitamine" }
+    }
+  },
+  "settings": {
+    "title": "Seaded",
+    "switches": {
+      "energy_saving": { "label": "Energiasääst", "desc": "Vähendab voolutarbimist ootel" },
+      "auto_bean_select": { "label": "Automaatne ubade valik", "desc": "Valib oamahuti automaatselt" },
+      "rinsing_disabled": { "label": "Loputus keelatud", "desc": "Jätab automaatse loputuse vahele" }
+    },
+    "numbers": {
+      "water_hardness": { "label": "Vee karedus", "desc": "Kalibreerimine vee tüübi järgi" },
+      "auto_off_after": { "label": "Automaatne väljalülitus", "desc": "Minutid väljalülitumiseni" },
+      "brew_temperature": { "label": "Valmistustemperatuur", "desc": "Valmistusvee temperatuur" }
+    },
+    "levels": {
+      "water_hardness": { "1": "Pehme", "2": "Keskmine", "3": "Kare", "4": "Väga kare" },
+      "brew_temperature": { "0": "Madal", "1": "Tavaline", "2": "Kõrge" }
+    },
+    "minutes": "{value} min"
+  },
+  "edit_dialog": {
+    "title": "Muuda: {drink}"
+  },
+  "editor": {
+    "device": "Seade",
+    "enter_manually": "Sisesta käsitsi...",
+    "entity_prefix": "Olemi prefiks",
+    "entity_prefix_placeholder": "Tuvastatakse automaatselt, kui integratsioon töötab",
+    "no_devices_hint": "Melitta seadmeid ei tuvastatud. Sisestage prefiks käsitsi või kontrollige, et integratsioon on seadistatud.",
+    "name": "Nimi",
+    "show_header": "Kuva päis",
+    "show_status": "Kuva olek",
+    "show_profiles": "Kuva profiilivalija",
+    "show_recipes": "Kuva retseptivalija",
+    "show_freestyle": "Kuva Freestyle retsept",
+    "show_sommelier": "Kuva AI Sommelier",
+    "show_stats": "Kuva tassistatistika",
+    "show_maintenance": "Kuva hooldus",
+    "show_settings": "Kuva seaded",
+    "compact": "Kompaktne režiim"
+  }
+}
