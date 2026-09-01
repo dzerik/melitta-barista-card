@@ -45,6 +45,7 @@ import { detectMelittaDevices } from "./utils";
 import { cardStyles } from "./styles";
 import "./editor";
 import "./sommelier";
+import { profileOptionForSlot } from "./profile";
 
 @customElement("melitta-barista-card")
 export class MelittaBaristaCard extends LitElement {
@@ -237,9 +238,16 @@ export class MelittaBaristaCard extends LitElement {
     return s && s !== "unknown" && s !== "unavailable" ? s : null;
   }
 
-  private _selectProfile(option: string): void {
+  private _selectProfile(slot: number): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
+
+    // Keep the numeric slot as identity. Profile labels can change after the
+    // tab was rendered, so resolve the current HA select option only when the
+    // user actually clicks.
+    const option = profileOptionForSlot(this._profileOptions(), slot);
+    if (option === undefined) return;
+
     api.selectOption(this.hass, prefix, "profile", option);
   }
 
@@ -428,7 +436,7 @@ export class MelittaBaristaCard extends LitElement {
     return renderProfileTabs({
       options: this._profileOptions(),
       selected: this._selectedProfile(),
-      onSelect: (o) => this._selectProfile(o),
+      onSelect: (slot) => this._selectProfile(slot),
     });
   }
 
