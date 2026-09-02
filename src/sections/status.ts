@@ -1,6 +1,7 @@
 // Header, status badge, offline / no-device and brewing views.
 
 import { html, nothing, TemplateResult } from "lit";
+import type { BrandBadge } from "../brand-badge";
 import { coffeeIconSvg } from "../icons";
 import { localize, localizeOptional } from "../localize/localize";
 import type { MachineStatus } from "../machine-state";
@@ -15,12 +16,51 @@ export function renderNoDevice(): TemplateResult {
   `;
 }
 
-export function renderHeader(name: string, connected: boolean): TemplateResult {
+/** Image error path (UI Contract §3.10): hide the logo, reveal the wordmark. */
+function onBrandLogoError(e: Event): void {
+  const img = e.currentTarget as HTMLImageElement;
+  img.hidden = true;
+  const label = img.parentElement?.querySelector<HTMLElement>(".brand-badge-label");
+  if (label) label.hidden = false;
+}
+
+/** Compact brand badge (UI Contract §3.10): wordmark text tinted with the
+ * brand accent pair; the user-supplied logo image when `logoUrl` is set. */
+function renderBrandBadge(badge: BrandBadge): TemplateResult {
+  return html`
+    <span class="brand-badge" style="color: ${badge.fg}; background: ${badge.bg}">
+      ${badge.logoUrl !== null ? html`
+        <img class="brand-badge-logo" src=${badge.logoUrl} alt=${badge.label}
+          @error=${onBrandLogoError} />
+        <span class="brand-badge-label" hidden>${badge.label}</span>
+      ` : html`<span class="brand-badge-label">${badge.label}</span>`}
+    </span>
+  `;
+}
+
+export function renderHeader(
+  name: string,
+  connected: boolean,
+  /** Brand badge model (UI Contract §3.10); null/omitted → legacy header. */
+  badge?: BrandBadge | null,
+): TemplateResult {
+  if (!badge) {
+    return html`
+      <div class="card-header">
+        <span class="machine-name">${name}</span>
+        <div class="connection-dot"
+          style="background: ${connected ? "var(--mbc-success)" : "var(--mbc-error)"}"></div>
+      </div>
+    `;
+  }
   return html`
     <div class="card-header">
       <span class="machine-name">${name}</span>
-      <div class="connection-dot"
-        style="background: ${connected ? "var(--mbc-success)" : "var(--mbc-error)"}"></div>
+      <div class="header-right">
+        ${renderBrandBadge(badge)}
+        <div class="connection-dot"
+          style="background: ${connected ? "var(--mbc-success)" : "var(--mbc-error)"}"></div>
+      </div>
     </div>
   `;
 }

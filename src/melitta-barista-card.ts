@@ -52,6 +52,7 @@ import {
   contractAllowsFreestyle,
   iconSpecForRecipe,
 } from "./contract-wiring";
+import { buildBrandBadge } from "./brand-badge";
 import { coffeeIconSvg, coffeeIconSvgFromSpec } from "./icons";
 import * as api from "./api";
 import { parseDirectKeyData } from "./directkey";
@@ -449,16 +450,19 @@ export class MelittaBaristaCard extends LitElement {
     );
     const cardName = this._config.name || this._detectedName || localize("common.default_name");
     const showHeader = this._config.show_header;
+    // Brand badge (UI Contract §3.10): null without a contract or brand_theme
+    // (older integration) → renderHeader falls back to the legacy header.
+    const brandBadge = buildBrandBadge(this._contract?.brand_theme);
 
     if (st.isUnavailable) {
       return html`<ha-card>
-        ${showHeader ? renderHeader(cardName, false) : nothing}
+        ${showHeader ? renderHeader(cardName, false, brandBadge) : nothing}
         ${renderOfflineBody()}
       </ha-card>`;
     }
 
     return html`<ha-card>
-      ${showHeader ? renderHeader(cardName, st.isConnected) : nothing}
+      ${showHeader ? renderHeader(cardName, st.isConnected, brandBadge) : nothing}
 
       ${this._config.show_status && !st.isBrewing ? renderStatus(st) : nothing}
 

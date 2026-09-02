@@ -31,6 +31,13 @@ const MELITTA_CONTRACT = {
     "machine_type": "BARISTA_TS",
     "connected": true
   },
+  "brand_theme": {
+    "brand": "melitta",
+    "wordmark": "MELITTA",
+    "accent": "#c8102e",
+    "accent_soft": "#f6e3e6",
+    "logo_url": null
+  },
   "capabilities": {
     "supports_recipe_writes": true,
     "supports_stats": true,
@@ -139,6 +146,13 @@ const NIVONA_CONTRACT = {
     "family_key": "700",
     "machine_type": null,
     "connected": true
+  },
+  "brand_theme": {
+    "brand": "nivona",
+    "wordmark": "NIVONA",
+    "accent": "#00646b",
+    "accent_soft": "#e0eeef",
+    "logo_url": "/local/melitta_barista/nivona.png"
   },
   "capabilities": {
     "supports_recipe_writes": false,
@@ -404,6 +418,18 @@ describe("validateContract", () => {
     expect(c!.recipes[0].components!.c1!.blend).toBe("hopper_1");
     expect(c!.status_attribute_entity).toBe("state");
     expect(c!.bridge_attribute_entity).toBe("connection");
+    expect(c!.brand_theme).toEqual({
+      brand: "melitta", wordmark: "MELITTA",
+      accent: "#c8102e", accent_soft: "#f6e3e6", logo_url: null,
+    });
+  });
+
+  it("does NOT require brand_theme (§3.10 is additive; pre-amendment 0.91 servers)", () => {
+    const c = clone(MELITTA_CONTRACT) as Record<string, unknown>;
+    delete c.brand_theme;
+    const validated = validateContract(c);
+    expect(validated).not.toBeNull();
+    expect(validated!.brand_theme).toBeUndefined();
   });
 
   it("accepts the §3.8 Nivona example payload verbatim (no components blocks)", () => {
@@ -414,6 +440,7 @@ describe("validateContract", () => {
     expect(c!.vocabularies.freestyle.blend).toEqual(["hopper_1"]);
     expect(c!.recipes[0].components).toBeUndefined();
     expect(c!.recipes[1].icon!.fill_level).toBe(0.82);
+    expect(c!.brand_theme!.logo_url).toBe("/local/melitta_barista/nivona.png");
   });
 
   it("must NOT reject unknown token values or unknown fields (§3.2, §5.3.1)", () => {

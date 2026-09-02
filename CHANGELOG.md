@@ -2,6 +2,16 @@
 
 All notable changes to the Melitta Barista Card.
 
+## [2.5.0] — 2026-09-02
+
+### Added
+
+- Brand badge in the card header (UI Contract §3.10, integration ≥ 0.91 with the `brand_theme` amendment): a compact wordmark badge tinted with the brand's accent colors served by the integration. When the user has placed their own logo file under Home Assistant's `www/melitta_barista/` directory, the badge shows that image instead, falling back to the wordmark text if it fails to load. The card ships no brand assets and hardcodes no brand colors — everything is data from the contract.
+
+### Compatibility
+
+- Contracts without `brand_theme` (older integrations) render exactly the previous header; malformed theme data degrades to a neutral badge or no badge, never an error. Accent pairs with insufficient text contrast are automatically corrected for legibility.
+
 ## [2.4.1] — 2026-09-02
 
 ### Fixed

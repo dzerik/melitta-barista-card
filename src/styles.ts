@@ -58,6 +58,32 @@ export const cardStyles = css`
     flex-shrink: 0;
     transition: background 0.3s;
   }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.6em;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1.7;
+    text-transform: uppercase;
+    user-select: none;
+    max-width: 40%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .brand-badge-logo {
+    display: block;
+    height: 12px;
+    width: auto;
+  }
 
   .section-title {
     font-size: 0.65em;

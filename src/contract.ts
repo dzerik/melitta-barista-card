@@ -88,6 +88,26 @@ export interface IconSpec {
   steam: boolean;
 }
 
+/**
+ * Brand badge data (spec §3.10) — additive within contract_version 1.
+ *
+ * DATA ONLY: the integration never ships brand logos. `logo_url` is non-null
+ * only when the user placed their own file under HA's www dir. Absent on
+ * older servers — every consumer must render fine without it.
+ */
+export interface BrandTheme {
+  /** BrandProfile.brand_slug; same value as machine.brand. */
+  brand: string;
+  /** Display string, e.g. "MELITTA" — rendered as text, never an image. */
+  wordmark: string;
+  /** "#rrggbb" primary brand accent. */
+  accent: string;
+  /** "#rrggbb" muted companion usable as a background tint. */
+  accent_soft: string;
+  /** "/local/melitta_barista/<brand>.png" iff the user-supplied file exists. */
+  logo_url: string | null;
+}
+
 /** Token-level composition of one recipe component (spec §3.3). */
 export interface RecipeComponentData {
   process: string;
@@ -135,6 +155,8 @@ export interface UiContract {
     machine_type: string | null;
     connected: boolean;
   };
+  /** Absent on servers older than the §3.10 amendment; never required. */
+  brand_theme?: BrandTheme;
   capabilities: {
     supports_recipe_writes: boolean;
     supports_stats: boolean;
