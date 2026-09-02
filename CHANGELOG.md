@@ -2,6 +2,12 @@
 
 All notable changes to the Melitta Barista Card.
 
+## [2.6.1] — 2026-09-03
+
+### Fixed
+
+- Brew steps in the favorite details expander and the step wizard now describe the phase composition — "Brew phase 1/2 — Milk, 160 ml" / "Brew phase 2/2 — Coffee, 40 ml, Strong" — instead of the uninformative bare phase number. Reuses the existing localized value labels, so no new translations were needed.
+
 ## [2.6.0] — 2026-09-03
 
 ### Added

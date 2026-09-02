@@ -24,7 +24,37 @@ export interface SomPlannable {
 
 export type BrewStep =
   | { kind: "manual"; text: string }
-  | { kind: "brew"; phaseIndex: number; phaseCount: number };
+  | {
+      kind: "brew";
+      phaseIndex: number;
+      phaseCount: number;
+      component?: Record<string, unknown>;
+    };
+
+/** What a brew phase actually pours, extracted defensively. */
+export interface BrewStepDetail {
+  process: string | null;
+  portionMl: number | null;
+  intensity: string | null;
+}
+
+/**
+ * Extract the pour composition of a brew step ("coffee, 40 ml, strong").
+ * Missing/malformed component fields degrade to nulls — callers render
+ * only the parts that exist.
+ */
+export function brewStepDetail(step: BrewStep): BrewStepDetail {
+  const empty: BrewStepDetail = { process: null, portionMl: null, intensity: null };
+  if (step.kind !== "brew" || !step.component) return empty;
+  const c = step.component;
+  const process = typeof c.process === "string" && c.process !== "none" ? c.process : null;
+  const rawMl = c.portion_ml;
+  const portionMl =
+    typeof rawMl === "number" && Number.isFinite(rawMl) && rawMl > 0 ? rawMl : null;
+  const intensity =
+    process === "coffee" && typeof c.intensity === "string" ? c.intensity : null;
+  return { process, portionMl, intensity };
+}
 
 function normalizeSteps(steps: SomPlannable["steps"]): SomRecipeSteps {
   if (!steps) return {};
@@ -49,7 +79,11 @@ export function buildBrewPlan(recipe: SomPlannable): BrewStep[] {
     for (const text of manualList(phase?.user_action_before)) {
       plan.push({ kind: "manual", text });
     }
-    plan.push({ kind: "brew", phaseIndex, phaseCount });
+    const component =
+      phase && typeof phase.component === "object" && phase.component !== null
+        ? (phase.component as Record<string, unknown>)
+        : undefined;
+    plan.push({ kind: "brew", phaseIndex, phaseCount, component });
   });
   for (const text of manualList(steps.post)) plan.push({ kind: "manual", text });
   return plan;

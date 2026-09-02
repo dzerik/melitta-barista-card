@@ -3,6 +3,7 @@ import {
   buildBrewPlan,
   needsWizard,
   agentErrorKey,
+  brewStepDetail,
 } from "../src/sommelier-steps";
 
 const phase = (actions: string[] = []) => ({
@@ -13,7 +14,7 @@ const phase = (actions: string[] = []) => ({
 describe("buildBrewPlan", () => {
   it("single phase, no manual steps → one brew step", () => {
     expect(buildBrewPlan({ machine_phases: [phase()] })).toEqual([
-      { kind: "brew", phaseIndex: 0, phaseCount: 1 },
+      { kind: "brew", phaseIndex: 0, phaseCount: 1, component: { process: "coffee" } },
     ]);
   });
 
@@ -24,9 +25,9 @@ describe("buildBrewPlan", () => {
     });
     expect(plan).toEqual([
       { kind: "manual", text: "Place a 300 ml cup" },
-      { kind: "brew", phaseIndex: 0, phaseCount: 2 },
+      { kind: "brew", phaseIndex: 0, phaseCount: 2, component: { process: "coffee" } },
       { kind: "manual", text: "Add 20 ml syrup" },
-      { kind: "brew", phaseIndex: 1, phaseCount: 2 },
+      { kind: "brew", phaseIndex: 1, phaseCount: 2, component: { process: "coffee" } },
       { kind: "manual", text: "Stir gently" },
     ]);
   });
@@ -85,5 +86,47 @@ describe("agentErrorKey", () => {
     expect(agentErrorKey({})).toBeNull();
     expect(agentErrorKey(undefined)).toBeNull();
     expect(agentErrorKey(new Error("boom"))).toBeNull();
+  });
+});
+
+describe("brewStepDetail", () => {
+  const brew = (component?: Record<string, unknown>) =>
+    ({ kind: "brew", phaseIndex: 0, phaseCount: 2, component }) as const;
+
+  it("extracts process, portion and coffee intensity", () => {
+    expect(
+      brewStepDetail(brew({ process: "coffee", portion_ml: 40, intensity: "strong" })),
+    ).toEqual({ process: "coffee", portionMl: 40, intensity: "strong" });
+  });
+
+  it("intensity only applies to coffee", () => {
+    expect(
+      brewStepDetail(brew({ process: "milk", portion_ml: 160, intensity: "strong" })),
+    ).toEqual({ process: "milk", portionMl: 160, intensity: null });
+  });
+
+  it("degrades to nulls on missing/malformed fields", () => {
+    expect(brewStepDetail(brew(undefined))).toEqual({
+      process: null, portionMl: null, intensity: null,
+    });
+    expect(
+      brewStepDetail(brew({ process: "none", portion_ml: "40" })),
+    ).toEqual({ process: null, portionMl: null, intensity: null });
+    expect(brewStepDetail(brew({ portion_ml: -5 }))).toEqual({
+      process: null, portionMl: null, intensity: null,
+    });
+  });
+
+  it("carries the phase component through buildBrewPlan", () => {
+    const plan = buildBrewPlan({
+      machine_phases: [
+        { component: { process: "milk", portion_ml: 160 } },
+        { component: { process: "coffee", portion_ml: 40, intensity: "strong" } },
+      ],
+    });
+    expect(brewStepDetail(plan[0] as never).process).toBe("milk");
+    expect(brewStepDetail(plan[1] as never)).toEqual({
+      process: "coffee", portionMl: 40, intensity: "strong",
+    });
   });
 });

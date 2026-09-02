@@ -11,8 +11,24 @@ import {
   buildBrewPlan,
   needsWizard,
   agentErrorKey,
+  brewStepDetail,
   type BrewStep,
 } from "./sommelier-steps";
+
+/** "Brew phase 1/2 — Coffee, 40 ml, Strong" (composition parts optional). */
+function brewStepLabel(step: BrewStep & { kind: "brew" }): string {
+  const base = localize("sommelier.brew_phase", {
+    n: step.phaseIndex + 1, total: step.phaseCount,
+  });
+  const d = brewStepDetail(step);
+  const parts: string[] = [];
+  if (d.process) parts.push(localize(`values.${d.process}`));
+  if (d.portionMl !== null) {
+    parts.push(localize("freestyle.portion_value", { value: d.portionMl }));
+  }
+  if (d.intensity) parts.push(localize(`values.${d.intensity}`));
+  return parts.length ? `${base} — ${parts.join(", ")}` : base;
+}
 
 interface WizardState {
   name: string;
@@ -291,13 +307,7 @@ export class MbcSommelier extends LitElement {
           <div class="som-fav-steps-title">${localize("sommelier.steps")}</div>
           <ol class="som-fav-steps">
             ${plan.map(s => html`
-              <li>
-                ${s.kind === "manual"
-                  ? s.text
-                  : localize("sommelier.brew_phase", {
-                      n: s.phaseIndex + 1, total: s.phaseCount,
-                    })}
-              </li>
+              <li>${s.kind === "manual" ? s.text : brewStepLabel(s)}</li>
             `)}
           </ol>
         ` : nothing}
@@ -321,11 +331,7 @@ export class MbcSommelier extends LitElement {
         <ol class="som-wiz-steps">
           ${w.plan.map((s, i) => html`
             <li class=${i === w.index ? "current" : i < w.index ? "done" : ""}>
-              ${s.kind === "manual"
-                ? s.text
-                : localize("sommelier.brew_phase", {
-                    n: s.phaseIndex + 1, total: s.phaseCount,
-                  })}
+              ${s.kind === "manual" ? s.text : brewStepLabel(s)}
             </li>
           `)}
         </ol>
