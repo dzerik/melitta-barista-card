@@ -114,6 +114,8 @@
     "phase_running": "Faza a început — lăsați aparatul să termine, apoi continuați",
     "finish": "Finalizare",
     "cancel": "Anulare",
+    "info": "Detaliile rețetei",
+    "steps": "Pași",
     "err": {
       "no_llm_agent": "Niciun agent AI nu este instalat în Home Assistant — adăugați o integrare LLM pentru a folosi sommelierul",
       "no_llm_agent_selected": "Niciun agent AI selectat — alegeți unul în panoul sommelierului, fila System",

@@ -114,6 +114,8 @@
     "phase_running": "Fase iniciada — deja que la máquina termine y luego continúa",
     "finish": "Finalizar",
     "cancel": "Cancelar",
+    "info": "Detalles de la receta",
+    "steps": "Pasos",
     "err": {
       "no_llm_agent": "No hay ningún agente de IA instalado en Home Assistant — añade una integración LLM para usar el sommelier",
       "no_llm_agent_selected": "No hay ningún agente de IA seleccionado — elige uno en el panel del sommelier, pestaña System",

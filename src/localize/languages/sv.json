@@ -114,6 +114,8 @@
     "phase_running": "Fasen har startat — låt maskinen bli klar och fortsätt sedan",
     "finish": "Slutför",
     "cancel": "Avbryt",
+    "info": "Receptdetaljer",
+    "steps": "Steg",
     "err": {
       "no_llm_agent": "Ingen AI-agent är installerad i Home Assistant — lägg till en LLM-integration för att använda sommeliern",
       "no_llm_agent_selected": "Ingen AI-agent är vald — välj en i sommelier-panelen, under fliken System",

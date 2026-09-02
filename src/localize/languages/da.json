@@ -114,6 +114,8 @@
     "phase_running": "Fasen er startet — lad maskinen blive færdig, og fortsæt derefter",
     "finish": "Afslut",
     "cancel": "Annuller",
+    "info": "Opskriftsdetaljer",
+    "steps": "Trin",
     "err": {
       "no_llm_agent": "Der er ingen AI-agent installeret i Home Assistant — tilføj en LLM-integration for at bruge sommelieren",
       "no_llm_agent_selected": "Der er ikke valgt en AI-agent — vælg en i sommelier-panelet under fanen System",

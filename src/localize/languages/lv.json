@@ -114,6 +114,8 @@
     "phase_running": "Fāze ir sākta — ļaujiet automātam pabeigt un tad turpiniet",
     "finish": "Pabeigt",
     "cancel": "Atcelt",
+    "info": "Receptes informācija",
+    "steps": "Soļi",
     "err": {
       "no_llm_agent": "Home Assistant nav instalēts neviens AI aģents — pievienojiet LLM integrāciju, lai izmantotu Sommelier",
       "no_llm_agent_selected": "Nav izvēlēts AI aģents — izvēlieties to Sommelier panelī, cilnē System",

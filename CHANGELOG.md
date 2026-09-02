@@ -2,6 +2,12 @@
 
 All notable changes to the Melitta Barista Card.
 
+## [2.6.0] — 2026-09-03
+
+### Added
+
+- Info button on sommelier favorites: expands the recipe description and the full step plan (manual actions interleaved with machine phases), reusing the wizard's step model. Localized in all 29 languages.
+
 ## [2.5.0] — 2026-09-02
 
 ### Added

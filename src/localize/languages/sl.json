@@ -114,6 +114,8 @@
     "phase_running": "Faza se je začela — počakajte, da aparat konča, nato nadaljujte",
     "finish": "Dokončaj",
     "cancel": "Prekliči",
+    "info": "Podrobnosti recepta",
+    "steps": "Koraki",
     "err": {
       "no_llm_agent": "V Home Assistantu ni nameščen noben AI agent — dodajte LLM integracijo za uporabo Sommeliera",
       "no_llm_agent_selected": "Izbran ni noben AI agent — izberite ga na plošči Sommelier, zavihek System",

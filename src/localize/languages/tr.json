@@ -114,6 +114,8 @@
     "phase_running": "Aşama başlatıldı — makinenin bitirmesini bekleyin, sonra devam edin",
     "finish": "Bitir",
     "cancel": "İptal",
+    "info": "Tarif ayrıntıları",
+    "steps": "Adımlar",
     "err": {
       "no_llm_agent": "Home Assistant'ta yüklü bir AI aracısı yok — Sommelier özelliğini kullanmak için bir LLM entegrasyonu ekleyin",
       "no_llm_agent_selected": "AI aracısı seçilmedi — Sommelier panelindeki System sekmesinden birini seçin",

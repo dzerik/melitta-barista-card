@@ -114,6 +114,8 @@
     "phase_running": "Faza rozpoczęta — poczekaj, aż ekspres skończy, potem kontynuuj",
     "finish": "Zakończ",
     "cancel": "Anuluj",
+    "info": "Szczegóły przepisu",
+    "steps": "Kroki",
     "err": {
       "no_llm_agent": "W Home Assistant nie zainstalowano agenta AI — dodaj integrację LLM, aby korzystać z sommeliera",
       "no_llm_agent_selected": "Nie wybrano agenta AI — wybierz go w panelu sommeliera, zakładka System",

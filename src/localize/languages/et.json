@@ -114,6 +114,8 @@
     "phase_running": "Faas on käivitatud — lase masinal lõpetada ja seejärel jätka",
     "finish": "Lõpeta",
     "cancel": "Tühista",
+    "info": "Retsepti üksikasjad",
+    "steps": "Sammud",
     "err": {
       "no_llm_agent": "Home Assistanti pole paigaldatud ühtegi AI-agenti — lisa LLM-integratsioon, et Sommelier'd kasutada",
       "no_llm_agent_selected": "AI-agent on valimata — vali see Sommelier' paneelil, vahekaart System",

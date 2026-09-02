@@ -114,6 +114,8 @@
     "phase_running": "Fazė pradėta — leiskite aparatui baigti, tada tęskite",
     "finish": "Baigti",
     "cancel": "Atšaukti",
+    "info": "Recepto informacija",
+    "steps": "Žingsniai",
     "err": {
       "no_llm_agent": "Home Assistant nėra įdiegto AI agento — pridėkite LLM integraciją, kad galėtumėte naudoti Sommelier",
       "no_llm_agent_selected": "Nepasirinktas AI agentas — pasirinkite jį Sommelier skydelyje, skirtuke System",

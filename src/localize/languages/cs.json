@@ -114,6 +114,8 @@
     "phase_running": "Fáze spuštěna — nechte kávovar dokončit práci a pak pokračujte",
     "finish": "Dokončit",
     "cancel": "Zrušit",
+    "info": "Podrobnosti receptu",
+    "steps": "Kroky",
     "err": {
       "no_llm_agent": "V Home Assistantu není nainstalován žádný AI agent — přidejte LLM integraci, abyste mohli sommeliera používat",
       "no_llm_agent_selected": "Není vybrán žádný AI agent — vyberte ho v panelu sommeliera na kartě System",

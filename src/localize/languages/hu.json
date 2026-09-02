@@ -114,6 +114,8 @@
     "phase_running": "A fázis elindult — várd meg, míg a gép végez, majd folytasd",
     "finish": "Befejezés",
     "cancel": "Mégse",
+    "info": "Recept részletei",
+    "steps": "Lépések",
     "err": {
       "no_llm_agent": "Nincs AI-ügynök telepítve a Home Assistantban — adj hozzá egy LLM-integrációt a Sommelier használatához",
       "no_llm_agent_selected": "Nincs kiválasztva AI-ügynök — válassz egyet a Sommelier panelen, a System fülön",

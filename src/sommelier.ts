@@ -35,6 +35,7 @@ export class MbcSommelier extends LitElement {
   @state() private _generating = false;
   @state() private _quickRecipe: SommelierQuickRecipe | null = null;
   @state() private _wizard: WizardState | null = null;
+  @state() private _infoFavId: string | null = null;
 
   private _loading = false;
 
@@ -229,10 +230,22 @@ export class MbcSommelier extends LitElement {
                 <span class="som-fav-name">★ ${fav.name}</span>
                 <span class="som-fav-count">${fav.brew_count}×</span>
               </div>
-              <button class="som-brew-btn" @click=${() => this._brewFavorite(fav)}>
-                <ha-icon icon="mdi:coffee"></ha-icon>
-              </button>
+              <div class="som-fav-actions">
+                <button class="som-info-btn"
+                  title=${localize("sommelier.info")}
+                  aria-label=${localize("sommelier.info")}
+                  aria-expanded=${this._infoFavId === fav.id}
+                  @click=${() => {
+                    this._infoFavId = this._infoFavId === fav.id ? null : fav.id;
+                  }}>
+                  <ha-icon icon="mdi:information-outline"></ha-icon>
+                </button>
+                <button class="som-brew-btn" @click=${() => this._brewFavorite(fav)}>
+                  <ha-icon icon="mdi:coffee"></ha-icon>
+                </button>
+              </div>
             </div>
+            ${this._infoFavId === fav.id ? this._renderFavInfo(fav) : nothing}
           `)}
         </div>
       ` : nothing}
@@ -262,6 +275,32 @@ export class MbcSommelier extends LitElement {
             ? html`<ha-icon icon="mdi:loading" class="spin"></ha-icon> ${localize("sommelier.generating")}`
             : html`<ha-icon icon="mdi:auto-fix"></ha-icon> ${localize("sommelier.surprise_me")}`}
         </button>
+      </div>
+    `;
+  }
+
+  /** Expanded favorite details: description + the linear brew step plan. */
+  private _renderFavInfo(fav: SommelierFavorite) {
+    const plan = buildBrewPlan(fav);
+    return html`
+      <div class="som-fav-details">
+        ${fav.description
+          ? html`<div class="som-fav-desc">${fav.description}</div>`
+          : nothing}
+        ${plan.length > 0 ? html`
+          <div class="som-fav-steps-title">${localize("sommelier.steps")}</div>
+          <ol class="som-fav-steps">
+            ${plan.map(s => html`
+              <li>
+                ${s.kind === "manual"
+                  ? s.text
+                  : localize("sommelier.brew_phase", {
+                      n: s.phaseIndex + 1, total: s.phaseCount,
+                    })}
+              </li>
+            `)}
+          </ol>
+        ` : nothing}
       </div>
     `;
   }
@@ -437,6 +476,52 @@ export class MbcSommelier extends LitElement {
       .som-surprise-btn ha-icon { --mdc-icon-size: 18px; }
       @keyframes mbc-spin { to { transform: rotate(360deg); } }
       .spin, ha-icon.spin { animation: mbc-spin 1s linear infinite; }
+
+      .som-fav-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+      .som-info-btn {
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        border-radius: 6px;
+        border: 1px solid var(--mbc-border);
+        background: transparent;
+        color: var(--mbc-text2);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .som-info-btn:hover { background: var(--mbc-surface); color: var(--mbc-text); }
+      .som-info-btn ha-icon { --mdc-icon-size: 15px; }
+      .som-fav-details {
+        margin: -2px 0 4px;
+        padding: 8px 10px;
+        border-radius: 0 0 8px 8px;
+        background: var(--mbc-surface);
+        border: 1px solid var(--mbc-border);
+        border-top: none;
+      }
+      .som-fav-desc {
+        font-size: 0.74em;
+        color: var(--mbc-text2);
+        line-height: 1.35;
+      }
+      .som-fav-steps-title {
+        font-size: 0.66em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--mbc-text2);
+        margin: 8px 0 4px;
+        opacity: 0.8;
+      }
+      .som-fav-steps {
+        margin: 0;
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        font-size: 0.74em;
+        color: var(--mbc-text);
+      }
 
       .som-reasoning { margin: 6px 0 2px; }
       .som-reasoning summary {
