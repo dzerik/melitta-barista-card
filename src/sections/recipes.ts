@@ -51,15 +51,15 @@ export function renderRecipes(props: RecipesSectionProps): TemplateResult {
 export interface ProfileTabsProps {
   options: string[];
   selected: string | null;
-  onSelect: (option: string) => void;
+  onSelect: (slot: number) => void;
 }
 
 export function renderProfileTabs(props: ProfileTabsProps): TemplateResult {
   return html`
     <div class="profile-tabs">
-      ${props.options.map(o => html`
+      ${props.options.map((o, slot) => html`
         <button class="profile-tab" ?data-active=${o === props.selected}
-          @click=${() => { if (o !== props.selected) props.onSelect(o); }}>
+          @click=${() => { if (o !== props.selected) props.onSelect(slot); }}>
           ${o}
           ${o === props.selected ? html`<span class="profile-tab-indicator"></span>` : nothing}
         </button>
