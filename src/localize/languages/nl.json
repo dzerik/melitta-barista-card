@@ -105,7 +105,20 @@
     "generating": "Genereren...",
     "surprise_me": "Verras me",
     "error_generate": "Sommelier: recept genereren mislukt",
-    "error_brew": "Sommelier: zetten mislukt"
+    "error_brew": "Sommelier: zetten mislukt",
+    "reasoning": "Waarom dit recept?",
+    "wizard_title": "Stap voor stap zetten",
+    "step_of": "Stap {n} van {total}",
+    "done": "Klaar",
+    "brew_phase": "Fase {n}/{total} zetten",
+    "phase_running": "Fase gestart — laat de machine de fase afronden en ga daarna verder",
+    "finish": "Voltooien",
+    "cancel": "Annuleren",
+    "err": {
+      "no_llm_agent": "Er is geen AI-agent geïnstalleerd in Home Assistant — voeg een LLM-integratie toe om de sommelier te gebruiken",
+      "no_llm_agent_selected": "Geen AI-agent geselecteerd — kies er een in het sommelier-paneel, tabblad System",
+      "llm_agent_missing": "De geselecteerde AI-agent bestaat niet meer — kies een andere in het sommelier-paneel, tabblad System"
+    }
   },
   "stats": {
     "title": "Statistieken",

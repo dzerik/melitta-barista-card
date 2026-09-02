@@ -105,7 +105,20 @@
     "generating": "Génération...",
     "surprise_me": "Surprends-moi",
     "error_generate": "Sommelier : échec de la génération de la recette",
-    "error_brew": "Sommelier : échec de la préparation"
+    "error_brew": "Sommelier : échec de la préparation",
+    "reasoning": "Pourquoi cette recette ?",
+    "wizard_title": "Préparation pas à pas",
+    "step_of": "Étape {n} sur {total}",
+    "done": "Terminé",
+    "brew_phase": "Préparer la phase {n}/{total}",
+    "phase_running": "Phase lancée — laissez la machine terminer, puis continuez",
+    "finish": "Terminer",
+    "cancel": "Annuler",
+    "err": {
+      "no_llm_agent": "Aucun agent IA n'est installé dans Home Assistant — ajoutez une intégration LLM pour utiliser le sommelier",
+      "no_llm_agent_selected": "Aucun agent IA sélectionné — choisissez-en un dans le panneau du sommelier, onglet System",
+      "llm_agent_missing": "L'agent IA sélectionné n'existe plus — choisissez-en un autre dans le panneau du sommelier, onglet System"
+    }
   },
   "stats": {
     "title": "Statistiques",

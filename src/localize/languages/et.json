@@ -105,7 +105,20 @@
     "generating": "Genereerimine...",
     "surprise_me": "Üllata mind",
     "error_generate": "Sommelier: retsepti loomine ebaõnnestus",
-    "error_brew": "Sommelier: valmistamine ebaõnnestus"
+    "error_brew": "Sommelier: valmistamine ebaõnnestus",
+    "reasoning": "Miks see retsept?",
+    "wizard_title": "Samm-sammuline valmistamine",
+    "step_of": "Samm {n} / {total}",
+    "done": "Valmis",
+    "brew_phase": "Valmista faas {n}/{total}",
+    "phase_running": "Faas on käivitatud — lase masinal lõpetada ja seejärel jätka",
+    "finish": "Lõpeta",
+    "cancel": "Tühista",
+    "err": {
+      "no_llm_agent": "Home Assistanti pole paigaldatud ühtegi AI-agenti — lisa LLM-integratsioon, et Sommelier'd kasutada",
+      "no_llm_agent_selected": "AI-agent on valimata — vali see Sommelier' paneelil, vahekaart System",
+      "llm_agent_missing": "Valitud AI-agent on kadunud — vali Sommelier' paneelil teine, vahekaart System"
+    }
   },
   "stats": {
     "title": "Statistika",

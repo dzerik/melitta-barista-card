@@ -105,7 +105,20 @@
     "generating": "Generálás...",
     "surprise_me": "Lepj meg",
     "error_generate": "Sommelier: a recept generálása sikertelen",
-    "error_brew": "Sommelier: a főzés sikertelen"
+    "error_brew": "Sommelier: a főzés sikertelen",
+    "reasoning": "Miért ez a recept?",
+    "wizard_title": "Lépésről lépésre főzés",
+    "step_of": "{n}. lépés / {total}",
+    "done": "Kész",
+    "brew_phase": "Fázis {n}/{total} főzése",
+    "phase_running": "A fázis elindult — várd meg, míg a gép végez, majd folytasd",
+    "finish": "Befejezés",
+    "cancel": "Mégse",
+    "err": {
+      "no_llm_agent": "Nincs AI-ügynök telepítve a Home Assistantban — adj hozzá egy LLM-integrációt a Sommelier használatához",
+      "no_llm_agent_selected": "Nincs kiválasztva AI-ügynök — válassz egyet a Sommelier panelen, a System fülön",
+      "llm_agent_missing": "A kiválasztott AI-ügynök eltűnt — válassz másikat a Sommelier panelen, a System fülön"
+    }
   },
   "stats": {
     "title": "Statisztika",

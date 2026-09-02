@@ -105,7 +105,20 @@
     "generating": "Oluşturuluyor...",
     "surprise_me": "Beni şaşırt",
     "error_generate": "Sommelier: tarif oluşturma başarısız",
-    "error_brew": "Sommelier: demleme başarısız"
+    "error_brew": "Sommelier: demleme başarısız",
+    "reasoning": "Neden bu tarif?",
+    "wizard_title": "Adım adım demleme",
+    "step_of": "Adım {n}/{total}",
+    "done": "Tamam",
+    "brew_phase": "{n}/{total}. aşamayı demle",
+    "phase_running": "Aşama başlatıldı — makinenin bitirmesini bekleyin, sonra devam edin",
+    "finish": "Bitir",
+    "cancel": "İptal",
+    "err": {
+      "no_llm_agent": "Home Assistant'ta yüklü bir AI aracısı yok — Sommelier özelliğini kullanmak için bir LLM entegrasyonu ekleyin",
+      "no_llm_agent_selected": "AI aracısı seçilmedi — Sommelier panelindeki System sekmesinden birini seçin",
+      "llm_agent_missing": "Seçilen AI aracısı artık yok — Sommelier panelindeki System sekmesinden başka birini seçin"
+    }
   },
   "stats": {
     "title": "İstatistik",

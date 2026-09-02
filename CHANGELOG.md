@@ -2,6 +2,18 @@
 
 All notable changes to the Melitta Barista Card.
 
+## [2.4.1] — 2026-09-02
+
+### Fixed
+
+- Multi-phase sommelier recipes no longer one-shot brew from the card: recipes with several machine phases or manual steps (attach milk, add syrup, ...) now open a compact step-by-step wizard that brews each phase separately via `sommelier/brew_phase`, pausing for the user actions the recipe requires. Single-phase recipes keep the legacy instant brew.
+- Sommelier generation errors now surface the backend pre-flight codes (`no_llm_agent`, `no_llm_agent_selected`, `llm_agent_missing`) as localized, actionable hints instead of a generic failure message.
+
+### Added
+
+- "Why this recipe?" expander on generated quick recipes when the sommelier provides reasoning.
+- All 29 locales gained the new wizard/error strings.
+
 ## [2.4.0] — 2026-09-02
 
 ### Added

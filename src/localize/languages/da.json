@@ -105,7 +105,20 @@
     "generating": "Genererer...",
     "surprise_me": "Overrask mig",
     "error_generate": "Sommelier: opskriftsgenerering mislykkedes",
-    "error_brew": "Sommelier: brygning mislykkedes"
+    "error_brew": "Sommelier: brygning mislykkedes",
+    "reasoning": "Hvorfor denne opskrift?",
+    "wizard_title": "Trin-for-trin brygning",
+    "step_of": "Trin {n} af {total}",
+    "done": "Færdig",
+    "brew_phase": "Bryg fase {n}/{total}",
+    "phase_running": "Fasen er startet — lad maskinen blive færdig, og fortsæt derefter",
+    "finish": "Afslut",
+    "cancel": "Annuller",
+    "err": {
+      "no_llm_agent": "Der er ingen AI-agent installeret i Home Assistant — tilføj en LLM-integration for at bruge sommelieren",
+      "no_llm_agent_selected": "Der er ikke valgt en AI-agent — vælg en i sommelier-panelet under fanen System",
+      "llm_agent_missing": "Den valgte AI-agent findes ikke længere — vælg en anden i sommelier-panelet under fanen System"
+    }
   },
   "stats": {
     "title": "Statistik",

@@ -94,3 +94,17 @@ export function somBrew(hass: HomeAssistant, recipeId: string): Promise<unknown>
 export function somBrewFavorite(hass: HomeAssistant, favoriteId: string): Promise<unknown> {
   return hass.callWS({ type: WS.favoritesBrew, favorite_id: favoriteId });
 }
+
+/** Brew a single machine phase of a recipe or favorite (wizard backend). */
+export function somBrewPhase(
+  hass: HomeAssistant,
+  target: { recipeId?: string; favoriteId?: string },
+  phaseIndex: number,
+): Promise<unknown> {
+  return hass.callWS({
+    type: `${SERVICE_DOMAIN}/sommelier/brew_phase`,
+    ...(target.recipeId ? { recipe_id: target.recipeId } : {}),
+    ...(target.favoriteId ? { favorite_id: target.favoriteId } : {}),
+    phase_index: phaseIndex,
+  });
+}

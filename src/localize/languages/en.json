@@ -105,7 +105,20 @@
     "generating": "Generating...",
     "surprise_me": "Surprise me",
     "error_generate": "Sommelier: recipe generation failed",
-    "error_brew": "Sommelier: brew failed"
+    "error_brew": "Sommelier: brew failed",
+    "reasoning": "Why this recipe?",
+    "wizard_title": "Step-by-step brew",
+    "step_of": "Step {n} of {total}",
+    "done": "Done",
+    "brew_phase": "Brew phase {n}/{total}",
+    "phase_running": "Phase started — let the machine finish, then continue",
+    "finish": "Finish",
+    "cancel": "Cancel",
+    "err": {
+      "no_llm_agent": "No AI agent is installed in Home Assistant — add an LLM integration to use the Sommelier",
+      "no_llm_agent_selected": "No AI agent selected — pick one in the Sommelier panel, System tab",
+      "llm_agent_missing": "The selected AI agent is gone — pick another in the Sommelier panel, System tab"
+    }
   },
   "stats": {
     "title": "Stats",
@@ -121,31 +134,82 @@
       "other": "Other"
     },
     "actions": {
-      "easy_clean": { "label": "Easy Clean", "desc": "Quick rinse of the brew unit" },
-      "intensive_clean": { "label": "Intensive Clean", "desc": "Deep cleaning with tablet" },
-      "descaling": { "label": "Descaling", "desc": "Remove limescale buildup" },
-      "evaporating": { "label": "Evaporating", "desc": "Purge the steam system" },
-      "filter_insert": { "label": "Insert Filter", "desc": "Start using a new water filter" },
-      "filter_replace": { "label": "Replace Filter", "desc": "Replace the current water filter" },
-      "filter_remove": { "label": "Remove Filter", "desc": "Stop using the water filter" },
-      "switch_off": { "label": "Switch Off", "desc": "Turn off the machine" }
+      "easy_clean": {
+        "label": "Easy Clean",
+        "desc": "Quick rinse of the brew unit"
+      },
+      "intensive_clean": {
+        "label": "Intensive Clean",
+        "desc": "Deep cleaning with tablet"
+      },
+      "descaling": {
+        "label": "Descaling",
+        "desc": "Remove limescale buildup"
+      },
+      "evaporating": {
+        "label": "Evaporating",
+        "desc": "Purge the steam system"
+      },
+      "filter_insert": {
+        "label": "Insert Filter",
+        "desc": "Start using a new water filter"
+      },
+      "filter_replace": {
+        "label": "Replace Filter",
+        "desc": "Replace the current water filter"
+      },
+      "filter_remove": {
+        "label": "Remove Filter",
+        "desc": "Stop using the water filter"
+      },
+      "switch_off": {
+        "label": "Switch Off",
+        "desc": "Turn off the machine"
+      }
     }
   },
   "settings": {
     "title": "Settings",
     "switches": {
-      "energy_saving": { "label": "Energy Saving", "desc": "Reduce power when idle" },
-      "auto_bean_select": { "label": "Auto Bean Select", "desc": "Auto-choose bean hopper" },
-      "rinsing_disabled": { "label": "Rinsing Disabled", "desc": "Skip auto rinse cycle" }
+      "energy_saving": {
+        "label": "Energy Saving",
+        "desc": "Reduce power when idle"
+      },
+      "auto_bean_select": {
+        "label": "Auto Bean Select",
+        "desc": "Auto-choose bean hopper"
+      },
+      "rinsing_disabled": {
+        "label": "Rinsing Disabled",
+        "desc": "Skip auto rinse cycle"
+      }
     },
     "numbers": {
-      "water_hardness": { "label": "Water Hardness", "desc": "Calibrate for water type" },
-      "auto_off_after": { "label": "Auto Off", "desc": "Minutes until shutdown" },
-      "brew_temperature": { "label": "Brew Temperature", "desc": "Brewing water temp" }
+      "water_hardness": {
+        "label": "Water Hardness",
+        "desc": "Calibrate for water type"
+      },
+      "auto_off_after": {
+        "label": "Auto Off",
+        "desc": "Minutes until shutdown"
+      },
+      "brew_temperature": {
+        "label": "Brew Temperature",
+        "desc": "Brewing water temp"
+      }
     },
     "levels": {
-      "water_hardness": { "1": "Soft", "2": "Medium", "3": "Hard", "4": "Very Hard" },
-      "brew_temperature": { "0": "Low", "1": "Normal", "2": "High" }
+      "water_hardness": {
+        "1": "Soft",
+        "2": "Medium",
+        "3": "Hard",
+        "4": "Very Hard"
+      },
+      "brew_temperature": {
+        "0": "Low",
+        "1": "Normal",
+        "2": "High"
+      }
     },
     "minutes": "{value} min"
   },

@@ -105,7 +105,20 @@
     "generating": "Ģenerē...",
     "surprise_me": "Pārsteidz mani",
     "error_generate": "Sommelier: neizdevās ģenerēt recepti",
-    "error_brew": "Sommelier: neizdevās pagatavot dzērienu"
+    "error_brew": "Sommelier: neizdevās pagatavot dzērienu",
+    "reasoning": "Kāpēc šī recepte?",
+    "wizard_title": "Pagatavošana soli pa solim",
+    "step_of": "Solis {n} no {total}",
+    "done": "Gatavs",
+    "brew_phase": "Pagatavot fāzi {n}/{total}",
+    "phase_running": "Fāze ir sākta — ļaujiet automātam pabeigt un tad turpiniet",
+    "finish": "Pabeigt",
+    "cancel": "Atcelt",
+    "err": {
+      "no_llm_agent": "Home Assistant nav instalēts neviens AI aģents — pievienojiet LLM integrāciju, lai izmantotu Sommelier",
+      "no_llm_agent_selected": "Nav izvēlēts AI aģents — izvēlieties to Sommelier panelī, cilnē System",
+      "llm_agent_missing": "Izvēlētais AI aģents ir pazudis — izvēlieties citu Sommelier panelī, cilnē System"
+    }
   },
   "stats": {
     "title": "Statistika",

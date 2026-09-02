@@ -105,7 +105,20 @@
     "generating": "Generuojama...",
     "surprise_me": "Nustebink mane",
     "error_generate": "Sommelier: nepavyko sugeneruoti recepto",
-    "error_brew": "Sommelier: nepavyko paruošti gėrimo"
+    "error_brew": "Sommelier: nepavyko paruošti gėrimo",
+    "reasoning": "Kodėl šis receptas?",
+    "wizard_title": "Ruošimas žingsnis po žingsnio",
+    "step_of": "Žingsnis {n} iš {total}",
+    "done": "Atlikta",
+    "brew_phase": "Ruošti fazę {n}/{total}",
+    "phase_running": "Fazė pradėta — leiskite aparatui baigti, tada tęskite",
+    "finish": "Baigti",
+    "cancel": "Atšaukti",
+    "err": {
+      "no_llm_agent": "Home Assistant nėra įdiegto AI agento — pridėkite LLM integraciją, kad galėtumėte naudoti Sommelier",
+      "no_llm_agent_selected": "Nepasirinktas AI agentas — pasirinkite jį Sommelier skydelyje, skirtuke System",
+      "llm_agent_missing": "Pasirinktas AI agentas dingo — pasirinkite kitą Sommelier skydelyje, skirtuke System"
+    }
   },
   "stats": {
     "title": "Statistika",

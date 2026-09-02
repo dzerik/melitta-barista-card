@@ -105,7 +105,20 @@
     "generating": "Generowanie...",
     "surprise_me": "Zaskocz mnie",
     "error_generate": "Sommelier: nie udało się wygenerować przepisu",
-    "error_brew": "Sommelier: nie udało się rozpocząć parzenia"
+    "error_brew": "Sommelier: nie udało się rozpocząć parzenia",
+    "reasoning": "Dlaczego ten przepis?",
+    "wizard_title": "Parzenie krok po kroku",
+    "step_of": "Krok {n} z {total}",
+    "done": "Gotowe",
+    "brew_phase": "Zaparz fazę {n}/{total}",
+    "phase_running": "Faza rozpoczęta — poczekaj, aż ekspres skończy, potem kontynuuj",
+    "finish": "Zakończ",
+    "cancel": "Anuluj",
+    "err": {
+      "no_llm_agent": "W Home Assistant nie zainstalowano agenta AI — dodaj integrację LLM, aby korzystać z sommeliera",
+      "no_llm_agent_selected": "Nie wybrano agenta AI — wybierz go w panelu sommeliera, zakładka System",
+      "llm_agent_missing": "Wybrany agent AI zniknął — wybierz innego w panelu sommeliera, zakładka System"
+    }
   },
   "stats": {
     "title": "Statystyki",

@@ -105,7 +105,20 @@
     "generating": "Generovanie...",
     "surprise_me": "Prekvap ma",
     "error_generate": "Sommelier: generovanie receptu zlyhalo",
-    "error_brew": "Sommelier: prípravu sa nepodarilo spustiť"
+    "error_brew": "Sommelier: prípravu sa nepodarilo spustiť",
+    "reasoning": "Prečo tento recept?",
+    "wizard_title": "Príprava krok za krokom",
+    "step_of": "Krok {n} z {total}",
+    "done": "Hotovo",
+    "brew_phase": "Pripraviť fázu {n}/{total}",
+    "phase_running": "Fáza sa spustila — nechajte kávovar dokončiť prácu a potom pokračujte",
+    "finish": "Dokončiť",
+    "cancel": "Zrušiť",
+    "err": {
+      "no_llm_agent": "V Home Assistante nie je nainštalovaný žiadny AI agent — pridajte LLM integráciu, aby ste mohli sommeliera používať",
+      "no_llm_agent_selected": "Nie je vybraný žiadny AI agent — vyberte ho v paneli sommeliera na karte System",
+      "llm_agent_missing": "Vybraný AI agent už neexistuje — vyberte iného v paneli sommeliera na karte System"
+    }
   },
   "stats": {
     "title": "Štatistiky",

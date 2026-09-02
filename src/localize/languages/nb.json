@@ -105,7 +105,20 @@
     "generating": "Genererer...",
     "surprise_me": "Overrask meg",
     "error_generate": "Sommelier: oppskriftsgenerering mislyktes",
-    "error_brew": "Sommelier: brygging mislyktes"
+    "error_brew": "Sommelier: brygging mislyktes",
+    "reasoning": "Hvorfor denne oppskriften?",
+    "wizard_title": "Trinnvis brygging",
+    "step_of": "Trinn {n} av {total}",
+    "done": "Ferdig",
+    "brew_phase": "Brygg fase {n}/{total}",
+    "phase_running": "Fasen er startet — la maskinen bli ferdig, og fortsett deretter",
+    "finish": "Fullfør",
+    "cancel": "Avbryt",
+    "err": {
+      "no_llm_agent": "Ingen AI-agent er installert i Home Assistant — legg til en LLM-integrasjon for å bruke sommelieren",
+      "no_llm_agent_selected": "Ingen AI-agent er valgt — velg en i sommelier-panelet, under fanen System",
+      "llm_agent_missing": "Den valgte AI-agenten finnes ikke lenger — velg en annen i sommelier-panelet, under fanen System"
+    }
   },
   "stats": {
     "title": "Statistikk",

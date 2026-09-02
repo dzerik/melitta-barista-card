@@ -105,7 +105,20 @@
     "generating": "Luodaan...",
     "surprise_me": "Yllätä minut",
     "error_generate": "Sommelier: reseptin luonti epäonnistui",
-    "error_brew": "Sommelier: valmistus epäonnistui"
+    "error_brew": "Sommelier: valmistus epäonnistui",
+    "reasoning": "Miksi tämä resepti?",
+    "wizard_title": "Vaiheittainen valmistus",
+    "step_of": "Vaihe {n}/{total}",
+    "done": "Valmis",
+    "brew_phase": "Valmista vaihe {n}/{total}",
+    "phase_running": "Vaihe käynnistetty — anna koneen valmistua ja jatka sitten",
+    "finish": "Lopeta",
+    "cancel": "Peruuta",
+    "err": {
+      "no_llm_agent": "Home Assistantiin ei ole asennettu AI-agenttia — lisää LLM-integraatio käyttääksesi sommelieria",
+      "no_llm_agent_selected": "AI-agenttia ei ole valittu — valitse se sommelier-paneelin System-välilehdeltä",
+      "llm_agent_missing": "Valittu AI-agentti on poistunut — valitse toinen sommelier-paneelin System-välilehdeltä"
+    }
   },
   "stats": {
     "title": "Tilastot",

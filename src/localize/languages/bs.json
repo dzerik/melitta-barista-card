@@ -105,7 +105,20 @@
     "generating": "Generisanje...",
     "surprise_me": "Iznenadi me",
     "error_generate": "Sommelier: generisanje recepta nije uspjelo",
-    "error_brew": "Sommelier: priprema nije uspjela"
+    "error_brew": "Sommelier: priprema nije uspjela",
+    "reasoning": "Zašto ovaj recept?",
+    "wizard_title": "Priprema korak po korak",
+    "step_of": "Korak {n} od {total}",
+    "done": "Gotovo",
+    "brew_phase": "Pripremi fazu {n}/{total}",
+    "phase_running": "Faza je pokrenuta — sačekajte da mašina završi, zatim nastavite",
+    "finish": "Završi",
+    "cancel": "Otkaži",
+    "err": {
+      "no_llm_agent": "U Home Assistantu nije instaliran AI agent — dodajte LLM integraciju da biste koristili Sommeliera",
+      "no_llm_agent_selected": "Nijedan AI agent nije odabran — odaberite ga na Sommelier panelu, kartica System",
+      "llm_agent_missing": "Odabrani AI agent više ne postoji — odaberite drugi na Sommelier panelu, kartica System"
+    }
   },
   "stats": {
     "title": "Statistika",

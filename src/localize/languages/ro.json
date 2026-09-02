@@ -105,7 +105,20 @@
     "generating": "Se generează...",
     "surprise_me": "Surprinde-mă",
     "error_generate": "Sommelier: generarea rețetei a eșuat",
-    "error_brew": "Sommelier: prepararea a eșuat"
+    "error_brew": "Sommelier: prepararea a eșuat",
+    "reasoning": "De ce această rețetă?",
+    "wizard_title": "Preparare pas cu pas",
+    "step_of": "Pasul {n} din {total}",
+    "done": "Gata",
+    "brew_phase": "Prepară faza {n}/{total}",
+    "phase_running": "Faza a început — lăsați aparatul să termine, apoi continuați",
+    "finish": "Finalizare",
+    "cancel": "Anulare",
+    "err": {
+      "no_llm_agent": "Niciun agent AI nu este instalat în Home Assistant — adăugați o integrare LLM pentru a folosi sommelierul",
+      "no_llm_agent_selected": "Niciun agent AI selectat — alegeți unul în panoul sommelierului, fila System",
+      "llm_agent_missing": "Agentul AI selectat nu mai există — alegeți altul în panoul sommelierului, fila System"
+    }
   },
   "stats": {
     "title": "Statistici",
