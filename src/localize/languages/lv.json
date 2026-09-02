@@ -21,9 +21,31 @@
     "descaling": "Atkaļķošana",
     "off": "Izslēgts",
     "busy": "Aizņemts",
+    "filter_insert": "Filtra ievietošana",
+    "filter_replace": "Filtra maiņa",
+    "filter_remove": "Filtra izņemšana",
+    "evaporating": "Iztvaikošana",
     "idle": "Gaidīšana",
     "unavailable": "Nav pieejams",
     "unknown": "Nezināms"
+  },
+  "activity": {
+    "grinding": "Malšana",
+    "coffee": "Kafija",
+    "steam": "Tvaiks",
+    "water": "Ūdens",
+    "prepare": "Sagatavošana"
+  },
+  "action": {
+    "none": "Nav",
+    "bu_removed": "Ievietojiet gatavošanas bloku",
+    "trays_missing": "Ievietojiet paplātes",
+    "empty_trays": "Iztukšojiet paplātes",
+    "fill_water": "Uzpildiet ūdens tvertni",
+    "close_powder_lid": "Aizveriet maltās kafijas vāciņu",
+    "fill_powder": "Iepildiet malto kafiju",
+    "move_cup_to_frother": "Pārvietojiet tasi pie piena putotāja",
+    "flush_required": "Nepieciešama skalošana"
   },
   "drinks": {
     "espresso": "Espresso",

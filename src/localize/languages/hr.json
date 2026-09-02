@@ -21,9 +21,31 @@
     "descaling": "Uklanjanje kamenca",
     "off": "Isključen",
     "busy": "Zauzet",
+    "filter_insert": "Umetanje filtera",
+    "filter_replace": "Zamjena filtera",
+    "filter_remove": "Uklanjanje filtera",
+    "evaporating": "Isparavanje",
     "idle": "Neaktivan",
     "unavailable": "Nedostupan",
     "unknown": "Nepoznato"
+  },
+  "activity": {
+    "grinding": "Mljevenje",
+    "coffee": "Kava",
+    "steam": "Para",
+    "water": "Voda",
+    "prepare": "Priprema"
+  },
+  "action": {
+    "none": "Nema",
+    "bu_removed": "Umetni jedinicu za kuhanje",
+    "trays_missing": "Umetni posude",
+    "empty_trays": "Isprazni posude",
+    "fill_water": "Napuni spremnik vodom",
+    "close_powder_lid": "Zatvori poklopac za mljevenu kavu",
+    "fill_powder": "Dodaj mljevenu kavu",
+    "move_cup_to_frother": "Pomakni šalicu do mliječne mlaznice",
+    "flush_required": "Potrebno ispiranje"
   },
   "drinks": {
     "espresso": "Espresso",

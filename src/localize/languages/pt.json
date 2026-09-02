@@ -21,9 +21,31 @@
     "descaling": "Descalcificação",
     "off": "Desligado",
     "busy": "Ocupado",
+    "filter_insert": "A inserir filtro",
+    "filter_replace": "A substituir filtro",
+    "filter_remove": "A remover filtro",
+    "evaporating": "Evaporação",
     "idle": "Inativo",
     "unavailable": "Indisponível",
     "unknown": "Desconhecido"
+  },
+  "activity": {
+    "grinding": "A moer",
+    "coffee": "Café",
+    "steam": "Vapor",
+    "water": "Água",
+    "prepare": "A preparar"
+  },
+  "action": {
+    "none": "Nenhuma",
+    "bu_removed": "Insira o grupo de infusão",
+    "trays_missing": "Insira as bandejas",
+    "empty_trays": "Esvazie as bandejas",
+    "fill_water": "Encha o depósito de água",
+    "close_powder_lid": "Feche a tampa do café moído",
+    "fill_powder": "Adicione café moído",
+    "move_cup_to_frother": "Aproxime a chávena do bocal de leite",
+    "flush_required": "Enxaguamento necessário"
   },
   "drinks": {
     "espresso": "Espresso",

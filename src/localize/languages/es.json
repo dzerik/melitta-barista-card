@@ -21,9 +21,31 @@
     "descaling": "Descalcificación",
     "off": "Apagado",
     "busy": "Ocupado",
+    "filter_insert": "Insertando filtro",
+    "filter_replace": "Reemplazando filtro",
+    "filter_remove": "Retirando filtro",
+    "evaporating": "Evaporación",
     "idle": "Inactivo",
     "unavailable": "No disponible",
     "unknown": "Desconocido"
+  },
+  "activity": {
+    "grinding": "Moliendo",
+    "coffee": "Café",
+    "steam": "Vapor",
+    "water": "Agua",
+    "prepare": "Preparando"
+  },
+  "action": {
+    "none": "Ninguna",
+    "bu_removed": "Inserta el grupo de erogación",
+    "trays_missing": "Inserta las bandejas",
+    "empty_trays": "Vacía las bandejas",
+    "fill_water": "Llena el depósito de agua",
+    "close_powder_lid": "Cierra la tapa del café molido",
+    "fill_powder": "Añade café molido",
+    "move_cup_to_frother": "Acerca la taza al espumador",
+    "flush_required": "Se requiere enjuague"
   },
   "drinks": {
     "espresso": "Espresso",

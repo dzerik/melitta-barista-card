@@ -21,9 +21,31 @@
     "descaling": "Отстранување на каменец",
     "off": "Исклучен",
     "busy": "Зафатен",
+    "filter_insert": "Вметнување филтер",
+    "filter_replace": "Замена на филтер",
+    "filter_remove": "Отстранување филтер",
+    "evaporating": "Испарување",
     "idle": "Неактивен",
     "unavailable": "Недостапен",
     "unknown": "Непознато"
+  },
+  "activity": {
+    "grinding": "Мелење",
+    "coffee": "Кафе",
+    "steam": "Пареа",
+    "water": "Вода",
+    "prepare": "Подготовка"
+  },
+  "action": {
+    "none": "Нема",
+    "bu_removed": "Вметни ја единицата за варење",
+    "trays_missing": "Вметни ги садовите",
+    "empty_trays": "Испразни ги садовите",
+    "fill_water": "Наполни го резервоарот со вода",
+    "close_powder_lid": "Затвори го капакот за мелено кафе",
+    "fill_powder": "Додај мелено кафе",
+    "move_cup_to_frother": "Премести ја шолјата кај млечната прскалка",
+    "flush_required": "Потребно е плакнење"
   },
   "drinks": {
     "espresso": "Espresso",

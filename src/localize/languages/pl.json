@@ -21,9 +21,31 @@
     "descaling": "Odkamienianie",
     "off": "Wyłączony",
     "busy": "Zajęty",
+    "filter_insert": "Zakładanie filtra",
+    "filter_replace": "Wymiana filtra",
+    "filter_remove": "Usuwanie filtra",
+    "evaporating": "Odparowywanie",
     "idle": "Bezczynny",
     "unavailable": "Niedostępny",
     "unknown": "Nieznany"
+  },
+  "activity": {
+    "grinding": "Mielenie",
+    "coffee": "Kawa",
+    "steam": "Para",
+    "water": "Woda",
+    "prepare": "Przygotowanie"
+  },
+  "action": {
+    "none": "Brak",
+    "bu_removed": "Włóż blok zaparzający",
+    "trays_missing": "Włóż tacki",
+    "empty_trays": "Opróżnij tacki",
+    "fill_water": "Napełnij zbiornik wody",
+    "close_powder_lid": "Zamknij pokrywę kawy mielonej",
+    "fill_powder": "Dodaj kawę mieloną",
+    "move_cup_to_frother": "Przesuń filiżankę pod spieniacz",
+    "flush_required": "Wymagane płukanie"
   },
   "drinks": {
     "espresso": "Espresso",

@@ -2,6 +2,18 @@
 
 All notable changes to the Melitta Barista Card.
 
+## [2.4.0] — 2026-09-02
+
+### Added
+
+- UI Contract v1 client (integration ≥ 0.91): when the integration advertises `contract_version` on the connection sensor, the card switches to token-based status handling — machine state, activity, and required actions are derived from stable machine-readable tokens instead of matching English display strings, with localized labels for all 29 languages (including the new filter and evaporation states).
+- Contract document fetch over WebSocket (`melitta_barista/ui_contract/get`): freestyle pickers and portion sliders now use the machine's own vocabularies and limits (e.g. 3-level Nivona intensity, single-hopper blend), and the freestyle section is hidden on machines that do not support freestyle brewing. The document is cached per config entry and refreshed automatically when the machine's contract fingerprint changes (reconnect, model refinement, recipe preload).
+- Procedural drink icons: recipe tiles and the brewing view render each drink from the per-recipe icon description served by the integration (glass shape, layers, foam, steam) instead of a hardcoded English-name table — machines and recipes the card has never heard of get correct icons.
+
+### Compatibility
+
+- Graceful fallback everywhere: against integrations older than the contract the card behaves exactly as 2.3.x — string-based status matching, built-in option lists and limits, and the name-keyed icon table remain as permanent legacy paths. A failed or unsupported contract fetch degrades only contract-derived features (icons, option lists, limits, capability gating); token status handling and all legacy behaviour stay intact. Transient fetch failures retry automatically on reconnect, without polling.
+
 ## [2.3.4] — 2026-09-02
 
 ### Fixed

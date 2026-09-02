@@ -21,9 +21,31 @@
     "descaling": "Kalkinpoisto",
     "off": "Pois",
     "busy": "Varattu",
+    "filter_insert": "Suodattimen asennus",
+    "filter_replace": "Suodattimen vaihto",
+    "filter_remove": "Suodattimen poisto",
+    "evaporating": "Höyrystys",
     "idle": "Odottaa",
     "unavailable": "Ei saatavilla",
     "unknown": "Tuntematon"
+  },
+  "activity": {
+    "grinding": "Jauhatus",
+    "coffee": "Kahvi",
+    "steam": "Höyry",
+    "water": "Vesi",
+    "prepare": "Valmistelu"
+  },
+  "action": {
+    "none": "Ei mitään",
+    "bu_removed": "Aseta suodatusyksikkö",
+    "trays_missing": "Aseta astiat",
+    "empty_trays": "Tyhjennä astiat",
+    "fill_water": "Täytä vesisäiliö",
+    "close_powder_lid": "Sulje jauhekahvin kansi",
+    "fill_powder": "Lisää jauhettua kahvia",
+    "move_cup_to_frother": "Siirrä kuppi maitovaahdottimen alle",
+    "flush_required": "Huuhtelu vaaditaan"
   },
   "drinks": {
     "espresso": "Espresso",

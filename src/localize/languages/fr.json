@@ -21,9 +21,31 @@
     "descaling": "Détartrage",
     "off": "Éteint",
     "busy": "Occupé",
+    "filter_insert": "Insertion du filtre",
+    "filter_replace": "Remplacement du filtre",
+    "filter_remove": "Retrait du filtre",
+    "evaporating": "Évaporation",
     "idle": "Inactif",
     "unavailable": "Indisponible",
     "unknown": "Inconnu"
+  },
+  "activity": {
+    "grinding": "Mouture",
+    "coffee": "Café",
+    "steam": "Vapeur",
+    "water": "Eau",
+    "prepare": "Préparation"
+  },
+  "action": {
+    "none": "Aucune",
+    "bu_removed": "Insérer le bloc d'infusion",
+    "trays_missing": "Insérer les bacs",
+    "empty_trays": "Vider les bacs",
+    "fill_water": "Remplir le réservoir d'eau",
+    "close_powder_lid": "Fermer le couvercle à café moulu",
+    "fill_powder": "Ajouter du café moulu",
+    "move_cup_to_frother": "Placer la tasse sous la buse à lait",
+    "flush_required": "Rinçage requis"
   },
   "drinks": {
     "espresso": "Espresso",

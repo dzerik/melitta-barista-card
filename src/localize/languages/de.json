@@ -21,9 +21,31 @@
     "descaling": "Entkalkung",
     "off": "Aus",
     "busy": "Beschäftigt",
+    "filter_insert": "Filter wird eingesetzt",
+    "filter_replace": "Filter wird gewechselt",
+    "filter_remove": "Filter wird entfernt",
+    "evaporating": "Ausdampfen",
     "idle": "Leerlauf",
     "unavailable": "Nicht verfügbar",
     "unknown": "Unbekannt"
+  },
+  "activity": {
+    "grinding": "Mahlen",
+    "coffee": "Kaffee",
+    "steam": "Dampf",
+    "water": "Wasser",
+    "prepare": "Vorbereitung"
+  },
+  "action": {
+    "none": "Keine",
+    "bu_removed": "Brüheinheit einsetzen",
+    "trays_missing": "Schalen einsetzen",
+    "empty_trays": "Schalen leeren",
+    "fill_water": "Wassertank füllen",
+    "close_powder_lid": "Pulverdeckel schließen",
+    "fill_powder": "Pulverkaffee einfüllen",
+    "move_cup_to_frother": "Tasse zum Milchschäumer stellen",
+    "flush_required": "Spülung erforderlich"
   },
   "drinks": {
     "espresso": "Espresso",

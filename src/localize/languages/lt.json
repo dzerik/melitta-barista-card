@@ -21,9 +21,31 @@
     "descaling": "Kalkių šalinimas",
     "off": "Išjungtas",
     "busy": "Užimtas",
+    "filter_insert": "Filtro įdėjimas",
+    "filter_replace": "Filtro keitimas",
+    "filter_remove": "Filtro išėmimas",
+    "evaporating": "Garinimas",
     "idle": "Laukimas",
     "unavailable": "Nepasiekiamas",
     "unknown": "Nežinomas"
+  },
+  "activity": {
+    "grinding": "Malimas",
+    "coffee": "Kava",
+    "steam": "Garai",
+    "water": "Vanduo",
+    "prepare": "Paruošimas"
+  },
+  "action": {
+    "none": "Nėra",
+    "bu_removed": "Įdėkite plikymo bloką",
+    "trays_missing": "Įdėkite padėklus",
+    "empty_trays": "Ištuštinkite padėklus",
+    "fill_water": "Pripilkite vandens į talpyklą",
+    "close_powder_lid": "Uždarykite maltos kavos dangtelį",
+    "fill_powder": "Įpilkite maltos kavos",
+    "move_cup_to_frother": "Perkelkite puodelį prie pieno putų antgalio",
+    "flush_required": "Reikalingas skalavimas"
   },
   "drinks": {
     "espresso": "Espresso",

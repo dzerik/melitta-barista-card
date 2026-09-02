@@ -21,9 +21,31 @@
     "descaling": "Kireç çözme",
     "off": "Kapalı",
     "busy": "Meşgul",
+    "filter_insert": "Filtre takılıyor",
+    "filter_replace": "Filtre değiştiriliyor",
+    "filter_remove": "Filtre çıkarılıyor",
+    "evaporating": "Buharlaştırma",
     "idle": "Boşta",
     "unavailable": "Kullanılamaz",
     "unknown": "Bilinmiyor"
+  },
+  "activity": {
+    "grinding": "Öğütme",
+    "coffee": "Kahve",
+    "steam": "Buhar",
+    "water": "Su",
+    "prepare": "Hazırlık"
+  },
+  "action": {
+    "none": "Yok",
+    "bu_removed": "Demleme ünitesini takın",
+    "trays_missing": "Tepsileri takın",
+    "empty_trays": "Tepsileri boşaltın",
+    "fill_water": "Su haznesini doldurun",
+    "close_powder_lid": "Öğütülmüş kahve kapağını kapatın",
+    "fill_powder": "Öğütülmüş kahve ekleyin",
+    "move_cup_to_frother": "Fincanı süt köpürtücüye yaklaştırın",
+    "flush_required": "Durulama gerekli"
   },
   "drinks": {
     "espresso": "Espresso",

@@ -21,9 +21,31 @@
     "descaling": "Vízkőmentesítés",
     "off": "Ki",
     "busy": "Foglalt",
+    "filter_insert": "Szűrő behelyezése",
+    "filter_replace": "Szűrő cseréje",
+    "filter_remove": "Szűrő eltávolítása",
+    "evaporating": "Párologtatás",
     "idle": "Üresjárat",
     "unavailable": "Nem elérhető",
     "unknown": "Ismeretlen"
+  },
+  "activity": {
+    "grinding": "Őrlés",
+    "coffee": "Kávé",
+    "steam": "Gőz",
+    "water": "Víz",
+    "prepare": "Előkészítés"
+  },
+  "action": {
+    "none": "Nincs",
+    "bu_removed": "Helyezd be a főzőegységet",
+    "trays_missing": "Helyezd be a tálcákat",
+    "empty_trays": "Ürítsd ki a tálcákat",
+    "fill_water": "Töltsd fel a víztartályt",
+    "close_powder_lid": "Zárd le az őrölt kávé fedelét",
+    "fill_powder": "Tölts be őrölt kávét",
+    "move_cup_to_frother": "Tedd a csészét a tejhabosító alá",
+    "flush_required": "Öblítés szükséges"
   },
   "drinks": {
     "espresso": "Espresso",

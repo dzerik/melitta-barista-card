@@ -58,11 +58,13 @@ export function renderBrewingView(
   recipeName: string | null,
   st: MachineStatus,
   onCancel: () => void,
+  /** Optional card-supplied icon renderer (UI Contract §7.2 C-D); omitted → legacy name lookup. */
+  renderIcon?: (name: string, size: number, uid: string) => TemplateResult,
 ): TemplateResult {
   return html`
     <div class="brewing-view">
       <div class="brewing-icon-wrap">
-        ${coffeeIconSvg(recipeName || "Espresso", 64, "brew-active")}
+        ${(renderIcon ?? coffeeIconSvg)(recipeName || "Espresso", 64, "brew-active")}
       </div>
       <div class="brewing-info">
         <span class="brewing-recipe">${recipeName || localize("state.brewing")}</span>

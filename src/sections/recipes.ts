@@ -14,6 +14,12 @@ export interface RecipesSectionProps {
   dkActive: boolean;
   onSelect: (name: string) => void;
   onBrew: () => void;
+  /**
+   * Icon renderer supplied by the card (UI Contract §7.2 C-D): prefers the
+   * per-recipe IconSpec from the `recipes` attribute / contract catalog over
+   * the legacy English-name lookup. Omitted → legacy coffeeIconSvg.
+   */
+  renderIcon?: (name: string, size: number, uid: string) => TemplateResult;
 }
 
 export function renderRecipes(props: RecipesSectionProps): TemplateResult {
@@ -39,7 +45,7 @@ export function renderRecipes(props: RecipesSectionProps): TemplateResult {
                 props.onSelect(name);
               }
             }}>
-            ${coffeeIconSvg(name, 48, `r-${uid}`)}
+            ${(props.renderIcon ?? coffeeIconSvg)(name, 48, `r-${uid}`)}
             <span class="recipe-name">${name}</span>
           </div>
         `;
