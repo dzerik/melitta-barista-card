@@ -2,6 +2,12 @@
 
 All notable changes to the Melitta Barista Card.
 
+## [2.3.4] — 2026-09-02
+
+### Fixed
+
+- Profile tabs now use the numeric slot as their stable identity instead of the mutable display label. Profile names load asynchronously from the machine, so a tab rendered as `Profile 1` could be renamed before the click; the old handler then submitted the stale label, which Home Assistant rejected as an invalid option. The card now resolves the current `select` option for the slot at click time; invalid slots are ignored with a console warning. Contributed by @Chreece (#6).
+
 ## [2.3.3] — 2026-07-08
 
 ### Fixed

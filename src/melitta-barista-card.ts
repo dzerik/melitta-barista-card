@@ -246,7 +246,12 @@ export class MelittaBaristaCard extends LitElement {
     // tab was rendered, so resolve the current HA select option only when the
     // user actually clicks.
     const option = profileOptionForSlot(this._profileOptions(), slot);
-    if (option === undefined) return;
+    if (option === undefined) {
+      // Unreachable in normal operation (slots come from the same options
+      // array) — logged to aid field debugging if entity state ever diverges.
+      console.warn(`melitta-barista-card: no profile option for slot ${slot}`);
+      return;
+    }
 
     api.selectOption(this.hass, prefix, "profile", option);
   }
