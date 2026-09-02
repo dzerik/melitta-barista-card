@@ -21,9 +21,31 @@
     "descaling": "Декальцинація",
     "off": "Вимкнено",
     "busy": "Зайнята",
+    "filter_insert": "Встановлення фільтра",
+    "filter_replace": "Заміна фільтра",
+    "filter_remove": "Виймання фільтра",
+    "evaporating": "Випаровування",
     "idle": "Очікування",
     "unavailable": "Недоступна",
     "unknown": "Невідомо"
+  },
+  "activity": {
+    "grinding": "Помел",
+    "coffee": "Кава",
+    "steam": "Пара",
+    "water": "Вода",
+    "prepare": "Підготовка"
+  },
+  "action": {
+    "none": "Немає",
+    "bu_removed": "Встановіть заварювальний блок",
+    "trays_missing": "Встановіть піддони",
+    "empty_trays": "Спорожніть піддони",
+    "fill_water": "Наповніть резервуар для води",
+    "close_powder_lid": "Закрийте кришку для меленої кави",
+    "fill_powder": "Додайте мелену каву",
+    "move_cup_to_frother": "Підставте чашку до капучинатора",
+    "flush_required": "Потрібне промивання"
   },
   "drinks": {
     "espresso": "Еспресо",

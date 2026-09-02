@@ -21,9 +21,31 @@
     "descaling": "Katlakivi eemaldamine",
     "off": "Väljas",
     "busy": "Hõivatud",
+    "filter_insert": "Filtri sisestamine",
+    "filter_replace": "Filtri vahetus",
+    "filter_remove": "Filtri eemaldamine",
+    "evaporating": "Aurustumine",
     "idle": "Ootel",
     "unavailable": "Pole saadaval",
     "unknown": "Tundmatu"
+  },
+  "activity": {
+    "grinding": "Jahvatamine",
+    "coffee": "Kohv",
+    "steam": "Aur",
+    "water": "Vesi",
+    "prepare": "Ettevalmistus"
+  },
+  "action": {
+    "none": "Puudub",
+    "bu_removed": "Paigalda tõmbeplokk",
+    "trays_missing": "Paigalda alused",
+    "empty_trays": "Tühjenda alused",
+    "fill_water": "Täida veepaak",
+    "close_powder_lid": "Sulge jahvatatud kohvi kaas",
+    "fill_powder": "Lisa jahvatatud kohvi",
+    "move_cup_to_frother": "Liiguta tass piimavahusti alla",
+    "flush_required": "Vajalik loputus"
   },
   "drinks": {
     "espresso": "Espresso",

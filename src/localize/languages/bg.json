@@ -21,9 +21,31 @@
     "descaling": "Декалциране",
     "off": "Изключена",
     "busy": "Заета",
+    "filter_insert": "Поставяне на филтър",
+    "filter_replace": "Смяна на филтър",
+    "filter_remove": "Премахване на филтър",
+    "evaporating": "Изпаряване",
     "idle": "В покой",
     "unavailable": "Недостъпна",
     "unknown": "Неизвестно"
+  },
+  "activity": {
+    "grinding": "Мелене",
+    "coffee": "Кафе",
+    "steam": "Пара",
+    "water": "Вода",
+    "prepare": "Подготовка"
+  },
+  "action": {
+    "none": "Няма",
+    "bu_removed": "Постави блока за запарване",
+    "trays_missing": "Постави тавичките",
+    "empty_trays": "Изпразни тавичките",
+    "fill_water": "Напълни резервоара с вода",
+    "close_powder_lid": "Затвори капака за мляно кафе",
+    "fill_powder": "Добави мляно кафе",
+    "move_cup_to_frother": "Премести чашата до дюзата за мляко",
+    "flush_required": "Необходимо е изплакване"
   },
   "drinks": {
     "espresso": "Еспресо",

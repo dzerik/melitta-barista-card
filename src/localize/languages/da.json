@@ -21,9 +21,31 @@
     "descaling": "Afkalkning",
     "off": "Slukket",
     "busy": "Optaget",
+    "filter_insert": "Indsætter filter",
+    "filter_replace": "Udskifter filter",
+    "filter_remove": "Fjerner filter",
+    "evaporating": "Fordampning",
     "idle": "Inaktiv",
     "unavailable": "Utilgængelig",
     "unknown": "Ukendt"
+  },
+  "activity": {
+    "grinding": "Maler",
+    "coffee": "Kaffe",
+    "steam": "Damp",
+    "water": "Vand",
+    "prepare": "Forbereder"
+  },
+  "action": {
+    "none": "Ingen",
+    "bu_removed": "Isæt bryggeenheden",
+    "trays_missing": "Isæt bakkerne",
+    "empty_trays": "Tøm bakkerne",
+    "fill_water": "Fyld vandtanken",
+    "close_powder_lid": "Luk låget til malet kaffe",
+    "fill_powder": "Påfyld malet kaffe",
+    "move_cup_to_frother": "Flyt koppen til mælkeskummeren",
+    "flush_required": "Skylning påkrævet"
   },
   "drinks": {
     "espresso": "Espresso",

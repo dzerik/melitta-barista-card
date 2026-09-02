@@ -68,6 +68,7 @@ export const DIRECTKEY_DISPLAY_TO_KEY: Record<string, DirectKeyCategory> = {
 };
 
 export const STATE_COLORS: Record<string, string> = {
+  // Legacy keys: lowercased English display strings (string-matching mode).
   ready: "var(--state-active-color, #4caf50)",
   brewing: "var(--warning-color, #ff9800)",
   cleaning: "var(--info-color, #2196f3)",
@@ -75,6 +76,20 @@ export const STATE_COLORS: Record<string, string> = {
   off: "var(--disabled-color, #9e9e9e)",
   busy: "var(--warning-color, #ff9800)",
   unavailable: "var(--error-color, #f44336)",
+  // UI Contract v1 process-token keys (UPPER_SNAKE — cannot collide with the
+  // lowercased legacy lookups above). Spec §3.2 status.process vocabulary.
+  READY: "var(--state-active-color, #4caf50)",
+  PRODUCT: "var(--warning-color, #ff9800)",
+  CLEANING: "var(--info-color, #2196f3)",
+  EASY_CLEAN: "var(--info-color, #2196f3)",
+  INTENSIVE_CLEAN: "var(--info-color, #2196f3)",
+  DESCALING: "var(--info-color, #2196f3)",
+  FILTER_INSERT: "var(--info-color, #2196f3)",
+  FILTER_REPLACE: "var(--info-color, #2196f3)",
+  FILTER_REMOVE: "var(--info-color, #2196f3)",
+  EVAPORATING: "var(--info-color, #2196f3)",
+  SWITCH_OFF: "var(--disabled-color, #9e9e9e)",
+  BUSY: "var(--warning-color, #ff9800)",
 };
 
 export const SWITCH_KEYS = [

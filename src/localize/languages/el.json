@@ -21,9 +21,31 @@
     "descaling": "Αφαλάτωση",
     "off": "Σβηστό",
     "busy": "Απασχολημένο",
+    "filter_insert": "Τοποθέτηση φίλτρου",
+    "filter_replace": "Αντικατάσταση φίλτρου",
+    "filter_remove": "Αφαίρεση φίλτρου",
+    "evaporating": "Εξάτμιση",
     "idle": "Αδρανές",
     "unavailable": "Μη διαθέσιμο",
     "unknown": "Άγνωστο"
+  },
+  "activity": {
+    "grinding": "Άλεση",
+    "coffee": "Καφές",
+    "steam": "Ατμός",
+    "water": "Νερό",
+    "prepare": "Προετοιμασία"
+  },
+  "action": {
+    "none": "Καμία",
+    "bu_removed": "Τοποθετήστε τη μονάδα εκχύλισης",
+    "trays_missing": "Τοποθετήστε τους δίσκους",
+    "empty_trays": "Αδειάστε τους δίσκους",
+    "fill_water": "Γεμίστε το δοχείο νερού",
+    "close_powder_lid": "Κλείστε το καπάκι αλεσμένου καφέ",
+    "fill_powder": "Προσθέστε αλεσμένο καφέ",
+    "move_cup_to_frother": "Μετακινήστε το φλιτζάνι στο ακροφύσιο γάλακτος",
+    "flush_required": "Απαιτείται έκπλυση"
   },
   "drinks": {
     "espresso": "Espresso",

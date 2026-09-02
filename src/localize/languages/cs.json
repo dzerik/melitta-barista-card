@@ -21,9 +21,31 @@
     "descaling": "Odvápnění",
     "off": "Vypnuto",
     "busy": "Zaneprázdněn",
+    "filter_insert": "Vkládání filtru",
+    "filter_replace": "Výměna filtru",
+    "filter_remove": "Odebírání filtru",
+    "evaporating": "Odpařování",
     "idle": "Nečinný",
     "unavailable": "Nedostupný",
     "unknown": "Neznámý"
+  },
+  "activity": {
+    "grinding": "Mletí",
+    "coffee": "Káva",
+    "steam": "Pára",
+    "water": "Voda",
+    "prepare": "Příprava"
+  },
+  "action": {
+    "none": "Žádné",
+    "bu_removed": "Vlož spařovací jednotku",
+    "trays_missing": "Vlož misky",
+    "empty_trays": "Vyprázdni misky",
+    "fill_water": "Doplň vodu do nádržky",
+    "close_powder_lid": "Zavři víko na mletou kávu",
+    "fill_powder": "Doplň mletou kávu",
+    "move_cup_to_frother": "Přesuň šálek k napěňovači",
+    "flush_required": "Nutné propláchnutí"
   },
   "drinks": {
     "espresso": "Espresso",

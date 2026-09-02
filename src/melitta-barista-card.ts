@@ -38,6 +38,21 @@ import { renderStats } from "./sections/stats";
 import { renderMaintenance } from "./sections/maintenance";
 import { renderSettings } from "./sections/settings";
 import { computeMachineStatus, type MachineStatus } from "./machine-state";
+import {
+  readBridgeAttrs,
+  readStatusTokens,
+  noteBridgeUpdate,
+  fetchUiContract,
+  type BridgeAttrs,
+  type StatusTokens,
+  type UiContract,
+} from "./contract";
+import {
+  resolveFreestyleVocab,
+  contractAllowsFreestyle,
+  iconSpecForRecipe,
+} from "./contract-wiring";
+import { coffeeIconSvg, coffeeIconSvgFromSpec } from "./icons";
 import * as api from "./api";
 import { parseDirectKeyData } from "./directkey";
 import { localize, setLanguage } from "./localize/localize";
@@ -78,6 +93,13 @@ export class MelittaBaristaCard extends LitElement {
   private _trackedIds: string[] = [];
   private _trackedPrefix: string | null = null;
 
+  // UI Contract v1 (spec §2.3): bridge/tokens re-read every willUpdate (not
+  // sticky), contract document session-cached inside fetchUiContract.
+  @state() private _contract: UiContract | null = null;
+  private _bridge: BridgeAttrs | null = null;
+  private _tokens: StatusTokens | null = null;
+  private _contractFetchInFlight = false;
+
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this._cancelDkLongPress();
@@ -115,6 +137,9 @@ export class MelittaBaristaCard extends LitElement {
     this._detectedName = null;
     this._trackedIds = [];
     this._trackedPrefix = null;
+    this._contract = null;
+    this._bridge = null;
+    this._tokens = null;
   }
 
   public getCardSize(): number {
@@ -168,6 +193,42 @@ export class MelittaBaristaCard extends LitElement {
       this._trackedPrefix = prefix;
       this._trackedIds = this._buildTrackedIds(prefix);
     }
+    this._updateContractBridge(prefix);
+  }
+
+  /**
+   * UI Contract v1 wiring (spec §2.3): re-evaluate token-mode detection on
+   * every willUpdate (never sticky — an integration upgraded mid-session is
+   * picked up), feed the transient-retry hook, and keep the contract document
+   * fresh. All failure handling lives inside fetchUiContract (never throws);
+   * a missing/failed contract only degrades contract-derived features.
+   */
+  private _updateContractBridge(prefix: string | null): void {
+    this._bridge = prefix
+      ? readBridgeAttrs(this.hass.states[`sensor.${prefix}_connection`]?.attributes)
+      : null;
+    this._tokens = this._bridge && prefix
+      ? readStatusTokens(this.hass.states[`sensor.${prefix}_state`]?.attributes, this._bridge)
+      : null;
+    if (!this._bridge) {
+      // Legacy mode: no contract_version on the connection sensor (or an
+      // unsupported one, §5.3.3) — never call the WS command.
+      if (this._contract !== null) this._contract = null;
+      return;
+    }
+    noteBridgeUpdate(this._bridge);
+    if (this._contractFetchInFlight) return;
+    const bridge = this._bridge;
+    if (this._contract && this._contract.contract_fingerprint === bridge.contract_fingerprint) {
+      return; // current document already matches the advertised fingerprint
+    }
+    this._contractFetchInFlight = true;
+    fetchUiContract(this.hass, bridge.entry_id, bridge.contract_fingerprint)
+      .then((contract) => {
+        this._contractFetchInFlight = false;
+        // @state assignment: identical reference (session cache) schedules no update.
+        this._contract = contract;
+      });
   }
 
   private _buildTrackedIds(prefix: string): string[] {
@@ -379,7 +440,13 @@ export class MelittaBaristaCard extends LitElement {
       return html`<ha-card>${renderNoDevice()}</ha-card>`;
     }
 
-    const st = computeMachineStatus((s) => this._state(s));
+    // Token mode when the bridge gate passed (§5.3.3); with tokens null (state
+    // sensor unavailable = offline, §3.4) computeMachineStatus falls through
+    // to the legacy branch, which renders the offline body exactly as before.
+    const st = computeMachineStatus(
+      (s) => this._state(s),
+      this._bridge ? { tokens: this._tokens, connected: this._bridge.connected } : undefined,
+    );
     const cardName = this._config.name || this._detectedName || localize("common.default_name");
     const showHeader = this._config.show_header;
 
@@ -396,7 +463,8 @@ export class MelittaBaristaCard extends LitElement {
       ${this._config.show_status && !st.isBrewing ? renderStatus(st) : nothing}
 
       ${st.isBrewing
-        ? renderBrewingView(this._selectedRecipe(), st, () => this._cancelBrew())
+        ? renderBrewingView(this._selectedRecipe(), st, () => this._cancelBrew(),
+            (name, size, uid) => this._renderRecipeIcon(name, size, uid))
         : nothing}
 
       ${!st.isBrewing && this._config.show_profiles && st.isReady && this._profileOptions().length > 1
@@ -412,6 +480,7 @@ export class MelittaBaristaCard extends LitElement {
         : nothing}
 
       ${!st.isBrewing && this._config.show_freestyle && st.isReady
+          && contractAllowsFreestyle(this._contract)
         ? this._renderFreestyle()
         : nothing}
 
@@ -469,12 +538,31 @@ export class MelittaBaristaCard extends LitElement {
       dkActive: this._selectedDk !== null,
       onSelect: (name) => this._selectRecipe(name),
       onBrew: () => this._brew(),
+      renderIcon: (name, size, uid) => this._renderRecipeIcon(name, size, uid),
     });
+  }
+
+  /**
+   * Per-recipe icon (UI Contract §7.2 C-D): prefer the IconSpec from the
+   * `recipes` attribute of `select.<prefix>_recipe`, then the contract
+   * catalog; only when neither surface knows the recipe fall back to the
+   * legacy English-name DRINKS lookup. A known recipe with `icon: null`
+   * renders the generic default drink (spec §3.3).
+   */
+  private _renderRecipeIcon(name: string, size: number, uid: string) {
+    const lookup = iconSpecForRecipe(
+      name, this._recipeEntity()?.attributes?.recipes, this._contract,
+    );
+    return lookup.found
+      ? coffeeIconSvgFromSpec(lookup.icon, size, uid)
+      : coffeeIconSvg(name, size, uid);
   }
 
   // -- Freestyle --
 
   private _renderFreestyle() {
+    // Contract vocabularies/limits when available, legacy consts otherwise.
+    const vocab = resolveFreestyleVocab(this._contract);
     return html`
       <div class="section-title">${localize("freestyle.title")}</div>
       <div class="freestyle-section">
@@ -491,6 +579,7 @@ export class MelittaBaristaCard extends LitElement {
             containerClass: "freestyle-component",
             spec: this._fsRecipe.c1,
             allowNoneProcess: false,
+            vocab,
             onChange: (patch) => this._updateFs("c1", patch),
           })}
           ${renderComponentForm({
@@ -498,6 +587,7 @@ export class MelittaBaristaCard extends LitElement {
             containerClass: "freestyle-component",
             spec: this._fsRecipe.c2,
             allowNoneProcess: true,
+            vocab,
             onChange: (patch) => this._updateFs("c2", patch),
           })}
         </div>
@@ -544,6 +634,7 @@ export class MelittaBaristaCard extends LitElement {
     if (!this._editDk || !this._editState) return nothing;
     const s = this._editState;
     const cat = this._editDk.category;
+    const vocab = resolveFreestyleVocab(this._contract);
 
     return html`
       <div class="edit-overlay" @click=${() => this._closeEditDialog()}>
@@ -563,6 +654,7 @@ export class MelittaBaristaCard extends LitElement {
               spec: s.c1,
               allowNoneProcess: false,
               longTemperatureLabel: true,
+              vocab,
               onChange: (patch) => this._updateEdit("c1", patch),
             })}
             ${renderComponentForm({
@@ -571,6 +663,7 @@ export class MelittaBaristaCard extends LitElement {
               spec: s.c2,
               allowNoneProcess: true,
               longTemperatureLabel: true,
+              vocab,
               onChange: (patch) => this._updateEdit("c2", patch),
             })}
           </div>

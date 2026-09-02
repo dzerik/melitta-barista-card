@@ -21,9 +21,31 @@
     "descaling": "Razapnjevanje",
     "off": "Izklopljeno",
     "busy": "Zaseden",
+    "filter_insert": "Vstavljanje filtra",
+    "filter_replace": "Menjava filtra",
+    "filter_remove": "Odstranjevanje filtra",
+    "evaporating": "Izhlapevanje",
     "idle": "Nedejavno",
     "unavailable": "Nedostopen",
     "unknown": "Neznano"
+  },
+  "activity": {
+    "grinding": "Mletje",
+    "coffee": "Kava",
+    "steam": "Para",
+    "water": "Voda",
+    "prepare": "Priprava"
+  },
+  "action": {
+    "none": "Brez",
+    "bu_removed": "Vstavi kuhalno enoto",
+    "trays_missing": "Vstavi pladnje",
+    "empty_trays": "Izprazni pladnje",
+    "fill_water": "Napolni posodo za vodo",
+    "close_powder_lid": "Zapri pokrov za mleto kavo",
+    "fill_powder": "Dodaj mleto kavo",
+    "move_cup_to_frother": "Premakni skodelico k penilcu mleka",
+    "flush_required": "Potrebno izpiranje"
   },
   "drinks": {
     "espresso": "Espresso",

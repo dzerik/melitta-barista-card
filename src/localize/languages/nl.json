@@ -21,9 +21,31 @@
     "descaling": "Ontkalking",
     "off": "Uit",
     "busy": "Bezig",
+    "filter_insert": "Filter plaatsen",
+    "filter_replace": "Filter vervangen",
+    "filter_remove": "Filter verwijderen",
+    "evaporating": "Verdampen",
     "idle": "Inactief",
     "unavailable": "Niet beschikbaar",
     "unknown": "Onbekend"
+  },
+  "activity": {
+    "grinding": "Malen",
+    "coffee": "Koffie",
+    "steam": "Stoom",
+    "water": "Water",
+    "prepare": "Voorbereiden"
+  },
+  "action": {
+    "none": "Geen",
+    "bu_removed": "Plaats de zetgroep",
+    "trays_missing": "Plaats de bakjes",
+    "empty_trays": "Leeg de bakjes",
+    "fill_water": "Vul het waterreservoir",
+    "close_powder_lid": "Sluit het deksel voor gemalen koffie",
+    "fill_powder": "Vul gemalen koffie bij",
+    "move_cup_to_frother": "Zet het kopje bij de melkschuimer",
+    "flush_required": "Spoelen vereist"
   },
   "drinks": {
     "espresso": "Espresso",

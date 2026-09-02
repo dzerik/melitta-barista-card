@@ -21,9 +21,31 @@
     "descaling": "Descaling",
     "off": "Off",
     "busy": "Busy",
+    "filter_insert": "Inserting Filter",
+    "filter_replace": "Replacing Filter",
+    "filter_remove": "Removing Filter",
+    "evaporating": "Evaporating",
     "idle": "Idle",
     "unavailable": "Unavailable",
     "unknown": "Unknown"
+  },
+  "activity": {
+    "grinding": "Grinding",
+    "coffee": "Coffee",
+    "steam": "Steam",
+    "water": "Water",
+    "prepare": "Preparing"
+  },
+  "action": {
+    "none": "None",
+    "bu_removed": "Insert brew unit",
+    "trays_missing": "Insert trays",
+    "empty_trays": "Empty trays",
+    "fill_water": "Fill water tank",
+    "close_powder_lid": "Close powder lid",
+    "fill_powder": "Fill ground coffee",
+    "move_cup_to_frother": "Move cup to frother",
+    "flush_required": "Rinse required"
   },
   "drinks": {
     "espresso": "Espresso",

@@ -21,9 +21,31 @@
     "descaling": "Decalcifiere",
     "off": "Oprit",
     "busy": "Ocupat",
+    "filter_insert": "Inserare filtru",
+    "filter_replace": "Înlocuire filtru",
+    "filter_remove": "Eliminare filtru",
+    "evaporating": "Evaporare",
     "idle": "Inactiv",
     "unavailable": "Indisponibil",
     "unknown": "Necunoscut"
+  },
+  "activity": {
+    "grinding": "Măcinare",
+    "coffee": "Cafea",
+    "steam": "Abur",
+    "water": "Apă",
+    "prepare": "Pregătire"
+  },
+  "action": {
+    "none": "Niciuna",
+    "bu_removed": "Introdu unitatea de infuzare",
+    "trays_missing": "Introdu tăvile",
+    "empty_trays": "Golește tăvile",
+    "fill_water": "Umple rezervorul de apă",
+    "close_powder_lid": "Închide capacul pentru cafea măcinată",
+    "fill_powder": "Adaugă cafea măcinată",
+    "move_cup_to_frother": "Mută ceașca la duza de lapte",
+    "flush_required": "Clătire necesară"
   },
   "drinks": {
     "espresso": "Espresso",

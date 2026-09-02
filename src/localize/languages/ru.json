@@ -21,9 +21,31 @@
     "descaling": "Декальцинация",
     "off": "Выключена",
     "busy": "Занята",
+    "filter_insert": "Установка фильтра",
+    "filter_replace": "Замена фильтра",
+    "filter_remove": "Извлечение фильтра",
+    "evaporating": "Выпаривание",
     "idle": "Ожидание",
     "unavailable": "Недоступна",
     "unknown": "Неизвестно"
+  },
+  "activity": {
+    "grinding": "Помол",
+    "coffee": "Кофе",
+    "steam": "Пар",
+    "water": "Вода",
+    "prepare": "Подготовка"
+  },
+  "action": {
+    "none": "Нет",
+    "bu_removed": "Установите заварочный блок",
+    "trays_missing": "Установите поддоны",
+    "empty_trays": "Опорожните поддоны",
+    "fill_water": "Наполните резервуар для воды",
+    "close_powder_lid": "Закройте крышку для молотого кофе",
+    "fill_powder": "Добавьте молотый кофе",
+    "move_cup_to_frother": "Подставьте чашку к капучинатору",
+    "flush_required": "Требуется промывка"
   },
   "drinks": {
     "espresso": "Эспрессо",

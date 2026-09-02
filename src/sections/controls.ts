@@ -2,19 +2,13 @@
 
 import { html, TemplateResult } from "lit";
 import {
-  FREESTYLE_PROCESSES,
-  FREESTYLE_PROCESSES_WITH_NONE,
-  FREESTYLE_INTENSITIES,
-  FREESTYLE_AROMAS,
-  FREESTYLE_TEMPERATURES,
-  FREESTYLE_SHOTS,
-  PORTION_LIMITS,
   type Process,
   type Intensity,
   type Aroma,
   type Temperature,
   type Shots,
 } from "../const";
+import { resolveFreestyleVocab, type FreestyleVocab } from "../contract-wiring";
 import { displayName } from "../format";
 import { localize } from "../localize/localize";
 import type { ComponentSpec } from "../recipe";
@@ -65,14 +59,21 @@ export interface ComponentFormOptions {
   allowNoneProcess: boolean;
   /** Dialog uses the long "Temperature" label, freestyle the short "Temp". */
   longTemperatureLabel?: boolean;
+  /**
+   * Resolved contract vocabularies + limits (UI Contract §7.2 C-D). Omitted →
+   * legacy const.ts option lists and PORTION_LIMITS, byte-identical to the
+   * pre-contract behaviour.
+   */
+  vocab?: FreestyleVocab;
 }
 
 export function renderComponentForm(opts: ComponentFormOptions): TemplateResult {
   const { spec, onChange, allowNoneProcess } = opts;
+  const vocab = opts.vocab ?? resolveFreestyleVocab(null);
   const isNone = spec.process === "none";
   const isCoffee = spec.process === "coffee";
-  const limits = allowNoneProcess ? PORTION_LIMITS.c2 : PORTION_LIMITS.c1;
-  const processes = allowNoneProcess ? FREESTYLE_PROCESSES_WITH_NONE : FREESTYLE_PROCESSES;
+  const limits = allowNoneProcess ? vocab.limits.c2 : vocab.limits.c1;
+  const processes = allowNoneProcess ? vocab.processesWithNone : vocab.processes;
 
   return html`
     <div class="${opts.containerClass}">
@@ -81,14 +82,14 @@ export function renderComponentForm(opts: ComponentFormOptions): TemplateResult 
         (v) => onChange({ process: v as Process }))}
       ${renderPortion(localize("freestyle.portion"), spec.portion_ml, limits.min, limits.max, limits.step,
         (v) => onChange({ portion_ml: v }), allowNoneProcess && isNone)}
-      ${renderSegment(localize("freestyle.intensity"), FREESTYLE_INTENSITIES, spec.intensity,
+      ${renderSegment(localize("freestyle.intensity"), vocab.intensities, spec.intensity,
         (v) => onChange({ intensity: v as Intensity }), !isCoffee)}
-      ${renderSegment(localize("freestyle.aroma"), FREESTYLE_AROMAS, spec.aroma,
+      ${renderSegment(localize("freestyle.aroma"), vocab.aromas, spec.aroma,
         (v) => onChange({ aroma: v as Aroma }), !isCoffee)}
       ${renderSegment(localize(opts.longTemperatureLabel ? "freestyle.temperature" : "freestyle.temp"),
-        FREESTYLE_TEMPERATURES, spec.temperature,
+        vocab.temperatures, spec.temperature,
         (v) => onChange({ temperature: v as Temperature }), allowNoneProcess && isNone)}
-      ${renderSegment(localize("freestyle.shots"), FREESTYLE_SHOTS, spec.shots,
+      ${renderSegment(localize("freestyle.shots"), vocab.shots, spec.shots,
         (v) => onChange({ shots: v as Shots }), !isCoffee)}
     </div>
   `;

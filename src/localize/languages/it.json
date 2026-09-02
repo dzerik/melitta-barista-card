@@ -21,9 +21,31 @@
     "descaling": "Decalcificazione",
     "off": "Spento",
     "busy": "Occupato",
+    "filter_insert": "Inserimento filtro",
+    "filter_replace": "Sostituzione filtro",
+    "filter_remove": "Rimozione filtro",
+    "evaporating": "Evaporazione",
     "idle": "Inattivo",
     "unavailable": "Non disponibile",
     "unknown": "Sconosciuto"
+  },
+  "activity": {
+    "grinding": "Macinatura",
+    "coffee": "Caffè",
+    "steam": "Vapore",
+    "water": "Acqua",
+    "prepare": "Preparazione"
+  },
+  "action": {
+    "none": "Nessuna",
+    "bu_removed": "Inserisci il gruppo infusore",
+    "trays_missing": "Inserisci le vaschette",
+    "empty_trays": "Svuota le vaschette",
+    "fill_water": "Riempi il serbatoio dell'acqua",
+    "close_powder_lid": "Chiudi il coperchio del caffè macinato",
+    "fill_powder": "Aggiungi caffè macinato",
+    "move_cup_to_frother": "Sposta la tazza sul cappuccinatore",
+    "flush_required": "Risciacquo necessario"
   },
   "drinks": {
     "espresso": "Espresso",
