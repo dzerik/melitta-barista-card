@@ -3,7 +3,7 @@
 // they live only here.
 
 import type { HomeAssistant } from "custom-card-helpers";
-import { SERVICE_DOMAIN, type DirectKeyCategory } from "./const";
+import { SERVICE_DOMAIN } from "./const";
 import { toServicePayload, type RecipeComponents } from "./recipe";
 import type { SommelierFavorite, SommelierHoppers, SommelierQuickRecipe } from "./types";
 
@@ -27,8 +27,17 @@ export function toggleSwitch(
   });
 }
 
+/** Write a number entity (contract-mode settings, UI Contract §9.1.6 rule 4). */
+export function setNumber(
+  hass: HomeAssistant, prefix: string, suffix: string, value: number,
+): Promise<unknown> {
+  return hass.callService("number", "set_value", {
+    entity_id: `number.${prefix}_${suffix}`, value,
+  });
+}
+
 export function brewDirectkey(
-  hass: HomeAssistant, prefix: string, category: DirectKeyCategory, twoCups: boolean,
+  hass: HomeAssistant, prefix: string, category: string, twoCups: boolean,
 ): Promise<unknown> {
   return hass.callService(SERVICE_DOMAIN, "brew_directkey", {
     entity_id: `button.${prefix}_brew`,
@@ -49,7 +58,7 @@ export function brewFreestyle(
 
 export function saveDirectkey(
   hass: HomeAssistant, prefix: string,
-  category: DirectKeyCategory, profileId: number, rc: RecipeComponents,
+  category: string, profileId: number, rc: RecipeComponents,
 ): Promise<unknown> {
   return hass.callService(SERVICE_DOMAIN, "save_directkey", {
     entity_id: `button.${prefix}_brew`,

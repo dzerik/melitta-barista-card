@@ -2,6 +2,20 @@
 
 All notable changes to the Melitta Barista Card.
 
+## [2.8.0] — 2026-09-03
+
+### Added
+
+UI Contract v3 client (integration ≥ 0.93, all features additive within `contract_version: 1`, detected by field presence — never by version):
+
+- **Settings descriptors** (§9.1): the settings section is catalog-driven when the contract serves `settings` — entries grouped in the normative order (brew, water, power, system, then unknown groups as served), server icons with the `mdi:tune` default, and the label/description/level chains (server per-setting key → server shared `_levels` tier → card bundle → humanized token). Writable numbers gain real controls: segmented level pickers for discrete ladders and slider/box inputs per the served display hint (contract `min`/`max`/`step` cross-checked against live entity attributes), writing through `number.set_value`. Select settings (Nivona water hardness) render as rows writing the served option label through `select.select_option`; `writable: false` entries render read-only. An entry whose bound entity is absent (user-disabled, or the registration lag after a machine-type refinement) is hidden — contract presence never overrides entity absence.
+- **DirectKey model** (§9.3): the quick-brew grid is model-driven when the contract serves `directkey` — category set and render order as served (milk froth before milk, matching the machine), served mdi icons for unknown category tokens, and `machine_button: false` tiles (e.g. Milk on the Barista TS, which has no dedicated front-panel key) visually de-emphasized while staying fully brewable over BLE. Category labels prefer the server-served strings in contract mode. The active-profile attribute name comes from the served model.
+- **Profile slots** (§9.3): profile tabs are built from the served slot bindings — slot 0 ("My Coffee") always shown, slots 1+ visible only while their activity switch is on, names read from the bound text entities with the select option as fallback. The active tab is identified by its stable slot number, never by label matching, so a mid-session rename cannot mismark the selection. Absent bound entities hide or degrade the affected slot only.
+
+### Compatibility
+
+- Every v3 feature degrades independently to the exact 2.7.0 behaviour: against a 0.92-or-older integration (or a Nivona entry, which serves no `directkey` block) the legacy hardcoded settings tables, category order, and options-driven profile tabs render unchanged. Unknown group, control, and category tokens are tolerated per the contract's open-set rules; malformed served entries are dropped individually and never break the section.
+
 ## [2.7.0] — 2026-09-03
 
 ### Added

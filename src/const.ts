@@ -34,6 +34,13 @@ export const PORTION_LIMITS = {
   c2: { min: 0, max: 250, step: 5 },
 } as const;
 
+// DirectKey legacy tier (UI Contract §9.3.6 rule 1, tier 2): with no
+// `contract.directkey` block (pre-0.93 server), these three tables ARE the
+// model — exactly-2.7.0 behaviour. With the block present, category set,
+// render order, icons and machine_button come from the contract instead
+// (src/directkey.ts resolveDirectKeyModel); this array's order is NOT the
+// contract enum order (milk vs milk_froth) and must stay frozen as the
+// 2.7.0 fallback.
 export const DIRECTKEY_CATEGORIES = [
   "espresso",
   "cafe_creme",
@@ -56,6 +63,11 @@ export const DK_LABELS: Record<DirectKeyCategory, string> = {
   water: "Hot Water",
 };
 
+// Reverse map for the `directkey_recipes` select attribute — a frozen legacy
+// surface (§5.2 rule 8: display-name keys, closed set, no new keys ever), so
+// this map is permanent for the attribute data path the card keeps using
+// (§9.3.4). For `recipes/list` consumers it is pre-0.93 fallback parsing
+// only (§9.3.6 rule 5) — rows carry `category` tokens since 0.93.
 export const DIRECTKEY_DISPLAY_TO_KEY: Record<string, DirectKeyCategory> = {
   "Espresso": "espresso",
   "Cafe Creme": "cafe_creme",

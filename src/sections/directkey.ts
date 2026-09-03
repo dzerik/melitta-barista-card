@@ -1,7 +1,17 @@
 // DirectKey quick-brew grid.
+//
+// Rendered from the resolved DirectKey model (spec §9.3.6, Zone C-L wiring):
+// category set and render order come from the model (contract-served order on
+// tier 1, the frozen 2.7.0 const order on tier 2), `machine_button: false`
+// de-emphasizes the tile (never disables the BLE brew path, rule 3), and
+// unknown category tokens are tolerated — served mdi icon, humanized label.
+// Without a `model` prop the section builds the legacy model itself, so any
+// pre-wiring caller keeps the exact 2.7.0 rendering.
 
 import { html, nothing, TemplateResult } from "lit";
-import { DIRECTKEY_CATEGORIES, DK_LABELS, type DirectKeyCategory } from "../const";
+import { DK_LABELS, type DirectKeyCategory } from "../const";
+import { resolveDirectKeyModel, type DirectKeyModel } from "../directkey";
+import { directKeyCategoryLabel } from "../directkey-display";
 import { INTENSITY_DOTS } from "../format";
 import { localize } from "../localize/localize";
 import { coffeeIconSvg } from "../icons";
@@ -9,10 +19,12 @@ import type { DirectKeyData, DirectKeyRecipe } from "../types";
 
 export interface DirectKeySectionProps {
   data: DirectKeyData;
-  selected: DirectKeyCategory | null;
+  selected: string | null;
   twoCups: boolean;
-  onCardClick: (cat: DirectKeyCategory) => void;
-  onLongPressStart: (cat: DirectKeyCategory, recipe: DirectKeyRecipe) => void;
+  /** Resolved model (Zone C-L). Absent → the legacy tier-2 model. */
+  model?: DirectKeyModel;
+  onCardClick: (cat: string) => void;
+  onLongPressStart: (cat: string, recipe: DirectKeyRecipe) => void;
   onLongPressCancel: () => void;
   onToggleTwoCups: () => void;
 }
@@ -20,23 +32,29 @@ export interface DirectKeySectionProps {
 export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | typeof nothing {
   const activeRecipes = props.data.profiles[props.data.activeProfile] ?? {};
   if (Object.keys(activeRecipes).length === 0) return nothing;
+  const model = props.model ?? resolveDirectKeyModel(null);
+  const contractMode = model.source === "contract";
 
   return html`
     <div class="dk-grid">
-      ${DIRECTKEY_CATEGORIES.map(cat => {
+      ${model.categories.map(catModel => {
+        const cat = catModel.category;
         const recipe = activeRecipes[cat];
         if (!recipe) return nothing;
         const isSelected = props.selected === cat;
         const hasDetails = recipe.c1_process !== undefined && recipe.c1_process !== "none";
+        const label = directKeyCategoryLabel(cat, contractMode);
         return html`
-          <button class="dk-card" ?data-selected=${isSelected}
+          <button class="dk-card${catModel.machineButton ? "" : " dk-card-nobutton"}"
+            ?data-selected=${isSelected}
+            style=${catModel.machineButton ? nothing : "opacity:0.6"}
             @click=${() => props.onCardClick(cat)}
             @pointerdown=${() => props.onLongPressStart(cat, recipe)}
             @pointerup=${() => props.onLongPressCancel()}
             @pointerleave=${() => props.onLongPressCancel()}
             @contextmenu=${(e: Event) => e.preventDefault()}>
             <div class="${isSelected && hasDetails ? "dk-icon-dimmed" : ""}">
-              ${coffeeIconSvg(DK_LABELS[cat], 48, `dk-${cat}`)}
+              ${renderDkIcon(cat, catModel.icon)}
             </div>
             ${isSelected && hasDetails ? html`
               <div class="dk-card-overlay">
@@ -45,8 +63,8 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
             ` : nothing}
             <span class="dk-card-label">
               ${isSelected
-                ? localize("directkey.brew_drink", { drink: localize(`drinks.${cat}`) })
-                : localize(`drinks.${cat}`)}
+                ? localize("directkey.brew_drink", { drink: label })
+                : label}
             </span>
           </button>
         `;
@@ -63,6 +81,21 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
 
     </div>
   `;
+}
+
+/**
+ * Tile icon: the seven known categories keep the procedural drink glyph
+ * (exact 2.7.0 visuals — the served mdi is a *fallback* icon, §9.3.2);
+ * an unknown token renders its served mdi icon when one exists, else the
+ * generic drink glyph.
+ */
+function renderDkIcon(cat: string, mdiIcon: string | null): TemplateResult {
+  const known = DK_LABELS[cat as DirectKeyCategory];
+  if (known !== undefined) return coffeeIconSvg(known, 48, `dk-${cat}`);
+  if (mdiIcon !== null) {
+    return html`<ha-icon class="dk-card-mdi" icon="${mdiIcon}" style="--mdc-icon-size:48px"></ha-icon>`;
+  }
+  return coffeeIconSvg(cat, 48, `dk-${cat}`);
 }
 
 function renderDkRecipeInfo(recipe: DirectKeyRecipe): TemplateResult | typeof nothing {

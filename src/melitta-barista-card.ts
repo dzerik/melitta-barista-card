@@ -10,7 +10,6 @@ import {
   OTHER_ACTIONS,
   LONG_PRESS_MS,
   MAINT_BUSY_RESET_MS,
-  type DirectKeyCategory,
 } from "./const";
 import type {
   MelittaCardConfig,
@@ -43,6 +42,7 @@ import {
   readStatusTokens,
   noteBridgeUpdate,
   fetchUiContract,
+  readContractSettings,
   type ActionEntry,
   type BridgeAttrs,
   type StatusTokens,
@@ -67,7 +67,14 @@ import {
 import { buildBrandBadge } from "./brand-badge";
 import { coffeeIconSvg, coffeeIconSvgFromSpec } from "./icons";
 import * as api from "./api";
-import { parseDirectKeyData } from "./directkey";
+import {
+  parseDirectKeyData,
+  resolveDirectKeyModel,
+  type DirectKeyModel,
+} from "./directkey";
+import { buildProfileTabs, directKeyCategoryLabel } from "./directkey-display";
+import { resolveProfileSlots } from "./profile";
+import { resolveSettings } from "./settings-catalog";
 import { localize, setLanguage, getLanguage } from "./localize/localize";
 import { detectMelittaDevices } from "./utils";
 import { cardStyles } from "./styles";
@@ -85,11 +92,11 @@ export class MelittaBaristaCard extends LitElement {
   @state() private _fsName = "Custom";
   @state() private _fsRecipe: RecipeComponents = defaultRecipe();
 
-  // DirectKey state
-  @state() private _selectedDk: DirectKeyCategory | null = null;
+  // DirectKey state (category tokens are an open set in contract mode, §9.3.6)
+  @state() private _selectedDk: string | null = null;
   @state() private _twoCups = false;
   // Recipe edit dialog
-  @state() private _editDk: { category: DirectKeyCategory; recipe: DirectKeyRecipe } | null = null;
+  @state() private _editDk: { category: string; recipe: DirectKeyRecipe } | null = null;
   @state() private _editState: RecipeComponents | null = null;
   @state() private _editSaving = false;
 
@@ -126,6 +133,20 @@ export class MelittaBaristaCard extends LitElement {
   private _serverStringsActive = false;
   /** Contract fingerprint the current _trackedIds were built against. */
   private _trackedContractFp: string | null = null;
+
+  // Resolved DirectKey model (§9.3.6), memoized per contract document —
+  // consulted several times per render (profile select anchor, active-profile
+  // attribute, tabs, grid, tracked ids).
+  private _dkModelFor: UiContract | null = null;
+  private _dkModelCached: DirectKeyModel | null = null;
+
+  private _dkModel(): DirectKeyModel {
+    if (this._dkModelCached === null || this._dkModelFor !== this._contract) {
+      this._dkModelFor = this._contract;
+      this._dkModelCached = resolveDirectKeyModel(this._contract);
+    }
+    return this._dkModelCached;
+  }
 
   public disconnectedCallback(): void {
     super.disconnectedCallback();
@@ -170,6 +191,8 @@ export class MelittaBaristaCard extends LitElement {
     this._i18nLocale = null;
     this._i18nFingerprint = null;
     this._trackedContractFp = null;
+    this._dkModelFor = null;
+    this._dkModelCached = null;
   }
 
   public getCardSize(): number {
@@ -325,11 +348,23 @@ export class MelittaBaristaCard extends LitElement {
     // arrays below stay tracked unconditionally — permanent fixture, §6.2.5.1).
     const catalogButtonIds = (resolveActionCatalog(this._contract) ?? [])
       .flatMap((g) => g.entries.map((e) => `button.${prefix}_${e.invocation.entity_suffix}`));
+    // Contract settings entries can bind entities outside the legacy tables
+    // (e.g. Nivona's water_hardness select) — track them all so presence and
+    // state changes re-render (§9.1.6 rules 1–2).
+    const settingsIds = (this._contract ? readContractSettings(this._contract) ?? [] : [])
+      .map((e) => `${e.entity.domain}.${prefix}_${e.entity.entity_suffix}`);
+    // DirectKey profile bindings (§9.3.6 rule 4): the profile select anchor
+    // comes from the model; slot name/activity entities gate tab visibility.
+    const dkModel = this._dkModel();
+    const profileIds = (dkModel.profiles ?? []).flatMap((p) => [
+      ...(p.name_entity_suffix ? [`text.${prefix}_${p.name_entity_suffix}`] : []),
+      ...(p.active_entity_suffix ? [`switch.${prefix}_${p.active_entity_suffix}`] : []),
+    ]);
     return [
       ...["state", "activity", "progress", "action_required", "connection", "total_cups"]
         .map((s) => `sensor.${prefix}_${s}`),
       `select.${prefix}_recipe`,
-      `select.${prefix}_profile`,
+      `select.${prefix}_${dkModel.profileSelectSuffix}`,
       ...SWITCH_KEYS.map((k) => `switch.${prefix}_${k}`),
       ...NUMBER_KEYS.map((k) => `number.${prefix}_${k}`),
       ...[...CLEANING_ACTIONS, ...FILTER_ACTIONS, ...OTHER_ACTIONS]
@@ -337,6 +372,8 @@ export class MelittaBaristaCard extends LitElement {
       `button.${prefix}_brew`,
       `button.${prefix}_cancel`,
       ...catalogButtonIds,
+      ...settingsIds,
+      ...profileIds,
     ];
   }
 
@@ -381,7 +418,7 @@ export class MelittaBaristaCard extends LitElement {
   // -- Profile helpers --
 
   private _profileEntity() {
-    return this._entity("select", "profile");
+    return this._entity("select", this._dkModel().profileSelectSuffix);
   }
 
   private _profileOptions(): string[] {
@@ -408,13 +445,18 @@ export class MelittaBaristaCard extends LitElement {
       return;
     }
 
-    api.selectOption(this.hass, prefix, "profile", option);
+    api.selectOption(this.hass, prefix, this._dkModel().profileSelectSuffix, option);
   }
 
   // -- DirectKey helpers --
 
   private _getDirectKeyData(): DirectKeyData | null {
-    return parseDirectKeyData(this._profileEntity()?.attributes);
+    // Active-profile attribute name from the served model (§9.3.6 rule 4);
+    // legacy tier keeps the frozen "active_profile" default.
+    return parseDirectKeyData(
+      this._profileEntity()?.attributes,
+      this._dkModel().activeProfileAttribute,
+    );
   }
 
   // -- Actions --
@@ -431,7 +473,7 @@ export class MelittaBaristaCard extends LitElement {
     api.pressButton(this.hass, prefix, "cancel");
   }
 
-  private _brewDirectkey(category: DirectKeyCategory): void {
+  private _brewDirectkey(category: string): void {
     const prefix = this._getPrefix();
     if (!prefix) return;
     api.brewDirectkey(this.hass, prefix, category, this._twoCups);
@@ -506,7 +548,7 @@ export class MelittaBaristaCard extends LitElement {
 
   // -- DK long press / click --
 
-  private _startDkLongPress(cat: DirectKeyCategory, recipe: DirectKeyRecipe): void {
+  private _startDkLongPress(cat: string, recipe: DirectKeyRecipe): void {
     this._dkLongPressTriggered = false;
     this._dkLongPressTimer = setTimeout(() => {
       this._dkLongPressTriggered = true;
@@ -521,7 +563,7 @@ export class MelittaBaristaCard extends LitElement {
     }
   }
 
-  private _handleDkClick(cat: DirectKeyCategory): void {
+  private _handleDkClick(cat: string): void {
     if (this._dkLongPressTriggered) return;
     if (this._selectedDk === cat) {
       this._brewDirectkey(cat);
@@ -530,7 +572,7 @@ export class MelittaBaristaCard extends LitElement {
     }
   }
 
-  private _openEditDialog(cat: DirectKeyCategory, recipe: DirectKeyRecipe): void {
+  private _openEditDialog(cat: string, recipe: DirectKeyRecipe): void {
     this._editDk = { category: cat, recipe };
     this._editState = fromDkRecipe(recipe);
     this._editSaving = false;
@@ -589,7 +631,7 @@ export class MelittaBaristaCard extends LitElement {
             (name, size, uid) => this._renderRecipeIcon(name, size, uid))
         : nothing}
 
-      ${!st.isBrewing && this._config.show_profiles && st.isReady && this._profileOptions().length > 1
+      ${!st.isBrewing && this._config.show_profiles && st.isReady
         ? this._renderProfileTabs()
         : nothing}
 
@@ -629,8 +671,27 @@ export class MelittaBaristaCard extends LitElement {
   // -- Section wrappers (props glue) --
 
   private _renderProfileTabs() {
+    const options = this._profileOptions();
+    const model = this._dkModel();
+    const prefix = this._getPrefix();
+    if (model.profiles !== null && prefix) {
+      // Contract mode (§9.3.6 rule 4): slots and visibility from the served
+      // bindings resolved against live entity state; the fewer-than-2 gate
+      // matches the legacy options gate below.
+      const slots = resolveProfileSlots(model.profiles, (domain, suffix) =>
+        this.hass.states[`${domain}.${prefix}_${suffix}`]?.state);
+      const tabs = buildProfileTabs(slots, options, this._selectedProfile());
+      if (tabs.length <= 1) return nothing;
+      return renderProfileTabs({
+        options,
+        selected: this._selectedProfile(),
+        tabs,
+        onSelect: (slot) => this._selectProfile(slot),
+      });
+    }
+    if (options.length <= 1) return nothing; // exact 2.7.0 gate (moved here)
     return renderProfileTabs({
-      options: this._profileOptions(),
+      options,
       selected: this._selectedProfile(),
       onSelect: (slot) => this._selectProfile(slot),
     });
@@ -641,6 +702,7 @@ export class MelittaBaristaCard extends LitElement {
     if (!dk) return nothing;
     return renderDirectKey({
       data: dk,
+      model: this._dkModel(),
       selected: this._selectedDk,
       twoCups: this._twoCups,
       onCardClick: (cat) => this._handleDkClick(cat),
@@ -753,9 +815,18 @@ export class MelittaBaristaCard extends LitElement {
   private _renderSettings() {
     const prefix = this._getPrefix();
     if (!prefix) return nothing;
+    // §5.3.6 three-tier resolution: contract `settings` (with the §9.1.6
+    // rule-2 entity-absence gate) → legacy tables + entity existence → hidden.
+    const resolved = resolveSettings(
+      this._contract,
+      (domain, suffix) => !!this.hass.states[`${domain}.${prefix}_${suffix}`],
+    );
     return renderSettings({
       getEntity: (domain, key) => this.hass.states[`${domain}.${prefix}_${key}`],
       onToggle: (key, turnOn) => this._toggleSwitch(key, turnOn),
+      resolved,
+      onSetNumber: (suffix, value) => api.setNumber(this.hass, prefix, suffix, value),
+      onSelectOption: (suffix, option) => api.selectOption(this.hass, prefix, suffix, option),
     });
   }
 
@@ -772,7 +843,9 @@ export class MelittaBaristaCard extends LitElement {
         <div class="edit-dialog" @click=${(e: Event) => e.stopPropagation()}>
           <div class="edit-header">
             <span class="edit-title">
-              ${localize("edit_dialog.title", { drink: localize(`drinks.${cat}`) })}
+              ${localize("edit_dialog.title", {
+                drink: directKeyCategoryLabel(cat, this._dkModel().source === "contract"),
+              })}
             </span>
             <button class="edit-close" @click=${() => this._closeEditDialog()}>
               <ha-icon icon="mdi:close"></ha-icon>

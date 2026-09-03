@@ -246,6 +246,68 @@ export interface ActionEntry {
   invocation: ActionInvocation;
 }
 
+// ---------------------------------------------------------------------------
+// v3 feature types (spec §9, 0.93 amendment). ALL additive and optional —
+// exactly the v2 pattern: shipped within contract_version 1, detected by
+// field presence (§9.0.1), degrading per feature (§5.3.6). validateContract
+// deliberately does NOT check any of them.
+// ---------------------------------------------------------------------------
+
+/** One rung of a discrete number scale (spec §9.1.1): token = semantic identity, value = wire mapping. */
+export interface SettingLevel {
+  value: number;
+  token: string;
+}
+
+/**
+ * One select option (spec §9.1.1). `label` mirrors the select entity's current
+ * option string — writes send the served label verbatim (§9.1.6 rule 4);
+ * `token` is non-null only where a semantic ladder has been authored.
+ */
+export interface SettingOption {
+  value: number;
+  token: string | null;
+  label: string;
+}
+
+/** Entity binding of a setting: `<domain>.<prefix>_<entity_suffix>` (§6.2.1 anchor convention). */
+export interface SettingEntityBinding {
+  domain: string; // "switch" | "number" | "select"
+  entity_suffix: string;
+}
+
+/**
+ * One machine-settings descriptor (spec §9.1.1). Served order is the
+ * normative render order; `control` and `group` are open sets (§5.3.2) —
+ * an unknown `control` is skipped per entry by the resolver, an unknown
+ * `group` renders after the known ones.
+ */
+export interface SettingEntry {
+  /** lower_snake stable token, byte-equal to the entity suffix (§9.1.2.1). */
+  setting: string;
+  /** Known: "switch" | "number" | "select" (open set). */
+  control: string;
+  /** Known: "brew" | "water" | "power" | "system" (open set). */
+  group: string;
+  /** "mdi:<name>"; absent/malformed → mdi:tune (§9.1.1). */
+  icon?: string;
+  entity: SettingEntityBinding;
+  /** false → read-only display, never a disabled write control (§9.1.6.6). */
+  writable: boolean;
+  // control == "number":
+  min?: number;
+  max?: number;
+  step?: number;
+  /** Known: "min" | "h". */
+  unit?: string;
+  /** Known: "slider" | "box" — advisory rendering hint only. */
+  display?: string;
+  /** Semantic ladder for discrete scales; absent → plain numeric control. */
+  levels?: SettingLevel[];
+  // control == "select":
+  options?: SettingOption[];
+}
+
 /** The full `ui_contract/get` response document (spec §3.3). */
 export interface UiContract {
   schema_version: number;
@@ -310,6 +372,18 @@ export interface UiContract {
   forbidden_combinations?: ForbiddenCombination[];
   /** Server-strings cache axis (§6.3.2): the integration manifest version. */
   strings_version?: string;
+
+  // --- v3 additive fields (spec §9, all optional; absent on ≤0.92 servers) ---
+
+  /** Settings descriptors (§9.1); absent → legacy hardcoded settings tables. */
+  settings?: SettingEntry[];
+  /**
+   * DirectKey/profile model (§9.3); present iff the machine supports the HC
+   * extension (Melitta only). The shape lives with its Zone C-K consumer
+   * (`ContractDirectKey` in directkey.ts), which reads it through a widening
+   * cast exactly like every feature reader — untyped here on purpose.
+   */
+  directkey?: unknown;
 }
 
 /** Minimal structural slice of the HA connection object this module needs. */
@@ -516,6 +590,90 @@ export function readContractActions(contract: UiContract): ActionEntry[] | null 
     };
     // destructive is meaningful only as the literal true (§6.2.1).
     if (entry.destructive !== true) delete normalized.destructive;
+    out.push(normalized);
+  }
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// v3 feature readers (spec §9.0.1): same contract as the v2 readers above —
+// per-feature presence detection, per-entry malformation dropping, never a
+// document rejection.
+// ---------------------------------------------------------------------------
+
+function readSettingLevels(v: unknown): SettingLevel[] | null {
+  if (!Array.isArray(v)) return null;
+  const out: SettingLevel[] = [];
+  for (const item of v) {
+    if (!isRecord(item)) continue;
+    if (typeof item.value !== "number") continue;
+    if (typeof item.token !== "string" || item.token === "") continue;
+    out.push({ value: item.value, token: item.token });
+  }
+  return out.length > 0 ? out : null;
+}
+
+function readSettingOptions(v: unknown): SettingOption[] | null {
+  if (!Array.isArray(v)) return null;
+  const out: SettingOption[] = [];
+  for (const item of v) {
+    if (!isRecord(item)) continue;
+    if (typeof item.value !== "number") continue;
+    if (typeof item.label !== "string") continue;
+    out.push({
+      value: item.value,
+      token: typeof item.token === "string" && item.token !== "" ? item.token : null,
+      label: item.label,
+    });
+  }
+  return out.length > 0 ? out : null;
+}
+
+/**
+ * Read the v3 `settings` block from a contract document (spec §9.1).
+ *
+ * Returns null when the field is absent or malformed (a ≤0.92 server) — the
+ * caller falls back to the legacy hardcoded settings tables (§5.3.6 tier 2).
+ * When present, entries are normalized per entry: an entry without a usable
+ * `setting` token, `control` string, or entity binding is DROPPED (it cannot
+ * be addressed); unknown `control`/`group` tokens pass through untouched
+ * (open sets, §5.3.2 — renderability is the resolver's decision); `writable`
+ * normalizes fail-closed (never invent a write control the server did not
+ * declare); malformed `levels`/`options` items and malformed optional scalars
+ * are stripped so the renderer sees only well-typed data. Served order is
+ * preserved — it is the normative render order (§9.1.1).
+ */
+export function readContractSettings(contract: UiContract): SettingEntry[] | null {
+  // Widen: validateContract passes v3 fields through unchecked (§9.0.1).
+  const raw: unknown = contract.settings;
+  if (!Array.isArray(raw)) return null;
+  const out: SettingEntry[] = [];
+  for (const entry of raw) {
+    if (!isRecord(entry)) continue;
+    if (typeof entry.setting !== "string" || entry.setting === "") continue;
+    if (typeof entry.control !== "string" || entry.control === "") continue;
+    const entity = entry.entity;
+    if (!isRecord(entity)) continue;
+    if (typeof entity.domain !== "string" || entity.domain === "") continue;
+    if (typeof entity.entity_suffix !== "string" || entity.entity_suffix === "") continue;
+    const normalized: SettingEntry = {
+      ...(entry as unknown as SettingEntry),
+      group: typeof entry.group === "string" ? entry.group : "",
+      entity: { domain: entity.domain, entity_suffix: entity.entity_suffix },
+      writable: entry.writable === true,
+    };
+    const levels = readSettingLevels(entry.levels);
+    if (levels) normalized.levels = levels;
+    else delete normalized.levels;
+    const options = readSettingOptions(entry.options);
+    if (options) normalized.options = options;
+    else delete normalized.options;
+    if (typeof entry.min !== "number") delete normalized.min;
+    if (typeof entry.max !== "number") delete normalized.max;
+    if (typeof entry.step !== "number") delete normalized.step;
+    if (typeof entry.unit !== "string") delete normalized.unit;
+    if (typeof entry.display !== "string") delete normalized.display;
+    if (typeof entry.icon !== "string") delete normalized.icon;
     out.push(normalized);
   }
   return out;

@@ -58,9 +58,30 @@ export interface ProfileTabsProps {
   options: string[];
   selected: string | null;
   onSelect: (slot: number) => void;
+  /**
+   * Contract-mode tab model (UI Contract §9.3.6 rule 4, Zone C-L): explicit
+   * slot identity, resolved labels, and slot-based active detection. When
+   * present it replaces the legacy options/selected label-matching render;
+   * absent → exactly the 2.7.0 tab bar.
+   */
+  tabs?: { slot: number; label: string; active: boolean }[];
 }
 
 export function renderProfileTabs(props: ProfileTabsProps): TemplateResult {
+  if (props.tabs !== undefined) {
+    return html`
+      <div class="profile-tabs">
+        ${props.tabs.map((t) => html`
+          <button class="profile-tab" ?data-active=${t.active}
+            @click=${() => { if (!t.active) props.onSelect(t.slot); }}>
+            ${t.label}
+            ${t.active ? html`<span class="profile-tab-indicator"></span>` : nothing}
+          </button>
+        `)}
+        <span class="profile-tabs-version">v${CARD_VERSION}</span>
+      </div>
+    `;
+  }
   return html`
     <div class="profile-tabs">
       ${props.options.map((o, slot) => html`
