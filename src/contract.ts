@@ -120,7 +120,7 @@ export interface RecipeComponentData {
   blend?: string;
 }
 
-/** One catalog recipe from the contract document (spec §3.3). */
+/** One catalog recipe from the contract document (spec §3.3, §6.3.6). */
 export interface ContractRecipe {
   recipe_id: number;
   name: string;
@@ -130,6 +130,12 @@ export interface ContractRecipe {
     c1: RecipeComponentData | null;
     c2: RecipeComponentData | null;
   };
+  /**
+   * Stable ASCII lower_snake i18n key (spec §6.3.6, additive v2 field):
+   * server string lookup goes through `recipes.name.<name_key>`; `name`
+   * stays the English fallback. Absent on 0.91 servers.
+   */
+  name_key?: string;
 }
 
 /** Inclusive numeric range with step, e.g. portion limits (spec §3.3). */
@@ -137,6 +143,107 @@ export interface PortionRange {
   min: number;
   max: number;
   step: number;
+}
+
+// ---------------------------------------------------------------------------
+// v2 feature types (spec §6, 0.92 amendment). ALL additive and optional:
+// every one of these ships within contract_version 1, is detected by field
+// presence (never by version, §6.0.1), and degrades independently (§6.0.4).
+// validateContract deliberately does NOT check any of them.
+// ---------------------------------------------------------------------------
+
+/**
+ * Self-describing parameter descriptor (spec §6.1.1).
+ *
+ * `kind` and `scope` are open sets (§5.3.2): a descriptor with an unknown
+ * `kind` is ignored per-parameter (§6.1.5 three-tier fallback); a descriptor
+ * whose `scope` contains no token the client understands is not rendered.
+ */
+export interface ParameterDescriptor {
+  /** Known: "enum" | "range" (open set). */
+  kind: string;
+  /** Known: "freestyle" | "brew_override" (open set). */
+  scope: string[];
+  /** Freestyle process tokens the parameter attaches to; absent = all. */
+  applies_to?: string[];
+  /** kind == "enum": lower_snake value tokens, §3.1 casing. */
+  tokens?: string[];
+  /** kind == "range": known "ml". */
+  unit?: string;
+  /** kind == "range": when set, c1/c2 sub-ranges apply; else min/max/step. */
+  per_component?: true;
+  c1?: PortionRange;
+  c2?: PortionRange;
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+/** Forbidden parameter combination (spec §6.1.6); advisory, server re-validates. */
+export interface ForbiddenCombination {
+  params: Record<string, string>;
+  reason_token?: string;
+}
+
+/** One parameter of a service-kind action invocation (spec §6.2.1). */
+export interface ActionParam {
+  name: string;
+  /** Known: "enum" | "bool" | "int" | "params_ref" (open set). */
+  kind: string;
+  required: boolean;
+  /** kind enum. */
+  tokens?: string[];
+  default?: string | number | boolean;
+  /** kind int; disjoint inclusive ranges. */
+  ranges?: [number, number][];
+  /** kind params_ref; known: "freestyle". */
+  ref?: string;
+}
+
+/** Press `button.<prefix>_<entity_suffix>` (spec §6.2.1). */
+export interface ActionInvocationButton {
+  kind: "button";
+  entity_suffix: string;
+}
+
+/**
+ * Call `melitta_barista.<service>` (spec §6.2.1). `entity_suffix` is REQUIRED:
+ * the service's `entity_id` target is `button.<prefix>_<entity_suffix>` —
+ * multi-machine targeting is normative.
+ */
+export interface ActionInvocationService {
+  kind: "service";
+  service: string;
+  entity_suffix: string;
+  params: ActionParam[];
+}
+
+/**
+ * How an action is invoked. The `kind` set is open on the wire: entries with
+ * an unknown `invocation.kind` are dropped by the client (§6.0.3/§6.2.1) —
+ * see readContractActions.
+ */
+export type ActionInvocation = ActionInvocationButton | ActionInvocationService;
+
+/** One action-catalog entry (spec §6.2.1/§6.2.2). */
+export interface ActionEntry {
+  /** lower_snake action token, e.g. "easy_clean". */
+  action: string;
+  /** Known: "brew" | "control" | "cleaning" | "filter" | "power" | "danger" (open). */
+  group: string;
+  /** MachineProcess token the action starts, if any. */
+  process: string | null;
+  /** "mdi:<name>"; absent/malformed → client default (normatively mdi:cog). */
+  icon?: string;
+  /** Client shows a confirm step (two-tap or dialog). */
+  confirm: boolean;
+  /** Implies confirm regardless of the confirm flag, plus danger styling. */
+  destructive?: true;
+  /** Condition tokens (§6.2.4); [] = always; unknown token = satisfied. */
+  requires: string[];
+  /** Per-family truth (§6.2.6); false entries hidden by default. */
+  available: boolean;
+  invocation: ActionInvocation;
 }
 
 /** The full `ui_contract/get` response document (spec §3.3). */
@@ -192,6 +299,17 @@ export interface UiContract {
   recipes: ContractRecipe[];
   status_attribute_entity: string;
   bridge_attribute_entity: string;
+
+  // --- v2 additive fields (spec §6, all optional; absent on 0.91 servers) ---
+
+  /** Parameter catalogs (§6.1); mirrors and closes the v1 vocab/limits blocks. */
+  parameters?: Record<string, ParameterDescriptor>;
+  /** Action catalog (§6.2); absent → legacy hardcoded action arrays. */
+  actions?: ActionEntry[];
+  /** Defined shape, empty content in 0.92 (§6.1.6). */
+  forbidden_combinations?: ForbiddenCombination[];
+  /** Server-strings cache axis (§6.3.2): the integration manifest version. */
+  strings_version?: string;
 }
 
 /** Minimal structural slice of the HA connection object this module needs. */
@@ -288,6 +406,119 @@ export function validateContract(data: unknown): UiContract | null {
   if (typeof data.status_attribute_entity !== "string") return null;
   if (typeof data.bridge_attribute_entity !== "string") return null;
   return data as unknown as UiContract;
+}
+
+// ---------------------------------------------------------------------------
+// v2 feature readers (spec §6.0.1/§6.0.3): per-feature presence detection and
+// unknown-kind dropping. These are the primitives the parameter wiring (tier
+// fallback, §6.1.5) and the action-catalog resolver (§6.2.5) build on; they
+// never reject a document — v2 malformation degrades only its own feature.
+// ---------------------------------------------------------------------------
+
+/** Parameter descriptor kinds this client can interpret (spec §6.1.1). */
+export const KNOWN_PARAMETER_KINDS: readonly string[] = ["enum", "range"];
+
+/** Action invocation kinds this client can dispatch (spec §6.2.1). */
+export const KNOWN_INVOCATION_KINDS: readonly string[] = ["button", "service"];
+
+function isStringArray(v: unknown): v is string[] {
+  return Array.isArray(v) && v.every((s) => typeof s === "string");
+}
+
+function isPortionRangeLike(v: unknown): v is PortionRange {
+  return isRecord(v)
+    && typeof v.min === "number" && typeof v.max === "number" && typeof v.step === "number";
+}
+
+/**
+ * Read the v2 `parameters` catalog from a contract document (spec §6.1).
+ *
+ * Returns null when the field is absent (0.91 server) — the caller falls back
+ * wholesale to the v1 vocabularies/limits tier (§6.1.5). When present, only
+ * descriptors this client can interpret survive: unknown `kind`, an enum
+ * without a string `tokens` list, or a range without usable numbers are
+ * OMITTED, so the per-parameter fallback happens naturally at the wiring tier.
+ * An unknown `scope` token is NOT dropped here — scope filtering is a
+ * rendering decision (§6.1.1); `scope` is only normalized to a string array.
+ */
+export function readContractParameters(
+  contract: UiContract,
+): Record<string, ParameterDescriptor> | null {
+  // Widen: validateContract passes v2 fields through unchecked (§6.0.1), so
+  // the value may be malformed despite the optimistic UiContract typing.
+  const raw: unknown = contract.parameters;
+  if (!isRecord(raw)) return null;
+  const out: Record<string, ParameterDescriptor> = {};
+  for (const [family, desc] of Object.entries(raw)) {
+    if (!isRecord(desc)) continue;
+    const kind = desc.kind;
+    if (typeof kind !== "string" || !KNOWN_PARAMETER_KINDS.includes(kind)) continue;
+    if (kind === "enum" && !isStringArray(desc.tokens)) continue;
+    if (kind === "range") {
+      const perComponent = desc.per_component === true;
+      const rangeOk = perComponent
+        ? isPortionRangeLike(desc.c1) && isPortionRangeLike(desc.c2)
+        : typeof desc.min === "number" && typeof desc.max === "number"
+          && typeof desc.step === "number";
+      if (!rangeOk) continue;
+    }
+    const scope = isStringArray(desc.scope) ? desc.scope : [];
+    out[family] = { ...(desc as unknown as ParameterDescriptor), scope };
+  }
+  return out;
+}
+
+function readInvocation(v: unknown): ActionInvocation | null {
+  if (!isRecord(v)) return null;
+  if (v.kind === "button") {
+    return typeof v.entity_suffix === "string" && v.entity_suffix !== ""
+      ? (v as unknown as ActionInvocationButton) : null;
+  }
+  if (v.kind === "service") {
+    // entity_suffix is REQUIRED on service entries (§6.2.1 multi-machine rule).
+    return typeof v.service === "string" && v.service !== ""
+      && typeof v.entity_suffix === "string" && v.entity_suffix !== ""
+      && Array.isArray(v.params)
+      ? (v as unknown as ActionInvocationService) : null;
+  }
+  return null; // unknown invocation kind → entry dropped (§6.0.3)
+}
+
+/**
+ * Read the v2 `actions` catalog from a contract document (spec §6.2).
+ *
+ * Returns null when the field is absent (0.91 server) — the caller renders
+ * its legacy hardcoded action arrays (§6.2.5.1). When present, entries with
+ * an unknown or malformed `invocation.kind` are dropped (§6.0.3/§6.2.1) and
+ * the advisory fields are normalized fail-open (`available` defaults true,
+ * missing `requires` → always-satisfied []): the catalog gates styling, never
+ * correctness — the server re-validates every command (§6.2.4). Serve order
+ * is preserved; group ordering is the resolver's concern (§6.2.3).
+ */
+export function readContractActions(contract: UiContract): ActionEntry[] | null {
+  // Widen: validateContract passes v2 fields through unchecked (§6.0.1).
+  const raw: unknown = contract.actions;
+  if (!Array.isArray(raw)) return null;
+  const out: ActionEntry[] = [];
+  for (const entry of raw) {
+    if (!isRecord(entry)) continue;
+    if (typeof entry.action !== "string" || entry.action === "") continue;
+    const invocation = readInvocation(entry.invocation);
+    if (!invocation) continue;
+    const normalized: ActionEntry = {
+      ...(entry as unknown as ActionEntry),
+      group: typeof entry.group === "string" ? entry.group : "",
+      process: typeof entry.process === "string" ? entry.process : null,
+      confirm: entry.confirm === true,
+      requires: isStringArray(entry.requires) ? entry.requires : [],
+      available: entry.available !== false,
+      invocation,
+    };
+    // destructive is meaningful only as the literal true (§6.2.1).
+    if (entry.destructive !== true) delete normalized.destructive;
+    out.push(normalized);
+  }
+  return out;
 }
 
 // ---------------------------------------------------------------------------

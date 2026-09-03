@@ -14,7 +14,7 @@
 //    entity the display name is the join key HA gives us, which is fine).
 //  - contractAllowsFreestyle(): capability gate for the freestyle section.
 
-import type { UiContract, IconSpec } from "./contract";
+import { readContractParameters, type UiContract, type IconSpec } from "./contract";
 import {
   FREESTYLE_PROCESSES,
   FREESTYLE_PROCESSES_WITH_NONE,
@@ -92,6 +92,165 @@ export function resolveFreestyleVocab(contract: UiContract | null | undefined): 
       c2: portionLimit(contract?.limits?.portion_ml?.c2, { ...PORTION_LIMITS.c2 }),
     },
   };
+}
+
+// ---------------------------------------------------------------------------
+// Zone C-F: v2 parameter-catalog wiring (spec §6.1.5 three-tier fallback).
+// ---------------------------------------------------------------------------
+
+/** The one descriptor scope this card renders parameters under (§6.1.1). */
+const FREESTYLE_SCOPE = "freestyle";
+
+/** Families whose legacy (pre-catalog) rule is "coffee component only" —
+ *  mirrors the historical hardcoded `!isCoffee` disables in controls.ts. */
+const COFFEE_ONLY_FAMILIES: readonly string[] = ["intensity", "aroma", "shots"];
+
+/** Parameter families the freestyle/edit component form renders. */
+export const FREESTYLE_PARAMETER_FAMILIES = [
+  "process", "intensity", "aroma", "temperature", "shots", "portion_ml",
+] as const;
+
+/** A string array (possibly empty), or null. Unlike stringList, an empty
+ *  array is meaningful here: `applies_to: []` attaches to no process. */
+function optionalStringArray(v: unknown): string[] | null {
+  if (!Array.isArray(v) || !v.every((x) => typeof x === "string")) return null;
+  return v as string[];
+}
+
+/**
+ * FreestyleVocab plus the v2 catalog metadata (spec §6.1). A strict superset:
+ * every consumer of FreestyleVocab accepts a ResolvedParameters unchanged.
+ */
+export interface ResolvedParameters extends FreestyleVocab {
+  /**
+   * Per family: freestyle process tokens the parameter attaches to
+   * (`applies_to`, §6.1.1); null = all processes. In tier-2/tier-3 modes this
+   * carries the legacy hardcoded rule (intensity/aroma/shots → coffee only).
+   */
+  appliesTo: Record<string, readonly string[] | null>;
+  /**
+   * Per family: false when a served descriptor scopes the family away from
+   * freestyle UI — brew_override-only or unknown scopes (§6.1.1/§6.1.4 note).
+   * Such a family is omitted from the form, never tier-fallen-back.
+   */
+  rendered: Record<string, boolean>;
+  /** Portion slider unit from a tier-1 range descriptor; null otherwise. */
+  portionUnit: string | null;
+}
+
+/**
+ * Resolve the freestyle form's parameters with the normative §6.1.5
+ * three-tier per-parameter fallback:
+ *
+ *   `parameters.<family>` → v1 `vocabularies.freestyle.<family>` /
+ *   `limits.portion_ml` → const.ts.
+ *
+ * Tier 2 is built by resolveFreestyleVocab (which already folds tier 3 in
+ * per field — today's 2.6.x behaviour, mandatory for 0.91 servers); tier 1
+ * then overrides per family from the readContractParameters() view, in which
+ * unknown-kind/structurally-unusable descriptors are already dropped (§6.0.3)
+ * so their families fall through naturally. A descriptor whose scope does not
+ * include "freestyle" marks its family not-rendered instead (§6.1.1); range
+ * descriptors drive the slider config (min/max/step/unit), flat ranges
+ * applying to both components.
+ */
+export function resolveParameters(contract: UiContract | null | undefined): ResolvedParameters {
+  const base = resolveFreestyleVocab(contract);
+  const out: ResolvedParameters = {
+    ...base,
+    appliesTo: {
+      process: null,
+      intensity: ["coffee"],
+      aroma: ["coffee"],
+      temperature: null,
+      shots: ["coffee"],
+      portion_ml: null,
+    },
+    rendered: {
+      process: true, intensity: true, aroma: true,
+      temperature: true, shots: true, portion_ml: true,
+    },
+    portionUnit: null,
+  };
+  const params = contract ? readContractParameters(contract) : null;
+  if (!params) return out; // tiers 2/3 (0.91 server, or no contract at all)
+
+  const applyEnum = (family: string, apply: (tokens: string[]) => void): void => {
+    const d = params[family];
+    if (!d) return; // absent or reader-dropped → per-parameter fallback
+    if (!d.scope.includes(FREESTYLE_SCOPE)) {
+      out.rendered[family] = false; // §6.1.1: not rendered as freestyle UI
+      return;
+    }
+    if (d.kind !== "enum") return; // wrong kind for an enum family → fallback
+    const tokens = stringList(d.tokens);
+    if (!tokens) return; // empty/malformed list → per-parameter fallback
+    apply(tokens);
+    out.appliesTo[family] = optionalStringArray(d.applies_to);
+  };
+
+  applyEnum("process", (tokens) => {
+    const noNone = tokens.filter((p) => p !== "none");
+    if (noNone.length > 0) out.processes = noNone;
+    out.processesWithNone = ["none", ...noNone];
+  });
+  applyEnum("intensity", (t) => { out.intensities = t; });
+  applyEnum("aroma", (t) => { out.aromas = t; });
+  applyEnum("temperature", (t) => { out.temperatures = t; });
+  applyEnum("shots", (t) => { out.shots = t; });
+
+  const p = params.portion_ml;
+  if (p) {
+    if (!p.scope.includes(FREESTYLE_SCOPE)) {
+      out.rendered.portion_ml = false;
+    } else if (p.kind === "range") {
+      if (p.per_component === true) {
+        out.limits = {
+          c1: portionLimit(p.c1, base.limits.c1),
+          c2: portionLimit(p.c2, base.limits.c2),
+        };
+      } else {
+        // Flat min/max/step: one range descriptor drives both sliders.
+        out.limits = {
+          c1: portionLimit(p, base.limits.c1),
+          c2: portionLimit(p, base.limits.c2),
+        };
+      }
+      out.portionUnit = typeof p.unit === "string" ? p.unit : null;
+      out.appliesTo.portion_ml = optionalStringArray(p.applies_to);
+    }
+  }
+  return out;
+}
+
+/**
+ * Whether a parameter family attaches to a component with the given process
+ * (`applies_to` filtering, §6.1.1) — drives the form's disabled styling.
+ *
+ * Accepts a plain FreestyleVocab from pre-catalog callers, for which the
+ * legacy hardcoded rule applies (intensity/aroma/shots enabled only on a
+ * coffee component; everything else always enabled).
+ */
+export function parameterEnabledFor(
+  vocab: FreestyleVocab | ResolvedParameters, family: string, process: string,
+): boolean {
+  if ("appliesTo" in vocab && family in vocab.appliesTo) {
+    const list = vocab.appliesTo[family];
+    return list === null || list.includes(process);
+  }
+  return !COFFEE_ONLY_FAMILIES.includes(family) || process === "coffee";
+}
+
+/**
+ * Whether a parameter family is rendered in the freestyle form at all.
+ * False only when a served descriptor scoped the family away from freestyle
+ * UI (§6.1.1); plain FreestyleVocab callers always render everything.
+ */
+export function parameterRendered(
+  vocab: FreestyleVocab | ResolvedParameters, family: string,
+): boolean {
+  if ("rendered" in vocab) return vocab.rendered[family] !== false;
+  return true;
 }
 
 /**

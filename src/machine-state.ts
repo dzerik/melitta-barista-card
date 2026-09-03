@@ -11,6 +11,7 @@
 
 import { STATE_COLORS } from "./const";
 import { localize, localizeOptional } from "./localize/localize";
+import { serverString } from "./server-i18n";
 
 /** True when the value is an actual reported state, not a HA sentinel. */
 export function isRealState(s: string | null | undefined): s is string {
@@ -82,25 +83,39 @@ export const ACTION_TOKEN_I18N: Record<string, string> = {
 };
 
 /**
- * Display label for a process token. Unknown tokens fall back to
- * `localizeOptional(token)` then the raw token (§5.3.2); a null token
- * (unmapped raw status code) renders as the neutral busy label.
+ * Display label for a process token, per-key preference order (§6.3.5.1):
+ * server string `status.process.<TOKEN>` → card bundle → `localizeOptional`
+ * raw-token fallback → raw token (§5.3.2). A null token (unmapped raw status
+ * code) renders as the neutral busy bundle label — it has no server key.
  */
 export function processTokenLabel(token: string | null): string {
   if (token == null) return localize("state.busy");
+  const server = serverString(`status.process.${token}`);
+  if (server !== undefined) return server;
   const key = PROCESS_TOKEN_I18N[token];
   return (key && localizeOptional(key)) || localizeOptional(token) || token;
 }
 
-/** Display label for a sub-process token; null (idle) → localized idle. */
+/**
+ * Display label for a sub-process token: server string
+ * `status.sub_process.<TOKEN>` → bundle → raw token; null (idle) → localized
+ * idle bundle label.
+ */
 export function activityTokenLabel(token: string | null): string {
   if (token == null) return localize("state.idle");
+  const server = serverString(`status.sub_process.${token}`);
+  if (server !== undefined) return server;
   const key = ACTIVITY_TOKEN_I18N[token];
   return (key && localizeOptional(key)) || localizeOptional(token) || token;
 }
 
-/** Display label for a manipulation token (raw-token fallback for unknown). */
+/**
+ * Display label for a manipulation token: server string
+ * `status.manipulation.<TOKEN>` → bundle → raw-token fallback for unknown.
+ */
 export function actionTokenLabel(token: string): string {
+  const server = serverString(`status.manipulation.${token}`);
+  if (server !== undefined) return server;
   const key = ACTION_TOKEN_I18N[token];
   return (key && localizeOptional(key)) || localizeOptional(token) || token;
 }

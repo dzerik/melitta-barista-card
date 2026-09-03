@@ -2,6 +2,20 @@
 
 All notable changes to the Melitta Barista Card.
 
+## [2.7.0] — 2026-09-03
+
+### Added
+
+UI Contract v2 client (integration ≥ 0.92, all features additive within `contract_version: 1` and detected by field presence — never by version):
+
+- **Parameter catalogs** (§6.1): the freestyle and recipe-edit forms now build their pickers and portion sliders from the contract `parameters` block with the normative three-tier per-parameter fallback — served descriptor → v1 `vocabularies.freestyle`/`limits.portion_ml` → built-in defaults. Served `applies_to` lists drive per-component enablement (replacing the hardcoded coffee-only rule when the server says otherwise), range descriptors drive slider min/max/step and unit, and families scoped away from freestyle UI (e.g. `brew_override`-only) are not rendered.
+- **Action catalog** (§6.2): the maintenance section is catalog-driven when the contract serves `actions` — groups in the normative order (cleaning, filter, power, danger, then unknown groups as served), server icons with the `mdi:cog` default, per-entry `requires` enablement (including switch-off usable while connected-but-not-ready), `available: false` entries hidden (unverified Nivona maintenance processes no longer render pressable buttons), and destructive entries with forced confirm plus danger styling. Presses dispatch through the planned invocation: button entries via the existing button-press path, service entries via `hass.callService` with the `entity_id` anchor always set.
+- **Server display strings** (§6.3): in token mode the card fetches machine-domain i18n over `melitta_barista/i18n/get` and prefers server strings per key over its bundled translations for status, activity, action-required, value, action and group labels — re-fetched on HA locale change and on `contract_fingerprint` change, cached per locale by `strings_version`.
+
+### Compatibility
+
+- Every v2 feature degrades independently and never touches v1 behaviour: against a 0.91 integration the card behaves exactly as 2.6.x (v1 vocabularies, legacy maintenance arrays, bundled translations; the i18n command's absence is detected once and not re-probed). Without any contract, the built-in defaults apply unchanged.
+
 ## [2.6.1] — 2026-09-03
 
 ### Fixed

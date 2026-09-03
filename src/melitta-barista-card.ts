@@ -43,20 +43,32 @@ import {
   readStatusTokens,
   noteBridgeUpdate,
   fetchUiContract,
+  type ActionEntry,
   type BridgeAttrs,
   type StatusTokens,
   type UiContract,
 } from "./contract";
 import {
-  resolveFreestyleVocab,
+  resolveParameters,
   contractAllowsFreestyle,
   iconSpecForRecipe,
 } from "./contract-wiring";
+import {
+  resolveActionCatalog,
+  needsConfirm,
+  planActionInvocation,
+} from "./action-catalog";
+import {
+  fetchServerStrings,
+  setServerStrings,
+  resetServerStrings,
+  stringsVersionStale,
+} from "./server-i18n";
 import { buildBrandBadge } from "./brand-badge";
 import { coffeeIconSvg, coffeeIconSvgFromSpec } from "./icons";
 import * as api from "./api";
 import { parseDirectKeyData } from "./directkey";
-import { localize, setLanguage } from "./localize/localize";
+import { localize, setLanguage, getLanguage } from "./localize/localize";
 import { detectMelittaDevices } from "./utils";
 import { cardStyles } from "./styles";
 import "./editor";
@@ -101,6 +113,20 @@ export class MelittaBaristaCard extends LitElement {
   private _tokens: StatusTokens | null = null;
   private _contractFetchInFlight = false;
 
+  // Server-served display strings (spec §6.3, v2 amendment): fetched only in
+  // token mode, re-fetched on the §6.3.2 triggers — first activation, HA
+  // locale change, contract_fingerprint change (which rides the same
+  // noteBridgeUpdate path as the contract refetch). `strings_version` is the
+  // cache key inside fetchServerStrings; the fingerprint trigger completes
+  // only once the refetched contract's strings_version lands (see
+  // _updateServerStrings and stringsVersionStale).
+  private _i18nLocale: string | null = null;
+  private _i18nFingerprint: string | null = null;
+  private _i18nFetchInFlight = false;
+  private _serverStringsActive = false;
+  /** Contract fingerprint the current _trackedIds were built against. */
+  private _trackedContractFp: string | null = null;
+
   public disconnectedCallback(): void {
     super.disconnectedCallback();
     this._cancelDkLongPress();
@@ -141,6 +167,9 @@ export class MelittaBaristaCard extends LitElement {
     this._contract = null;
     this._bridge = null;
     this._tokens = null;
+    this._i18nLocale = null;
+    this._i18nFingerprint = null;
+    this._trackedContractFp = null;
   }
 
   public getCardSize(): number {
@@ -190,8 +219,12 @@ export class MelittaBaristaCard extends LitElement {
       }
     }
     const prefix = this._getPrefix();
-    if (prefix && this._trackedPrefix !== prefix) {
+    const contractFp = this._contract?.contract_fingerprint ?? null;
+    if (prefix && (this._trackedPrefix !== prefix || this._trackedContractFp !== contractFp)) {
+      // Rebuilt on contract change too: catalog entries may anchor on button
+      // entities outside the legacy arrays (e.g. factory_reset_settings).
       this._trackedPrefix = prefix;
+      this._trackedContractFp = contractFp;
       this._trackedIds = this._buildTrackedIds(prefix);
     }
     this._updateContractBridge(prefix);
@@ -213,11 +246,19 @@ export class MelittaBaristaCard extends LitElement {
       : null;
     if (!this._bridge) {
       // Legacy mode: no contract_version on the connection sensor (or an
-      // unsupported one, §5.3.3) — never call the WS command.
+      // unsupported one, §5.3.3) — never call the WS command, and clear any
+      // installed server strings (§6.3: display falls back to the bundles).
       if (this._contract !== null) this._contract = null;
+      if (this._serverStringsActive) {
+        this._serverStringsActive = false;
+        this._i18nLocale = null;
+        this._i18nFingerprint = null;
+        resetServerStrings();
+      }
       return;
     }
     noteBridgeUpdate(this._bridge);
+    this._updateServerStrings(this._bridge);
     if (this._contractFetchInFlight) return;
     const bridge = this._bridge;
     if (this._contract && this._contract.contract_fingerprint === bridge.contract_fingerprint) {
@@ -232,7 +273,58 @@ export class MelittaBaristaCard extends LitElement {
       });
   }
 
+  /**
+   * Server-string lifecycle (spec §6.3.2, wired per §8.2 C-I): in token mode,
+   * (re)fetch the machine-domain i18n map on first activation, HA locale
+   * change, and contract_fingerprint change. fetchServerStrings owns the
+   * session cache (`locale + strings_version`) and the durable-unknown_command
+   * classification, so re-triggering here is cheap; a null result simply
+   * clears the registry and every label falls back to the card bundles —
+   * display strings only, never token semantics (§6.3.2).
+   *
+   * The fingerprint trigger arrives in two halves on different update passes:
+   * the bridge advertises the new fingerprint while the contract refetch is
+   * still in flight, so at that moment `expected` is still the OLD document's
+   * strings_version and the locale cache correctly short-circuits. The
+   * stringsVersionStale probe re-arms the fetch when the NEW contract document
+   * lands with a different strings_version — an integration upgrade therefore
+   * fetches exactly once, and never leaves stale strings for the session. A
+   * transient failure of that re-fetch keeps the probe armed, so the next
+   * update pass retries (still display-strings-only degradation).
+   */
+  private _updateServerStrings(bridge: BridgeAttrs): void {
+    if (this._i18nFetchInFlight) return;
+    const locale = getLanguage(this.hass);
+    const fingerprint = bridge.contract_fingerprint;
+    // The contract document's strings_version (when already fetched) lets a
+    // matching cache entry short-circuit without a WS round-trip — and, via
+    // the staleness probe, re-arms the fetch when a new document arrives.
+    const expected = this._contract?.strings_version ?? null;
+    if (this._serverStringsActive
+        && this._i18nLocale === locale
+        && this._i18nFingerprint === fingerprint
+        && !stringsVersionStale(locale, expected)) {
+      return; // no §6.3.2 trigger fired since the last fetch
+    }
+    this._i18nFetchInFlight = true;
+    fetchServerStrings(this.hass, locale, expected).then((strings) => {
+      this._i18nFetchInFlight = false;
+      this._i18nLocale = locale;
+      this._i18nFingerprint = fingerprint;
+      this._serverStringsActive = true;
+      setServerStrings(strings);
+      // Server strings are module state, not a @state property — re-render so
+      // labels pick up the freshly installed (or cleared) map.
+      this.requestUpdate();
+    });
+  }
+
   private _buildTrackedIds(prefix: string): string[] {
+    // Catalog-driven maintenance (spec §6.2) anchors every entry on a button
+    // entity; track those too so presence changes re-render (the legacy
+    // arrays below stay tracked unconditionally — permanent fixture, §6.2.5.1).
+    const catalogButtonIds = (resolveActionCatalog(this._contract) ?? [])
+      .flatMap((g) => g.entries.map((e) => `button.${prefix}_${e.invocation.entity_suffix}`));
     return [
       ...["state", "activity", "progress", "action_required", "connection", "total_cups"]
         .map((s) => `sensor.${prefix}_${s}`),
@@ -244,6 +336,7 @@ export class MelittaBaristaCard extends LitElement {
         .map((a) => `button.${prefix}_${a.suffix}`),
       `button.${prefix}_brew`,
       `button.${prefix}_cancel`,
+      ...catalogButtonIds,
     ];
   }
 
@@ -370,6 +463,31 @@ export class MelittaBaristaCard extends LitElement {
       }).catch(() => {
         this._editSaving = false;
       });
+  }
+
+  /**
+   * Dispatch a pressed action-catalog entry (spec §6.2.1, wired per §8.2 C-I):
+   * the confirm step first (`destructive` forces it, §6.2.5.4), then the
+   * planned invocation — button entries through the existing pressButton path,
+   * service entries through hass.callService with the plan's data (which
+   * always carries the `button.<prefix>_<entity_suffix>` entity_id anchor).
+   */
+  private _pressCatalogAction(entry: ActionEntry): void {
+    if (needsConfirm(entry) && this._confirmKey !== entry.action) {
+      this._confirmKey = entry.action;
+      return;
+    }
+    const prefix = this._getPrefix();
+    if (!prefix) return;
+    this._confirmKey = null;
+    this._busyKey = entry.action;
+    const plan = planActionInvocation(entry, prefix);
+    const call = "button" in plan
+      ? api.pressButton(this.hass, prefix, plan.button)
+      : this.hass.callService(plan.domain, plan.service, plan.data);
+    Promise.resolve(call).catch(() => undefined).finally(() => {
+      setTimeout(() => { this._busyKey = null; }, MAINT_BUSY_RESET_MS);
+    });
   }
 
   private _pressMaintenanceButton(action: MaintenanceAction): void {
@@ -565,8 +683,9 @@ export class MelittaBaristaCard extends LitElement {
   // -- Freestyle --
 
   private _renderFreestyle() {
-    // Contract vocabularies/limits when available, legacy consts otherwise.
-    const vocab = resolveFreestyleVocab(this._contract);
+    // v2 parameter catalog with the §6.1.5 three-tier fallback: contract
+    // `parameters` → v1 vocabularies/limits → legacy consts, per parameter.
+    const vocab = resolveParameters(this._contract);
     return html`
       <div class="section-title">${localize("freestyle.title")}</div>
       <div class="freestyle-section">
@@ -613,6 +732,9 @@ export class MelittaBaristaCard extends LitElement {
   private _renderMaintenance(st: MachineStatus) {
     const prefix = this._getPrefix();
     if (!prefix) return nothing;
+    // Catalog mode when the contract serves `actions` (spec §6.2.5); null —
+    // no contract or a 0.91 server — keeps the legacy hardcoded arrays.
+    const catalog = resolveActionCatalog(this._contract);
     return renderMaintenance({
       st,
       hasEntity: (suffix) => !!this.hass.states[`button.${prefix}_${suffix}`],
@@ -620,6 +742,11 @@ export class MelittaBaristaCard extends LitElement {
       busyKey: this._busyKey,
       onPress: (action) => this._pressMaintenanceButton(action),
       onDismissConfirm: () => { if (this._confirmKey) this._confirmKey = null; },
+      catalog,
+      requiresCtx: this._bridge
+        ? { statusTokens: this._tokens, connected: this._bridge.connected }
+        : null,
+      onCatalogPress: (entry) => this._pressCatalogAction(entry),
     });
   }
 
@@ -638,7 +765,7 @@ export class MelittaBaristaCard extends LitElement {
     if (!this._editDk || !this._editState) return nothing;
     const s = this._editState;
     const cat = this._editDk.category;
-    const vocab = resolveFreestyleVocab(this._contract);
+    const vocab = resolveParameters(this._contract);
 
     return html`
       <div class="edit-overlay" @click=${() => this._closeEditDialog()}>
