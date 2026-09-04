@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.1] — 2026-09-04
+
+### Fixed
+
+- The sommelier's own instructions are shown again. Recipe steps arrive as authored objects (`{order, phase, action, amount, unit}`), but the card expected plain strings and silently dropped every one — the wizard and the details expander showed only the synthesized "Brew phase 1/2" lines. Steps now render as written, ordered, with quantities and notes; "during" sentences appear with the pour they describe, and a favourite's "why this recipe" is shown when the integration (0.94+) kept it.
+
+
 ## [2.9.0] — 2026-09-04
 
 ### Changed

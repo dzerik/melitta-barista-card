@@ -12,43 +12,79 @@ const phase = (actions: string[] = []) => ({
 });
 
 describe("buildBrewPlan", () => {
-  it("single phase, no manual steps → one brew step", () => {
+  it("single phase, no authored steps → one brew step", () => {
     expect(buildBrewPlan({ machine_phases: [phase()] })).toEqual([
-      { kind: "brew", phaseIndex: 0, phaseCount: 1, component: { process: "coffee" } },
+      { kind: "brew", phaseIndex: 0, phaseCount: 1, component: { process: "coffee" }, hints: undefined },
     ]);
   });
 
-  it("interleaves pre, per-phase actions, and post", () => {
+  it("renders the sommelier's own sentences, ordered, around the pours", () => {
     const plan = buildBrewPlan({
-      machine_phases: [phase(), phase(["Add 20 ml syrup"])],
-      steps: { pre: ["Place a 300 ml cup"], post: ["Stir gently"] },
+      machine_phases: [
+        phase(),
+        { component: { process: "milk" }, user_action_before: [
+          { order: 1, action: "Add vanilla syrup", amount: 20, unit: "ml" },
+        ] },
+      ],
+      steps: [
+        { order: 2, phase: "pre", action: "Chill a 300 ml glass" },
+        { order: 1, phase: "pre", action: "Fill it with ice", amount: 3, unit: "cubes" },
+        { order: 3, phase: "during", action: "Let the espresso settle before the milk" },
+        { order: 4, phase: "post", action: "Dust with cocoa" },
+      ],
     });
-    expect(plan).toEqual([
-      { kind: "manual", text: "Place a 300 ml cup" },
-      { kind: "brew", phaseIndex: 0, phaseCount: 2, component: { process: "coffee" } },
-      { kind: "manual", text: "Add 20 ml syrup" },
-      { kind: "brew", phaseIndex: 1, phaseCount: 2, component: { process: "coffee" } },
-      { kind: "manual", text: "Stir gently" },
+    expect(plan.map((s) => (s.kind === "manual" ? s.text : `brew#${s.phaseIndex}`))).toEqual([
+      "Fill it with ice (3 cubes)",   // order wins over array position
+      "Chill a 300 ml glass",
+      "brew#0",
+      "Add vanilla syrup (20 ml)",
+      "brew#1",
+      "Dust with cocoa",
     ]);
   });
 
-  it("legacy flat steps list is treated as pre-steps", () => {
+  it("attaches 'during' sentences to the first pour as hints", () => {
+    const plan = buildBrewPlan({
+      machine_phases: [phase(), phase()],
+      steps: [{ order: 1, phase: "during", action: "Swirl the cup halfway" }],
+    });
+    const brews = plan.filter((s) => s.kind === "brew") as Extract<BrewStep, { kind: "brew" }>[];
+    expect(brews[0].hints).toEqual(["Swirl the cup halfway"]);
+    expect(brews[1].hints).toBeUndefined();
+  });
+
+  it("keeps a step's notes alongside its sentence", () => {
     const plan = buildBrewPlan({
       machine_phases: [phase()],
-      steps: ["Warm the cup"],
+      steps: [{ order: 1, phase: "pre", action: "Warm the cup", notes: "Hot water works" }],
     });
-    expect(plan[0]).toEqual({ kind: "manual", text: "Warm the cup" });
+    expect(plan[0]).toEqual({ kind: "manual", text: "Warm the cup", notes: "Hot water works" });
   });
 
-  it("tolerates null/missing fields and junk entries", () => {
+  it("accepts the legacy grouped {pre, post} object of plain strings", () => {
+    const plan = buildBrewPlan({
+      machine_phases: [phase()],
+      steps: { pre: ["Warm the cup"], post: ["Stir gently"] },
+    });
+    expect(plan.map((s) => (s.kind === "manual" ? s.text : "brew"))).toEqual([
+      "Warm the cup", "brew", "Stir gently",
+    ]);
+  });
+
+  it("tolerates null/missing fields and unusable entries", () => {
     expect(buildBrewPlan({})).toEqual([]);
     expect(buildBrewPlan({ machine_phases: null, steps: null })).toEqual([]);
     const plan = buildBrewPlan({
-      machine_phases: [{ user_action_before: ["ok", "", 42 as unknown as string] }],
+      machine_phases: [{ user_action_before: [
+        { order: 1, action: "Attach the milk hose" },
+        { order: 2, action: "   " },
+        { order: 3 },
+        42 as unknown as Record<string, unknown>,
+      ] }],
     });
     expect(plan).toEqual([
-      { kind: "manual", text: "ok" },
-      { kind: "brew", phaseIndex: 0, phaseCount: 1 },
+      { kind: "manual", text: "Attach the milk hose", notes: null },
+      { kind: "brew", phaseIndex: 0, phaseCount: 1, component: undefined, hints: undefined },
     ]);
   });
 });

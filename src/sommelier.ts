@@ -32,6 +32,20 @@ function brewStepLabel(step: BrewStep & { kind: "brew" }): string {
   return parts.length ? `${base} — ${parts.join(", ")}` : base;
 }
 
+/** One plan line: the sommelier's sentence, or the pour with its own hints. */
+function stepLine(step: BrewStep) {
+  if (step.kind === "manual") {
+    return html`
+      <span>${step.text}</span>
+      ${step.notes ? html`<span class="som-step-note">${step.notes}</span>` : nothing}
+    `;
+  }
+  return html`
+    <span>${brewStepLabel(step)}</span>
+    ${(step.hints ?? []).map((h) => html`<span class="som-step-note">${h}</span>`)}
+  `;
+}
+
 interface WizardState {
   name: string;
   target: { recipeId?: string; favoriteId?: string };
@@ -305,12 +319,16 @@ export class MbcSommelier extends LitElement {
         ${fav.description
           ? html`<div class="som-fav-desc">${fav.description}</div>`
           : nothing}
+        ${fav.reasoning ? html`
+          <details class="som-reasoning">
+            <summary>${localize("sommelier.reasoning")}</summary>
+            <div class="som-reasoning-text">${fav.reasoning}</div>
+          </details>
+        ` : nothing}
         ${plan.length > 0 ? html`
           <div class="som-fav-steps-title">${localize("sommelier.steps")}</div>
           <ol class="som-fav-steps">
-            ${plan.map(s => html`
-              <li>${s.kind === "manual" ? s.text : brewStepLabel(s)}</li>
-            `)}
+            ${plan.map(s => html`<li>${stepLine(s)}</li>`)}
           </ol>
         ` : nothing}
       </div>
@@ -333,7 +351,7 @@ export class MbcSommelier extends LitElement {
         <ol class="som-wiz-steps">
           ${w.plan.map((s, i) => html`
             <li class=${i === w.index ? "current" : i < w.index ? "done" : ""}>
-              ${s.kind === "manual" ? s.text : brewStepLabel(s)}
+              ${stepLine(s)}
             </li>
           `)}
         </ol>
@@ -583,6 +601,12 @@ export class MbcSommelier extends LitElement {
         gap: 4px;
         font-size: 0.78em;
         color: var(--mbc-text2);
+      }
+      .som-step-note {
+        display: block;
+        font-size: 0.92em;
+        color: var(--mbc-text2);
+        margin-top: 1px;
       }
       .som-wiz-steps li.current { color: var(--mbc-text); font-weight: 600; }
       .som-wiz-steps li.done { text-decoration: line-through; opacity: 0.6; }

@@ -14,27 +14,49 @@ import { serverString } from "./server-i18n";
 
 export interface SomMachinePhase {
   component?: Record<string, unknown>;
-  user_action_before?: string[];
+  /** Authored step objects (older rows may carry plain strings). */
+  user_action_before?: unknown[];
 }
 
+/**
+ * One authored instruction as the sommelier wrote it.
+ *
+ * The server stores the model's own step objects verbatim — an ordered list
+ * carrying the sentence, an optional quantity and the phase it belongs to
+ * ("pre" before the machine runs, "during" alongside a pour, "post" after).
+ * The card renders those sentences rather than paraphrasing them.
+ */
+export interface SomStepWire {
+  order?: number;
+  phase?: string;
+  action?: string;
+  amount?: number | string;
+  unit?: string;
+  ingredient?: string;
+  notes?: string;
+}
+
+/** Legacy shape: some older rows grouped plain strings by phase. */
 export interface SomRecipeSteps {
-  pre?: string[];
-  post?: string[];
+  pre?: unknown[];
+  post?: unknown[];
 }
 
 /** Minimal shape of a generate/favorite row the plan builder consumes. */
 export interface SomPlannable {
   machine_phases?: SomMachinePhase[] | null;
-  steps?: SomRecipeSteps | string[] | null;
+  steps?: SomRecipeSteps | unknown[] | null;
 }
 
 export type BrewStep =
-  | { kind: "manual"; text: string }
+  | { kind: "manual"; text: string; notes?: string | null }
   | {
       kind: "brew";
       phaseIndex: number;
       phaseCount: number;
       component?: Record<string, unknown>;
+      /** Sommelier sentences for what happens while this pour runs. */
+      hints?: string[];
     };
 
 /** What a brew phase actually pours, extracted defensively. */
@@ -62,36 +84,97 @@ export function brewStepDetail(step: BrewStep): BrewStepDetail {
   return { process, portionMl, intensity };
 }
 
-function normalizeSteps(steps: SomPlannable["steps"]): SomRecipeSteps {
-  if (!steps) return {};
-  // Legacy rows stored steps as a flat list — treat those as pre-steps.
-  if (Array.isArray(steps)) return { pre: steps.filter((s) => typeof s === "string") };
-  return steps;
+/**
+ * Render one authored step as the sentence the sommelier wrote, with its
+ * quantity appended when it carried one. A plain string (legacy rows) is
+ * its own sentence.
+ */
+export function stepText(step: unknown): string {
+  if (typeof step === "string") return step.trim();
+  if (!step || typeof step !== "object") return "";
+  const s = step as SomStepWire;
+  const action = typeof s.action === "string" ? s.action.trim() : "";
+  if (!action) return "";
+  const qty = s.amount !== undefined && s.unit ? ` (${s.amount} ${s.unit})` : "";
+  const ingredient = typeof s.ingredient === "string" && s.ingredient
+    ? ` — ${s.ingredient}`
+    : "";
+  return `${action}${qty}${ingredient}`;
 }
 
-function manualList(value: unknown): string[] {
+function stepNotes(step: unknown): string | null {
+  if (!step || typeof step !== "object") return null;
+  const notes = (step as SomStepWire).notes;
+  return typeof notes === "string" && notes.trim() ? notes.trim() : null;
+}
+
+const byOrder = (a: unknown, b: unknown) => {
+  const ao = typeof (a as SomStepWire)?.order === "number" ? (a as SomStepWire).order! : 0;
+  const bo = typeof (b as SomStepWire)?.order === "number" ? (b as SomStepWire).order! : 0;
+  return ao - bo;
+};
+
+/**
+ * Group the authored steps by phase.
+ *
+ * The wire format is a flat ordered list whose entries name their own phase
+ * ("during" when unset, matching the generator's default); the older grouped
+ * `{pre, post}` object is still accepted.
+ */
+function groupSteps(steps: SomPlannable["steps"]): {
+  pre: unknown[]; during: unknown[]; post: unknown[];
+} {
+  if (!steps) return { pre: [], during: [], post: [] };
+  if (Array.isArray(steps)) {
+    const phaseOf = (s: unknown) =>
+      (s && typeof s === "object" && typeof (s as SomStepWire).phase === "string"
+        ? (s as SomStepWire).phase
+        : "during") as string;
+    return {
+      pre: steps.filter((s) => phaseOf(s) === "pre").sort(byOrder),
+      during: steps.filter((s) => phaseOf(s) === "during").sort(byOrder),
+      post: steps.filter((s) => phaseOf(s) === "post").sort(byOrder),
+    };
+  }
+  return { pre: steps.pre ?? [], during: [], post: steps.post ?? [] };
+}
+
+type ManualStep = Extract<BrewStep, { kind: "manual" }>;
+
+function manualSteps(value: unknown): ManualStep[] {
   if (!Array.isArray(value)) return [];
-  return value.filter((s): s is string => typeof s === "string" && s.trim().length > 0);
+  return value
+    .slice()
+    .sort(byOrder)
+    .map((s): ManualStep => ({ kind: "manual", text: stepText(s), notes: stepNotes(s) }))
+    .filter((s) => s.text.length > 0);
 }
 
 /** Linear step plan: pre → (actions_i, brew_i)* → post. */
 export function buildBrewPlan(recipe: SomPlannable): BrewStep[] {
   const phases = Array.isArray(recipe.machine_phases) ? recipe.machine_phases : [];
-  const steps = normalizeSteps(recipe.steps);
+  const { pre, during, post } = groupSteps(recipe.steps);
   const plan: BrewStep[] = [];
-  for (const text of manualList(steps.pre)) plan.push({ kind: "manual", text });
+  plan.push(...manualSteps(pre));
   const phaseCount = phases.length;
+  const duringHints = manualSteps(during).map((s) => s.text);
   phases.forEach((phase, phaseIndex) => {
-    for (const text of manualList(phase?.user_action_before)) {
-      plan.push({ kind: "manual", text });
-    }
+    plan.push(...manualSteps(phase?.user_action_before));
     const component =
       phase && typeof phase.component === "object" && phase.component !== null
         ? (phase.component as Record<string, unknown>)
         : undefined;
-    plan.push({ kind: "brew", phaseIndex, phaseCount, component });
+    plan.push({
+      kind: "brew",
+      phaseIndex,
+      phaseCount,
+      component,
+      // "during" sentences describe the pour itself, so they belong to the
+      // first machine step rather than to a step of their own.
+      hints: phaseIndex === 0 && duringHints.length ? duringHints : undefined,
+    });
   });
-  for (const text of manualList(steps.post)) plan.push({ kind: "manual", text });
+  plan.push(...manualSteps(post));
   return plan;
 }
 

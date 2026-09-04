@@ -50,12 +50,14 @@ export interface SommelierFavorite {
   component1: Record<string, unknown>;
   component2: Record<string, unknown>;
   brew_count: number;
+  /** Why the sommelier suggested this drink (kept since integration 0.94). */
+  reasoning?: string;
   /** Optional step-machine fields (present since integration 0.89). */
   machine_phases?: Array<{
     component?: Record<string, unknown>;
-    user_action_before?: string[];
+    user_action_before?: unknown[];
   }> | null;
-  steps?: { pre?: string[]; post?: string[] } | string[] | null;
+  steps?: { pre?: unknown[]; post?: unknown[] } | unknown[] | null;
 }
 
 export interface SommelierQuickRecipe {
@@ -66,9 +68,9 @@ export interface SommelierQuickRecipe {
   reasoning?: string;
   machine_phases?: Array<{
     component?: Record<string, unknown>;
-    user_action_before?: string[];
+    user_action_before?: unknown[];
   }> | null;
-  steps?: { pre?: string[]; post?: string[] } | string[] | null;
+  steps?: { pre?: unknown[]; post?: unknown[] } | unknown[] | null;
 }
 
 export interface SommelierHoppers {
