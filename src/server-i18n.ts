@@ -139,6 +139,11 @@ export async function fetchServerStrings(
 
   let response: unknown;
   try {
+    // No `domains` list on purpose: an omitted parameter means "all domains",
+    // so additively served families (the `wizard` domain of §6.3.7, and any
+    // future one) arrive without a card change. A client that ever sends an
+    // explicit list MUST enumerate every domain it consumes — "wizard"
+    // included — or those keys silently stop arriving.
     response = await hass.callWS({ type: WS_I18N_GET, locale });
   } catch (err) {
     if (isRecord(err) && err.code === "unknown_command") {

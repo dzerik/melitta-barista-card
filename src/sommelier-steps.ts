@@ -1,10 +1,16 @@
-// Pure business logic: turn a sommelier recipe into a linear brew plan.
-// No Lit, no Home Assistant imports — testable in isolation.
+// Pure business logic: turn a sommelier recipe into a linear brew plan, plus
+// the string resolution for the mini-wizard vocabulary and the sommelier
+// error hints. No Lit, no Home Assistant imports — testable in isolation
+// (the server-string registry consumed here is the PURE half of
+// server-i18n, per spec §6.3.5.6).
 //
 // Mirrors the panel wizard's step model in compact form: steps.pre (manual)
 // → per machine phase: its user_action_before entries (manual) then the
 // brew step → steps.post (manual). A recipe that needs none of that keeps
 // the legacy one-shot brew path.
+
+import { localize } from "./localize/localize";
+import { serverString } from "./server-i18n";
 
 export interface SomMachinePhase {
   component?: Record<string, unknown>;
@@ -110,11 +116,138 @@ export const AGENT_ERROR_CODES = [
 /**
  * Map a WS error to the card i18n key for it, or null for generic handling.
  * hass.callWS rejections carry {code, message}.
+ *
+ * Bundle tier (tier 2 of §6.3.5.1) — the served `sommelier.error.<code>`
+ * string is preferred by agentErrorText; this mapper stays the offline /
+ * pre-0.94 path and keeps its exact 3-code surface.
  */
 export function agentErrorKey(err: unknown): string | null {
-  const code = (err as { code?: unknown } | null | undefined)?.code;
-  if (typeof code !== "string") return null;
+  const code = errorCode(err);
+  if (code === null) return null;
   return (AGENT_ERROR_CODES as readonly string[]).includes(code)
     ? `sommelier.err.${code}`
     : null;
+}
+
+/** WS rejection code, or null when the error carries none. */
+function errorCode(err: unknown): string | null {
+  const code = (err as { code?: unknown } | null | undefined)?.code;
+  return typeof code === "string" ? code : null;
+}
+
+/**
+ * Sommelier error codes the SERVER carries a string for
+ * (`sommelier.error.<code>`, spec §6.3.7).
+ *
+ * Superset of AGENT_ERROR_CODES: `timeout` and `unauthorized` have a served
+ * string but no card bundle entry, so they render a specific hint only on a
+ * 0.94+ server and fall through to the caller's generic message otherwise.
+ *
+ * Descriptive, not a gate — `agentErrorText` probes the server for any code,
+ * so the list going stale costs nothing but its own accuracy.
+ */
+export const SOMMELIER_ERROR_CODES = [
+  ...AGENT_ERROR_CODES,
+  "timeout",
+  "unauthorized",
+] as const;
+
+/**
+ * Resolved hint text for a sommelier WS rejection, or null when the error is
+ * not one we have wording for (the caller then shows its generic message).
+ *
+ * Preference order per §6.3.5.1/§6.3.7: served `sommelier.error.<code>` →
+ * card bundle `sommelier.err.<code>` → null. The bundle entries stay in all
+ * 29 languages as the tier-2 fallback and are never deleted.
+ *
+ * The server is asked for ANY code, not only the ones in the lists above:
+ * those lists guard the bundle tier only. Gating the server probe on a
+ * client-side allowlist would keep a sixth served code invisible until every
+ * card shipped a new list — the opposite of what a server-owned family buys.
+ */
+export function agentErrorText(err: unknown): string | null {
+  const code = errorCode(err);
+  if (code === null) return null;
+  const served = serverString(`sommelier.error.${code}`);
+  if (served !== undefined) return served;
+  const bundleKey = agentErrorKey(err);
+  return bundleKey === null ? null : localize(bundleKey);
+}
+
+/**
+ * Card mini-wizard key → served machine-domain key (spec §6.3.7 `wizard`
+ * domain). The card's wizard vocabulary predates the served domain and uses
+ * its own names, so the mapping is explicit and reviewed rather than derived:
+ *
+ *   sommelier.wizard_title  → wizard.title           "Brew guide"
+ *   sommelier.step_of       → wizard.step_of         "Step {n} of {m}"
+ *   sommelier.done          → wizard.step.done       "Done"
+ *   sommelier.finish        → wizard.finish.button   "Close"
+ *
+ * Three card strings deliberately stay card-owned, because the served
+ * wording means something else in this layout (§6.3.7c keeps client chrome
+ * out of the machine domain):
+ *
+ *   sommelier.phase_running — in the card's flat wizard this note is the ONLY
+ *     thing telling the user to wait and then press Done; the served
+ *     `wizard.machine.waiting` ("Brewing…") is a status word that sits next
+ *     to an explicit done-button in the panel and PWA layouts.
+ *   sommelier.cancel — a standalone dismiss button, whereas
+ *     `wizard.close.leave` is the affirmative answer inside a
+ *     "Leave the brew guide? / Stay / Leave" confirm dialog.
+ *   sommelier.brew_phase — the card's brew BUTTON caption, an action that
+ *     carries the pour composition ("Brew phase 1/2 — Milk, 160 ml");
+ *     `wizard.step.machine_n` is a step-list title and would drop the
+ *     composition this label exists to show.
+ *
+ * Left side = card bundle key, kept in all 29 bundles as the tier-2 fallback
+ * (offline use and pre-0.94 integrations, §6.3.7c). Right side = the key the
+ * integration serves over `i18n/get`. The card sends no `domains` list, so
+ * the `wizard` domain arrives automatically (§6.3.7a).
+ */
+export const WIZARD_SERVER_KEYS: Readonly<Record<string, string>> = {
+  "sommelier.wizard_title": "wizard.title",
+  "sommelier.step_of": "wizard.step_of",
+  "sommelier.done": "wizard.step.done",
+  "sommelier.finish": "wizard.finish.button",
+};
+
+/**
+ * Placeholder name aliases between the two vocabularies: the card bundles
+ * call the step total `{total}`, the served strings call it `{m}` (§6.3.7a —
+ * placeholder names are carried verbatim per key, so neither side may be
+ * renamed). Call sites keep passing their own variable names.
+ */
+const WIZARD_PLACEHOLDER_ALIASES: Readonly<Record<string, string>> = {
+  m: "total",
+  total: "m",
+};
+
+/** Interpolate `{name}` spans, honouring the alias table; unknown spans stay. */
+function interpolate(
+  template: string, vars: Record<string, string | number>,
+): string {
+  return template.replace(/\{(\w+)\}/g, (span, name: string) => {
+    const direct = vars[name];
+    if (direct !== undefined) return String(direct);
+    const alias = WIZARD_PLACEHOLDER_ALIASES[name];
+    const aliased = alias === undefined ? undefined : vars[alias];
+    return aliased === undefined ? span : String(aliased);
+  });
+}
+
+/**
+ * Wizard vocabulary lookup by CARD key (spec §6.3.5.1 preference order):
+ * served `wizard.*` string → card bundle → the key itself (localize's own
+ * last resort). Interpolation works on both tiers.
+ */
+export function wizardLabel(
+  cardKey: string, vars?: Record<string, string | number>,
+): string {
+  const servedKey = WIZARD_SERVER_KEYS[cardKey];
+  if (servedKey !== undefined) {
+    const served = serverString(servedKey);
+    if (served !== undefined) return vars ? interpolate(served, vars) : served;
+  }
+  return localize(cardKey, vars);
 }

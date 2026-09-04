@@ -5,28 +5,30 @@ import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
 import { SOM_FAVORITES_LIMIT } from "./const";
 import { localize, setLanguage } from "./localize/localize";
+import { displayNameFor } from "./format";
 import * as api from "./api";
 import type { SommelierFavorite, SommelierHoppers, SommelierQuickRecipe } from "./types";
 import {
   buildBrewPlan,
   needsWizard,
-  agentErrorKey,
+  agentErrorText,
   brewStepDetail,
+  wizardLabel,
   type BrewStep,
 } from "./sommelier-steps";
 
 /** "Brew phase 1/2 — Coffee, 40 ml, Strong" (composition parts optional). */
 function brewStepLabel(step: BrewStep & { kind: "brew" }): string {
-  const base = localize("sommelier.brew_phase", {
+  const base = wizardLabel("sommelier.brew_phase", {
     n: step.phaseIndex + 1, total: step.phaseCount,
   });
   const d = brewStepDetail(step);
   const parts: string[] = [];
-  if (d.process) parts.push(localize(`values.${d.process}`));
+  if (d.process) parts.push(displayNameFor("process", d.process));
   if (d.portionMl !== null) {
     parts.push(localize("freestyle.portion_value", { value: d.portionMl }));
   }
-  if (d.intensity) parts.push(localize(`values.${d.intensity}`));
+  if (d.intensity) parts.push(displayNameFor("intensity", d.intensity));
   return parts.length ? `${base} — ${parts.join(", ")}` : base;
 }
 
@@ -101,8 +103,8 @@ export class MbcSommelier extends LitElement {
       this._quickRecipe = await api.somGenerateSurprise(this.hass);
     } catch (e) {
       console.error("[melitta-card] Generate failed:", e);
-      const key = agentErrorKey(e);
-      this._notify(localize(key ?? "sommelier.error_generate"));
+      // Served hint (sommelier.error.<code>) → card bundle → generic message.
+      this._notify(agentErrorText(e) ?? localize("sommelier.error_generate"));
     } finally {
       this._generating = false;
     }
@@ -322,11 +324,11 @@ export class MbcSommelier extends LitElement {
       <div class="som-wizard-backdrop" @click=${() => this._wizardClose(false)}></div>
       <div class="som-wizard" role="dialog" aria-modal="true">
         <div class="som-wiz-head">
-          <span class="som-wiz-title">${localize("sommelier.wizard_title")}</span>
+          <span class="som-wiz-title">${wizardLabel("sommelier.wizard_title")}</span>
           <span class="som-wiz-name">${w.name}</span>
         </div>
         <div class="som-wiz-progress">
-          ${localize("sommelier.step_of", { n: w.index + 1, total })}
+          ${wizardLabel("sommelier.step_of", { n: w.index + 1, total })}
         </div>
         <ol class="som-wiz-steps">
           ${w.plan.map((s, i) => html`
@@ -336,17 +338,17 @@ export class MbcSommelier extends LitElement {
           `)}
         </ol>
         ${w.phaseRunning ? html`
-          <div class="som-wiz-note">${localize("sommelier.phase_running")}</div>
+          <div class="som-wiz-note">${wizardLabel("sommelier.phase_running")}</div>
         ` : nothing}
         <div class="som-wiz-actions">
           <button class="som-retry-btn" @click=${() => this._wizardClose(false)}>
-            ${localize("sommelier.cancel")}
+            ${wizardLabel("sommelier.cancel")}
           </button>
           ${step.kind === "manual" || w.phaseRunning ? html`
             <button class="som-brew-btn" @click=${() => this._wizardAdvance()}>
               ${w.index + 1 >= total
-                ? localize("sommelier.finish")
-                : localize("sommelier.done")}
+                ? wizardLabel("sommelier.finish")
+                : wizardLabel("sommelier.done")}
             </button>
           ` : html`
             <button class="som-brew-btn" ?disabled=${w.brewing}
@@ -354,7 +356,7 @@ export class MbcSommelier extends LitElement {
               ${w.brewing
                 ? html`<ha-icon icon="mdi:loading" class="spin"></ha-icon>`
                 : html`<ha-icon icon="mdi:coffee"></ha-icon>`}
-              ${localize("sommelier.brew_phase", {
+              ${wizardLabel("sommelier.brew_phase", {
                 n: step.phaseIndex + 1, total: step.phaseCount,
               })}
             </button>

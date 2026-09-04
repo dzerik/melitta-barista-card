@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.9.0] — 2026-09-04
+
+### Changed
+
+- Machine wording now comes from the integration (0.94+): the brew-guide vocabulary, sommelier error hints and composition values in the step list are served over `i18n/get` and translated once, server-side. The card's own bundles stay as the offline / pre-0.94 fallback, so nothing changes against an older integration.
+- Three wizard strings stay card-owned on purpose — the served wording means something else in this layout: the "let the machine finish" note, the dismiss button, and the brew button that carries the pour composition.
+
+
 All notable changes to the Melitta Barista Card.
 
 ## [2.8.0] — 2026-09-03
