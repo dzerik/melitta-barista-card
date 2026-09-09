@@ -183,6 +183,7 @@
     "show_stats": "Fincan istatistiklerini göster",
     "show_maintenance": "Bakımı göster",
     "show_settings": "Ayarları göster",
-    "compact": "Kompakt mod"
+    "compact": "Kompakt mod",
+    "scale": "Metin ve simge boyutu"
   }
 }

@@ -183,6 +183,7 @@
     "show_stats": "Mostrar estatísticas de chávenas",
     "show_maintenance": "Mostrar manutenção",
     "show_settings": "Mostrar definições",
-    "compact": "Modo compacto"
+    "compact": "Modo compacto",
+    "scale": "Tamanho do texto e dos ícones"
   }
 }

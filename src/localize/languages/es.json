@@ -183,6 +183,7 @@
     "show_stats": "Mostrar estadísticas de tazas",
     "show_maintenance": "Mostrar mantenimiento",
     "show_settings": "Mostrar ajustes",
-    "compact": "Modo compacto"
+    "compact": "Modo compacto",
+    "scale": "Tamaño del texto y de los iconos"
   }
 }

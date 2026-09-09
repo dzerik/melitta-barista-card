@@ -183,6 +183,7 @@
     "show_stats": "Kopjesstatistieken tonen",
     "show_maintenance": "Onderhoud tonen",
     "show_settings": "Instellingen tonen",
-    "compact": "Compacte modus"
+    "compact": "Compacte modus",
+    "scale": "Tekst- en pictogramgrootte"
   }
 }

@@ -76,7 +76,7 @@ import { buildProfileTabs, directKeyCategoryLabel } from "./directkey-display";
 import { resolveProfileSlots } from "./profile";
 import { resolveSettings } from "./settings-catalog";
 import { localize, setLanguage, getLanguage } from "./localize/localize";
-import { detectMelittaDevices } from "./utils";
+import { detectMelittaDevices, normalizeScale } from "./utils";
 import { cardStyles } from "./styles";
 import "./editor";
 import "./sommelier";
@@ -180,6 +180,7 @@ export class MelittaBaristaCard extends LitElement {
       show_stats: config.show_stats || false,
       show_maintenance: config.show_maintenance || false,
       compact: config.compact || false,
+      scale: normalizeScale(config.scale),
     };
     this._resolvedPrefix = null;
     this._detectedName = null;
@@ -594,11 +595,24 @@ export class MelittaBaristaCard extends LitElement {
 
   // -- Render --
 
+  /**
+   * Inline `--mbc-scale` for the card body, or nothing at the default size.
+   *
+   * The variable lives on ha-card (not :host) so the same element can both
+   * carry it and use it for its own font-size; children — including the
+   * sommelier's shadow root — inherit it.
+   */
+  private _scaleStyle(): string | typeof nothing {
+    const scale = this._config?.scale ?? 1;
+    return scale === 1 ? nothing : `--mbc-scale: ${scale};`;
+  }
+
+
   protected render() {
     if (!this.hass || !this._config) return nothing;
     const prefix = this._getPrefix();
     if (!prefix) {
-      return html`<ha-card>${renderNoDevice()}</ha-card>`;
+      return html`<ha-card style=${this._scaleStyle()}>${renderNoDevice()}</ha-card>`;
     }
 
     // Token mode when the bridge gate passed (§5.3.3); with tokens null (state
@@ -615,13 +629,13 @@ export class MelittaBaristaCard extends LitElement {
     const brandBadge = buildBrandBadge(this._contract?.brand_theme);
 
     if (st.isUnavailable) {
-      return html`<ha-card>
+      return html`<ha-card style=${this._scaleStyle()}>
         ${showHeader ? renderHeader(cardName, false, brandBadge) : nothing}
         ${renderOfflineBody()}
       </ha-card>`;
     }
 
-    return html`<ha-card>
+    return html`<ha-card style=${this._scaleStyle()}>
       ${showHeader ? renderHeader(cardName, st.isConnected, brandBadge) : nothing}
 
       ${this._config.show_status && !st.isBrewing ? renderStatus(st) : nothing}

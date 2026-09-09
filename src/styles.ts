@@ -14,7 +14,15 @@ export const cardStyles = css`
     --mbc-warning: var(--warning-color, #ff9800);
     --mbc-radius: 12px;
   }
-  ha-card { overflow: hidden; background: var(--mbc-bg); }
+  /* Everything textual is sized in em, so one font-size on the card scales the
+     whole body; --mbc-scale (set from the scale config option) additionally
+     drives the px-sized bits — icons, icon buttons and tile grid minimums.
+     At scale 1 the font-size resolves to 1em, i.e. exactly what the theme gives. */
+  ha-card {
+    overflow: hidden;
+    background: var(--mbc-bg);
+    font-size: calc(var(--mbc-scale, 1) * 1em);
+  }
 
   /* -- No device / Offline -- */
   .no-device {
@@ -22,7 +30,7 @@ export const cardStyles = css`
     text-align: center;
     color: var(--mbc-text2);
   }
-  .no-device ha-icon { --mdc-icon-size: 48px; opacity: 0.3; }
+  .no-device ha-icon { --mdc-icon-size: calc(var(--mbc-scale, 1) * 48px); opacity: 0.3; }
   .no-device p { margin: 8px 0 0; }
   .no-device .hint { font-size: 0.8em; opacity: 0.6; }
 
@@ -35,7 +43,7 @@ export const cardStyles = css`
     color: var(--mbc-text2);
     font-size: 0.85em;
   }
-  .offline-section ha-icon { --mdc-icon-size: 32px; opacity: 0.3; }
+  .offline-section ha-icon { --mdc-icon-size: calc(var(--mbc-scale, 1) * 32px); opacity: 0.3; }
 
   /* -- Header -- */
   .card-header {
@@ -132,7 +140,7 @@ export const cardStyles = css`
     font-size: 0.82em;
     font-weight: 500;
   }
-  .action-alert ha-icon { --mdc-icon-size: 18px; flex-shrink: 0; }
+  .action-alert ha-icon { --mdc-icon-size: calc(var(--mbc-scale, 1) * 18px); flex-shrink: 0; }
 
   /* -- Brewing view -- */
   .brewing-view {
@@ -204,8 +212,8 @@ export const cardStyles = css`
   }
   .brewing-cancel {
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
+    width: calc(var(--mbc-scale, 1) * 32px);
+    height: calc(var(--mbc-scale, 1) * 32px);
     border-radius: 50%;
     border: 1px solid color-mix(in srgb, var(--mbc-error) 30%, transparent);
     background: color-mix(in srgb, var(--mbc-error) 8%, transparent);
@@ -217,7 +225,7 @@ export const cardStyles = css`
     transition: all 0.15s ease;
     padding: 0;
   }
-  .brewing-cancel ha-icon { --mdc-icon-size: 16px; }
+  .brewing-cancel ha-icon { --mdc-icon-size: calc(var(--mbc-scale, 1) * 16px); }
   .brewing-cancel:hover { background: color-mix(in srgb, var(--mbc-error) 18%, transparent); }
   .brewing-cancel:active { transform: scale(0.9); }
 
@@ -231,7 +239,7 @@ export const cardStyles = css`
   .profile-tabs::-webkit-scrollbar { display: none; }
   .profile-tab {
     flex: 1;
-    min-width: 70px;
+    min-width: calc(var(--mbc-scale, 1) * 70px);
     padding: 10px 12px;
     border: none;
     background: transparent;
@@ -274,7 +282,7 @@ export const cardStyles = css`
   /* -- DirectKey grid -- */
   .dk-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--mbc-scale, 1) * 60px), 1fr));
     gap: 1px;
     background: var(--mbc-border);
   }
@@ -301,8 +309,8 @@ export const cardStyles = css`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 55px;
+    width: calc(var(--mbc-scale, 1) * 48px);
+    height: calc(var(--mbc-scale, 1) * 55px);
     font-size: 1.6em;
     font-weight: 700;
     color: var(--mbc-text);
@@ -404,7 +412,7 @@ export const cardStyles = css`
   /* -- Recipe grid -- */
   .recipe-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--mbc-scale, 1) * 72px), 1fr));
     gap: 4px;
     padding: 4px 12px 8px;
   }
@@ -469,7 +477,7 @@ export const cardStyles = css`
     transition: all 0.15s ease;
     letter-spacing: 0.02em;
   }
-  .brew-btn ha-icon { --mdc-icon-size: 18px; }
+  .brew-btn ha-icon { --mdc-icon-size: calc(var(--mbc-scale, 1) * 18px); }
   .brew-btn:hover:not(:disabled) { opacity: 0.88; }
   .brew-btn:active:not(:disabled) { transform: scale(0.97); }
   .brew-btn:disabled { opacity: 0.3; cursor: not-allowed; }
@@ -613,7 +621,7 @@ export const cardStyles = css`
     transition: background 0.2s;
   }
   .setting-icon {
-    --mdc-icon-size: 18px;
+    --mdc-icon-size: calc(var(--mbc-scale, 1) * 18px);
     color: var(--mbc-text2);
     opacity: 0.6;
     flex-shrink: 0;
@@ -639,9 +647,9 @@ export const cardStyles = css`
 
   .toggle-track {
     position: relative;
-    width: 36px;
-    height: 20px;
-    border-radius: 10px;
+    width: calc(var(--mbc-scale, 1) * 36px);
+    height: calc(var(--mbc-scale, 1) * 20px);
+    border-radius: calc(var(--mbc-scale, 1) * 10px);
     background: rgba(255,255,255,0.12);
     cursor: pointer;
     transition: background 0.2s;
@@ -652,15 +660,15 @@ export const cardStyles = css`
   .toggle-track[data-on] { background: var(--mbc-text); }
   .toggle-thumb {
     position: absolute;
-    top: 2px; left: 2px;
-    width: 16px; height: 16px;
+    top: calc(var(--mbc-scale, 1) * 2px); left: calc(var(--mbc-scale, 1) * 2px);
+    width: calc(var(--mbc-scale, 1) * 16px); height: calc(var(--mbc-scale, 1) * 16px);
     border-radius: 50%;
     background: rgba(255,255,255,0.5);
     transition: transform 0.2s, background 0.2s;
     box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   }
   .toggle-track[data-on] .toggle-thumb {
-    transform: translateX(16px);
+    transform: translateX(calc(var(--mbc-scale, 1) * 16px));
     background: var(--mbc-bg);
   }
 
@@ -692,7 +700,7 @@ export const cardStyles = css`
   }
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--mbc-scale, 1) * 80px), 1fr));
     gap: 4px;
   }
   .stats-card {
@@ -789,7 +797,7 @@ export const cardStyles = css`
     background: color-mix(in srgb, var(--mbc-error) 5%, transparent);
   }
   .maint-icon {
-    --mdc-icon-size: 18px;
+    --mdc-icon-size: calc(var(--mbc-scale, 1) * 18px);
     color: var(--mbc-text2);
     opacity: 0.6;
     flex-shrink: 0;
@@ -864,8 +872,8 @@ export const cardStyles = css`
     letter-spacing: 0.03em;
   }
   .edit-close {
-    width: 28px;
-    height: 28px;
+    width: calc(var(--mbc-scale, 1) * 28px);
+    height: calc(var(--mbc-scale, 1) * 28px);
     border-radius: 50%;
     border: none;
     background: var(--mbc-surface);
@@ -877,7 +885,7 @@ export const cardStyles = css`
     transition: all 0.15s;
     padding: 0;
   }
-  .edit-close ha-icon { --mdc-icon-size: 16px; }
+  .edit-close ha-icon { --mdc-icon-size: calc(var(--mbc-scale, 1) * 16px); }
   .edit-close:hover { background: var(--mbc-surface-hover); }
   .edit-body {
     flex: 1;

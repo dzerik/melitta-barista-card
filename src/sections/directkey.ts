@@ -93,7 +93,7 @@ function renderDkIcon(cat: string, mdiIcon: string | null): TemplateResult {
   const known = DK_LABELS[cat as DirectKeyCategory];
   if (known !== undefined) return coffeeIconSvg(known, 48, `dk-${cat}`);
   if (mdiIcon !== null) {
-    return html`<ha-icon class="dk-card-mdi" icon="${mdiIcon}" style="--mdc-icon-size:48px"></ha-icon>`;
+    return html`<ha-icon class="dk-card-mdi" icon="${mdiIcon}" style="--mdc-icon-size: calc(var(--mbc-scale, 1) * 48px)"></ha-icon>`;
   }
   return coffeeIconSvg(cat, 48, `dk-${cat}`);
 }

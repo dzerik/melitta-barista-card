@@ -183,6 +183,7 @@
     "show_stats": "Mostra statistiche tazze",
     "show_maintenance": "Mostra manutenzione",
     "show_settings": "Mostra impostazioni",
-    "compact": "Modalità compatta"
+    "compact": "Modalità compatta",
+    "scale": "Dimensione di testo e icone"
   }
 }

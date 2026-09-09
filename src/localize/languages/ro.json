@@ -183,6 +183,7 @@
     "show_stats": "Afișează statisticile ceștilor",
     "show_maintenance": "Afișează întreținerea",
     "show_settings": "Afișează setările",
-    "compact": "Mod compact"
+    "compact": "Mod compact",
+    "scale": "Dimensiunea textului și a pictogramelor"
   }
 }

@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.10.0] — 2026-09-09
+
+### Added
+
+- **Text and icon size option.** The new `scale` option (0.8–2, default 1) enlarges the whole card body at once — labels, drink icons, icon buttons and the tile grid, which reflows to fewer, larger columns as the tiles grow. The visual editor exposes it as a slider showing the current percentage. Asked for on the community forum by a user running the card on a kitchen display.
+
+### Compatibility
+
+- A config without `scale` renders byte-identically to 2.9.1: at scale 1 the card's font-size resolves to `1em`, i.e. exactly the size the theme gives it, and every scaled length falls back to its previous pixel value. Out-of-range or malformed values (`"1.25"`, `125`, `null`) are clamped or ignored rather than collapsing the layout.
+
 ## [2.9.1] — 2026-09-04
 
 ### Fixed

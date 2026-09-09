@@ -183,6 +183,7 @@
     "show_stats": "Csészestatisztika megjelenítése",
     "show_maintenance": "Karbantartás megjelenítése",
     "show_settings": "Beállítások megjelenítése",
-    "compact": "Kompakt mód"
+    "compact": "Kompakt mód",
+    "scale": "Szöveg- és ikonméret"
   }
 }

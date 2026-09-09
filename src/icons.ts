@@ -499,7 +499,8 @@ function renderGlassSvg(
   const sa3 = `${sp3};M ${cx + 8} ${cupTop - 2} Q ${cx + 10} ${cupTop - 9} ${cx + 7} ${cupTop - 15};${sp3}`;
 
   return svg`
-    <svg width="${size}" height="${size * (vbH / vbW)}" viewBox="0 0 ${vbW} ${vbH}" fill="none">
+    <svg width="${size}" height="${size * (vbH / vbW)}" viewBox="0 0 ${vbW} ${vbH}" fill="none"
+      style="width: calc(var(--mbc-scale, 1) * ${size}px); height: auto;">
       <defs>
         <clipPath id="clip-${uid}">
           <path d="${f.clipPath}" />

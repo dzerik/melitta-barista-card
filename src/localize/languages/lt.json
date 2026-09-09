@@ -183,6 +183,7 @@
     "show_stats": "Rodyti puodelių statistiką",
     "show_maintenance": "Rodyti priežiūrą",
     "show_settings": "Rodyti nustatymus",
-    "compact": "Kompaktiškas režimas"
+    "compact": "Kompaktiškas režimas",
+    "scale": "Teksto ir piktogramų dydis"
   }
 }

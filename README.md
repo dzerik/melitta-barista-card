@@ -101,6 +101,7 @@ show_stats: true
 show_maintenance: true
 show_settings: false
 compact: false
+scale: 1.25
 ```
 
 ### Options
@@ -119,6 +120,11 @@ compact: false
 | `show_maintenance` | boolean | false         | Show maintenance section                       |
 | `show_settings`    | boolean | false         | Show machine settings section                  |
 | `compact`          | boolean | false         | Compact layout                                 |
+| `scale`            | number  | 1             | Text and icon size, `0.8`–`2` (1 = theme size) |
+
+`scale` enlarges (or shrinks) the whole card body — text, icons and the tile grid alike —
+which helps on wall tablets and kitchen displays. The visual editor exposes it as a slider.
+Values outside `0.8`–`2` are clamped.
 
 If you have multiple Melitta machines, use the visual editor dropdown to select the desired device, or set `entity_prefix` manually.
 

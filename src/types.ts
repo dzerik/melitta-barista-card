@@ -12,6 +12,8 @@ export interface MelittaCardConfig {
   show_stats?: boolean;
   show_maintenance?: boolean;
   compact?: boolean;
+  /** UI scale factor for text and icons, 0.8-2.0 (default 1 = theme size). */
+  scale?: number;
 }
 
 export interface DirectKeyRecipe {

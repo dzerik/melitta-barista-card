@@ -469,7 +469,7 @@ export class MbcSommelier extends LitElement {
       }
       .som-brew-btn:hover { opacity: 0.85; }
       .som-brew-btn.full { width: 100%; justify-content: center; padding: 6px; margin-top: 6px; }
-      .som-brew-btn ha-icon { --mdc-icon-size: 16px; }
+      .som-brew-btn ha-icon { --mdc-icon-size: calc(var(--mbc-scale, 1) * 16px); }
       .som-quick-recipe {
         padding: 10px;
         border-radius: 10px;
@@ -499,7 +499,7 @@ export class MbcSommelier extends LitElement {
       }
       .som-surprise-btn:hover { background: var(--mbc-surface); }
       .som-surprise-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-      .som-surprise-btn ha-icon { --mdc-icon-size: 18px; }
+      .som-surprise-btn ha-icon { --mdc-icon-size: calc(var(--mbc-scale, 1) * 18px); }
       @keyframes mbc-spin { to { transform: rotate(360deg); } }
       .spin, ha-icon.spin { animation: mbc-spin 1s linear infinite; }
 
@@ -516,7 +516,7 @@ export class MbcSommelier extends LitElement {
         transition: all 0.15s;
       }
       .som-info-btn:hover { background: var(--mbc-surface); color: var(--mbc-text); }
-      .som-info-btn ha-icon { --mdc-icon-size: 15px; }
+      .som-info-btn ha-icon { --mdc-icon-size: calc(var(--mbc-scale, 1) * 15px); }
       .som-fav-details {
         margin: -2px 0 4px;
         padding: 8px 10px;

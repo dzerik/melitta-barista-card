@@ -183,6 +183,7 @@
     "show_stats": "Tassenstatistik anzeigen",
     "show_maintenance": "Wartung anzeigen",
     "show_settings": "Einstellungen anzeigen",
-    "compact": "Kompaktmodus"
+    "compact": "Kompaktmodus",
+    "scale": "Text- und Symbolgröße"
   }
 }

@@ -3,7 +3,13 @@ import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
 import type { MelittaCardConfig } from "./types";
 import { localize, setLanguage } from "./localize/localize";
-import { detectMelittaDevices, DetectedDevice } from "./utils";
+import {
+  detectMelittaDevices,
+  DetectedDevice,
+  normalizeScale,
+  MIN_SCALE,
+  MAX_SCALE,
+} from "./utils";
 
 interface ToggleOption {
   key: keyof MelittaCardConfig;
@@ -53,6 +59,22 @@ export class MelittaBaristaCardEditor extends LitElement {
     this._fireConfigChanged();
   }
 
+  /**
+   * Stores the UI scale as a number, dropping the key at the default size.
+   *
+   * A config without `scale` is what every card shipped before this option
+   * looked like, so leaving it out keeps the YAML clean for users who never
+   * touch the slider.
+   */
+  private _scaleChanged(ev: Event): void {
+    const scale = normalizeScale((ev.target as HTMLInputElement).value);
+    const config = { ...this._config };
+    if (scale === 1) delete config.scale;
+    else config.scale = scale;
+    this._config = config;
+    this._fireConfigChanged();
+  }
+
   private _prefixChanged(ev: Event): void {
     const raw = (ev.target as HTMLInputElement).value;
     this._config = { ...this._config, entity_prefix: raw.trim() };
@@ -93,6 +115,7 @@ export class MelittaBaristaCardEditor extends LitElement {
     const isKnownDevice = devices.some((d) => d.prefix === currentPrefix);
     const manualSelected = this._manualMode || (!!currentPrefix && !isKnownDevice);
     const showManualInput = devices.length > 0 && manualSelected;
+    const scale = normalizeScale(this._config.scale);
 
     return html`
       ${devices.length > 0
@@ -149,6 +172,22 @@ export class MelittaBaristaCardEditor extends LitElement {
         />
       </div>
 
+      <div class="editor-row">
+        <label for="scale">
+          ${localize("editor.scale")}
+          <span class="scale-value">${Math.round(scale * 100)}%</span>
+        </label>
+        <input
+          id="scale"
+          type="range"
+          min=${MIN_SCALE}
+          max=${MAX_SCALE}
+          step="0.05"
+          .value=${String(scale)}
+          @input=${(ev: Event) => this._scaleChanged(ev)}
+        />
+      </div>
+
       ${TOGGLES.map(({ key, defaultOn }) => html`
         <div class="checkbox-row">
           <input type="checkbox" id=${key}
@@ -188,6 +227,13 @@ export class MelittaBaristaCardEditor extends LitElement {
         color: var(--secondary-text-color);
         margin-top: 4px;
       }
+      .scale-value {
+        float: right;
+        font-weight: 400;
+        color: var(--secondary-text-color);
+        font-variant-numeric: tabular-nums;
+      }
+      input[type="range"] { width: 100%; }
       .checkbox-row {
         display: flex;
         align-items: center;

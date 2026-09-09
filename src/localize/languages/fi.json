@@ -183,6 +183,7 @@
     "show_stats": "Näytä kuppitilastot",
     "show_maintenance": "Näytä huolto",
     "show_settings": "Näytä asetukset",
-    "compact": "Tiivis tila"
+    "compact": "Tiivis tila",
+    "scale": "Tekstin ja kuvakkeiden koko"
   }
 }

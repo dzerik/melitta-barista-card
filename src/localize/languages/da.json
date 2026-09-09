@@ -183,6 +183,7 @@
     "show_stats": "Vis kopstatistik",
     "show_maintenance": "Vis vedligeholdelse",
     "show_settings": "Vis indstillinger",
-    "compact": "Kompakt tilstand"
+    "compact": "Kompakt tilstand",
+    "scale": "Tekst- og ikonstørrelse"
   }
 }

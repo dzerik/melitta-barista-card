@@ -183,6 +183,7 @@
     "show_stats": "Prikaži statistiku šalica",
     "show_maintenance": "Prikaži održavanje",
     "show_settings": "Prikaži postavke",
-    "compact": "Kompaktni način"
+    "compact": "Kompaktni način",
+    "scale": "Veličina teksta i ikona"
   }
 }

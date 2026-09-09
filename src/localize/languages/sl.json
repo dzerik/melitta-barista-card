@@ -183,6 +183,7 @@
     "show_stats": "Prikaži statistiko skodelic",
     "show_maintenance": "Prikaži vzdrževanje",
     "show_settings": "Prikaži nastavitve",
-    "compact": "Kompaktni način"
+    "compact": "Kompaktni način",
+    "scale": "Velikost besedila in ikon"
   }
 }

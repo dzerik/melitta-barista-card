@@ -183,6 +183,7 @@
     "show_stats": "Rādīt tašu statistiku",
     "show_maintenance": "Rādīt apkopi",
     "show_settings": "Rādīt iestatījumus",
-    "compact": "Kompaktais režīms"
+    "compact": "Kompaktais režīms",
+    "scale": "Teksta un ikonu izmērs"
   }
 }

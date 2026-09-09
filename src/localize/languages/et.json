@@ -183,6 +183,7 @@
     "show_stats": "Kuva tassistatistika",
     "show_maintenance": "Kuva hooldus",
     "show_settings": "Kuva seaded",
-    "compact": "Kompaktne režiim"
+    "compact": "Kompaktne režiim",
+    "scale": "Teksti ja ikoonide suurus"
   }
 }

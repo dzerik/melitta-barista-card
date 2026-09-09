@@ -183,6 +183,7 @@
     "show_stats": "Zobrazit statistiky šálků",
     "show_maintenance": "Zobrazit údržbu",
     "show_settings": "Zobrazit nastavení",
-    "compact": "Kompaktní režim"
+    "compact": "Kompaktní režim",
+    "scale": "Velikost textu a ikon"
   }
 }

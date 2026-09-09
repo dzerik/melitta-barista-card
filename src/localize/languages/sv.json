@@ -183,6 +183,7 @@
     "show_stats": "Visa koppstatistik",
     "show_maintenance": "Visa underhåll",
     "show_settings": "Visa inställningar",
-    "compact": "Kompakt läge"
+    "compact": "Kompakt läge",
+    "scale": "Text- och ikonstorlek"
   }
 }

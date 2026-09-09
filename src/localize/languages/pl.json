@@ -183,6 +183,7 @@
     "show_stats": "Pokaż statystyki filiżanek",
     "show_maintenance": "Pokaż konserwację",
     "show_settings": "Pokaż ustawienia",
-    "compact": "Tryb kompaktowy"
+    "compact": "Tryb kompaktowy",
+    "scale": "Rozmiar tekstu i ikon"
   }
 }

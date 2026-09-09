@@ -234,6 +234,7 @@
     "show_stats": "Show cup statistics",
     "show_maintenance": "Show maintenance",
     "show_settings": "Show settings",
-    "compact": "Compact mode"
+    "compact": "Compact mode",
+    "scale": "Text and icon size"
   }
 }
