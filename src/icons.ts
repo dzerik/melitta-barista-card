@@ -476,6 +476,20 @@ export function computeIconGeometry(
 // Lit template rendering (shared by legacy and spec paths).
 // ---------------------------------------------------------------------------
 
+/**
+ * The rising puffs that make up the steam, offset in time so the column never
+ * empties. `dx` is relative to the cup centre, `rise` the travel in viewBox
+ * units (capped by the headroom above the cup), `peak` the opacity it reaches.
+ * A negative `begin` starts the puff mid-flight, so the icon is never caught
+ * with nothing above the cup on first paint.
+ */
+const STEAM_PUFFS = [
+  { dx: -5, begin: 0, dur: 3.4, r0: 3.2, r1: 8.0, rise: 22, peak: 0.62 },
+  { dx: 3, begin: -1.2, dur: 3.8, r0: 2.8, r1: 7.5, rise: 24, peak: 0.56},
+  { dx: 9, begin: -2.3, dur: 3.1, r0: 2.4, r1: 6.5, rise: 20, peak: 0.46},
+  { dx: -1, begin: -0.6, dur: 4.2, r0: 3.0, r1: 9.0, rise: 26, peak: 0.44 },
+];
+
 /** Renders the full glass SVG (steam, outline, liquid bands, shine, reflection). */
 function renderGlassSvg(
   f: CupFrame,
@@ -491,12 +505,15 @@ function renderGlassSvg(
   const hBot = cupTop + cupH * 0.65;
   const hOut = isTall ? 10 : 14;
 
-  const sp1 = `M ${cx - 6} ${cupTop - 2} Q ${cx - 8} ${cupTop - 10} ${cx - 5} ${cupTop - 16}`;
-  const sa1 = `${sp1};M ${cx - 6} ${cupTop - 2} Q ${cx - 4} ${cupTop - 10} ${cx - 7} ${cupTop - 16};${sp1}`;
-  const sp2 = `M ${cx + 1} ${cupTop - 3} Q ${cx + 3} ${cupTop - 11} ${cx} ${cupTop - 18}`;
-  const sa2 = `${sp2};M ${cx + 1} ${cupTop - 3} Q ${cx - 1} ${cupTop - 11} ${cx + 2} ${cupTop - 18};${sp2}`;
-  const sp3 = `M ${cx + 8} ${cupTop - 2} Q ${cx + 6} ${cupTop - 9} ${cx + 9} ${cupTop - 15}`;
-  const sa3 = `${sp3};M ${cx + 8} ${cupTop - 2} Q ${cx + 10} ${cupTop - 9} ${cx + 7} ${cupTop - 15};${sp3}`;
+  // Steam: soft puffs leaving the surface, spreading as they climb and
+  // dissolving before the viewBox ends. A tall glass sits higher in the frame,
+  // so the rise is capped by the headroom it actually has (cupTop - 2).
+  const headroom = Math.max(6, cupTop - 2);
+  const puffs = STEAM_PUFFS.map((p) => ({
+    ...p,
+    x: cx + p.dx,
+    rise: Math.min(p.rise, headroom),
+  }));
 
   return svg`
     <svg width="${size}" height="${size * (vbH / vbW)}" viewBox="0 0 ${vbW} ${vbH}" fill="none"
@@ -516,9 +533,14 @@ function renderGlassSvg(
           <stop offset="0%" stop-color="white" stop-opacity="0.35" />
           <stop offset="100%" stop-color="white" stop-opacity="0" />
         </linearGradient>
-        <filter id="sg-${uid}" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2.5" />
+        <filter id="sg-${uid}" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="1.7" />
         </filter>
+        <radialGradient id="steam-${uid}">
+          <stop offset="0%" stop-color="currentColor" stop-opacity="1" />
+          <stop offset="55%" stop-color="currentColor" stop-opacity="0.5" />
+          <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
+        </radialGradient>
         <linearGradient id="rf-${uid}" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="white" stop-opacity="0.15" />
           <stop offset="100%" stop-color="white" stop-opacity="0" />
@@ -529,15 +551,20 @@ function renderGlassSvg(
       </defs>
 
       ${hasSteam ? svg`
-        <g opacity="0.20" stroke="rgba(255,255,255,0.6)" stroke-width="4" fill="none" stroke-linecap="round" filter="url(#sg-${uid})">
-          <path d="${sp1}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${sa1}" /></path>
-          <path d="${sp2}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${sa2}" /></path>
-          <path d="${sp3}"><animate attributeName="d" dur="3.3s" repeatCount="indefinite" values="${sa3}" /></path>
-        </g>
-        <g opacity="0.40" stroke="#D4C4A0" stroke-width="1" fill="none" stroke-linecap="round">
-          <path d="${sp1}"><animate attributeName="d" dur="3s" repeatCount="indefinite" values="${sa1}" /></path>
-          <path d="${sp2}"><animate attributeName="d" dur="2.6s" repeatCount="indefinite" values="${sa2}" /></path>
-          <path d="${sp3}"><animate attributeName="d" dur="3.3s" repeatCount="indefinite" values="${sa3}" /></path>
+        <g filter="url(#sg-${uid})" style="color: var(--mbc-text, #fff)">
+          ${puffs.map((p) => svg`
+            <ellipse cx="${p.x}" cy="${cupTop - 1}" rx="${p.r0}" ry="${p.r0 * 0.7}"
+              fill="url(#steam-${uid})" opacity="0">
+              <animate attributeName="cy" values="${cupTop - 1};${cupTop - p.rise}"
+                dur="${p.dur}s" begin="${p.begin}s" repeatCount="indefinite" />
+              <animate attributeName="rx" values="${p.r0};${p.r1}"
+                dur="${p.dur}s" begin="${p.begin}s" repeatCount="indefinite" />
+              <animate attributeName="ry" values="${p.r0 * 0.7};${p.r1 * 0.85}"
+                dur="${p.dur}s" begin="${p.begin}s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0;${p.peak};${p.peak * 0.5};0"
+                keyTimes="0;0.25;0.6;1" dur="${p.dur}s" begin="${p.begin}s" repeatCount="indefinite" />
+            </ellipse>
+          `)}
         </g>
       ` : nothing}
 

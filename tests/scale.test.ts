@@ -74,8 +74,45 @@ describe("the sommelier's own stylesheet", () => {
 });
 
 describe("drink icons", () => {
+  /**
+   * Flattens a Lit TemplateResult into its markup.
+   *
+   * `strings` alone is not enough: the puffs come from a `.map()`, so they live
+   * in `values` as nested TemplateResults, and a naive join misses them.
+   */
+  function flattenTemplate(node: unknown): string {
+    if (node == null || typeof node === "boolean") return "";
+    if (Array.isArray(node)) return node.map(flattenTemplate).join("");
+    if (typeof node === "object") {
+      const t = node as { strings?: readonly string[]; values?: unknown[] };
+      if (!t.strings) return "";
+      return t.strings
+        .map((str, i) => str + flattenTemplate(t.values?.[i]))
+        .join("");
+    }
+    return String(node);
+  }
+
+  it("draw steam as rising puffs, not stroked ribbons", () => {
+    const markup = flattenTemplate(coffeeIconSvg("Espresso", 48, "u1"));
+    expect(markup).toContain("<ellipse");
+    // The hard sand-coloured line was what read as a stripe rather than vapour.
+    expect(markup).not.toContain("D4C4A0");
+  });
+
+  it("leave steam off the drinks that do not carry any", () => {
+    for (const cold of ["Milk", "Milk Froth", "Hot Water"]) {
+      expect(flattenTemplate(coffeeIconSvg(cold, 48, "u1"))).not.toContain("<ellipse");
+    }
+  });
+
+  it("take their steam colour from the card token, so both themes show it", () => {
+    expect(flattenTemplate(coffeeIconSvg("Espresso", 48, "u1")))
+      .toContain("color: var(--mbc-text, #fff)");
+  });
+
   it("carry a scale-aware width so they grow with the text", () => {
-    const res = coffeeIconSvg("Espresso", 48, "u1") as { strings?: readonly string[] };
-    expect(res.strings?.join("")).toContain("calc(var(--mbc-scale, 1) *");
+    expect(flattenTemplate(coffeeIconSvg("Espresso", 48, "u1")))
+      .toContain("calc(var(--mbc-scale, 1) *");
   });
 });

@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.0] — 2026-09-10
+
+### Changed
+
+- **Steam is drawn as vapour, not stripes.** The drink icons used to stack a blurred white ribbon under a hard 1px sand-coloured line, which read as three light streaks above the cup. Steam is now four soft puffs that leave the surface, spread as they climb and dissolve before the top of the frame, offset in time so the column never empties and never starts empty. A tall glass sits higher in the icon, so the rise is capped by the headroom it actually has.
+- **Steam follows the theme.** It was painted in fixed white and `#D4C4A0`, which all but disappeared on a light dashboard. It now takes the card's own text color, so it reads on either ground.
+
 ## [2.10.1] — 2026-09-10
 
 ### Fixed
