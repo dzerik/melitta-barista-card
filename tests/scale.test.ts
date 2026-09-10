@@ -35,6 +35,14 @@ describe("scale plumbing in the stylesheet", () => {
     expect(css).toContain("font-size: calc(var(--mbc-scale, 1) * 1em)");
   });
 
+  it("makes form controls inherit type, so labels inside buttons scale", () => {
+    // .dk-card (the MyCoffee tile) is a <button>: without this the UA stylesheet
+    // pins it to its own 13.33px and .dk-card-label ignores the scale entirely.
+    expect(css).toMatch(
+      /button,\s*input,\s*select,\s*textarea\s*{[^}]*font-size:\s*inherit/,
+    );
+  });
+
   it("leaves no icon size outside the scale", () => {
     const srcDir = join(__dirname, "../src");
     const files: string[] = [];
@@ -53,6 +61,15 @@ describe("scale plumbing in the stylesheet", () => {
       ),
     );
     expect(unscaled).toEqual([]);
+  });
+});
+
+describe("the sommelier's own stylesheet", () => {
+  it("inherits type in form controls too — it renders in its own shadow root", async () => {
+    const source = readFileSync(join(__dirname, "../src/sommelier.ts"), "utf8");
+    expect(source).toMatch(
+      /button,\s*input,\s*select,\s*textarea\s*{[^}]*font-size:\s*inherit/,
+    );
   });
 });
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.10.1] — 2026-09-10
+
+### Fixed
+
+- **Tile labels ignored the scale (and the theme's text size).** The MyCoffee quick-brew tiles, the profile tabs and every other control built on a `<button>` kept their labels at the browser's own 13.33px: the card set `font-family: inherit` on them but never `font-size`, and a button does not inherit type from its container on its own. Icons and tiles grew with `scale` while the words under them stayed put. Form controls now inherit type in both stylesheets (card and sommelier).
+
+### Changed
+
+- As a consequence, label text inside buttons follows the dashboard's text size, which it never did before — at the default scale those labels are ~5% larger than in 2.10.0 on a stock theme, and they now respond to a theme that sets its own size.
+
 ## [2.10.0] — 2026-09-09
 
 ### Added

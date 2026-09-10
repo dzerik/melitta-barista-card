@@ -386,6 +386,17 @@ export class MbcSommelier extends LitElement {
 
   static get styles(): CSSResultGroup {
     return css`
+
+  /* Form controls do not inherit type from their container: the UA stylesheet
+     pins buttons and inputs to its own font (13.33px in Chrome), so every label
+     inside a tile or button ignored both the theme size and --mbc-scale. */
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: inherit;
+  }
       :host { display: block; }
 
       .section-title {
