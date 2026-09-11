@@ -137,6 +137,12 @@ export class MelittaBaristaCard extends LitElement {
   // Resolved DirectKey model (§9.3.6), memoized per contract document —
   // consulted several times per render (profile select anchor, active-profile
   // attribute, tabs, grid, tracked ids).
+  /** Per-profile DirectKey icon specs from `recipes/list`, or null before the
+   *  first successful fetch. Keyed by profile id, then by category token. */
+  private _dkIcons: Record<number, Record<string, unknown>> | null = null;
+  /** Signature of the DirectKey attribute the cached icons were fetched for. */
+  private _dkIconsFor: string | null = null;
+  private _dkIconsInFlight = false;
   private _dkModelFor: UiContract | null = null;
   private _dkModelCached: DirectKeyModel | null = null;
 
@@ -194,6 +200,8 @@ export class MelittaBaristaCard extends LitElement {
     this._trackedContractFp = null;
     this._dkModelFor = null;
     this._dkModelCached = null;
+    this._dkIcons = null;
+    this._dkIconsFor = null;
   }
 
   public getCardSize(): number {
@@ -283,6 +291,7 @@ export class MelittaBaristaCard extends LitElement {
     }
     noteBridgeUpdate(this._bridge);
     this._updateServerStrings(this._bridge);
+    this._updateDirectKeyIcons(prefix, this._bridge.entry_id);
     if (this._contractFetchInFlight) return;
     const bridge = this._bridge;
     if (this._contract && this._contract.contract_fingerprint === bridge.contract_fingerprint) {
@@ -711,12 +720,40 @@ export class MelittaBaristaCard extends LitElement {
     });
   }
 
+  /**
+   * Keep the DirectKey icon specs fresh (UI Contract §2.1 icon surface).
+   *
+   * The tile grid is driven by the frozen `directkey_recipes` attribute, which
+   * carries the composition but no icon, so the specs come from `recipes/list`
+   * — a non-admin, entry-scoped command. Refetched only when that attribute
+   * actually changes, which is what editing a slot's recipe does; a failure
+   * leaves the previous specs in place and the tile falls back to the
+   * category glyph.
+   */
+  private _updateDirectKeyIcons(prefix: string | null, entryId: string): void {
+    if (!prefix || this._dkIconsInFlight) return;
+    const raw = this.hass.states[`select.${prefix}_${this._dkModel().profileSelectSuffix}`]
+      ?.attributes?.directkey_recipes;
+    if (!raw) return;
+    const signature = `${entryId}:${JSON.stringify(raw)}`;
+    if (signature === this._dkIconsFor) return;
+    this._dkIconsInFlight = true;
+    api.fetchDirectKeyIcons(this.hass, entryId).then((icons) => {
+      this._dkIconsInFlight = false;
+      if (Object.keys(icons).length === 0) return; // keep whatever we had
+      this._dkIconsFor = signature;
+      this._dkIcons = icons;
+      this.requestUpdate();
+    });
+  }
+
   private _renderDirectKey() {
     const dk = this._getDirectKeyData();
     if (!dk) return nothing;
     return renderDirectKey({
       data: dk,
       model: this._dkModel(),
+      icons: this._dkIcons?.[dk.activeProfile] ?? null,
       selected: this._selectedDk,
       twoCups: this._twoCups,
       onCardClick: (cat) => this._handleDkClick(cat),

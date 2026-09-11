@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.12.0] — 2026-09-11
+
+### Changed
+
+- **A profile tile now draws the drink it actually brews.** Every slot used to render the stock glyph for its category, so two profiles whose cappuccino differs looked identical and editing a recipe never changed its picture. The tile now uses the composition-derived icon spec the integration already publishes on `recipes/list` — the same procedural drawing the recipe list uses — and falls back to the category glyph when no spec is available, which keeps pre-contract installs exactly as they were.
+- **The composition is visible without selecting the tile.** Millilitres and coffee intensity used to appear only on the selected slot, as an overlay that dimmed the icon to 15% — so reading what a slot brews meant losing sight of the drink. Both are now shown together, permanently.
+- **The tiles fill the row.** The grid laid out as many fixed 60px tracks as fit, which left dead cells beside the last tile and squeezed labels into an ellipsis — "Молочная пена" and "Молочное молоко" both read as "Молочн…". Tracks now stretch to fill the row, tiles are tall enough for the icon, the composition and a two-line label, and the label wraps instead of truncating.
+
 ## [2.11.1] — 2026-09-11
 
 ### Fixed

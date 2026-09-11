@@ -14,7 +14,12 @@ import { resolveDirectKeyModel, type DirectKeyModel } from "../directkey";
 import { directKeyCategoryLabel } from "../directkey-display";
 import { INTENSITY_DOTS } from "../format";
 import { localize } from "../localize/localize";
-import { coffeeIconSvg } from "../icons";
+import {
+  coffeeIconSvg,
+  coffeeIconSvgFromSpec,
+  computeIconGeometry,
+  type IconSpec,
+} from "../icons";
 import type { DirectKeyData, DirectKeyRecipe } from "../types";
 
 export interface DirectKeySectionProps {
@@ -23,6 +28,12 @@ export interface DirectKeySectionProps {
   twoCups: boolean;
   /** Resolved model (Zone C-L). Absent → the legacy tier-2 model. */
   model?: DirectKeyModel;
+  /**
+   * Composition-derived icon specs for the active profile, keyed by category
+   * token (UI Contract §2.1 via `recipes/list`). Absent or missing a category
+   * → the tile falls back to the generic glyph for that category.
+   */
+  icons?: Record<string, unknown> | null;
   onCardClick: (cat: string) => void;
   onLongPressStart: (cat: string, recipe: DirectKeyRecipe) => void;
   onLongPressCancel: () => void;
@@ -53,14 +64,8 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
             @pointerup=${() => props.onLongPressCancel()}
             @pointerleave=${() => props.onLongPressCancel()}
             @contextmenu=${(e: Event) => e.preventDefault()}>
-            <div class="${isSelected && hasDetails ? "dk-icon-dimmed" : ""}">
-              ${renderDkIcon(cat, catModel.icon)}
-            </div>
-            ${isSelected && hasDetails ? html`
-              <div class="dk-card-overlay">
-                ${renderDkRecipeInfo(recipe)}
-              </div>
-            ` : nothing}
+            ${renderDkIcon(cat, catModel.icon, props.icons?.[cat])}
+            ${hasDetails ? renderDkRecipeInfo(recipe) : nothing}
             <span class="dk-card-label">
               ${isSelected
                 ? localize("directkey.brew_drink", { drink: label })
@@ -84,12 +89,24 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
 }
 
 /**
- * Tile icon: the seven known categories keep the procedural drink glyph
- * (exact 2.7.0 visuals — the served mdi is a *fallback* icon, §9.3.2);
- * an unknown token renders its served mdi icon when one exists, else the
- * generic drink glyph.
+ * Tile icon, in preference order:
+ *   1. the composition-derived IconSpec for THIS profile's recipe, so a slot
+ *      draws what it actually brews rather than a stock picture of its
+ *      category — two profiles whose cappuccino differs now look different;
+ *   2. the procedural glyph for a known category (the exact 2.7.0 visuals);
+ *   3. the served mdi icon for an unknown token (§9.3.2 calls it a fallback);
+ *   4. the generic drink glyph.
  */
-function renderDkIcon(cat: string, mdiIcon: string | null): TemplateResult {
+function renderDkIcon(
+  cat: string, mdiIcon: string | null, spec?: unknown,
+): TemplateResult {
+  // computeIconGeometry is the usability test: coffeeIconSvgFromSpec silently
+  // falls back to the DEFAULT glyph on a spec it cannot read, which would be a
+  // worse picture than the category glyph this tile already had.
+  if (spec && typeof spec === "object"
+      && computeIconGeometry(spec as IconSpec, 48) !== null) {
+    return coffeeIconSvgFromSpec(spec as IconSpec, 48, `dk-${cat}`);
+  }
   const known = DK_LABELS[cat as DirectKeyCategory];
   if (known !== undefined) return coffeeIconSvg(known, 48, `dk-${cat}`);
   if (mdiIcon !== null) {
@@ -98,6 +115,14 @@ function renderDkIcon(cat: string, mdiIcon: string | null): TemplateResult {
   return coffeeIconSvg(cat, 48, `dk-${cat}`);
 }
 
+/**
+ * Composition line under the tile icon: one row per real component, with
+ * millilitres and — for coffee — intensity dots.
+ *
+ * Shown unconditionally since 2.12.0. It used to appear only on the selected
+ * tile, as an overlay that dimmed the icon to 15%, so reading what a profile
+ * slot actually brews meant selecting it and losing sight of the drink.
+ */
 function renderDkRecipeInfo(recipe: DirectKeyRecipe): TemplateResult | typeof nothing {
   const components: { process: string; intensity: string; ml: number }[] = [];
   if (recipe.c1_process && recipe.c1_process !== "none") {

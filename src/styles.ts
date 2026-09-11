@@ -293,7 +293,11 @@ export const cardStyles = css`
   /* -- DirectKey grid -- */
   .dk-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(calc(var(--mbc-scale, 1) * 60px), 1fr));
+    /* auto-fit (not auto-fill) collapses the empty trailing tracks, so the
+       tiles stretch to fill the row instead of leaving dead cells beside the
+       last one. 88px is the narrowest track that fits a wrapped two-line
+       label without clipping it. */
+    grid-template-columns: repeat(auto-fit, minmax(calc(var(--mbc-scale, 1) * 88px), 1fr));
     gap: 1px;
     background: var(--mbc-border);
   }
@@ -303,7 +307,9 @@ export const cardStyles = css`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 6px 4px 20px;
+    padding: 8px 4px calc(var(--mbc-scale, 1) * 26px);
+    min-height: calc(var(--mbc-scale, 1) * 104px);
+    gap: 3px;
     background: var(--mbc-surface);
     border: none;
     cursor: pointer;
@@ -315,7 +321,6 @@ export const cardStyles = css`
   .dk-card[data-selected] {
     background: rgba(255,255,255,0.08);
   }
-  .dk-icon-dimmed { opacity: 0.15; }
   .dk-2x {
     display: flex;
     align-items: center;
@@ -335,42 +340,33 @@ export const cardStyles = css`
     right: 0;
     text-align: center;
     font-size: 0.55em;
-    padding: 4px 2px;
+    line-height: 1.15;
+    padding: 3px 3px 4px;
     font-weight: 500;
     color: var(--mbc-text2);
     transition: all 0.3s;
     z-index: 2;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    /* Two lines, centred: a wrapped label beats an ellipsis that hides which
+       drink the slot holds ("Молочная пе…" reads the same as "Молочное м…"). */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(var(--mbc-scale, 1) * 22px);
   }
   .dk-card[data-selected] .dk-card-label {
     background: var(--mbc-text);
     color: var(--mbc-bg);
     font-weight: 600;
   }
-  .dk-card-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    background: rgba(0,0,0,0.5);
-    animation: overlay-in 0.2s ease both;
-  }
-  @keyframes overlay-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
   .dk-recipe-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    font-size: 0.62em;
-    color: var(--mbc-text);
+    gap: 1px;
+    font-size: 0.52em;
+    line-height: 1.2;
+    color: var(--mbc-text2);
   }
   .dk-recipe-row {
     display: flex;

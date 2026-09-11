@@ -117,3 +117,39 @@ export function somBrewPhase(
     phase_index: phaseIndex,
   });
 }
+
+/**
+ * Per-profile DirectKey icon specs from `recipes/list` (UI Contract §2.1 names
+ * that command an icon surface).
+ *
+ * The tile grid itself is driven by the frozen `directkey_recipes` select
+ * attribute, which is push-updated but carries no icon — so a slot always drew
+ * the generic glyph for its category, identical whatever the slot actually
+ * brews. The spec is composition-derived and built on the server, so the card
+ * reads it rather than re-deriving the normative geometry (§4.10) locally.
+ *
+ * Non-admin and entry-scoped. Resolves to an empty map on any failure: a
+ * missing spec costs the drawn composition and nothing else.
+ */
+export async function fetchDirectKeyIcons(
+  hass: HomeAssistant, entryId: string,
+): Promise<Record<number, Record<string, unknown>>> {
+  try {
+    const res = await hass.callWS<{
+      directkey?: { profile_id: number; recipes?: { category?: string; icon?: unknown }[] }[];
+    }>({ type: `${SERVICE_DOMAIN}/recipes/list`, entry_id: entryId });
+    const out: Record<number, Record<string, unknown>> = {};
+    for (const profile of res?.directkey ?? []) {
+      const byCategory: Record<string, unknown> = {};
+      for (const row of profile.recipes ?? []) {
+        if (typeof row.category === "string" && row.category !== "" && row.icon) {
+          byCategory[row.category] = row.icon;
+        }
+      }
+      out[profile.profile_id] = byCategory;
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
