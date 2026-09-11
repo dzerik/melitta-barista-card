@@ -54,7 +54,7 @@
     "latte_macchiato": "Latte Macchiato",
     "milk": "Млеко",
     "milk_froth": "Млечна пена",
-    "water": "Топла вода"
+    "water": "Врела вода"
   },
   "values": {
     "very_mild": "В. блага",
@@ -100,7 +100,7 @@
     "brew_named": "Припреми {name}"
   },
   "sommelier": {
-    "title": "AI Sommelier",
+    "title": "AI сомелијер",
     "unavailable": "Сомелијер није доступан.",
     "generating": "Генерисање...",
     "surprise_me": "Изненади ме",
@@ -118,8 +118,8 @@
     "steps": "Кораци",
     "err": {
       "no_llm_agent": "У Home Assistant-у није инсталиран AI агент — додајте LLM интеграцију да бисте користили сомелијера",
-      "no_llm_agent_selected": "Није изабран AI агент — изаберите га на панелу сомелијера, картица System",
-      "llm_agent_missing": "Изабрани AI агент више не постоји — изаберите другог на панелу сомелијера, картица System"
+      "no_llm_agent_selected": "Није изабран AI агент — изаберите га на панелу сомелијера, картица Систем",
+      "llm_agent_missing": "Изабрани AI агент више не постоји — изаберите другог на панелу сомелијера, картица Систем"
     }
   },
   "stats": {
@@ -179,7 +179,7 @@
     "show_profiles": "Прикажи избор профила",
     "show_recipes": "Прикажи избор рецепта",
     "show_freestyle": "Прикажи Freestyle рецепт",
-    "show_sommelier": "Прикажи AI Sommelier",
+    "show_sommelier": "Прикажи AI сомелијера",
     "show_stats": "Прикажи статистику шољица",
     "show_maintenance": "Прикажи одржавање",
     "show_settings": "Прикажи подешавања",

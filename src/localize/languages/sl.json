@@ -4,7 +4,7 @@
     "cancel": "Prekliči",
     "save": "Shrani",
     "confirm": "Potrdi",
-    "start": "Start",
+    "start": "Začni",
     "loading": "Nalaganje...",
     "retry": "Poskusi znova",
     "default_name": "Melitta Barista"
@@ -22,8 +22,8 @@
     "off": "Izklopljeno",
     "busy": "Zaseden",
     "filter_insert": "Vstavljanje filtra",
-    "filter_replace": "Menjava filtra",
-    "filter_remove": "Odstranjevanje filtra",
+    "filter_replace": "Zamenjava filtra",
+    "filter_remove": "Odstranitev filtra",
     "evaporating": "Izhlapevanje",
     "idle": "Nedejavno",
     "unavailable": "Nedostopen",
@@ -95,7 +95,7 @@
     "aroma": "Aroma",
     "temp": "Temp.",
     "temperature": "Temperatura",
-    "shots": "Šoti",
+    "shots": "Shoti",
     "portion_value": "{value} ml",
     "brew_named": "Pripravi {name}"
   },
@@ -118,8 +118,8 @@
     "steps": "Koraki",
     "err": {
       "no_llm_agent": "V Home Assistantu ni nameščen noben AI agent — dodajte LLM integracijo za uporabo Sommeliera",
-      "no_llm_agent_selected": "Izbran ni noben AI agent — izberite ga na plošči Sommelier, zavihek System",
-      "llm_agent_missing": "Izbrani AI agent ne obstaja več — izberite drugega na plošči Sommelier, zavihek System"
+      "no_llm_agent_selected": "Izbran ni noben AI agent — izberite ga na plošči Sommelier, zavihek Sistem",
+      "llm_agent_missing": "Izbrani AI agent ne obstaja več — izberite drugega na plošči Sommelier, zavihek Sistem"
     }
   },
   "stats": {

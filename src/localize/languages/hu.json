@@ -38,13 +38,13 @@
   },
   "action": {
     "none": "Nincs",
-    "bu_removed": "Helyezd be a főzőegységet",
-    "trays_missing": "Helyezd be a tálcákat",
-    "empty_trays": "Ürítsd ki a tálcákat",
-    "fill_water": "Töltsd fel a víztartályt",
-    "close_powder_lid": "Zárd le az őrölt kávé fedelét",
-    "fill_powder": "Tölts be őrölt kávét",
-    "move_cup_to_frother": "Tedd a csészét a tejhabosító alá",
+    "bu_removed": "Helyezze be a főzőegységet",
+    "trays_missing": "Helyezze be a tálcákat",
+    "empty_trays": "Ürítse ki a tálcákat",
+    "fill_water": "Töltse fel a víztartályt",
+    "close_powder_lid": "Zárja le az őrölt kávé fedelét",
+    "fill_powder": "Töltsön be őrölt kávét",
+    "move_cup_to_frother": "Tegye a csészét a tejhabosító alá",
     "flush_required": "Öblítés szükséges"
   },
   "drinks": {
@@ -73,7 +73,7 @@
     "coffee": "Kávé",
     "milk": "Tej",
     "water": "Víz",
-    "standard": "Std",
+    "standard": "Norm.",
     "intense": "Int+"
   },
   "directkey": {
@@ -100,7 +100,7 @@
     "brew_named": "{name} főzése"
   },
   "sommelier": {
-    "title": "AI Sommelier",
+    "title": "AI-sommelier",
     "unavailable": "A Sommelier nem érhető el.",
     "generating": "Generálás...",
     "surprise_me": "Lepj meg",
@@ -111,15 +111,15 @@
     "step_of": "{n}. lépés / {total}",
     "done": "Kész",
     "brew_phase": "Fázis {n}/{total} főzése",
-    "phase_running": "A fázis elindult — várd meg, míg a gép végez, majd folytasd",
+    "phase_running": "A fázis elindult — várja meg, míg a gép végez, majd folytassa",
     "finish": "Befejezés",
     "cancel": "Mégse",
     "info": "Recept részletei",
     "steps": "Lépések",
     "err": {
-      "no_llm_agent": "Nincs AI-ügynök telepítve a Home Assistantban — adj hozzá egy LLM-integrációt a Sommelier használatához",
-      "no_llm_agent_selected": "Nincs kiválasztva AI-ügynök — válassz egyet a Sommelier panelen, a System fülön",
-      "llm_agent_missing": "A kiválasztott AI-ügynök eltűnt — válassz másikat a Sommelier panelen, a System fülön"
+      "no_llm_agent": "Nincs AI-ügynök telepítve a Home Assistantban — adjon hozzá egy LLM-integrációt a Sommelier használatához",
+      "no_llm_agent_selected": "Nincs kiválasztva AI-ügynök — válasszon egyet a Sommelier panel Rendszer fülén",
+      "llm_agent_missing": "A kiválasztott AI-ügynök eltűnt — válasszon másikat a Sommelier panel Rendszer fülén"
     }
   },
   "stats": {
@@ -179,7 +179,7 @@
     "show_profiles": "Profilválasztó megjelenítése",
     "show_recipes": "Receptválasztó megjelenítése",
     "show_freestyle": "Freestyle recept megjelenítése",
-    "show_sommelier": "AI Sommelier megjelenítése",
+    "show_sommelier": "AI-sommelier megjelenítése",
     "show_stats": "Csészestatisztika megjelenítése",
     "show_maintenance": "Karbantartás megjelenítése",
     "show_settings": "Beállítások megjelenítése",

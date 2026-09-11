@@ -38,7 +38,7 @@
   },
   "action": {
     "none": "Καμία",
-    "bu_removed": "Τοποθετήστε τη μονάδα εκχύλισης",
+    "bu_removed": "Τοποθετήστε τη μονάδα παρασκευής",
     "trays_missing": "Τοποθετήστε τους δίσκους",
     "empty_trays": "Αδειάστε τους δίσκους",
     "fill_water": "Γεμίστε το δοχείο νερού",
@@ -62,7 +62,7 @@
     "medium": "Μέτριος",
     "strong": "Δυνατός",
     "very_strong": "Π.Δυνατ.",
-    "extra_strong": "X.Δυνατ.",
+    "extra_strong": "Ε.Δυνατ.",
     "cold": "Κρύο",
     "normal": "Κανονικό",
     "high": "Υψηλό",
@@ -79,14 +79,14 @@
   "directkey": {
     "brew_drink": "Παρασκευή {drink}",
     "two_cups": "2x",
-    "two_cups_on": "2x ON"
+    "two_cups_on": "2x ενεργό"
   },
   "recipes": {
     "title": "Συνταγή",
     "all_recipes": "Όλες οι συνταγές"
   },
   "freestyle": {
-    "title": "Freestyle",
+    "title": "Ελεύθερη συνταγή",
     "drink_name_placeholder": "Όνομα ροφήματος",
     "component": "Συστατικό {n}",
     "process": "Διαδικασία",
@@ -100,12 +100,12 @@
     "brew_named": "Παρασκευή {name}"
   },
   "sommelier": {
-    "title": "AI Sommelier",
-    "unavailable": "Ο Sommelier δεν είναι διαθέσιμος.",
+    "title": "AI Σομελιέ",
+    "unavailable": "Ο Σομελιέ δεν είναι διαθέσιμος.",
     "generating": "Δημιουργία...",
     "surprise_me": "Εξέπληξέ με",
-    "error_generate": "Sommelier: αποτυχία δημιουργίας συνταγής",
-    "error_brew": "Sommelier: αποτυχία παρασκευής",
+    "error_generate": "Σομελιέ: αποτυχία δημιουργίας συνταγής",
+    "error_brew": "Σομελιέ: αποτυχία παρασκευής",
     "reasoning": "Γιατί αυτή η συνταγή;",
     "wizard_title": "Παρασκευή βήμα προς βήμα",
     "step_of": "Βήμα {n} από {total}",
@@ -117,9 +117,9 @@
     "info": "Λεπτομέρειες συνταγής",
     "steps": "Βήματα",
     "err": {
-      "no_llm_agent": "Δεν υπάρχει εγκατεστημένος AI agent στο Home Assistant — προσθέστε μια ενσωμάτωση LLM για να χρησιμοποιήσετε τον Sommelier",
-      "no_llm_agent_selected": "Δεν έχει επιλεγεί AI agent — επιλέξτε έναν στον πίνακα Sommelier, καρτέλα System",
-      "llm_agent_missing": "Ο επιλεγμένος AI agent δεν υπάρχει πια — επιλέξτε άλλον στον πίνακα Sommelier, καρτέλα System"
+      "no_llm_agent": "Δεν υπάρχει εγκατεστημένος πράκτορας AI στο Home Assistant — προσθέστε μια ενσωμάτωση LLM για να χρησιμοποιήσετε τον Σομελιέ",
+      "no_llm_agent_selected": "Δεν έχει επιλεγεί πράκτορας AI — επιλέξτε έναν στον πίνακα του Σομελιέ, καρτέλα Σύστημα",
+      "llm_agent_missing": "Ο επιλεγμένος πράκτορας AI δεν υπάρχει πια — επιλέξτε άλλον στον πίνακα του Σομελιέ, καρτέλα Σύστημα"
     }
   },
   "stats": {
@@ -178,8 +178,8 @@
     "show_status": "Εμφάνιση κατάστασης",
     "show_profiles": "Εμφάνιση επιλογής προφίλ",
     "show_recipes": "Εμφάνιση επιλογής συνταγών",
-    "show_freestyle": "Εμφάνιση συνταγής Freestyle",
-    "show_sommelier": "Εμφάνιση AI Sommelier",
+    "show_freestyle": "Εμφάνιση ελεύθερης συνταγής",
+    "show_sommelier": "Εμφάνιση AI Σομελιέ",
     "show_stats": "Εμφάνιση στατιστικών φλιτζανιών",
     "show_maintenance": "Εμφάνιση συντήρησης",
     "show_settings": "Εμφάνιση ρυθμίσεων",

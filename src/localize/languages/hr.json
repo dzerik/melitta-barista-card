@@ -4,7 +4,7 @@
     "cancel": "Odustani",
     "save": "Spremi",
     "confirm": "Potvrdi",
-    "start": "Start",
+    "start": "Pokreni",
     "loading": "Učitavanje...",
     "retry": "Pokušaj ponovno",
     "default_name": "Melitta Barista"
@@ -95,7 +95,7 @@
     "aroma": "Aroma",
     "temp": "Temp.",
     "temperature": "Temperatura",
-    "shots": "Šotovi",
+    "shots": "Shotovi",
     "portion_value": "{value} ml",
     "brew_named": "Pripremi {name}"
   },
@@ -118,8 +118,8 @@
     "steps": "Koraci",
     "err": {
       "no_llm_agent": "U Home Assistantu nije instaliran AI agent — dodajte LLM integraciju kako biste koristili Sommeliera",
-      "no_llm_agent_selected": "Nije odabran AI agent — odaberite ga na Sommelier panelu, kartica System",
-      "llm_agent_missing": "Odabrani AI agent više ne postoji — odaberite drugi na Sommelier panelu, kartica System"
+      "no_llm_agent_selected": "Nije odabran AI agent — odaberite ga na Sommelier panelu, kartica Sustav",
+      "llm_agent_missing": "Odabrani AI agent više ne postoji — odaberite drugi na Sommelier panelu, kartica Sustav"
     }
   },
   "stats": {

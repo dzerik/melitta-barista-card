@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.11.1] — 2026-09-11
+
+### Fixed
+
+- **Strings that were never translated.** Every locale file carried all 162 keys, so the completeness test was green — but 42 values across the 28 non-English locales were still the raw English source and the card rendered them as such: Italian labelled the double-shot toggle "2x ON", Spanish counted espresso "Shots", German offered "Easy Clean", and Swedish gave a coffee strength of "Med", which reads as the preposition "with" rather than "medium". They are now written in the language of the file.
+
+### Changed
+
+- **158 further values were rewritten to sound native.** Terminology was aligned with the wording the integration, the panel and the app already ship for the same concept — one language, one word for a thing, whichever surface shows it — and calqued English word order was replaced with what a speaker would actually say in a smart-home app: Czech maintenance prompts moved from the familiar imperative to the polite one the rest of the UI uses, Estonian brewing-unit and strength terms were corrected, sommelier wording was localised rather than left in French-English. Placeholders, markup and sentence structure are unchanged; coffee proper names, Bluetooth, Melitta and Home Assistant stay as they are.
+
+### Added
+
+- **A regression pin for untranslated strings** (`tests/localize-english.test.ts`). Key parity never noticed English leaking into a locale, because the key *was* there. The new test fails when any locale value is byte-identical to its `en.json` source, outside an allowlist that names the exact locales and the reason — coffee proper names, numerals, unit symbols such as `ml` and `min`, and genuine cognates like German "Normal" or Dutch "Water". The allowlist is checked in both directions: an entry whose locale has since been translated fails too, so it cannot quietly widen into a blanket exemption.
+
 ## [2.11.0] — 2026-09-10
 
 ### Changed

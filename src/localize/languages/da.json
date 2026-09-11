@@ -59,7 +59,7 @@
   "values": {
     "very_mild": "M.Mild",
     "mild": "Mild",
-    "medium": "Med",
+    "medium": "Mellem",
     "strong": "Stærk",
     "very_strong": "M.Stærk",
     "extra_strong": "X.Stærk",
@@ -93,7 +93,7 @@
     "portion": "Portion",
     "intensity": "Intensitet",
     "aroma": "Aroma",
-    "temp": "Temp",
+    "temp": "Temp.",
     "temperature": "Temperatur",
     "shots": "Shots",
     "portion_value": "{value} ml",

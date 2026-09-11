@@ -38,10 +38,10 @@
   },
   "action": {
     "none": "Nenhuma",
-    "bu_removed": "Insira o grupo de infusão",
-    "trays_missing": "Insira as bandejas",
-    "empty_trays": "Esvazie as bandejas",
-    "fill_water": "Encha o depósito de água",
+    "bu_removed": "Insira a unidade de infusão",
+    "trays_missing": "Insira os tabuleiros",
+    "empty_trays": "Esvazie os tabuleiros",
+    "fill_water": "Encha o reservatório de água",
     "close_powder_lid": "Feche a tampa do café moído",
     "fill_powder": "Adicione café moído",
     "move_cup_to_frother": "Aproxime a chávena do bocal de leite",
@@ -73,13 +73,13 @@
     "coffee": "Café",
     "milk": "Leite",
     "water": "Água",
-    "standard": "Std",
+    "standard": "Pad.",
     "intense": "Int+"
   },
   "directkey": {
     "brew_drink": "Preparar {drink}",
     "two_cups": "2x",
-    "two_cups_on": "2x ON"
+    "two_cups_on": "2x ativado"
   },
   "recipes": {
     "title": "Receita",
@@ -95,7 +95,7 @@
     "aroma": "Aroma",
     "temp": "Temp.",
     "temperature": "Temperatura",
-    "shots": "Shots",
+    "shots": "Doses",
     "portion_value": "{value} ml",
     "brew_named": "Preparar {name}"
   },
@@ -103,7 +103,7 @@
     "title": "Sommelier IA",
     "unavailable": "O sommelier não está disponível.",
     "generating": "A gerar...",
-    "surprise_me": "Surpreende-me",
+    "surprise_me": "Surpreenda-me",
     "error_generate": "Sommelier: falha ao gerar a receita",
     "error_brew": "Sommelier: falha na preparação",
     "reasoning": "Porquê esta receita?",
@@ -118,8 +118,8 @@
     "steps": "Passos",
     "err": {
       "no_llm_agent": "Não há nenhum agente de IA instalado no Home Assistant — adicione uma integração LLM para usar o sommelier",
-      "no_llm_agent_selected": "Nenhum agente de IA selecionado — escolha um no painel do sommelier, separador System",
-      "llm_agent_missing": "O agente de IA selecionado já não existe — escolha outro no painel do sommelier, separador System"
+      "no_llm_agent_selected": "Nenhum agente de IA selecionado — escolha um no painel do sommelier, separador Sistema",
+      "llm_agent_missing": "O agente de IA selecionado já não existe — escolha outro no painel do sommelier, separador Sistema"
     }
   },
   "stats": {

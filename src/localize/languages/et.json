@@ -38,7 +38,7 @@
   },
   "action": {
     "none": "Puudub",
-    "bu_removed": "Paigalda tõmbeplokk",
+    "bu_removed": "Paigalda keeduplokk",
     "trays_missing": "Paigalda alused",
     "empty_trays": "Tühjenda alused",
     "fill_water": "Täida veepaak",
@@ -91,21 +91,21 @@
     "component": "Komponent {n}",
     "process": "Protsess",
     "portion": "Kogus",
-    "intensity": "Intensiivsus",
+    "intensity": "Kangus",
     "aroma": "Aroom",
     "temp": "Temp.",
     "temperature": "Temperatuur",
-    "shots": "Šotid",
+    "shots": "Shotid",
     "portion_value": "{value} ml",
     "brew_named": "Valmista {name}"
   },
   "sommelier": {
-    "title": "AI Sommelier",
-    "unavailable": "Sommelier pole saadaval.",
+    "title": "AI Sommeljee",
+    "unavailable": "Sommeljee pole saadaval.",
     "generating": "Genereerimine...",
     "surprise_me": "Üllata mind",
-    "error_generate": "Sommelier: retsepti loomine ebaõnnestus",
-    "error_brew": "Sommelier: valmistamine ebaõnnestus",
+    "error_generate": "Sommeljee: retsepti loomine ebaõnnestus",
+    "error_brew": "Sommeljee: valmistamine ebaõnnestus",
     "reasoning": "Miks see retsept?",
     "wizard_title": "Samm-sammuline valmistamine",
     "step_of": "Samm {n} / {total}",
@@ -117,9 +117,9 @@
     "info": "Retsepti üksikasjad",
     "steps": "Sammud",
     "err": {
-      "no_llm_agent": "Home Assistanti pole paigaldatud ühtegi AI-agenti — lisa LLM-integratsioon, et Sommelier'd kasutada",
-      "no_llm_agent_selected": "AI-agent on valimata — vali see Sommelier' paneelil, vahekaart System",
-      "llm_agent_missing": "Valitud AI-agent on kadunud — vali Sommelier' paneelil teine, vahekaart System"
+      "no_llm_agent": "Home Assistanti pole paigaldatud ühtegi AI-agenti — lisa LLM-integratsioon, et sommeljeed kasutada",
+      "no_llm_agent_selected": "AI-agent on valimata — vali see sommeljee paneelil, vahekaart Süsteem",
+      "llm_agent_missing": "Valitud AI-agent on kadunud — vali sommeljee paneelil teine, vahekaart Süsteem"
     }
   },
   "stats": {
@@ -136,7 +136,7 @@
       "other": "Muu"
     },
     "actions": {
-      "easy_clean": { "label": "Kiirpuhastus", "desc": "Valmistusüksuse kiire loputus" },
+      "easy_clean": { "label": "Kiirpuhastus", "desc": "Keeduploki kiire loputus" },
       "intensive_clean": { "label": "Intensiivne puhastus", "desc": "Põhjalik puhastus tabletiga" },
       "descaling": { "label": "Katlakivi eemaldamine", "desc": "Eemaldab katlakivi ladestused" },
       "evaporating": { "label": "Aurustumine", "desc": "Aurusüsteemi tühjendamine" },
@@ -149,13 +149,13 @@
   "settings": {
     "title": "Seaded",
     "switches": {
-      "energy_saving": { "label": "Energiasääst", "desc": "Vähendab voolutarbimist ootel" },
-      "auto_bean_select": { "label": "Automaatne ubade valik", "desc": "Valib oamahuti automaatselt" },
-      "rinsing_disabled": { "label": "Loputus keelatud", "desc": "Jätab automaatse loputuse vahele" }
+      "energy_saving": { "label": "Energiasääst", "desc": "Vähendab jõudeolekus energiatarvet" },
+      "auto_bean_select": { "label": "Automaatne ubade valik", "desc": "Valib automaatselt ubade mahuti" },
+      "rinsing_disabled": { "label": "Loputus keelatud", "desc": "Jätab automaatse loputustsükli vahele" }
     },
     "numbers": {
-      "water_hardness": { "label": "Vee karedus", "desc": "Kalibreerimine vee tüübi järgi" },
-      "auto_off_after": { "label": "Automaatne väljalülitus", "desc": "Minutid väljalülitumiseni" },
+      "water_hardness": { "label": "Vee karedus", "desc": "Seadista vastavalt vee tüübile" },
+      "auto_off_after": { "label": "Automaatne väljalülitus", "desc": "Minutid automaatse väljalülitumiseni" },
       "brew_temperature": { "label": "Valmistustemperatuur", "desc": "Valmistusvee temperatuur" }
     },
     "levels": {
@@ -179,7 +179,7 @@
     "show_profiles": "Kuva profiilivalija",
     "show_recipes": "Kuva retseptivalija",
     "show_freestyle": "Kuva Freestyle retsept",
-    "show_sommelier": "Kuva AI Sommelier",
+    "show_sommelier": "Kuva AI Sommeljee",
     "show_stats": "Kuva tassistatistika",
     "show_maintenance": "Kuva hooldus",
     "show_settings": "Kuva seaded",

@@ -38,7 +38,7 @@
   },
   "action": {
     "none": "Nessuna",
-    "bu_removed": "Inserisci il gruppo infusore",
+    "bu_removed": "Inserisci il gruppo erogatore",
     "trays_missing": "Inserisci le vaschette",
     "empty_trays": "Svuota le vaschette",
     "fill_water": "Riempi il serbatoio dell'acqua",
@@ -63,9 +63,9 @@
     "strong": "Forte",
     "very_strong": "M.Forte",
     "extra_strong": "X.Forte",
-    "cold": "Freddo",
+    "cold": "Fredda",
     "normal": "Normale",
-    "high": "Alto",
+    "high": "Alta",
     "none": "Nessuno",
     "one": "1",
     "two": "2",
@@ -79,7 +79,7 @@
   "directkey": {
     "brew_drink": "Prepara {drink}",
     "two_cups": "2x",
-    "two_cups_on": "2x ON"
+    "two_cups_on": "2x attivo"
   },
   "recipes": {
     "title": "Ricetta",
@@ -118,8 +118,8 @@
     "steps": "Passaggi",
     "err": {
       "no_llm_agent": "Nessun agente AI installato in Home Assistant — aggiungi un'integrazione LLM per usare il sommelier",
-      "no_llm_agent_selected": "Nessun agente AI selezionato — scegline uno nel pannello del sommelier, scheda System",
-      "llm_agent_missing": "L'agente AI selezionato non esiste più — scegline un altro nel pannello del sommelier, scheda System"
+      "no_llm_agent_selected": "Nessun agente AI selezionato — scegline uno nel pannello del sommelier, scheda Sistema",
+      "llm_agent_missing": "L'agente AI selezionato non esiste più — scegline un altro nel pannello del sommelier, scheda Sistema"
     }
   },
   "stats": {

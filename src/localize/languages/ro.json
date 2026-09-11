@@ -38,7 +38,7 @@
   },
   "action": {
     "none": "Niciuna",
-    "bu_removed": "Introdu unitatea de infuzare",
+    "bu_removed": "Introdu unitatea de preparare",
     "trays_missing": "Introdu tăvile",
     "empty_trays": "Golește tăvile",
     "fill_water": "Umple rezervorul de apă",
@@ -79,7 +79,7 @@
   "directkey": {
     "brew_drink": "Prepară {drink}",
     "two_cups": "2x",
-    "two_cups_on": "2x ON"
+    "two_cups_on": "2x activat"
   },
   "recipes": {
     "title": "Rețetă",
@@ -100,12 +100,12 @@
     "brew_named": "Prepară {name}"
   },
   "sommelier": {
-    "title": "AI Sommelier",
-    "unavailable": "Sommelierul nu este disponibil.",
+    "title": "Somelier AI",
+    "unavailable": "Somelierul nu este disponibil.",
     "generating": "Se generează...",
     "surprise_me": "Surprinde-mă",
-    "error_generate": "Sommelier: generarea rețetei a eșuat",
-    "error_brew": "Sommelier: prepararea a eșuat",
+    "error_generate": "Somelier: generarea rețetei a eșuat",
+    "error_brew": "Somelier: prepararea a eșuat",
     "reasoning": "De ce această rețetă?",
     "wizard_title": "Preparare pas cu pas",
     "step_of": "Pasul {n} din {total}",
@@ -117,9 +117,9 @@
     "info": "Detaliile rețetei",
     "steps": "Pași",
     "err": {
-      "no_llm_agent": "Niciun agent AI nu este instalat în Home Assistant — adăugați o integrare LLM pentru a folosi sommelierul",
-      "no_llm_agent_selected": "Niciun agent AI selectat — alegeți unul în panoul sommelierului, fila System",
-      "llm_agent_missing": "Agentul AI selectat nu mai există — alegeți altul în panoul sommelierului, fila System"
+      "no_llm_agent": "Niciun agent AI nu este instalat în Home Assistant — adăugați o integrare LLM pentru a folosi somelierul",
+      "no_llm_agent_selected": "Niciun agent AI selectat — alegeți unul în panoul somelierului, fila Sistem",
+      "llm_agent_missing": "Agentul AI selectat nu mai există — alegeți altul în panoul somelierului, fila Sistem"
     }
   },
   "stats": {
@@ -150,7 +150,7 @@
     "title": "Setări",
     "switches": {
       "energy_saving": { "label": "Economie energie", "desc": "Reduce consumul în repaus" },
-      "auto_bean_select": { "label": "Selectare automată boabe", "desc": "Alegere automată a recipientului de boabe" },
+      "auto_bean_select": { "label": "Selectare automată boabe", "desc": "Alege automat rezervorul de boabe" },
       "rinsing_disabled": { "label": "Clătire dezactivată", "desc": "Omite ciclul de clătire automată" }
     },
     "numbers": {
@@ -179,7 +179,7 @@
     "show_profiles": "Afișează selectorul de profil",
     "show_recipes": "Afișează selectorul de rețete",
     "show_freestyle": "Afișează rețeta Freestyle",
-    "show_sommelier": "Afișează AI Sommelier",
+    "show_sommelier": "Afișează Somelierul AI",
     "show_stats": "Afișează statisticile ceștilor",
     "show_maintenance": "Afișează întreținerea",
     "show_settings": "Afișează setările",

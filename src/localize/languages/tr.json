@@ -100,7 +100,7 @@
     "brew_named": "{name} demle"
   },
   "sommelier": {
-    "title": "AI Sommelier",
+    "title": "Yapay Zeka Sommelier",
     "unavailable": "Sommelier kullanılamıyor.",
     "generating": "Oluşturuluyor...",
     "surprise_me": "Beni şaşırt",
@@ -118,8 +118,8 @@
     "steps": "Adımlar",
     "err": {
       "no_llm_agent": "Home Assistant'ta yüklü bir AI aracısı yok — Sommelier özelliğini kullanmak için bir LLM entegrasyonu ekleyin",
-      "no_llm_agent_selected": "AI aracısı seçilmedi — Sommelier panelindeki System sekmesinden birini seçin",
-      "llm_agent_missing": "Seçilen AI aracısı artık yok — Sommelier panelindeki System sekmesinden başka birini seçin"
+      "no_llm_agent_selected": "AI aracısı seçilmedi — Sommelier panelindeki Sistem sekmesinden birini seçin",
+      "llm_agent_missing": "Seçilen AI aracısı artık yok — Sommelier panelindeki Sistem sekmesinden başka birini seçin"
     }
   },
   "stats": {
@@ -179,7 +179,7 @@
     "show_profiles": "Profil seçiciyi göster",
     "show_recipes": "Tarif seçiciyi göster",
     "show_freestyle": "Freestyle tarifini göster",
-    "show_sommelier": "AI Sommelier'i göster",
+    "show_sommelier": "Yapay Zeka Sommelier'i göster",
     "show_stats": "Fincan istatistiklerini göster",
     "show_maintenance": "Bakımı göster",
     "show_settings": "Ayarları göster",

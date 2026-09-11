@@ -73,7 +73,7 @@
     "coffee": "Kafija",
     "milk": "Piens",
     "water": "Ūdens",
-    "standard": "Std",
+    "standard": "Std.",
     "intense": "Int+"
   },
   "directkey": {
@@ -100,12 +100,12 @@
     "brew_named": "Gatavot {name}"
   },
   "sommelier": {
-    "title": "AI Sommelier",
-    "unavailable": "Sommelier nav pieejams.",
+    "title": "AI Someljē",
+    "unavailable": "Someljē nav pieejams.",
     "generating": "Ģenerē...",
     "surprise_me": "Pārsteidz mani",
-    "error_generate": "Sommelier: neizdevās ģenerēt recepti",
-    "error_brew": "Sommelier: neizdevās pagatavot dzērienu",
+    "error_generate": "Someljē: neizdevās ģenerēt recepti",
+    "error_brew": "Someljē: neizdevās pagatavot dzērienu",
     "reasoning": "Kāpēc šī recepte?",
     "wizard_title": "Pagatavošana soli pa solim",
     "step_of": "Solis {n} no {total}",
@@ -117,9 +117,9 @@
     "info": "Receptes informācija",
     "steps": "Soļi",
     "err": {
-      "no_llm_agent": "Home Assistant nav instalēts neviens AI aģents — pievienojiet LLM integrāciju, lai izmantotu Sommelier",
-      "no_llm_agent_selected": "Nav izvēlēts AI aģents — izvēlieties to Sommelier panelī, cilnē System",
-      "llm_agent_missing": "Izvēlētais AI aģents ir pazudis — izvēlieties citu Sommelier panelī, cilnē System"
+      "no_llm_agent": "Home Assistant nav instalēts neviens AI aģents — pievienojiet LLM integrāciju, lai izmantotu someljē",
+      "no_llm_agent_selected": "Nav izvēlēts AI aģents — izvēlieties to someljē panelī, cilnē “Sistēma”",
+      "llm_agent_missing": "Izvēlētais AI aģents ir pazudis — izvēlieties citu someljē panelī, cilnē “Sistēma”"
     }
   },
   "stats": {
@@ -179,7 +179,7 @@
     "show_profiles": "Rādīt profila izvēli",
     "show_recipes": "Rādīt recepšu izvēli",
     "show_freestyle": "Rādīt Freestyle recepti",
-    "show_sommelier": "Rādīt AI Sommelier",
+    "show_sommelier": "Rādīt AI Someljē",
     "show_stats": "Rādīt tašu statistiku",
     "show_maintenance": "Rādīt apkopi",
     "show_settings": "Rādīt iestatījumus",

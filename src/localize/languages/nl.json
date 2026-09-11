@@ -39,8 +39,8 @@
   "action": {
     "none": "Geen",
     "bu_removed": "Plaats de zetgroep",
-    "trays_missing": "Plaats de bakjes",
-    "empty_trays": "Leeg de bakjes",
+    "trays_missing": "Plaats de lekbakken",
+    "empty_trays": "Leeg de lekbakken",
     "fill_water": "Vul het waterreservoir",
     "close_powder_lid": "Sluit het deksel voor gemalen koffie",
     "fill_powder": "Vul gemalen koffie bij",
@@ -59,7 +59,7 @@
   "values": {
     "very_mild": "Z.Mild",
     "mild": "Mild",
-    "medium": "Med",
+    "medium": "Gem.",
     "strong": "Sterk",
     "very_strong": "Z.Sterk",
     "extra_strong": "X.Sterk",
@@ -93,7 +93,7 @@
     "portion": "Portie",
     "intensity": "Intensiteit",
     "aroma": "Aroma",
-    "temp": "Temp",
+    "temp": "Temp.",
     "temperature": "Temperatuur",
     "shots": "Shots",
     "portion_value": "{value} ml",
@@ -118,8 +118,8 @@
     "steps": "Stappen",
     "err": {
       "no_llm_agent": "Er is geen AI-agent geïnstalleerd in Home Assistant — voeg een LLM-integratie toe om de sommelier te gebruiken",
-      "no_llm_agent_selected": "Geen AI-agent geselecteerd — kies er een in het sommelier-paneel, tabblad System",
-      "llm_agent_missing": "De geselecteerde AI-agent bestaat niet meer — kies een andere in het sommelier-paneel, tabblad System"
+      "no_llm_agent_selected": "Geen AI-agent geselecteerd — kies er een in het sommelier-paneel, tabblad Systeem",
+      "llm_agent_missing": "De geselecteerde AI-agent bestaat niet meer — kies een andere in het sommelier-paneel, tabblad Systeem"
     }
   },
   "stats": {

@@ -12,7 +12,7 @@
   "card": {
     "no_device": "Melitta Barista -laitetta ei löytynyt.",
     "no_device_hint": "Varmista, että integraatio on asennettu ja määritetty.",
-    "machine_offline": "Kone on offline-tilassa"
+    "machine_offline": "Kone ei ole yhteydessä"
   },
   "state": {
     "ready": "Valmis",
@@ -38,7 +38,7 @@
   },
   "action": {
     "none": "Ei mitään",
-    "bu_removed": "Aseta suodatusyksikkö",
+    "bu_removed": "Aseta keittoyksikkö",
     "trays_missing": "Aseta astiat",
     "empty_trays": "Tyhjennä astiat",
     "fill_water": "Täytä vesisäiliö",
@@ -79,7 +79,7 @@
   "directkey": {
     "brew_drink": "Valmista {drink}",
     "two_cups": "2x",
-    "two_cups_on": "2x ON"
+    "two_cups_on": "2x päällä"
   },
   "recipes": {
     "title": "Resepti",
@@ -118,8 +118,8 @@
     "steps": "Vaiheet",
     "err": {
       "no_llm_agent": "Home Assistantiin ei ole asennettu AI-agenttia — lisää LLM-integraatio käyttääksesi sommelieria",
-      "no_llm_agent_selected": "AI-agenttia ei ole valittu — valitse se sommelier-paneelin System-välilehdeltä",
-      "llm_agent_missing": "Valittu AI-agentti on poistunut — valitse toinen sommelier-paneelin System-välilehdeltä"
+      "no_llm_agent_selected": "AI-agenttia ei ole valittu — valitse se sommelier-paneelin Järjestelmä-välilehdeltä",
+      "llm_agent_missing": "Valittu AI-agentti on poistunut — valitse toinen sommelier-paneelin Järjestelmä-välilehdeltä"
     }
   },
   "stats": {

@@ -38,12 +38,12 @@
   },
   "action": {
     "none": "Nėra",
-    "bu_removed": "Įdėkite plikymo bloką",
+    "bu_removed": "Įdėkite virimo bloką",
     "trays_missing": "Įdėkite padėklus",
     "empty_trays": "Ištuštinkite padėklus",
-    "fill_water": "Pripilkite vandens į talpyklą",
+    "fill_water": "Pripilkite vandens į bakelį",
     "close_powder_lid": "Uždarykite maltos kavos dangtelį",
-    "fill_powder": "Įpilkite maltos kavos",
+    "fill_powder": "Įberkite maltos kavos",
     "move_cup_to_frother": "Perkelkite puodelį prie pieno putų antgalio",
     "flush_required": "Reikalingas skalavimas"
   },
@@ -100,12 +100,12 @@
     "brew_named": "Ruošti {name}"
   },
   "sommelier": {
-    "title": "AI Sommelier",
-    "unavailable": "Sommelier nepasiekiamas.",
+    "title": "AI Someljė",
+    "unavailable": "Someljė nepasiekiamas.",
     "generating": "Generuojama...",
     "surprise_me": "Nustebink mane",
-    "error_generate": "Sommelier: nepavyko sugeneruoti recepto",
-    "error_brew": "Sommelier: nepavyko paruošti gėrimo",
+    "error_generate": "Someljė: nepavyko sugeneruoti recepto",
+    "error_brew": "Someljė: nepavyko paruošti gėrimo",
     "reasoning": "Kodėl šis receptas?",
     "wizard_title": "Ruošimas žingsnis po žingsnio",
     "step_of": "Žingsnis {n} iš {total}",
@@ -117,9 +117,9 @@
     "info": "Recepto informacija",
     "steps": "Žingsniai",
     "err": {
-      "no_llm_agent": "Home Assistant nėra įdiegto AI agento — pridėkite LLM integraciją, kad galėtumėte naudoti Sommelier",
-      "no_llm_agent_selected": "Nepasirinktas AI agentas — pasirinkite jį Sommelier skydelyje, skirtuke System",
-      "llm_agent_missing": "Pasirinktas AI agentas dingo — pasirinkite kitą Sommelier skydelyje, skirtuke System"
+      "no_llm_agent": "Home Assistant nėra įdiegto AI agento — pridėkite LLM integraciją, kad galėtumėte naudoti Someljė",
+      "no_llm_agent_selected": "Nepasirinktas AI agentas — pasirinkite jį Someljė skydelyje, skirtuke „Sistema“",
+      "llm_agent_missing": "Pasirinktas AI agentas dingo — pasirinkite kitą Someljė skydelyje, skirtuke „Sistema“"
     }
   },
   "stats": {
@@ -136,7 +136,7 @@
       "other": "Kita"
     },
     "actions": {
-      "easy_clean": { "label": "Greitas valymas", "desc": "Greitas ruošimo bloko skalavimas" },
+      "easy_clean": { "label": "Greitas valymas", "desc": "Greitas virimo bloko skalavimas" },
       "intensive_clean": { "label": "Intensyvus valymas", "desc": "Kruopštus valymas su tablete" },
       "descaling": { "label": "Kalkių šalinimas", "desc": "Pašalina kalkių nuosėdas" },
       "evaporating": { "label": "Garinimas", "desc": "Išvalo garų sistemą" },
@@ -179,7 +179,7 @@
     "show_profiles": "Rodyti profilio pasirinkimą",
     "show_recipes": "Rodyti receptų pasirinkimą",
     "show_freestyle": "Rodyti Freestyle receptą",
-    "show_sommelier": "Rodyti AI Sommelier",
+    "show_sommelier": "Rodyti AI Someljė",
     "show_stats": "Rodyti puodelių statistiką",
     "show_maintenance": "Rodyti priežiūrą",
     "show_settings": "Rodyti nustatymus",

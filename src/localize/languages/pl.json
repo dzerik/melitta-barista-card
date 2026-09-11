@@ -4,7 +4,7 @@
     "cancel": "Anuluj",
     "save": "Zapisz",
     "confirm": "Potwierdź",
-    "start": "Start",
+    "start": "Rozpocznij",
     "loading": "Ładowanie...",
     "retry": "Ponów",
     "default_name": "Melitta Barista"
@@ -38,7 +38,7 @@
   },
   "action": {
     "none": "Brak",
-    "bu_removed": "Włóż blok zaparzający",
+    "bu_removed": "Włóż blok parzący",
     "trays_missing": "Włóż tacki",
     "empty_trays": "Opróżnij tacki",
     "fill_water": "Napełnij zbiornik wody",

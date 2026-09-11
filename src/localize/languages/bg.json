@@ -30,7 +30,7 @@
     "unknown": "Неизвестно"
   },
   "activity": {
-    "grinding": "Мелене",
+    "grinding": "Смилане",
     "coffee": "Кафе",
     "steam": "Пара",
     "water": "Вода",
@@ -38,9 +38,9 @@
   },
   "action": {
     "none": "Няма",
-    "bu_removed": "Постави блока за запарване",
-    "trays_missing": "Постави тавичките",
-    "empty_trays": "Изпразни тавичките",
+    "bu_removed": "Постави заварочния блок",
+    "trays_missing": "Постави тавите",
+    "empty_trays": "Изпразни тавите",
     "fill_water": "Напълни резервоара с вода",
     "close_powder_lid": "Затвори капака за мляно кафе",
     "fill_powder": "Добави мляно кафе",
@@ -48,10 +48,10 @@
     "flush_required": "Необходимо е изплакване"
   },
   "drinks": {
-    "espresso": "Еспресо",
-    "cafe_creme": "Кафе крем",
-    "cappuccino": "Капучино",
-    "latte_macchiato": "Лате макиато",
+    "espresso": "Espresso",
+    "cafe_creme": "Café Crème",
+    "cappuccino": "Cappuccino",
+    "latte_macchiato": "Latte Macchiato",
     "milk": "Мляко",
     "milk_froth": "Млечна пяна",
     "water": "Гореща вода"
@@ -100,7 +100,7 @@
     "brew_named": "Приготви {name}"
   },
   "sommelier": {
-    "title": "AI Sommelier",
+    "title": "AI Сомелиер",
     "unavailable": "Сомелиерът не е наличен.",
     "generating": "Генериране...",
     "surprise_me": "Изненадай ме",
@@ -117,9 +117,9 @@
     "info": "Детайли за рецептата",
     "steps": "Стъпки",
     "err": {
-      "no_llm_agent": "В Home Assistant не е инсталиран AI агент — добавете LLM интеграция, за да използвате сомелиера",
-      "no_llm_agent_selected": "Не е избран AI агент — изберете го в панела на сомелиера, раздел System",
-      "llm_agent_missing": "Избраният AI агент липсва — изберете друг в панела на сомелиера, раздел System"
+      "no_llm_agent": "В Home Assistant не е инсталиран AI агент — добавете LLM интеграция, за да използвате Сомелиера",
+      "no_llm_agent_selected": "Не е избран AI агент — изберете го в панела на Сомелиера, раздел „Система“",
+      "llm_agent_missing": "Избраният AI агент липсва — изберете друг в панела на Сомелиера, раздел „Система“"
     }
   },
   "stats": {
@@ -179,7 +179,7 @@
     "show_profiles": "Показване на избор на профил",
     "show_recipes": "Показване на избор на рецепта",
     "show_freestyle": "Показване на Freestyle",
-    "show_sommelier": "Показване на AI Sommelier",
+    "show_sommelier": "Показване на AI Сомелиер",
     "show_stats": "Показване на статистика за чашите",
     "show_maintenance": "Показване на поддръжка",
     "show_settings": "Показване на настройки",

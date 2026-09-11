@@ -39,8 +39,8 @@
   "action": {
     "none": "Ingen",
     "bu_removed": "Sett inn bryggeenheten",
-    "trays_missing": "Sett inn skuffene",
-    "empty_trays": "Tøm skuffene",
+    "trays_missing": "Sett inn dryppskålen",
+    "empty_trays": "Tøm dryppskålen og grutbeholderen",
     "fill_water": "Fyll vanntanken",
     "close_powder_lid": "Lukk lokket for malt kaffe",
     "fill_powder": "Fyll på malt kaffe",
@@ -59,7 +59,7 @@
   "values": {
     "very_mild": "S.Mild",
     "mild": "Mild",
-    "medium": "Med",
+    "medium": "Middels",
     "strong": "Sterk",
     "very_strong": "S.Sterk",
     "extra_strong": "X.Sterk",

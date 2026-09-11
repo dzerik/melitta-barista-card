@@ -4,7 +4,7 @@
     "cancel": "Otkaži",
     "save": "Sačuvaj",
     "confirm": "Potvrdi",
-    "start": "Start",
+    "start": "Pokreni",
     "loading": "Učitavanje...",
     "retry": "Pokušaj ponovo",
     "default_name": "Melitta Barista"
@@ -12,7 +12,7 @@
   "card": {
     "no_device": "Uređaj Melitta Barista nije pronađen.",
     "no_device_hint": "Provjerite da li je integracija instalirana i konfigurisana.",
-    "machine_offline": "Aparat van mreže"
+    "machine_offline": "Aparat nije povezan"
   },
   "state": {
     "ready": "Spreman",
@@ -38,7 +38,7 @@
   },
   "action": {
     "none": "Nema",
-    "bu_removed": "Umetni jedinicu za kuhanje",
+    "bu_removed": "Umetni jedinicu za pripremu",
     "trays_missing": "Umetni posude",
     "empty_trays": "Isprazni posude",
     "fill_water": "Napuni spremnik vodom",
@@ -111,15 +111,15 @@
     "step_of": "Korak {n} od {total}",
     "done": "Gotovo",
     "brew_phase": "Pripremi fazu {n}/{total}",
-    "phase_running": "Faza je pokrenuta — sačekajte da mašina završi, zatim nastavite",
+    "phase_running": "Faza je pokrenuta — sačekajte da aparat završi, zatim nastavite",
     "finish": "Završi",
     "cancel": "Otkaži",
     "info": "Detalji recepta",
     "steps": "Koraci",
     "err": {
       "no_llm_agent": "U Home Assistantu nije instaliran AI agent — dodajte LLM integraciju da biste koristili Sommeliera",
-      "no_llm_agent_selected": "Nijedan AI agent nije odabran — odaberite ga na Sommelier panelu, kartica System",
-      "llm_agent_missing": "Odabrani AI agent više ne postoji — odaberite drugi na Sommelier panelu, kartica System"
+      "no_llm_agent_selected": "Nijedan AI agent nije odabran — odaberite ga na Sommelier panelu, kartica Sistem",
+      "llm_agent_missing": "Odabrani AI agent više ne postoji — odaberite drugi na Sommelier panelu, kartica Sistem"
     }
   },
   "stats": {
@@ -136,7 +136,7 @@
       "other": "Ostalo"
     },
     "actions": {
-      "easy_clean": { "label": "Brzo čišćenje", "desc": "Brzo ispiranje jedinice za kuhanje" },
+      "easy_clean": { "label": "Brzo čišćenje", "desc": "Brzo ispiranje jedinice za pripremu" },
       "intensive_clean": { "label": "Intenzivno čišćenje", "desc": "Dubinsko čišćenje s tabletom" },
       "descaling": { "label": "Uklanjanje kamenca", "desc": "Uklanjanje naslaga kamenca" },
       "evaporating": { "label": "Isparavanje", "desc": "Pročišćavanje parnog sistema" },
