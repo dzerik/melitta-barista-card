@@ -28,7 +28,7 @@ jobs:
           mv /tmp/package.json package.json
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Run tests
         run: npm test

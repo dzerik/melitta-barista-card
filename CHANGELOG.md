@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.12.1-beta.1] — 2026-11-04 (beta)
+
+### Fixed
+
+- DirectKey tiles and brew prompts show the profile's configured drink name when the integration supplies it, with localized recipe names and an English fallback. Older integrations and unknown drinks keep the category label; brewing and editing still target the same profile slot.
+- CI and release builds use the committed dependency lock with `npm ci`, keeping clean installs on the tested dependency set.
+
+Use integration 0.96.0b3 or newer to receive configured drink names.
+
 ## [2.12.0] — 2026-09-11
 
 ### Changed
