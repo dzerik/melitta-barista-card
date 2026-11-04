@@ -91,6 +91,8 @@ export class MelittaBaristaCard extends LitElement {
   // Freestyle form
   @state() private _fsName = "Custom";
   @state() private _fsRecipe: RecipeComponents = defaultRecipe();
+  /** Native modes initialize each component once; subsequent editing is local. */
+  private _fsMilkModeSeeded = new Set<string>();
 
   // DirectKey state (category tokens are an open set in contract mode, §9.3.6)
   @state() private _selectedDk: string | null = null;
@@ -251,6 +253,7 @@ export class MelittaBaristaCard extends LitElement {
       }
     }
     const prefix = this._getPrefix();
+    if (prefix) this._seedFreestyleMilkModes(prefix);
     const contractFp = this._contract?.contract_fingerprint ?? null;
     if (prefix && (this._trackedPrefix !== prefix || this._trackedContractFp !== contractFp)) {
       // Rebuilt on contract change too: catalog entries may anchor on button
@@ -374,6 +377,8 @@ export class MelittaBaristaCard extends LitElement {
       ...["state", "activity", "progress", "action_required", "connection", "total_cups"]
         .map((s) => `sensor.${prefix}_${s}`),
       `select.${prefix}_recipe`,
+      `select.${prefix}_freestyle_milk_mode_1`,
+      `select.${prefix}_freestyle_milk_mode_2`,
       `select.${prefix}_${dkModel.profileSelectSuffix}`,
       ...SWITCH_KEYS.map((k) => `switch.${prefix}_${k}`),
       ...NUMBER_KEYS.map((k) => `number.${prefix}_${k}`),
@@ -594,7 +599,24 @@ export class MelittaBaristaCard extends LitElement {
   }
 
   private _updateFs(comp: "c1" | "c2", patch: Partial<ComponentSpec>): void {
+    if ("milk_mode" in patch) this._fsMilkModeSeeded.add(`${this._getPrefix()}:${comp}`);
     this._fsRecipe = { ...this._fsRecipe, [comp]: { ...this._fsRecipe[comp], ...patch } };
+  }
+
+  /** Seed optional native overrides even while their process-gated selects are unavailable. */
+  private _seedFreestyleMilkModes(prefix: string): void {
+    for (const [comp, number] of [["c1", 1], ["c2", 2]] as const) {
+      const key = `${prefix}:${comp}`;
+      if (this._fsMilkModeSeeded.has(key)) continue;
+      const entity = this.hass.states[`select.${prefix}_freestyle_milk_mode_${number}`];
+      if (!entity) continue;
+      const mode = "milk_mode" in entity.attributes ? entity.attributes.milk_mode : entity.state;
+      if (mode === null) {
+        this._fsMilkModeSeeded.add(key);
+      } else if (mode === "warm_milk" || mode === "milk_froth") {
+        this._updateFs(comp, { milk_mode: mode });
+      }
+    }
   }
 
   private _updateEdit(comp: "c1" | "c2", patch: Partial<ComponentSpec>): void {

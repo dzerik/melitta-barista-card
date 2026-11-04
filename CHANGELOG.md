@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.12.1-beta.2] — 2026-11-04 (beta)
+
+### Added
+
+- Choose warm milk or milk froth for either Freestyle or DirectKey recipe
+  component (#60). The mode remains independent of coffee shots and uses
+  existing service fields, including on older integrations. Untouched legacy
+  recipes keep their original values.
+
 ## [2.12.1-beta.1] — 2026-11-04 (beta)
 
 ### Fixed
