@@ -11,7 +11,7 @@
 import { html, nothing, TemplateResult } from "lit";
 import { DK_LABELS, type DirectKeyCategory } from "../const";
 import { resolveDirectKeyModel, type DirectKeyModel } from "../directkey";
-import { directKeyCategoryLabel } from "../directkey-display";
+import { directKeyRecipeLabel } from "../directkey-display";
 import { INTENSITY_DOTS } from "../format";
 import { localize } from "../localize/localize";
 import {
@@ -40,6 +40,7 @@ export interface DirectKeySectionProps {
   onToggleTwoCups: () => void;
 }
 
+/** Render profile slots with configured drink titles and category-based actions. */
 export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | typeof nothing {
   const activeRecipes = props.data.profiles[props.data.activeProfile] ?? {};
   if (Object.keys(activeRecipes).length === 0) return nothing;
@@ -54,7 +55,7 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
         if (!recipe) return nothing;
         const isSelected = props.selected === cat;
         const hasDetails = recipe.c1_process !== undefined && recipe.c1_process !== "none";
-        const label = directKeyCategoryLabel(cat, contractMode);
+        const label = directKeyRecipeLabel(cat, recipe, contractMode);
         return html`
           <button class="dk-card${catModel.machineButton ? "" : " dk-card-nobutton"}"
             ?data-selected=${isSelected}

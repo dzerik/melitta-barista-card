@@ -12,7 +12,7 @@
 import { DIRECTKEY_CATEGORIES, DIRECTKEY_DISPLAY_TO_KEY } from "./const";
 import type { UiContract } from "./contract";
 import type { ProfileSlotEntry } from "./profile";
-import type { DirectKeyData, DirectKeyRecipe } from "./types";
+import type { ConfiguredRecipe, DirectKeyData, DirectKeyRecipe } from "./types";
 
 export type { ProfileSlotEntry } from "./profile";
 
@@ -178,6 +178,16 @@ export function resolveDirectKeyModel(
 // Frozen attribute parser (pre-existing data path, spec §9.3.4)
 // ---------------------------------------------------------------------------
 
+/** Read additive display metadata without trusting or retaining HA-owned objects. */
+function readConfiguredRecipe(value: unknown): ConfiguredRecipe | undefined {
+  if (!isRecord(value)) return undefined;
+  if (typeof value.type !== "number" || !Number.isInteger(value.type)
+      || value.type < 0 || value.type > 23) return undefined;
+  if (typeof value.name !== "string" || value.name.trim() === "") return undefined;
+  if (typeof value.name_key !== "string" || !/^[a-z][a-z0-9_]*$/.test(value.name_key)) return undefined;
+  return { type: value.type, name: value.name, name_key: value.name_key };
+}
+
 /**
  * Parse the frozen `directkey_recipes` profile-select attribute into
  * token-keyed per-profile recipe maps.
@@ -188,6 +198,9 @@ export function resolveDirectKeyModel(
  * The v3 delta is `activeProfileAttribute`: the attribute name now comes
  * from the contract's `directkey.active_profile_attribute` (§9.3.6 rule 4),
  * defaulting to the frozen `"active_profile"` on the legacy tier.
+ * Optional `directkey_drinks` supplies configured drink identities separately;
+ * merge only validated copies for the matching profile/category. Reparse each
+ * entity update so removed metadata immediately restores the category label.
  */
 export function parseDirectKeyData(
   attributes: Record<string, unknown> | undefined,
@@ -198,13 +211,16 @@ export function parseDirectKeyData(
     Record<number, Record<string, DirectKeyRecipe>> | undefined;
   const activeProfile = (attributes[activeProfileAttribute] as number) ?? 0;
   if (!rawDk) return null;
+  const drinks = isRecord(attributes.directkey_drinks) ? attributes.directkey_drinks : {};
   const profiles: DirectKeyData["profiles"] = {};
   for (const [pidStr, categories] of Object.entries(rawDk)) {
     const pid = Number(pidStr);
+    const profileDrinks = isRecord(drinks[pidStr]) ? drinks[pidStr] : {};
     profiles[pid] = {};
     for (const [dName, recipe] of Object.entries(categories as Record<string, DirectKeyRecipe>)) {
       const key = DIRECTKEY_DISPLAY_TO_KEY[dName] || dName;
-      profiles[pid][key] = recipe;
+      const configured = readConfiguredRecipe(profileDrinks[key]);
+      profiles[pid][key] = configured ? { ...recipe, configured_recipe: configured } : recipe;
     }
   }
   return { activeProfile, profiles };
