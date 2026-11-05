@@ -16,8 +16,17 @@ export interface MelittaCardConfig {
   scale?: number;
 }
 
+/** Configured drink identity; category and profile still identify the brew slot. */
+export interface ConfiguredRecipe {
+  type: number;
+  name: string;
+  name_key: string;
+}
+
+/** Parsed legacy slot contents with optional additive display metadata. */
 export interface DirectKeyRecipe {
   category: number;
+  configured_recipe?: ConfiguredRecipe;
   c1_process: string;
   c1_intensity: string;
   c1_aroma: string;

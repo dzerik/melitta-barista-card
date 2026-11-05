@@ -24,10 +24,18 @@ export function displayName(v: string): string {
  *
  * Preference order per key (§6.3.5.1): server string
  * `values.<family>.<token>` → bundle `values.<token>` → humanized token.
+ * Milk modes also reuse served recipe names and bundled drink labels.
  * Server keys are family-scoped because bare tokens collide across families
  * ("none", "standard" — §6.3.1); the card bundles keep their historical
  * bare-token keys as the shared fallback layer.
  */
 export function displayNameFor(family: string, token: string): string {
-  return serverString(`values.${family}.${token}`) ?? displayName(token);
+  const served = serverString(`values.${family}.${token}`);
+  if (served !== undefined) return served;
+  if (family === "milk_mode" && (token === "warm_milk" || token === "milk_froth")) {
+    return serverString(`recipes.name.${token}`)
+      ?? localizeOptional(`drinks.${token === "warm_milk" ? "milk" : token}`)
+      ?? displayName(token);
+  }
+  return displayName(token);
 }

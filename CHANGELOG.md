@@ -1,5 +1,31 @@
 # Changelog
 
+## [Unreleased]
+
+## [2.12.1-beta.3] — 2026-11-05 (beta)
+
+### Fixed
+
+- DirectKey edits keep their original profile when the active profile changes externally. Changing the card target discards the open edit.
+
+## [2.12.1-beta.2] — 2026-11-04 (beta)
+
+### Added
+
+- Choose warm milk or milk froth for either Freestyle or DirectKey recipe
+  component (#60). The mode remains independent of coffee shots and uses
+  existing service fields, including on older integrations. Untouched legacy
+  recipes keep their original values.
+
+## [2.12.1-beta.1] — 2026-11-04 (beta)
+
+### Fixed
+
+- DirectKey tiles and brew prompts show the profile's configured drink name when the integration supplies it, with localized recipe names and an English fallback. Older integrations and unknown drinks keep the category label; brewing and editing still target the same profile slot.
+- CI and release builds use the committed dependency lock with `npm ci`, keeping clean installs on the tested dependency set.
+
+Use integration 0.96.0b3 or newer to receive configured drink names.
+
 ## [2.12.0] — 2026-09-11
 
 ### Changed
