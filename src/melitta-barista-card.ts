@@ -98,7 +98,13 @@ export class MelittaBaristaCard extends LitElement {
   @state() private _selectedDk: string | null = null;
   @state() private _twoCups = false;
   // Recipe edit dialog
-  @state() private _editDk: { category: string; recipe: DirectKeyRecipe } | null = null;
+  @state() private _editDk: {
+    category: string;
+    recipe: DirectKeyRecipe;
+    profileId: number;
+    prefix: string;
+    entryId: unknown;
+  } | null = null;
   @state() private _editState: RecipeComponents | null = null;
   @state() private _editSaving = false;
 
@@ -176,7 +182,10 @@ export class MelittaBaristaCard extends LitElement {
     };
   }
 
+  /** Apply card configuration and discard edits belonging to the previous target. */
   public setConfig(config: MelittaCardConfig): void {
+    this._cancelDkLongPress();
+    this._closeEditDialog();
     this._config = {
       ...config,
       show_header: config.show_header !== false,
@@ -263,6 +272,10 @@ export class MelittaBaristaCard extends LitElement {
       this._trackedIds = this._buildTrackedIds(prefix);
     }
     this._updateContractBridge(prefix);
+    if (this._editDk && (this._editDk.prefix !== prefix ||
+        this._editDk.entryId !== this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id)) {
+      this._closeEditDialog();
+    }
   }
 
   /**
@@ -510,9 +523,13 @@ export class MelittaBaristaCard extends LitElement {
     if (!this._editDk || !this._editState) return;
     const prefix = this._getPrefix();
     if (!prefix) return;
+    if (this._editDk.prefix !== prefix ||
+        this._editDk.entryId !== this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id) {
+      this._closeEditDialog();
+      return;
+    }
     this._editSaving = true;
-    const dk = this._getDirectKeyData();
-    api.saveDirectkey(this.hass, prefix, this._editDk.category, dk?.activeProfile ?? 0, this._editState)
+    api.saveDirectkey(this.hass, prefix, this._editDk.category, this._editDk.profileId, this._editState)
       .then(() => {
         this._editDk = null;
         this._editState = null;
@@ -564,10 +581,15 @@ export class MelittaBaristaCard extends LitElement {
   // -- DK long press / click --
 
   private _startDkLongPress(cat: string, recipe: DirectKeyRecipe): void {
+    const prefix = this._getPrefix();
+    const entryId = this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id;
+    const profileId = this._getDirectKeyData()?.activeProfile ?? 0;
     this._dkLongPressTriggered = false;
     this._dkLongPressTimer = setTimeout(() => {
+      if (prefix !== this._getPrefix() ||
+          entryId !== this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id) return;
       this._dkLongPressTriggered = true;
-      this._openEditDialog(cat, recipe);
+      this._openEditDialog(cat, recipe, profileId);
     }, LONG_PRESS_MS);
   }
 
@@ -587,8 +609,14 @@ export class MelittaBaristaCard extends LitElement {
     }
   }
 
-  private _openEditDialog(cat: string, recipe: DirectKeyRecipe): void {
-    this._editDk = { category: cat, recipe };
+  private _openEditDialog(
+    cat: string, recipe: DirectKeyRecipe,
+    profileId = this._getDirectKeyData()?.activeProfile ?? 0,
+  ): void {
+    const prefix = this._getPrefix();
+    if (!prefix) return;
+    this._editDk = { category: cat, recipe, profileId,
+      prefix, entryId: this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id };
     this._editState = fromDkRecipe(recipe);
     this._editSaving = false;
   }

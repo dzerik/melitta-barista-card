@@ -157,6 +157,8 @@ describe("milk-mode metadata and labels", () => {
 
 it("the real DirectKey dialog clears prior mode choices when a different recipe opens", () => {
   const card = new MelittaBaristaCard() as any;
+  card.setConfig({ type: "custom:melitta-barista-card", entity_prefix: "machine" });
+  card.hass = { states: {} };
   card._openEditDialog("milk", milkRecipe());
   choose(card._editState, "c1", "Milk mode", "Milk");
   card._openEditDialog("milk", milkRecipe(0, 3));
