@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [2.13.0-beta.1] — 2026-11-06 (beta)
+
+### Changed
+
+- Give procedural drink icons rounded transparent glass, soft material lighting and distinct ingredient layers while retaining composition, fill level, foam and crema from the existing icon contract.
+- Give each visible hot drink independently shaped and phased steam that remains stable across HA updates and respects reduced-motion preferences.
+- Refresh recipe and DirectKey tiles with theme-aware surfaces, larger icons, readable wrapping labels and clearer selection. Recipe tiles support native keyboard activation.
+
+### Fixed
+
+- Keep SVG definitions distinct for localized recipe names and escape punctuation in SVG identifiers.
+- Avoid drawing a horizontal chord across the glass opening or a protruding base beneath the cup.
+
 ## [2.12.1-beta.3] — 2026-11-05 (beta)
 
 ### Fixed

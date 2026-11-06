@@ -106,14 +106,14 @@ function renderDkIcon(
   // worse picture than the category glyph this tile already had.
   if (spec && typeof spec === "object"
       && computeIconGeometry(spec as IconSpec, 48) !== null) {
-    return coffeeIconSvgFromSpec(spec as IconSpec, 48, `dk-${cat}`);
+    return coffeeIconSvgFromSpec(spec as IconSpec, 64, `dk-${cat}`);
   }
   const known = DK_LABELS[cat as DirectKeyCategory];
-  if (known !== undefined) return coffeeIconSvg(known, 48, `dk-${cat}`);
+  if (known !== undefined) return coffeeIconSvg(known, 64, `dk-${cat}`);
   if (mdiIcon !== null) {
     return html`<ha-icon class="dk-card-mdi" icon="${mdiIcon}" style="--mdc-icon-size: calc(var(--mbc-scale, 1) * 48px)"></ha-icon>`;
   }
-  return coffeeIconSvg(cat, 48, `dk-${cat}`);
+  return coffeeIconSvg(cat, 64, `dk-${cat}`);
 }
 
 /**

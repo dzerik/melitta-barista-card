@@ -93,16 +93,17 @@ describe("drink icons", () => {
     return String(node);
   }
 
-  it("draw steam as rising puffs, not stroked ribbons", () => {
+  it("draw animated, softened steam without a fixed coloured stripe", () => {
     const markup = flattenTemplate(coffeeIconSvg("Espresso", 48, "u1"));
-    expect(markup).toContain("<ellipse");
+    expect(markup).toContain('class="mbc-coffee-vapour"');
+    expect(markup).toContain("feGaussianBlur");
     // The hard sand-coloured line was what read as a stripe rather than vapour.
     expect(markup).not.toContain("D4C4A0");
   });
 
   it("leave steam off the drinks that do not carry any", () => {
     for (const cold of ["Milk", "Milk Froth", "Hot Water"]) {
-      expect(flattenTemplate(coffeeIconSvg(cold, 48, "u1"))).not.toContain("<ellipse");
+      expect(flattenTemplate(coffeeIconSvg(cold, 48, "u1"))).not.toContain('class="mbc-coffee-vapour"');
     }
   });
 

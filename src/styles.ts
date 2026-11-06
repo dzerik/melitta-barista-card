@@ -13,6 +13,13 @@ export const cardStyles = css`
     --mbc-success: var(--state-active-color, #4caf50);
     --mbc-warning: var(--warning-color, #ff9800);
     --mbc-radius: 12px;
+    --mbc-tile-border: color-mix(in srgb, var(--mbc-text) 16%, transparent);
+    --mbc-tile-surface: color-mix(in srgb, var(--mbc-text) 4%, var(--mbc-bg));
+    --mbc-tile-hover: color-mix(in srgb, var(--mbc-text) 8%, var(--mbc-bg));
+    --mbc-tile-selected: color-mix(in srgb, var(--mbc-text) 12%, var(--mbc-bg));
+    --mbc-glass-edge: color-mix(in srgb, var(--mbc-text) 72%, transparent);
+    --mbc-glass-rim: color-mix(in srgb, var(--mbc-text) 72%, transparent);
+    --mbc-glass-shadow: rgba(0, 0, 0, .45);
   }
   /* Everything textual is sized in em, so one font-size on the card scales the
      whole body; --mbc-scale (set from the scale config option) additionally
@@ -295,31 +302,40 @@ export const cardStyles = css`
     display: grid;
     /* auto-fit (not auto-fill) collapses the empty trailing tracks, so the
        tiles stretch to fill the row instead of leaving dead cells beside the
-       last one. 88px is the narrowest track that fits a wrapped two-line
-       label without clipping it. */
-    grid-template-columns: repeat(auto-fit, minmax(calc(var(--mbc-scale, 1) * 88px), 1fr));
-    gap: 1px;
-    background: var(--mbc-border);
+       last one. The minimum is capped at the container width for narrow
+       dashboards with a large configured scale. */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--mbc-scale, 1) * 88px)), 1fr));
+    gap: 8px;
+    padding: 4px 12px 12px;
   }
   .dk-card {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 8px 4px calc(var(--mbc-scale, 1) * 26px);
-    min-height: calc(var(--mbc-scale, 1) * 104px);
+    justify-content: flex-start;
+    padding: 10px 5px 8px;
+    min-height: calc(var(--mbc-scale, 1) * 132px);
     gap: 3px;
-    background: var(--mbc-surface);
-    border: none;
+    background: var(--mbc-tile-surface);
+    color: var(--mbc-text);
+    border: 1px solid var(--mbc-tile-border);
+    border-radius: var(--mbc-radius);
     cursor: pointer;
     overflow: hidden;
-    transition: background 0.3s;
+    transition: background .2s, border-color .2s;
     font-family: inherit;
   }
-  .dk-card:active { transform: scale(0.97); }
+  .dk-card:hover { background: var(--mbc-tile-hover); }
+  .dk-card:active { transform: scale(0.98); }
   .dk-card[data-selected] {
-    background: rgba(255,255,255,0.08);
+    background: var(--mbc-tile-selected);
+    border-color: color-mix(in srgb, var(--mbc-text) 55%, transparent);
+  }
+  .dk-card:focus-visible,
+  .recipe-card:focus-visible {
+    outline: 2px solid var(--mbc-accent);
+    outline-offset: 2px;
   }
   .dk-2x {
     display: flex;
@@ -334,17 +350,15 @@ export const cardStyles = css`
   }
   .dk-card[data-selected] .dk-2x { opacity: 1; }
   .dk-card-label {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
+    margin-top: auto;
     text-align: center;
-    font-size: 0.55em;
-    line-height: 1.15;
-    padding: 3px 3px 4px;
+    font-size: 0.6875em;
+    line-height: 1.25;
+    padding: 5px 2px 2px;
     font-weight: 500;
     color: var(--mbc-text2);
-    transition: all 0.3s;
+    transition: color .2s;
     z-index: 2;
     overflow: hidden;
     /* Two lines, centred: a wrapped label beats an ellipsis that hides which
@@ -352,19 +366,19 @@ export const cardStyles = css`
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: calc(var(--mbc-scale, 1) * 22px);
+    min-height: 2.5em;
+    overflow-wrap: anywhere;
   }
   .dk-card[data-selected] .dk-card-label {
-    background: var(--mbc-text);
-    color: var(--mbc-bg);
-    font-weight: 600;
+    color: var(--mbc-text);
+    font-weight: 500;
   }
   .dk-recipe-info {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1px;
-    font-size: 0.52em;
+    font-size: 0.6875em;
     line-height: 1.2;
     color: var(--mbc-text2);
   }
@@ -408,61 +422,69 @@ export const cardStyles = css`
     background: var(--mbc-border);
   }
   .recipes-divider-text {
-    font-size: 0.55em;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 0.6875em;
+    letter-spacing: 0;
     font-weight: 500;
     color: var(--mbc-text2);
-    opacity: 0.6;
+    opacity: .9;
   }
 
   /* -- Recipe grid -- */
   .recipe-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(calc(var(--mbc-scale, 1) * 72px), 1fr));
-    gap: 4px;
-    padding: 4px 12px 8px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--mbc-scale, 1) * 88px)), 1fr));
+    gap: 8px;
+    padding: 4px 12px 12px;
   }
   .recipe-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px 4px 6px;
+    padding: 10px 5px 8px;
+    font: inherit;
+    color: var(--mbc-text);
+    width: 100%;
+    appearance: none;
     border-radius: var(--mbc-radius);
-    background: var(--mbc-surface);
-    border: 1px solid var(--mbc-border);
+    background: var(--mbc-tile-surface);
+    border: 1px solid var(--mbc-tile-border);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background .2s, border-color .2s;
     position: relative;
     overflow: hidden;
   }
-  .recipe-card:hover { background: var(--mbc-surface-hover); }
-  .recipe-card:active { transform: scale(0.96); }
+  .recipe-card:hover { background: var(--mbc-tile-hover); }
+  .recipe-card:active { transform: scale(0.98); }
   .recipe-card[data-selected] {
-    border-color: rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.06);
+    border-color: color-mix(in srgb, var(--mbc-text) 55%, transparent);
+    background: var(--mbc-tile-selected);
   }
   .recipe-card[data-selected]::before {
-    content: "";
+    content: "✓";
     position: absolute;
-    top: 4px; right: 4px;
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: white;
+    top: 5px; right: 7px;
+    font-size: .6875em;
+    color: var(--mbc-text);
   }
   .recipe-name {
-    font-size: 0.6em;
+    font-size: 0.6875em;
     color: var(--mbc-text2);
     font-weight: 500;
     margin-top: 3px;
     text-align: center;
-    line-height: 1.2;
+    line-height: 1.25;
+    min-height: 3.75em;
+    overflow-wrap: anywhere;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .recipe-card, .dk-card { transition: none; }
+    .recipe-card:active, .dk-card:active { transform: none; }
   }
 
   /* -- Brew button -- */

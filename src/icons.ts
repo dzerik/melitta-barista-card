@@ -1,4 +1,4 @@
-import { svg, nothing } from "lit";
+import { html, svg, nothing } from "lit";
 
 interface Layer {
   color: string;
@@ -476,120 +476,168 @@ export function computeIconGeometry(
 // Lit template rendering (shared by legacy and spec paths).
 // ---------------------------------------------------------------------------
 
-/**
- * The rising puffs that make up the steam, offset in time so the column never
- * empties. `dx` is relative to the cup centre, `rise` the travel in viewBox
- * units (capped by the headroom above the cup), `peak` the opacity it reaches.
- * A negative `begin` starts the puff mid-flight, so the icon is never caught
- * with nothing above the cup on first paint.
- */
-const STEAM_PUFFS = [
-  { dx: -5, begin: 0, dur: 3.4, r0: 3.2, r1: 8.0, rise: 22, peak: 0.62 },
-  { dx: 3, begin: -1.2, dur: 3.8, r0: 2.8, r1: 7.5, rise: 24, peak: 0.56},
-  { dx: 9, begin: -2.3, dur: 3.1, r0: 2.4, r1: 6.5, rise: 20, peak: 0.46},
-  { dx: -1, begin: -0.6, dur: 4.2, r0: 3.0, r1: 9.0, rise: 26, peak: 0.44 },
-];
+/** A soft steam curl with stable timing and phase for one visible cup. */
+interface SteamStream {
+  path: string;
+  duration: number;
+  delay: number;
+  drift: number;
+  peak: number;
+  width: number;
+}
+
+/** Derive a repeatable, independently phased steam field for one visible cup. */
+function steamStreams(frame: CupFrame, uid: string): SteamStream[] {
+  let seed = 2166136261;
+  for (const char of uid) seed = Math.imul(seed ^ char.codePointAt(0)!, 16777619) >>> 0;
+  const random = () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  };
+  const count = 2 + Math.floor(random() * 2);
+  return Array.from({ length: count }, () => {
+    const x = frame.cx + (random() - .5) * 16;
+    const rise = Math.max(5, frame.cupTop - 7) * (.5 + random() * .43);
+    const curl = (random() - .5) * 13;
+    const duration = 3.2 + random() * 3.1;
+    const delay = -random() * duration;
+    const drift = (random() - .5) * 9;
+    const peak = .25 + random() * .28;
+    const y = frame.cupTop - 1;
+    return {
+      path: `M${x} ${y}C${x + curl} ${y - rise * .3},${x - curl} ${y - rise * .58},${x + curl * .7} ${y - rise}`,
+      duration, delay, drift, peak, width: 1.3 + random() * 1.5,
+    };
+  });
+}
+
+/** Apply material lighting to a validated fill without changing its role. */
+function shadeFill(color: string, amount: number): string {
+  if (!COLOR_HINT_RE.test(color)) return color;
+  const rgb: [number, number, number] = [
+    parseInt(color.slice(1, 3), 16),
+    parseInt(color.slice(3, 5), 16),
+    parseInt(color.slice(5, 7), 16),
+  ];
+  return lerpColor(rgb, amount < 0 ? [0, 0, 0] : [255, 255, 255], Math.abs(amount));
+}
 
 /** Renders the full glass SVG (steam, outline, liquid bands, shine, reflection). */
 function renderGlassSvg(
   f: CupFrame,
-  layerPaths: { d: string; fill: string }[],
+  layerPaths: LayerGeom[],
   hasSteam: boolean,
   size: number,
   uid: string,
 ) {
+  // Code-point encoding is injective, SVG-safe and stable across Lit updates.
+  const key = `mbc-cup-${Array.from(uid, char => char.codePointAt(0)!.toString(16)).join("-") || "empty"}`;
   const { vbW, vbH, cupTop, cupBot, cupH, cx, topL, topR, botL, botR, isTall } = f;
+  const outer = isTall
+    ? `M${topL} ${cupTop}L${botL} ${cupBot - 6}Q${botL} ${cupBot + 1},${botL + 6} ${cupBot + 1}L${botR - 6} ${cupBot + 1}Q${botR} ${cupBot + 1},${botR} ${cupBot - 6}L${topR} ${cupTop}Z`
+    : `M${topL} ${cupTop}C${topL + 1} ${cupBot - 19},${botL} ${cupBot},${botL + 10} ${cupBot}L${botR - 10} ${cupBot}C${botR} ${cupBot},${topR - 1} ${cupBot - 19},${topR} ${cupTop}Z`;
+  const inner = isTall
+    ? `M${topL + 1.1} ${cupTop + 1}L${botL + 1.6} ${cupBot - 6}Q${botL + 1.6} ${cupBot - 1.5},${botL + 6} ${cupBot - 1.5}L${botR - 6} ${cupBot - 1.5}Q${botR - 1.6} ${cupBot - 1.5},${botR - 1.6} ${cupBot - 6}L${topR - 1.1} ${cupTop + 1}Z`
+    : `M${topL + 1.3} ${cupTop + 1}C${topL + 2.4} ${cupBot - 19},${botL + 1.7} ${cupBot - 1.5},${botL + 10} ${cupBot - 1.5}L${botR - 10} ${cupBot - 1.5}C${botR - 1.7} ${cupBot - 1.5},${topR - 2.4} ${cupBot - 19},${topR - 1.3} ${cupTop + 1}Z`;
+  // Only filled masks close at the rim: closing the stroke draws a false chord.
+  const sideOutline = outer.slice(0, -1);
+  const handleTop = cupTop + cupH * .21;
+  const handleBottom = cupTop + cupH * .68;
+  const handle = `M${topR - .5} ${handleTop}C${topR + 19} ${handleTop - 7},${topR + 22} ${handleBottom + 7},${topR - 4} ${handleBottom}`;
+  const top = layerPaths[layerPaths.length - 1];
+  const streams = hasSteam ? steamStreams(f, uid) : [];
 
-  const handleX = topR;
-  const hTop = cupTop + cupH * 0.18;
-  const hBot = cupTop + cupH * 0.65;
-  const hOut = isTall ? 10 : 14;
-
-  // Steam: soft puffs leaving the surface, spreading as they climb and
-  // dissolving before the viewBox ends. A tall glass sits higher in the frame,
-  // so the rise is capped by the headroom it actually has (cupTop - 2).
-  const headroom = Math.max(6, cupTop - 2);
-  const puffs = STEAM_PUFFS.map((p) => ({
-    ...p,
-    x: cx + p.dx,
-    rise: Math.min(p.rise, headroom),
-  }));
-
-  return svg`
-    <svg width="${size}" height="${size * (vbH / vbW)}" viewBox="0 0 ${vbW} ${vbH}" fill="none"
-      style="width: calc(var(--mbc-scale, 1) * ${size}px); height: auto;">
+  return html`
+    <svg width="${size}" height="${size * (vbH / vbW)}" viewBox="0 0 ${vbW} ${vbH}"
+      fill="none" aria-hidden="true"
+      style="width: calc(var(--mbc-scale, 1) * ${size}px); height: auto; color: var(--mbc-text, currentColor);">
+      ${hasSteam ? svg`<style>
+        .mbc-coffee-vapour {
+          transform-box: fill-box;
+          transform-origin: center bottom;
+          opacity: .2;
+          animation: mbc-coffee-rise var(--mbc-vapour-duration) var(--mbc-vapour-delay) linear infinite;
+        }
+        @keyframes mbc-coffee-rise {
+          0% { opacity: 0; transform: translate(0,3px) scale(.8,.8); }
+          24% { opacity: var(--mbc-vapour-peak); }
+          62% { opacity: calc(var(--mbc-vapour-peak) * .65); }
+          100% { opacity: 0; transform: translate(var(--mbc-vapour-drift),-5px) scale(1.35,1.12); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .mbc-coffee-vapour { animation: none; }
+        }
+      </style>` : nothing}
       <defs>
-        <clipPath id="clip-${uid}">
-          <path d="${f.clipPath}" />
-        </clipPath>
-        <linearGradient id="refl-${uid}" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="white" stop-opacity="0.18" />
-          <stop offset="15%" stop-color="white" stop-opacity="0.06" />
-          <stop offset="50%" stop-color="white" stop-opacity="0" />
-          <stop offset="80%" stop-color="white" stop-opacity="0.03" />
-          <stop offset="100%" stop-color="white" stop-opacity="0.10" />
+        <clipPath id="${key}-clip"><path d="${inner}" /></clipPath>
+        <linearGradient id="${key}-light">
+          <stop offset="0" stop-color="white" stop-opacity=".6" />
+          <stop offset=".08" stop-color="white" stop-opacity=".1" />
+          <stop offset=".45" stop-color="white" stop-opacity="0" />
+          <stop offset=".9" stop-color="white" stop-opacity=".025" />
+          <stop offset="1" stop-color="white" stop-opacity=".42" />
         </linearGradient>
-        <linearGradient id="spec-${uid}" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="white" stop-opacity="0.35" />
-          <stop offset="100%" stop-color="white" stop-opacity="0" />
+        <linearGradient id="${key}-spec">
+          <stop stop-color="white" stop-opacity=".8" />
+          <stop offset=".42" stop-color="white" stop-opacity=".3" />
+          <stop offset="1" stop-color="white" stop-opacity="0" />
         </linearGradient>
-        <filter id="sg-${uid}" x="-80%" y="-80%" width="260%" height="260%">
-          <feGaussianBlur stdDeviation="1.7" />
-        </filter>
-        <radialGradient id="steam-${uid}">
-          <stop offset="0%" stop-color="currentColor" stop-opacity="1" />
-          <stop offset="55%" stop-color="currentColor" stop-opacity="0.5" />
-          <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
+        <linearGradient id="${key}-handle">
+          <stop stop-color="white" stop-opacity=".65" />
+          <stop offset=".25" stop-color="white" stop-opacity=".1" />
+          <stop offset=".62" stop-color="white" stop-opacity=".3" />
+          <stop offset="1" stop-color="white" stop-opacity=".1" />
+        </linearGradient>
+        <radialGradient id="${key}-shadow">
+          <stop stop-color="var(--mbc-glass-shadow, #000)" stop-opacity=".7" />
+          <stop offset="1" stop-color="var(--mbc-glass-shadow, #000)" stop-opacity="0" />
         </radialGradient>
-        <linearGradient id="rf-${uid}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="white" stop-opacity="0.15" />
-          <stop offset="100%" stop-color="white" stop-opacity="0" />
-        </linearGradient>
-        <mask id="rm-${uid}">
-          <rect x="0" y="${cupBot + 1}" width="${vbW}" height="${cupH * 0.4}" fill="url(#rf-${uid})" />
-        </mask>
+        <filter id="${key}-soft"><feGaussianBlur stdDeviation=".5" /></filter>
+        ${hasSteam ? svg`<filter id="${key}-vapour" x="-100%" y="-70%" width="300%" height="230%">
+          <feGaussianBlur stdDeviation=".8" />
+        </filter>` : nothing}
+        ${layerPaths.map((layer, i) => svg`
+          <linearGradient id="${key}-liquid-${i}">
+            <stop stop-color="${shadeFill(layer.fill, -.23)}" />
+            <stop offset=".18" stop-color="${shadeFill(layer.fill, .06)}" />
+            <stop offset=".48" stop-color="${layer.fill}" />
+            <stop offset=".76" stop-color="${shadeFill(layer.fill, -.04)}" />
+            <stop offset="1" stop-color="${shadeFill(layer.fill, -.21)}" />
+          </linearGradient>
+        `)}
       </defs>
-
+      <ellipse cx="${cx + 1}" cy="${cupBot + 3}" rx="${isTall ? 21 : 29}" ry="3.7" fill="url(#${key}-shadow)" />
+      ${isTall ? nothing : svg`
+        <path d="${handle}" stroke="var(--mbc-glass-edge, currentColor)" stroke-width="4" stroke-opacity=".28" />
+        <path d="${handle}" stroke="url(#${key}-handle)" stroke-width="2.2" opacity=".65" />
+      `}
+      <path d="${outer}" fill="url(#${key}-light)" opacity=".18" />
+      <g clip-path="url(#${key}-clip)">
+        ${layerPaths.map((layer, i) => svg`
+          <path class="mbc-coffee-layer" data-role="${layer.role}"
+            d="M${topL - 1} ${layer.yTop}H${topR + 1}V${layer.yBottom}H${topL - 1}Z"
+            fill="url(#${key}-liquid-${i})" />
+        `)}
+        ${top ? svg`<ellipse cx="${cx}" cy="${top.yTop + Math.min(2.2, top.height / 3)}"
+          rx="${(topR - topL) / 2 - 1}" ry="${Math.min(2.2, top.height / 3)}" fill="${shadeFill(top.fill, .04)}" />` : nothing}
+        <path d="${outer}" fill="url(#${key}-light)" opacity=".4" />
+        <path d="M${topL + 3} ${cupTop + 4}C${topL + 4} ${cupBot - 22},${botL + 4} ${cupBot - 5},${botL + 9} ${cupBot - 4}L${botL + 13} ${cupBot - 4}C${botL + 6} ${cupBot - 16},${topL + 10} ${cupTop + 5},${topL + 9} ${cupTop + 4}Z"
+          fill="url(#${key}-spec)" opacity=".4" filter="url(#${key}-soft)" />
+      </g>
+      <path class="mbc-coffee-outline" d="${sideOutline}"
+        stroke="var(--mbc-glass-edge, currentColor)" stroke-width=".4" stroke-opacity=".35" />
+      <ellipse cx="${cx}" cy="${cupTop}" rx="${(topR - topL) / 2}" ry="3.2"
+        stroke="var(--mbc-glass-rim, currentColor)" stroke-width="1" stroke-opacity=".55" />
       ${hasSteam ? svg`
-        <g filter="url(#sg-${uid})" style="color: var(--mbc-text, #fff)">
-          ${puffs.map((p) => svg`
-            <ellipse cx="${p.x}" cy="${cupTop - 1}" rx="${p.r0}" ry="${p.r0 * 0.7}"
-              fill="url(#steam-${uid})" opacity="0">
-              <animate attributeName="cy" values="${cupTop - 1};${cupTop - p.rise}"
-                dur="${p.dur}s" begin="${p.begin}s" repeatCount="indefinite" />
-              <animate attributeName="rx" values="${p.r0};${p.r1}"
-                dur="${p.dur}s" begin="${p.begin}s" repeatCount="indefinite" />
-              <animate attributeName="ry" values="${p.r0 * 0.7};${p.r1 * 0.85}"
-                dur="${p.dur}s" begin="${p.begin}s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0;${p.peak};${p.peak * 0.5};0"
-                keyTimes="0;0.25;0.6;1" dur="${p.dur}s" begin="${p.begin}s" repeatCount="indefinite" />
-            </ellipse>
+        <g filter="url(#${key}-vapour)" stroke="currentColor" stroke-linecap="round" style="color: var(--mbc-text, #fff)">
+          ${streams.map(stream => svg`
+            <g class="mbc-coffee-vapour"
+              style="--mbc-vapour-duration:${stream.duration}s;--mbc-vapour-delay:${stream.delay}s;--mbc-vapour-drift:${stream.drift}px;--mbc-vapour-peak:${stream.peak}">
+              <path d="${stream.path}" stroke-width="${stream.width}" />
+            </g>
           `)}
         </g>
       ` : nothing}
-
-      <path d="${f.glassPath}" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linejoin="round" />
-
-      <g clip-path="url(#clip-${uid})">
-        ${layerPaths.map((l) => svg`<path d="${l.d}" fill="${l.fill}" />`)}
-      </g>
-
-      <path d="${f.glassPath}" fill="url(#refl-${uid})" clip-path="url(#clip-${uid})" />
-      <path d="M ${topL + 1.5} ${cupTop + 3} L ${botL + 2.5} ${cupBot - 5} L ${botL + 2.5 + (isTall ? 4 : 5)} ${cupBot - 5} L ${topL + 1.5 + (isTall ? 4 : 5)} ${cupTop + 3} Z" fill="url(#spec-${uid})" />
-      <line x1="${topR - 2.5}" y1="${cupTop + 5}" x2="${botR - 3}" y2="${cupBot - 7}" stroke="rgba(255,255,255,0.08)" stroke-width="2" stroke-linecap="round" />
-      <line x1="${topL + 3}" y1="${cupTop + 0.5}" x2="${topR - 3}" y2="${cupTop + 0.5}" stroke="rgba(255,255,255,0.20)" stroke-width="1" stroke-linecap="round" />
-
-      <path d="M ${handleX} ${hTop} C ${handleX + hOut} ${hTop - 2}, ${handleX + hOut} ${hBot + 2}, ${handleX} ${hBot}" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" fill="none" stroke-linecap="round" />
-
-      <g mask="url(#rm-${uid})">
-        <g transform="translate(0, ${cupBot * 2 + 2}) scale(1, -1)">
-          <path d="${f.glassPath}" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-linejoin="round" />
-          <g clip-path="url(#clip-${uid})" opacity="0.5">
-            ${layerPaths.map((l) => svg`<path d="${l.d}" fill="${l.fill}" />`)}
-          </g>
-          <path d="M ${handleX} ${hTop} C ${handleX + hOut} ${hTop - 2}, ${handleX + hOut} ${hBot + 2}, ${handleX} ${hBot}" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none" />
-        </g>
-      </g>
     </svg>
   `;
 }
