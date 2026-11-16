@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { coffeeIconSvg, coffeeIconSvgFromSpec, type IconSpec } from "../src/icons";
+import { coffeeIconSvg, coffeeIconSvgFromSpec, computeIconGeometry, type IconSpec } from "../src/icons";
 import { renderRecipes } from "../src/sections/recipes";
 
 /** Inspect the real Lit output, including nested SVG templates and arrays. */
@@ -33,6 +33,39 @@ function layerSpans(svg: string): { role: string; top: number; bottom: number }[
 }
 
 describe("transparent glass rendering", () => {
+  it("keeps espresso visibly smaller than a regular cup within the same viewport", () => {
+    const small = computeIconGeometry({ ...drink, glass: "espresso_cup" }, 64)!;
+    const large = computeIconGeometry({ ...drink, glass: "cup" }, 64)!;
+    expect(small.frame.cupH).toBeLessThan(large.frame.cupH * .8);
+    expect(small.frame.topR - small.frame.topL).toBeLessThan((large.frame.topR - large.frame.topL) * .8);
+    expect(small.width).toBe(large.width);
+    expect(small.height).toBe(large.height);
+    expect(small.frame.cupBot).toBeCloseTo(large.frame.cupBot);
+  });
+
+  it.each(["espresso_cup", "cup", "tall_glass"])("emits complete quadratic curve coordinates in the %s clip", glass => {
+    const { frame } = computeIconGeometry({ ...drink, glass }, 64)!;
+    const curves = [...frame.clipPath.matchAll(/Q([^A-Za-z]*)/g)];
+    expect(curves.length).toBeGreaterThan(0);
+    for (const curve of curves) {
+      // SVG Q requires a control point and an endpoint: four numbers.
+      expect(curve[1].trim().split(/[ ,]+/).map(Number)).toHaveLength(4);
+    }
+  });
+
+  it("renders different cup outlines even when the drink and fill fraction match", () => {
+    const outline = (glass: string) => markup(coffeeIconSvgFromSpec({ ...drink, glass }, 220, "same"))
+      .match(/class="mbc-coffee-outline"\s+d="([^"]+)"/)?.[1];
+    expect(outline("espresso_cup")).toBeDefined();
+    expect(outline("espresso_cup")).not.toBe(outline("cup"));
+  });
+
+  it("retains a visibly smaller espresso in the legacy recipe fallback", () => {
+    const outline = (name: string) => markup(coffeeIconSvg(name, 64, "legacy"))
+      .match(/class="mbc-coffee-outline"\s+d="([^"]+)"/)?.[1];
+    expect(outline("Espresso")).not.toBe(outline("Café Crème"));
+  });
+
   it.each(["cup", "tall_glass"])("does not draw a chord across the %s opening", glass => {
     const svg = markup(coffeeIconSvgFromSpec({ ...drink, glass }, 48, "cup"));
     const stroke = /<path\s+class="mbc-coffee-outline"\s+d="([^"]+)"/.exec(svg);

@@ -66,11 +66,16 @@ export const cardStyles = css`
   /* -- Header -- */
   .card-header {
     display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
     align-items: center;
     justify-content: space-between;
     padding: 10px 16px 0;
   }
   .machine-name {
+    flex: 1 1 160px;
+    min-width: 0;
+    overflow-wrap: anywhere;
     font-size: 0.7em;
     font-weight: 500;
     color: var(--mbc-text2);
@@ -88,6 +93,8 @@ export const cardStyles = css`
     display: flex;
     align-items: center;
     gap: 8px;
+    flex: 0 0 auto;
+    max-width: 100%;
   }
   .brand-badge {
     display: inline-flex;
@@ -101,14 +108,16 @@ export const cardStyles = css`
     line-height: 1.7;
     text-transform: uppercase;
     user-select: none;
-    max-width: 40%;
-    overflow: hidden;
+    flex: 0 1 auto;
+    min-width: 0;
     white-space: nowrap;
   }
   .brand-badge-logo {
     display: block;
-    height: 12px;
+    height: 1.4em;
     width: auto;
+    max-width: 100%;
+    object-fit: contain;
   }
 
   .section-title {
@@ -512,7 +521,53 @@ export const cardStyles = css`
   .brew-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
   /* -- Freestyle -- */
-  .freestyle-section { padding: 4px 12px 12px; }
+  .freestyle-section {
+    padding: 4px 12px 12px;
+    container: freestyle / inline-size;
+  }
+  .freestyle-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .freestyle-preview {
+    min-width: 0;
+    margin: 0;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .freestyle-glass {
+    width: min(100%, calc(var(--mbc-scale, 1) * 220px));
+    /* The shared icon reserves space below the base for compact catalog tiles. */
+    aspect-ratio: 100 / 88;
+    overflow: hidden;
+  }
+  .freestyle-glass svg { display: block; width: 100%; max-width: 100%; height: auto; }
+  .freestyle-caption {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 100%;
+    text-align: center;
+  }
+  .freestyle-drink-name {
+    font-size: 0.85em;
+    font-weight: 500;
+    color: var(--mbc-text);
+    overflow-wrap: anywhere;
+  }
+  .freestyle-volume {
+    font-size: 0.8em;
+    color: var(--mbc-text2);
+    font-variant-numeric: tabular-nums;
+  }
+  @container freestyle (min-width: 640px) {
+    .freestyle-layout { grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1.6fr); }
+  }
   .freestyle-name-row { margin-bottom: 10px; }
   .freestyle-name-input {
     width: 100%;
@@ -530,10 +585,11 @@ export const cardStyles = css`
 
   .freestyle-components {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--mbc-scale, 1) * 190px)), 1fr));
     gap: 12px;
   }
   .freestyle-component {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -612,6 +668,7 @@ export const cardStyles = css`
   }
   .portion-slider {
     width: 100%;
+    margin: 0;
     height: 4px;
     -webkit-appearance: none;
     appearance: none;

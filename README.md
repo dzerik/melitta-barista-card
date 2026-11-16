@@ -17,8 +17,8 @@ A custom Lovelace card for the [Melitta Barista Smart](https://github.com/dzerik
 ## Features
 
 - **Auto-detection** -- automatically finds your Melitta device, no manual configuration needed
-- **Recipe grid** -- all 24 recipes with SVG cup icons, DirectKey quick-access buttons, and user profile tabs
-- **Freestyle builder** -- custom drink with two components, intensity, aroma, temperature, shots, and portion size
+- **Recipe grid** -- dynamic recipe icons show ingredient layers, fill level, foam and crema in distinct espresso cups, regular cups and tall glasses; DirectKey tiles show configured drink names and quantities
+- **Freestyle builder** -- custom drink with two components, intensity, aroma, temperature, shots, milk or froth and portion size, with a live glass preview and total volume
 - **AI Sommelier** -- bean hopper overview, favorite recipes with one-tap brew, and a "Surprise me" recipe generator (requires the integration's Sommelier feature)
 - **Cup statistics** -- total counter and per-recipe stats dashboard
 - **Maintenance** -- easy clean, intensive clean, descaling, evaporating, water filter management
@@ -27,19 +27,19 @@ A custom Lovelace card for the [Melitta Barista Smart](https://github.com/dzerik
 - **Action alerts** -- fill water, empty trays, insert brew unit, and other required actions
 - **29 languages** -- follows your Home Assistant profile language, switches on the fly
 - **Visual editor** -- device dropdown in the card editor UI
-- **Theme-aware** -- light and dark mode styling
+- **Theme-aware** -- light and dark tiles, responsive labels and scaling, independent animated steam and reduced-motion support
 
 ## Screenshots
 
 ### Recipes
 
-Recipe grid with user profiles, DirectKey quick-access buttons, and all available recipes with SVG cup icons.
+Recipe grid with user profiles, DirectKey quick-access buttons and composition-driven glass icons. Small espresso cups remain visibly smaller than regular cups.
 
 ![Recipes](images/recipes.png)
 
 ### Freestyle
 
-Custom drink builder with two components, adjustable intensity, aroma, temperature, shots, and portion size.
+Custom drink builder with a live composition preview, two components, adjustable intensity, aroma, temperature, shots, milk preparation mode and portion size. The preview sits beside the controls on wide cards and above them on narrow cards.
 
 ![Freestyle](images/freestyle.png)
 

@@ -9,14 +9,17 @@ interface DrinkProfile {
   layers: Layer[];
   foam?: { color: string; height: number };
   tall?: boolean;
+  small?: boolean;
 }
 
 const DRINKS: Record<string, DrinkProfile> = {
   Espresso: {
+    small: true,
     layers: [{ color: "#3E1F0D", height: 0.30 }],
     foam: { color: "#C9A87C", height: 0.04 },
   },
   Ristretto: {
+    small: true,
     layers: [{ color: "#1A0D04", height: 0.22 }],
     foam: { color: "#B89970", height: 0.03 },
   },
@@ -29,6 +32,7 @@ const DRINKS: Record<string, DrinkProfile> = {
     foam: { color: "#C9A87C", height: 0.04 },
   },
   "Ristretto Doppio": {
+    small: true,
     layers: [{ color: "#1A0D04", height: 0.40 }],
     foam: { color: "#B89970", height: 0.03 },
   },
@@ -67,6 +71,7 @@ const DRINKS: Record<string, DrinkProfile> = {
     foam: { color: "#F5EDE0", height: 0.18 },
   },
   "Espresso Macchiato": {
+    small: true,
     layers: [{ color: "#3E1F0D", height: 0.30 }],
     foam: { color: "#F5EDE0", height: 0.12 },
   },
@@ -217,15 +222,17 @@ export interface CupFrame {
 }
 
 /** Computes the glass outline + inner clip metrics for the cup or tall shape. */
-export function computeCupFrame(isTall: boolean): CupFrame {
+/** Build cup geometry on a shared baseline; espresso cups keep a smaller silhouette. */
+export function computeCupFrame(isTall: boolean, isSmall = false): CupFrame {
   const vbW = 100;
   const vbH = 115;
+  const scale = isSmall && !isTall ? .72 : 1;
 
-  const cupTopW = isTall ? 36 : 50;
-  const cupBotW = isTall ? 30 : 42;
-  const cupH = isTall ? 68 : 48;
-  const cupTop = isTall ? 12 : 28;
-  const cupBot = cupTop + cupH;
+  const cupTopW = (isTall ? 36 : 50) * scale;
+  const cupBotW = (isTall ? 30 : 42) * scale;
+  const cupH = (isTall ? 68 : 48) * scale;
+  const cupBot = isTall ? 80 : 76;
+  const cupTop = cupBot - cupH;
   const cx = isTall ? 50 : 46;
 
   const topL = cx - cupTopW / 2;
@@ -233,10 +240,10 @@ export function computeCupFrame(isTall: boolean): CupFrame {
   const botL = cx - cupBotW / 2;
   const botR = cx + cupBotW / 2;
 
-  const r = 4;
+  const r = 4 * scale;
   const glassPath = `M ${topL} ${cupTop} L ${botL + r} ${cupBot - r} Q ${botL} ${cupBot} ${botL + r} ${cupBot} L ${botR - r} ${cupBot} Q ${botR} ${cupBot} ${botR - r} ${cupBot - r} L ${topR} ${cupTop}`;
 
-  const inset = 1.5;
+  const inset = 1.5 * scale;
   const ciTopL = topL + inset;
   const ciTopR = topR - inset;
   const ciBotL = botL + inset + r * 0.3;
@@ -372,7 +379,9 @@ export interface IconGeometry {
 function isValidSpec(spec: IconSpec | null | undefined): spec is IconSpec {
   if (typeof spec !== "object" || spec === null) return false;
   if (!SUPPORTED_ICON_SPEC_VERSIONS.includes(spec.spec_version)) return false;
-  if (!Array.isArray(spec.layers) || spec.layers.length === 0) return false;
+  if (!Array.isArray(spec.layers)) return false;
+  // §4.4 can carve the entire milk portion into foam, leaving no body layers.
+  if (spec.layers.length === 0 && !(spec.foam && Number.isFinite(spec.foam.fraction) && spec.foam.fraction > 0)) return false;
   for (const l of spec.layers) {
     if (typeof l !== "object" || l === null) return false;
   }
@@ -399,7 +408,7 @@ export function computeIconGeometry(
   if (!isValidSpec(spec)) return null;
 
   const isTall = spec.glass === "tall_glass";
-  const frame = computeCupFrame(isTall);
+  const frame = computeCupFrame(isTall, spec.glass === "espresso_cup");
 
   // fill_level: server-computed; if absent, derive from total_ml and the
   // nominal volume (unknown glass uses the cup nominal — §3.6).
@@ -425,7 +434,7 @@ export function computeIconGeometry(
       : 0;
   const sum = fracs.reduce((s, x) => s + x, 0) + foamFrac;
   const last = fracs.length - 1;
-  fracs[last] = Math.max(0, fracs[last] + (1 - sum));
+  if (last >= 0) fracs[last] = Math.max(0, fracs[last] + (1 - sum));
   // Safety: if the spec badly over-fills (sum still > 1), scale everything.
   let scale = 1;
   const sum2 = fracs.reduce((s, x) => s + x, 0) + foamFrac;
@@ -533,17 +542,18 @@ function renderGlassSvg(
   // Code-point encoding is injective, SVG-safe and stable across Lit updates.
   const key = `mbc-cup-${Array.from(uid, char => char.codePointAt(0)!.toString(16)).join("-") || "empty"}`;
   const { vbW, vbH, cupTop, cupBot, cupH, cx, topL, topR, botL, botR, isTall } = f;
+  const scale = isTall ? 1 : (topR - topL) / 50;
   const outer = isTall
     ? `M${topL} ${cupTop}L${botL} ${cupBot - 6}Q${botL} ${cupBot + 1},${botL + 6} ${cupBot + 1}L${botR - 6} ${cupBot + 1}Q${botR} ${cupBot + 1},${botR} ${cupBot - 6}L${topR} ${cupTop}Z`
-    : `M${topL} ${cupTop}C${topL + 1} ${cupBot - 19},${botL} ${cupBot},${botL + 10} ${cupBot}L${botR - 10} ${cupBot}C${botR} ${cupBot},${topR - 1} ${cupBot - 19},${topR} ${cupTop}Z`;
+    : `M${topL} ${cupTop}C${topL + scale} ${cupBot - 19 * scale},${botL} ${cupBot},${botL + 10 * scale} ${cupBot}L${botR - 10 * scale} ${cupBot}C${botR} ${cupBot},${topR - scale} ${cupBot - 19 * scale},${topR} ${cupTop}Z`;
   const inner = isTall
-    ? `M${topL + 1.1} ${cupTop + 1}L${botL + 1.6} ${cupBot - 6}Q${botL + 1.6} ${cupBot - 1.5},${botL + 6} ${cupBot - 1.5}L${botR - 6} ${cupBot - 1.5}Q${botR - 1.6} ${cupBot - 1.5},${botR - 1.6} ${cupBot - 6}L${topR - 1.1} ${cupTop + 1}Z`
-    : `M${topL + 1.3} ${cupTop + 1}C${topL + 2.4} ${cupBot - 19},${botL + 1.7} ${cupBot - 1.5},${botL + 10} ${cupBot - 1.5}L${botR - 10} ${cupBot - 1.5}C${botR - 1.7} ${cupBot - 1.5},${topR - 2.4} ${cupBot - 19},${topR - 1.3} ${cupTop + 1}Z`;
+    ? `M${topL + 1.1} ${cupTop + 1}L${botL + 1.6} ${cupBot - 6}Q${botL + 1.6} ${cupBot - 1.5 * scale},${botL + 6} ${cupBot - 1.5 * scale}L${botR - 6} ${cupBot - 1.5 * scale}Q${botR - 1.6} ${cupBot - 1.5 * scale},${botR - 1.6} ${cupBot - 6}L${topR - 1.1} ${cupTop + 1}Z`
+    : `M${topL + 1.3 * scale} ${cupTop + 1}C${topL + 2.4 * scale} ${cupBot - 19 * scale},${botL + 1.7 * scale} ${cupBot - 1.5 * scale},${botL + 10 * scale} ${cupBot - 1.5 * scale}L${botR - 10 * scale} ${cupBot - 1.5 * scale}C${botR - 1.7 * scale} ${cupBot - 1.5 * scale},${topR - 2.4 * scale} ${cupBot - 19 * scale},${topR - 1.3 * scale} ${cupTop + 1}Z`;
   // Only filled masks close at the rim: closing the stroke draws a false chord.
   const sideOutline = outer.slice(0, -1);
   const handleTop = cupTop + cupH * .21;
   const handleBottom = cupTop + cupH * .68;
-  const handle = `M${topR - .5} ${handleTop}C${topR + 19} ${handleTop - 7},${topR + 22} ${handleBottom + 7},${topR - 4} ${handleBottom}`;
+  const handle = `M${topR - .5 * scale} ${handleTop}C${topR + 19 * scale} ${handleTop - 7 * scale},${topR + 22 * scale} ${handleBottom + 7 * scale},${topR - 4 * scale} ${handleBottom}`;
   const top = layerPaths[layerPaths.length - 1];
   const streams = hasSteam ? steamStreams(f, uid) : [];
 
@@ -606,10 +616,10 @@ function renderGlassSvg(
           </linearGradient>
         `)}
       </defs>
-      <ellipse cx="${cx + 1}" cy="${cupBot + 3}" rx="${isTall ? 21 : 29}" ry="3.7" fill="url(#${key}-shadow)" />
+      <ellipse cx="${cx + 1}" cy="${cupBot + 3 * scale}" rx="${isTall ? 21 : 29 * scale}" ry="${3.7 * scale}" fill="url(#${key}-shadow)" />
       ${isTall ? nothing : svg`
-        <path d="${handle}" stroke="var(--mbc-glass-edge, currentColor)" stroke-width="4" stroke-opacity=".28" />
-        <path d="${handle}" stroke="url(#${key}-handle)" stroke-width="2.2" opacity=".65" />
+        <path d="${handle}" stroke="var(--mbc-glass-edge, currentColor)" stroke-width="${4 * scale}" stroke-opacity=".28" />
+        <path d="${handle}" stroke="url(#${key}-handle)" stroke-width="${2.2 * scale}" opacity=".65" />
       `}
       <path d="${outer}" fill="url(#${key}-light)" opacity=".18" />
       <g clip-path="url(#${key}-clip)">
@@ -618,15 +628,15 @@ function renderGlassSvg(
             d="M${topL - 1} ${layer.yTop}H${topR + 1}V${layer.yBottom}H${topL - 1}Z"
             fill="url(#${key}-liquid-${i})" />
         `)}
-        ${top ? svg`<ellipse cx="${cx}" cy="${top.yTop + Math.min(2.2, top.height / 3)}"
-          rx="${(topR - topL) / 2 - 1}" ry="${Math.min(2.2, top.height / 3)}" fill="${shadeFill(top.fill, .04)}" />` : nothing}
+        ${top ? svg`<ellipse cx="${cx}" cy="${top.yTop + Math.min(2.2 * scale, top.height / 3)}"
+          rx="${(topR - topL) / 2 - scale}" ry="${Math.min(2.2 * scale, top.height / 3)}" fill="${shadeFill(top.fill, .04)}" />` : nothing}
         <path d="${outer}" fill="url(#${key}-light)" opacity=".4" />
-        <path d="M${topL + 3} ${cupTop + 4}C${topL + 4} ${cupBot - 22},${botL + 4} ${cupBot - 5},${botL + 9} ${cupBot - 4}L${botL + 13} ${cupBot - 4}C${botL + 6} ${cupBot - 16},${topL + 10} ${cupTop + 5},${topL + 9} ${cupTop + 4}Z"
+        <path d="M${topL + 3 * scale} ${cupTop + 4 * scale}C${topL + 4 * scale} ${cupBot - 22 * scale},${botL + 4 * scale} ${cupBot - 5 * scale},${botL + 9 * scale} ${cupBot - 4 * scale}L${botL + 13 * scale} ${cupBot - 4 * scale}C${botL + 6 * scale} ${cupBot - 16 * scale},${topL + 10 * scale} ${cupTop + 5 * scale},${topL + 9 * scale} ${cupTop + 4 * scale}Z"
           fill="url(#${key}-spec)" opacity=".4" filter="url(#${key}-soft)" />
       </g>
       <path class="mbc-coffee-outline" d="${sideOutline}"
         stroke="var(--mbc-glass-edge, currentColor)" stroke-width=".4" stroke-opacity=".35" />
-      <ellipse cx="${cx}" cy="${cupTop}" rx="${(topR - topL) / 2}" ry="3.2"
+      <ellipse cx="${cx}" cy="${cupTop}" rx="${(topR - topL) / 2}" ry="${3.2 * scale}"
         stroke="var(--mbc-glass-rim, currentColor)" stroke-width="1" stroke-opacity=".55" />
       ${hasSteam ? svg`
         <g filter="url(#${key}-vapour)" stroke="currentColor" stroke-linecap="round" style="color: var(--mbc-text, #fff)">
@@ -652,7 +662,7 @@ function renderGlassSvg(
  */
 export function coffeeIconSvg(recipe: string, size: number, uid: string) {
   const profile = DRINKS[recipe] || DEFAULT;
-  const frame = computeCupFrame(!!profile.tall);
+  const frame = computeCupFrame(!!profile.tall, !!profile.small);
 
   // DRINKS arrays are ordered top→bottom; the stack wants bottom→top.
   const stack: StackEntry[] = [...profile.layers]
@@ -684,4 +694,10 @@ export function coffeeIconSvgFromSpec(
     return coffeeIconSvg("", size, uid);
   }
   return renderGlassSvg(geom.frame, geom.layers, geom.steam, size, uid);
+}
+
+
+/** Render the same glass without beverage or steam for an empty draft. */
+export function emptyCoffeeGlassSvg(size: number, uid: string) {
+  return renderGlassSvg(computeCupFrame(false), [], false, size, uid);
 }

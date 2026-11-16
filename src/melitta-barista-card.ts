@@ -65,7 +65,8 @@ import {
   stringsVersionStale,
 } from "./server-i18n";
 import { buildBrandBadge } from "./brand-badge";
-import { coffeeIconSvg, coffeeIconSvgFromSpec } from "./icons";
+import { coffeeIconSvg, coffeeIconSvgFromSpec, emptyCoffeeGlassSvg } from "./icons";
+import { freestylePreviewSpec } from "./freestyle-preview";
 import * as api from "./api";
 import {
   parseDirectKeyData,
@@ -845,10 +846,11 @@ export class MelittaBaristaCard extends LitElement {
 
   // -- Freestyle --
 
+  /** Render the draft's live glass alongside its existing ingredient controls. */
   private _renderFreestyle() {
-    // v2 parameter catalog with the §6.1.5 three-tier fallback: contract
-    // `parameters` → v1 vocabularies/limits → legacy consts, per parameter.
+    // Contract parameters → v1 vocabularies/limits → legacy constants.
     const vocab = resolveParameters(this._contract);
+    const preview = freestylePreviewSpec(this._fsRecipe);
     return html`
       <div class="section-title">${localize("freestyle.title")}</div>
       <div class="freestyle-section">
@@ -859,23 +861,37 @@ export class MelittaBaristaCard extends LitElement {
             @input=${(e: Event) => { this._fsName = (e.target as HTMLInputElement).value; }} />
         </div>
 
-        <div class="freestyle-components">
-          ${renderComponentForm({
-            title: localize("freestyle.component", { n: 1 }),
-            containerClass: "freestyle-component",
-            spec: this._fsRecipe.c1,
-            allowNoneProcess: false,
-            vocab,
-            onChange: (patch) => this._updateFs("c1", patch),
-          })}
-          ${renderComponentForm({
-            title: localize("freestyle.component", { n: 2 }),
-            containerClass: "freestyle-component",
-            spec: this._fsRecipe.c2,
-            allowNoneProcess: true,
-            vocab,
-            onChange: (patch) => this._updateFs("c2", patch),
-          })}
+        <div class="freestyle-layout">
+          <figure class="freestyle-preview" aria-label=${this._fsName}>
+            <div class="freestyle-glass" aria-hidden="true">
+              ${preview
+                ? coffeeIconSvgFromSpec(preview, 220, "freestyle-preview")
+                : emptyCoffeeGlassSvg(220, "freestyle-preview")}
+            </div>
+            <figcaption class="freestyle-caption">
+              <span class="freestyle-drink-name">${this._fsName}</span>
+              <output class="freestyle-volume" aria-live="polite">${localize("freestyle.portion_value", { value: preview?.total_ml ?? 0 })}</output>
+            </figcaption>
+          </figure>
+
+          <div class="freestyle-components">
+            ${renderComponentForm({
+              title: localize("freestyle.component", { n: 1 }),
+              containerClass: "freestyle-component",
+              spec: this._fsRecipe.c1,
+              allowNoneProcess: false,
+              vocab,
+              onChange: (patch) => this._updateFs("c1", patch),
+            })}
+            ${renderComponentForm({
+              title: localize("freestyle.component", { n: 2 }),
+              containerClass: "freestyle-component",
+              spec: this._fsRecipe.c2,
+              allowNoneProcess: true,
+              vocab,
+              onChange: (patch) => this._updateFs("c2", patch),
+            })}
+          </div>
         </div>
 
         <div class="freestyle-brew-row">
