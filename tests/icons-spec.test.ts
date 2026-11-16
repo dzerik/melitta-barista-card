@@ -67,11 +67,11 @@ describe("computeIconGeometry — §3.7 Espresso", () => {
   it("parses and maps espresso_cup to the small cup shape", () => {
     expect(g).not.toBeNull();
     expect(g.frame.isTall).toBe(false);
-    expect(g.frame.cupH).toBe(48);
+    expect(g.frame.cupH).toBeLessThan(computeIconGeometry({ ...ESPRESSO_SPEC, glass: "cup" }, 48)!.frame.cupH);
   });
 
-  it("fills to fill_level of the glass interior (0.67 * cupH)", () => {
-    expect(totalHeight(g)).toBeCloseTo(48 * 0.67, 5);
+  it("fills to fill_level without stretching the smaller glass", () => {
+    expect(totalHeight(g)).toBeCloseTo(g.frame.cupH * 0.67, 5);
   });
 
   it("stacks from the interior bottom", () => {

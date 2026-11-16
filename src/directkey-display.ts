@@ -8,6 +8,7 @@ import { humanizeToken } from "./action-catalog";
 import { localizeOptional } from "./localize/localize";
 import type { ResolvedProfileSlot } from "./profile";
 import { serverString } from "./server-i18n";
+import type { DirectKeyRecipe } from "./types";
 
 /**
  * Display label for a DirectKey category token (spec §9.3.6 rule 2).
@@ -26,6 +27,16 @@ export function directKeyCategoryLabel(category: string, contractMode: boolean):
     if (served !== undefined) return served;
   }
   return localizeOptional(`drinks.${category}`) ?? humanizeToken(category);
+}
+
+/** Configured drink title, falling back to the category for older integrations. */
+export function directKeyRecipeLabel(
+  category: string, recipe: DirectKeyRecipe, contractMode: boolean,
+): string {
+  const configured = recipe.configured_recipe;
+  return configured
+    ? serverString(`recipes.name.${configured.name_key}`) ?? configured.name
+    : directKeyCategoryLabel(category, contractMode);
 }
 
 /** One profile tab in render order — slot number is the stable identity (PR #6). */

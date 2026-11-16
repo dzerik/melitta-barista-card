@@ -122,6 +122,8 @@ function optionalStringArray(v: unknown): string[] | null {
  * every consumer of FreestyleVocab accepts a ResolvedParameters unchanged.
  */
 export interface ResolvedParameters extends FreestyleVocab {
+  /** Optional milk-mode family, absent from the frozen freestyle vocabulary. */
+  milkModes: readonly string[];
   /**
    * Per family: freestyle process tokens the parameter attaches to
    * (`applies_to`, §6.1.1); null = all processes. In tier-2/tier-3 modes this
@@ -158,17 +160,19 @@ export function resolveParameters(contract: UiContract | null | undefined): Reso
   const base = resolveFreestyleVocab(contract);
   const out: ResolvedParameters = {
     ...base,
+    milkModes: ["warm_milk", "milk_froth"],
     appliesTo: {
       process: null,
       intensity: ["coffee"],
       aroma: ["coffee"],
       temperature: null,
       shots: ["coffee"],
+      milk_mode: ["milk"],
       portion_ml: null,
     },
     rendered: {
       process: true, intensity: true, aroma: true,
-      temperature: true, shots: true, portion_ml: true,
+      temperature: true, shots: true, portion_ml: true, milk_mode: true,
     },
     portionUnit: null,
   };
@@ -198,6 +202,7 @@ export function resolveParameters(contract: UiContract | null | undefined): Reso
   applyEnum("aroma", (t) => { out.aromas = t; });
   applyEnum("temperature", (t) => { out.temperatures = t; });
   applyEnum("shots", (t) => { out.shots = t; });
+  applyEnum("milk_mode", (t) => { out.milkModes = t; });
 
   const p = params.portion_ml;
   if (p) {

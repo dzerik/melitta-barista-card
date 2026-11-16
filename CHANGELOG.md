@@ -1,5 +1,67 @@
 # Changelog
 
+## [Unreleased]
+
+## [2.13.0] — 2026-11-16
+
+### Added
+
+- Show a live Freestyle glass with draft ingredient layers, milk or froth, coffee shading, steam and a localized total volume. Place the preview beside the controls on wide cards and above them on narrow cards.
+- Choose warm milk or milk froth independently for either milk component, retaining coffee shots when switching back to coffee.
+
+### Changed
+
+- Refresh recipe and DirectKey tiles with rounded transparent glass, soft lighting, theme-aware surfaces, larger icons, readable labels and keyboard activation.
+- Give hot drinks independently shaped and phased steam that persists across HA updates and respects reduced-motion preferences.
+- Show the profile's configured DirectKey drink name when supplied by the integration, while preserving the slot used for brewing and editing.
+
+### Fixed
+
+- Keep open recipe editors bound to their original profile when the active profile changes externally.
+- Keep SVG definitions distinct for localized recipe names and safely encode punctuation in SVG identifiers.
+- Distinguish espresso cups from regular cups with a smaller body, handle and rim on the same baseline, including legacy recipe icons.
+- Keep brand wordmarks and logos visible beside long machine names, including on narrow cards and at larger scales.
+- Render foam-only portions without falling back to a stock coffee icon, and keep large Freestyle previews inside the available width.
+
+The configured DirectKey names require integration 0.96.0 or its earlier b3+ test builds. Older integrations retain the category-label fallback. This card release targets Melitta; it does not add a Nivona card layout.
+
+## [2.13.0-beta.1] — 2026-11-06 (beta)
+
+### Changed
+
+- Give procedural drink icons rounded transparent glass, soft material lighting and distinct ingredient layers while retaining composition, fill level, foam and crema from the existing icon contract.
+- Give each visible hot drink independently shaped and phased steam that remains stable across HA updates and respects reduced-motion preferences.
+- Refresh recipe and DirectKey tiles with theme-aware surfaces, larger icons, readable wrapping labels and clearer selection. Recipe tiles support native keyboard activation.
+
+### Fixed
+
+- Keep SVG definitions distinct for localized recipe names and escape punctuation in SVG identifiers.
+- Avoid drawing a horizontal chord across the glass opening or a protruding base beneath the cup.
+
+## [2.12.1-beta.3] — 2026-11-05 (beta)
+
+### Fixed
+
+- DirectKey edits keep their original profile when the active profile changes externally. Changing the card target discards the open edit.
+
+## [2.12.1-beta.2] — 2026-11-04 (beta)
+
+### Added
+
+- Choose warm milk or milk froth for either Freestyle or DirectKey recipe
+  component (#60). The mode remains independent of coffee shots and uses
+  existing service fields, including on older integrations. Untouched legacy
+  recipes keep their original values.
+
+## [2.12.1-beta.1] — 2026-11-04 (beta)
+
+### Fixed
+
+- DirectKey tiles and brew prompts show the profile's configured drink name when the integration supplies it, with localized recipe names and an English fallback. Older integrations and unknown drinks keep the category label; brewing and editing still target the same profile slot.
+- CI and release builds use the committed dependency lock with `npm ci`, keeping clean installs on the tested dependency set.
+
+Use integration 0.96.0b3 or newer to receive configured drink names.
+
 ## [2.12.0] — 2026-09-11
 
 ### Changed

@@ -33,10 +33,10 @@ export function renderRecipes(props: RecipesSectionProps): TemplateResult {
     ` : html`<div class="section-title">${localize("recipes.title")}</div>`}
     <div class="recipe-grid">
       ${props.options.map((name) => {
-        const uid = name.replace(/[^a-zA-Z0-9]/g, "");
+        const uid = name;
         const isSelected = name === props.selected && !props.dkActive;
         return html`
-          <div class="recipe-card"
+          <button type="button" class="recipe-card"
             ?data-selected=${isSelected}
             @click=${() => {
               if (isSelected) {
@@ -45,9 +45,9 @@ export function renderRecipes(props: RecipesSectionProps): TemplateResult {
                 props.onSelect(name);
               }
             }}>
-            ${(props.renderIcon ?? coffeeIconSvg)(name, 48, `r-${uid}`)}
+            ${(props.renderIcon ?? coffeeIconSvg)(name, 64, `r-${uid}`)}
             <span class="recipe-name">${name}</span>
-          </div>
+          </button>
         `;
       })}
     </div>

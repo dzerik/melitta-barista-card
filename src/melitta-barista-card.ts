@@ -65,7 +65,8 @@ import {
   stringsVersionStale,
 } from "./server-i18n";
 import { buildBrandBadge } from "./brand-badge";
-import { coffeeIconSvg, coffeeIconSvgFromSpec } from "./icons";
+import { coffeeIconSvg, coffeeIconSvgFromSpec, emptyCoffeeGlassSvg } from "./icons";
+import { freestylePreviewSpec } from "./freestyle-preview";
 import * as api from "./api";
 import {
   parseDirectKeyData,
@@ -91,12 +92,20 @@ export class MelittaBaristaCard extends LitElement {
   // Freestyle form
   @state() private _fsName = "Custom";
   @state() private _fsRecipe: RecipeComponents = defaultRecipe();
+  /** Native modes initialize each component once; subsequent editing is local. */
+  private _fsMilkModeSeeded = new Set<string>();
 
   // DirectKey state (category tokens are an open set in contract mode, §9.3.6)
   @state() private _selectedDk: string | null = null;
   @state() private _twoCups = false;
   // Recipe edit dialog
-  @state() private _editDk: { category: string; recipe: DirectKeyRecipe } | null = null;
+  @state() private _editDk: {
+    category: string;
+    recipe: DirectKeyRecipe;
+    profileId: number;
+    prefix: string;
+    entryId: unknown;
+  } | null = null;
   @state() private _editState: RecipeComponents | null = null;
   @state() private _editSaving = false;
 
@@ -174,7 +183,10 @@ export class MelittaBaristaCard extends LitElement {
     };
   }
 
+  /** Apply card configuration and discard edits belonging to the previous target. */
   public setConfig(config: MelittaCardConfig): void {
+    this._cancelDkLongPress();
+    this._closeEditDialog();
     this._config = {
       ...config,
       show_header: config.show_header !== false,
@@ -251,6 +263,7 @@ export class MelittaBaristaCard extends LitElement {
       }
     }
     const prefix = this._getPrefix();
+    if (prefix) this._seedFreestyleMilkModes(prefix);
     const contractFp = this._contract?.contract_fingerprint ?? null;
     if (prefix && (this._trackedPrefix !== prefix || this._trackedContractFp !== contractFp)) {
       // Rebuilt on contract change too: catalog entries may anchor on button
@@ -260,6 +273,10 @@ export class MelittaBaristaCard extends LitElement {
       this._trackedIds = this._buildTrackedIds(prefix);
     }
     this._updateContractBridge(prefix);
+    if (this._editDk && (this._editDk.prefix !== prefix ||
+        this._editDk.entryId !== this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id)) {
+      this._closeEditDialog();
+    }
   }
 
   /**
@@ -374,6 +391,8 @@ export class MelittaBaristaCard extends LitElement {
       ...["state", "activity", "progress", "action_required", "connection", "total_cups"]
         .map((s) => `sensor.${prefix}_${s}`),
       `select.${prefix}_recipe`,
+      `select.${prefix}_freestyle_milk_mode_1`,
+      `select.${prefix}_freestyle_milk_mode_2`,
       `select.${prefix}_${dkModel.profileSelectSuffix}`,
       ...SWITCH_KEYS.map((k) => `switch.${prefix}_${k}`),
       ...NUMBER_KEYS.map((k) => `number.${prefix}_${k}`),
@@ -505,9 +524,13 @@ export class MelittaBaristaCard extends LitElement {
     if (!this._editDk || !this._editState) return;
     const prefix = this._getPrefix();
     if (!prefix) return;
+    if (this._editDk.prefix !== prefix ||
+        this._editDk.entryId !== this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id) {
+      this._closeEditDialog();
+      return;
+    }
     this._editSaving = true;
-    const dk = this._getDirectKeyData();
-    api.saveDirectkey(this.hass, prefix, this._editDk.category, dk?.activeProfile ?? 0, this._editState)
+    api.saveDirectkey(this.hass, prefix, this._editDk.category, this._editDk.profileId, this._editState)
       .then(() => {
         this._editDk = null;
         this._editState = null;
@@ -559,10 +582,15 @@ export class MelittaBaristaCard extends LitElement {
   // -- DK long press / click --
 
   private _startDkLongPress(cat: string, recipe: DirectKeyRecipe): void {
+    const prefix = this._getPrefix();
+    const entryId = this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id;
+    const profileId = this._getDirectKeyData()?.activeProfile ?? 0;
     this._dkLongPressTriggered = false;
     this._dkLongPressTimer = setTimeout(() => {
+      if (prefix !== this._getPrefix() ||
+          entryId !== this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id) return;
       this._dkLongPressTriggered = true;
-      this._openEditDialog(cat, recipe);
+      this._openEditDialog(cat, recipe, profileId);
     }, LONG_PRESS_MS);
   }
 
@@ -582,8 +610,14 @@ export class MelittaBaristaCard extends LitElement {
     }
   }
 
-  private _openEditDialog(cat: string, recipe: DirectKeyRecipe): void {
-    this._editDk = { category: cat, recipe };
+  private _openEditDialog(
+    cat: string, recipe: DirectKeyRecipe,
+    profileId = this._getDirectKeyData()?.activeProfile ?? 0,
+  ): void {
+    const prefix = this._getPrefix();
+    if (!prefix) return;
+    this._editDk = { category: cat, recipe, profileId,
+      prefix, entryId: this.hass.states[`sensor.${prefix}_connection`]?.attributes.entry_id };
     this._editState = fromDkRecipe(recipe);
     this._editSaving = false;
   }
@@ -594,7 +628,24 @@ export class MelittaBaristaCard extends LitElement {
   }
 
   private _updateFs(comp: "c1" | "c2", patch: Partial<ComponentSpec>): void {
+    if ("milk_mode" in patch) this._fsMilkModeSeeded.add(`${this._getPrefix()}:${comp}`);
     this._fsRecipe = { ...this._fsRecipe, [comp]: { ...this._fsRecipe[comp], ...patch } };
+  }
+
+  /** Seed optional native overrides even while their process-gated selects are unavailable. */
+  private _seedFreestyleMilkModes(prefix: string): void {
+    for (const [comp, number] of [["c1", 1], ["c2", 2]] as const) {
+      const key = `${prefix}:${comp}`;
+      if (this._fsMilkModeSeeded.has(key)) continue;
+      const entity = this.hass.states[`select.${prefix}_freestyle_milk_mode_${number}`];
+      if (!entity) continue;
+      const mode = "milk_mode" in entity.attributes ? entity.attributes.milk_mode : entity.state;
+      if (mode === null) {
+        this._fsMilkModeSeeded.add(key);
+      } else if (mode === "warm_milk" || mode === "milk_froth") {
+        this._updateFs(comp, { milk_mode: mode });
+      }
+    }
   }
 
   private _updateEdit(comp: "c1" | "c2", patch: Partial<ComponentSpec>): void {
@@ -795,10 +846,11 @@ export class MelittaBaristaCard extends LitElement {
 
   // -- Freestyle --
 
+  /** Render the draft's live glass alongside its existing ingredient controls. */
   private _renderFreestyle() {
-    // v2 parameter catalog with the §6.1.5 three-tier fallback: contract
-    // `parameters` → v1 vocabularies/limits → legacy consts, per parameter.
+    // Contract parameters → v1 vocabularies/limits → legacy constants.
     const vocab = resolveParameters(this._contract);
+    const preview = freestylePreviewSpec(this._fsRecipe);
     return html`
       <div class="section-title">${localize("freestyle.title")}</div>
       <div class="freestyle-section">
@@ -809,23 +861,37 @@ export class MelittaBaristaCard extends LitElement {
             @input=${(e: Event) => { this._fsName = (e.target as HTMLInputElement).value; }} />
         </div>
 
-        <div class="freestyle-components">
-          ${renderComponentForm({
-            title: localize("freestyle.component", { n: 1 }),
-            containerClass: "freestyle-component",
-            spec: this._fsRecipe.c1,
-            allowNoneProcess: false,
-            vocab,
-            onChange: (patch) => this._updateFs("c1", patch),
-          })}
-          ${renderComponentForm({
-            title: localize("freestyle.component", { n: 2 }),
-            containerClass: "freestyle-component",
-            spec: this._fsRecipe.c2,
-            allowNoneProcess: true,
-            vocab,
-            onChange: (patch) => this._updateFs("c2", patch),
-          })}
+        <div class="freestyle-layout">
+          <figure class="freestyle-preview" aria-label=${this._fsName}>
+            <div class="freestyle-glass" aria-hidden="true">
+              ${preview
+                ? coffeeIconSvgFromSpec(preview, 220, "freestyle-preview")
+                : emptyCoffeeGlassSvg(220, "freestyle-preview")}
+            </div>
+            <figcaption class="freestyle-caption">
+              <span class="freestyle-drink-name">${this._fsName}</span>
+              <output class="freestyle-volume" aria-live="polite">${localize("freestyle.portion_value", { value: preview?.total_ml ?? 0 })}</output>
+            </figcaption>
+          </figure>
+
+          <div class="freestyle-components">
+            ${renderComponentForm({
+              title: localize("freestyle.component", { n: 1 }),
+              containerClass: "freestyle-component",
+              spec: this._fsRecipe.c1,
+              allowNoneProcess: false,
+              vocab,
+              onChange: (patch) => this._updateFs("c1", patch),
+            })}
+            ${renderComponentForm({
+              title: localize("freestyle.component", { n: 2 }),
+              containerClass: "freestyle-component",
+              spec: this._fsRecipe.c2,
+              allowNoneProcess: true,
+              vocab,
+              onChange: (patch) => this._updateFs("c2", patch),
+            })}
+          </div>
         </div>
 
         <div class="freestyle-brew-row">

@@ -17,7 +17,7 @@ import {
 } from "../contract-wiring";
 import { displayNameFor } from "../format";
 import { localize } from "../localize/localize";
-import type { ComponentSpec } from "../recipe";
+import { displayedMilkMode, type ComponentSpec, type MilkMode } from "../recipe";
 
 export function renderSegment(
   label: string,
@@ -82,6 +82,7 @@ export interface ComponentFormOptions {
   vocab?: FreestyleVocab | ResolvedParameters;
 }
 
+/** Render shared Freestyle/DirectKey controls without mutating inactive values. */
 export function renderComponentForm(opts: ComponentFormOptions): TemplateResult {
   const { spec, onChange, allowNoneProcess } = opts;
   const vocab = opts.vocab ?? resolveParameters(null);
@@ -100,6 +101,11 @@ export function renderComponentForm(opts: ComponentFormOptions): TemplateResult 
       ${shown("process")
         ? renderSegment(localize("freestyle.process"), processes, spec.process,
             (v) => onChange({ process: v as Process }), false, "process")
+        : nothing}
+      ${spec.process === "milk" && shown("milk_mode") && enabled("milk_mode")
+        ? renderSegment(localize("freestyle.milk_mode"),
+            (vocab as Partial<ResolvedParameters>).milkModes ?? ["warm_milk", "milk_froth"],
+            displayedMilkMode(spec), (v) => onChange({ milk_mode: v as MilkMode }), false, "milk_mode")
         : nothing}
       ${shown("portion_ml")
         ? renderPortion(localize("freestyle.portion"), spec.portion_ml, limits.min, limits.max, limits.step,

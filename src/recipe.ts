@@ -7,12 +7,16 @@
 import type { Process, Intensity, Aroma, Temperature, Shots } from "./const";
 import type { DirectKeyRecipe } from "./types";
 
+export type MilkMode = "warm_milk" | "milk_froth";
+
 export interface ComponentSpec {
   process: Process;
   intensity: Intensity;
   aroma: Aroma;
   temperature: Temperature;
   shots: Shots;
+  /** Explicit local choice; absence preserves the legacy shots value. */
+  milk_mode?: MilkMode;
   portion_ml: number;
 }
 
@@ -72,6 +76,7 @@ export function fromDkRecipe(r: DirectKeyRecipe): RecipeComponents {
   };
 }
 
+/** Serialize the legacy service fields, resolving explicit milk modes locally. */
 export function toServicePayload(rc: RecipeComponents): Record<string, string | number> {
   return {
     process1: rc.c1.process,
@@ -79,12 +84,26 @@ export function toServicePayload(rc: RecipeComponents): Record<string, string | 
     aroma1: rc.c1.aroma,
     portion1_ml: rc.c1.portion_ml,
     temperature1: rc.c1.temperature,
-    shots1: rc.c1.shots,
+    shots1: effectiveShots(rc.c1),
     process2: rc.c2.process,
     intensity2: rc.c2.intensity,
     aroma2: rc.c2.aroma,
     portion2_ml: rc.c2.portion_ml,
     temperature2: rc.c2.temperature,
-    shots2: rc.c2.shots,
+    shots2: effectiveShots(rc.c2),
   };
+}
+
+/** Resolve only explicit milk choices, preserving inactive and legacy shots. */
+export function effectiveShots(spec: ComponentSpec): Shots {
+  if (spec.process === "milk") {
+    if (spec.milk_mode === "warm_milk") return "one";
+    if (spec.milk_mode === "milk_froth") return "none";
+  }
+  return spec.shots;
+}
+
+/** Display a legacy recipe without turning its derived mode into an override. */
+export function displayedMilkMode(spec: ComponentSpec): MilkMode {
+  return spec.milk_mode ?? (spec.shots === "none" ? "milk_froth" : "warm_milk");
 }
