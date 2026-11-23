@@ -10,7 +10,8 @@ interface EntityLike {
   attributes: Record<string, unknown>;
 }
 
-export function renderStats(entity: EntityLike | undefined): TemplateResult {
+/** Render counters with the same optional drink renderer as the recipe grid. */
+export function renderStats(entity: EntityLike | undefined, renderIcon = coffeeIconSvg): TemplateResult {
   const total = entity?.state ? parseInt(entity.state, 10) : null;
 
   if (total === null || isNaN(total)) {
@@ -40,7 +41,7 @@ export function renderStats(entity: EntityLike | undefined): TemplateResult {
         <div class="stats-grid">
           ${counters.map(({ name, count }, i) => html`
             <div class="stats-card" ?data-top=${i === 0}>
-              ${coffeeIconSvg(name, 40, `stat-${name.replace(/[^a-zA-Z0-9]/g, "")}`)}
+              ${renderIcon(name, 40, `stat-${name.replace(/[^a-zA-Z0-9]/g, "")}`)}
               <span class="stats-recipe-name">${name}</span>
               <span class="stats-recipe-count">${count}</span>
             </div>

@@ -185,6 +185,9 @@
     "show_maintenance": "Prikaži održavanje",
     "show_settings": "Prikaži postavke",
     "compact": "Kompaktni način",
-    "scale": "Veličina teksta i ikona"
+    "scale": "Veličina teksta i ikona",
+    "cup_style": "Izgled šoljica",
+    "cup_style_classic": "Klasični",
+    "cup_style_glass": "3D staklo"
   }
 }

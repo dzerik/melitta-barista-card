@@ -1,6 +1,7 @@
 import { html, svg, nothing } from "lit";
 
 interface Layer {
+  role: "coffee" | "milk" | "water" | "additive";
   color: string;
   height: number;
 }
@@ -15,123 +16,123 @@ interface DrinkProfile {
 const DRINKS: Record<string, DrinkProfile> = {
   Espresso: {
     small: true,
-    layers: [{ color: "#3E1F0D", height: 0.30 }],
+    layers: [{ role: "coffee", color: "#3E1F0D", height: 0.30 }],
     foam: { color: "#C9A87C", height: 0.04 },
   },
   Ristretto: {
     small: true,
-    layers: [{ color: "#1A0D04", height: 0.22 }],
+    layers: [{ role: "coffee", color: "#1A0D04", height: 0.22 }],
     foam: { color: "#B89970", height: 0.03 },
   },
   Lungo: {
-    layers: [{ color: "#4A2A14", height: 0.50 }],
+    layers: [{ role: "coffee", color: "#4A2A14", height: 0.50 }],
     foam: { color: "#C9A87C", height: 0.04 },
   },
   "Espresso Doppio": {
-    layers: [{ color: "#3E1F0D", height: 0.45 }],
+    layers: [{ role: "coffee", color: "#3E1F0D", height: 0.45 }],
     foam: { color: "#C9A87C", height: 0.04 },
   },
   "Ristretto Doppio": {
     small: true,
-    layers: [{ color: "#1A0D04", height: 0.40 }],
+    layers: [{ role: "coffee", color: "#1A0D04", height: 0.40 }],
     foam: { color: "#B89970", height: 0.03 },
   },
   "Café Crème": {
-    layers: [{ color: "#5C3A1E", height: 0.50 }],
+    layers: [{ role: "coffee", color: "#5C3A1E", height: 0.50 }],
     foam: { color: "#E8D5B7", height: 0.08 },
   },
   "Café Crème Doppio": {
-    layers: [{ color: "#5C3A1E", height: 0.58 }],
+    layers: [{ role: "coffee", color: "#5C3A1E", height: 0.58 }],
     foam: { color: "#E8D5B7", height: 0.08 },
   },
   Americano: {
-    layers: [{ color: "#3E1F0D", height: 0.60 }],
+    layers: [{ role: "coffee", color: "#3E1F0D", height: 0.60 }],
   },
   "Americano Extra": {
-    layers: [{ color: "#2C1507", height: 0.65 }],
+    layers: [{ role: "coffee", color: "#2C1507", height: 0.65 }],
   },
   "Long Black": {
-    layers: [{ color: "#3E1F0D", height: 0.55 }],
+    layers: [{ role: "coffee", color: "#3E1F0D", height: 0.55 }],
     foam: { color: "#C9A87C", height: 0.05 },
   },
   "Red Eye": {
-    layers: [{ color: "#2C1507", height: 0.60 }],
+    layers: [{ role: "coffee", color: "#2C1507", height: 0.60 }],
   },
   "Black Eye": {
-    layers: [{ color: "#1A0D04", height: 0.65 }],
+    layers: [{ role: "coffee", color: "#1A0D04", height: 0.65 }],
   },
   "Dead Eye": {
-    layers: [{ color: "#0F0803", height: 0.70 }],
+    layers: [{ role: "coffee", color: "#0F0803", height: 0.70 }],
   },
   Cappuccino: {
     layers: [
-      { color: "#3E1F0D", height: 0.28 },
-      { color: "#D4B896", height: 0.22 },
+      { role: "coffee", color: "#3E1F0D", height: 0.28 },
+      { role: "milk", color: "#D4B896", height: 0.22 },
     ],
     foam: { color: "#F5EDE0", height: 0.18 },
   },
   "Espresso Macchiato": {
     small: true,
-    layers: [{ color: "#3E1F0D", height: 0.30 }],
+    layers: [{ role: "coffee", color: "#3E1F0D", height: 0.30 }],
     foam: { color: "#F5EDE0", height: 0.12 },
   },
   "Caffè Latte": {
     tall: true,
     layers: [
-      { color: "#E8D5B7", height: 0.35 },
-      { color: "#8B5A30", height: 0.18 },
+      { role: "milk", color: "#E8D5B7", height: 0.35 },
+      { role: "coffee", color: "#8B5A30", height: 0.18 },
     ],
     foam: { color: "#F5EDE0", height: 0.10 },
   },
   "Café au Lait": {
-    layers: [{ color: "#C9A87C", height: 0.50 }],
+    layers: [{ role: "additive", color: "#C9A87C", height: 0.50 }],
     foam: { color: "#F0E6D8", height: 0.06 },
   },
   "Flat White": {
     layers: [
-      { color: "#3E1F0D", height: 0.20 },
-      { color: "#D4B896", height: 0.30 },
+      { role: "coffee", color: "#3E1F0D", height: 0.20 },
+      { role: "milk", color: "#D4B896", height: 0.30 },
     ],
     foam: { color: "#F0E6D8", height: 0.05 },
   },
   "Latte Macchiato": {
     tall: true,
     layers: [
-      { color: "#F0E6D8", height: 0.28 },
-      { color: "#6B4226", height: 0.12 },
-      { color: "#E8D5B7", height: 0.12 },
+      { role: "milk", color: "#F0E6D8", height: 0.28 },
+      { role: "coffee", color: "#6B4226", height: 0.12 },
+      { role: "milk", color: "#E8D5B7", height: 0.12 },
     ],
     foam: { color: "#FEFCFA", height: 0.15 },
   },
   "Latte Macchiato Extra": {
     tall: true,
     layers: [
-      { color: "#F0E6D8", height: 0.25 },
-      { color: "#5C3A1E", height: 0.16 },
-      { color: "#E8D5B7", height: 0.12 },
+      { role: "milk", color: "#F0E6D8", height: 0.25 },
+      { role: "coffee", color: "#5C3A1E", height: 0.16 },
+      { role: "milk", color: "#E8D5B7", height: 0.12 },
     ],
     foam: { color: "#FEFCFA", height: 0.14 },
   },
   "Latte Macchiato Triple": {
     tall: true,
     layers: [
-      { color: "#F0E6D8", height: 0.22 },
-      { color: "#4A2A14", height: 0.20 },
-      { color: "#E8D5B7", height: 0.10 },
+      { role: "milk", color: "#F0E6D8", height: 0.22 },
+      { role: "coffee", color: "#4A2A14", height: 0.20 },
+      { role: "milk", color: "#E8D5B7", height: 0.10 },
     ],
     foam: { color: "#FEFCFA", height: 0.14 },
   },
   Milk: {
     tall: true,
-    layers: [{ color: "#F0E6D8", height: 0.55 }],
+    layers: [{ role: "milk", color: "#F0E6D8", height: 0.55 }],
   },
   "Milk Froth": {
     tall: true,
-    layers: [{ color: "#F0E6D8", height: 0.15 }],
+    layers: [{ role: "milk", color: "#F0E6D8", height: 0.15 }],
     foam: { color: "#FEFCFA", height: 0.40 },
   },
   "Hot Water": {
-    layers: [{ color: "#9DC4D8", height: 0.50 }],
+    layers: [{ role: "water", color: "#9DC4D8", height: 0.50 }],
   },
 };
 
@@ -142,7 +143,7 @@ DRINKS["Caffe Latte"] = DRINKS["Caffè Latte"];
 DRINKS["Cafe au Lait"] = DRINKS["Café au Lait"];
 
 const DEFAULT: DrinkProfile = {
-  layers: [{ color: "#5C3A1E", height: 0.45 }],
+  layers: [{ role: "coffee", color: "#5C3A1E", height: 0.45 }],
 };
 
 // ---------------------------------------------------------------------------
@@ -675,6 +676,31 @@ export function coffeeIconSvg(recipe: string, size: number, uid: string) {
 
   const hasSteam = recipe !== "Milk" && recipe !== "Milk Froth" && recipe !== "Hot Water";
   return renderGlassSvg(frame, layerPaths, hasSteam, size, uid);
+}
+
+/** Describe the legacy name-based icon for alternative renderers on old servers. */
+export function legacyIconSpec(recipe: string): IconSpec {
+  const profile = DRINKS[recipe] || DEFAULT;
+  const glass = profile.tall ? "tall_glass" : profile.small ? "espresso_cup" : "cup";
+  const fill = profile.layers.reduce((n, l) => n + l.height, 0) + (profile.foam?.height ?? 0);
+  const nominal = NOMINAL_GLASS_ML[glass];
+  const total = fill * nominal;
+  const layers: IconSpecLayer[] = [...profile.layers].reverse().map(l => {
+    return { role: l.role, ml: l.height * nominal, fraction: l.height / fill,
+      intensity: l.role === "coffee" ? .7 : 0, color_hint: l.role === "additive" ? l.color : null };
+  });
+  const coffee = layers.some(l => l.role === "coffee");
+  let foam: IconSpecFoam | null = null;
+  if (profile.foam && coffee && ["#C9A87C", "#B89970", "#E8D5B7"].includes(profile.foam.color)
+      && layers.at(-1)?.role === "coffee") {
+    layers[layers.length - 1].crema = true;
+    layers[layers.length - 1].fraction += profile.foam.height / fill;
+    layers[layers.length - 1].ml += profile.foam.height * nominal;
+  } else if (profile.foam) {
+    foam = { role: "milk_foam", ml: profile.foam.height * nominal, fraction: profile.foam.height / fill };
+  }
+  return { spec_version: 1, glass, total_ml: total, fill_level: fill, layers, foam,
+    steam: recipe !== "Milk" && recipe !== "Milk Froth" && recipe !== "Hot Water" };
 }
 
 /**

@@ -65,7 +65,8 @@ import {
   stringsVersionStale,
 } from "./server-i18n";
 import { buildBrandBadge } from "./brand-badge";
-import { coffeeIconSvg, coffeeIconSvgFromSpec, emptyCoffeeGlassSvg } from "./icons";
+import { renderDrinkIcon } from "./drink-icon";
+import { normalizeCupStyle } from "./glass-model";
 import { freestylePreviewSpec } from "./freestyle-preview";
 import * as api from "./api";
 import {
@@ -199,6 +200,7 @@ export class MelittaBaristaCard extends LitElement {
       show_maintenance: config.show_maintenance || false,
       compact: config.compact || false,
       scale: normalizeScale(config.scale),
+      cup_style: normalizeCupStyle(config.cup_style),
     };
     this._resolvedPrefix = null;
     this._detectedName = null;
@@ -805,6 +807,7 @@ export class MelittaBaristaCard extends LitElement {
       data: dk,
       model: this._dkModel(),
       icons: this._dkIcons?.[dk.activeProfile] ?? null,
+      cupStyle: this._config.cup_style,
       selected: this._selectedDk,
       twoCups: this._twoCups,
       onCardClick: (cat) => this._handleDkClick(cat),
@@ -839,9 +842,8 @@ export class MelittaBaristaCard extends LitElement {
     const lookup = iconSpecForRecipe(
       name, this._recipeEntity()?.attributes?.recipes, this._contract,
     );
-    return lookup.found
-      ? coffeeIconSvgFromSpec(lookup.icon, size, uid)
-      : coffeeIconSvg(name, size, uid);
+    return renderDrinkIcon(lookup.found ? lookup.icon ?? null : undefined,
+      size, uid, this._config?.cup_style, name);
   }
 
   // -- Freestyle --
@@ -864,9 +866,7 @@ export class MelittaBaristaCard extends LitElement {
         <div class="freestyle-layout">
           <figure class="freestyle-preview" aria-label=${this._fsName}>
             <div class="freestyle-glass" aria-hidden="true">
-              ${preview
-                ? coffeeIconSvgFromSpec(preview, 220, "freestyle-preview")
-                : emptyCoffeeGlassSvg(220, "freestyle-preview")}
+              ${renderDrinkIcon(preview, 220, "freestyle-preview", this._config?.cup_style, "", !preview)}
             </div>
             <figcaption class="freestyle-caption">
               <span class="freestyle-drink-name">${this._fsName}</span>
@@ -905,7 +905,8 @@ export class MelittaBaristaCard extends LitElement {
   }
 
   private _renderStats() {
-    return renderStats(this._entity("sensor", "total_cups"));
+    return renderStats(this._entity("sensor", "total_cups"),
+      (name, size, uid) => this._renderRecipeIcon(name, size, uid));
   }
 
   private _renderMaintenance(st: MachineStatus) {

@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [2.14.0] — 2026-11-23
+
+### Added
+
+- Choose **Classic** or **Dimensional glass** in the card editor, or use `cup_style: classic` / `cup_style: glass` in YAML. Existing configurations keep the classic appearance.
+- Render the new glass style in recipes, profile tiles, Freestyle, the brewing view and statistics, with distinct espresso cups, regular cups and tall glasses, material reflections and independently animated steam.
+- Bundle the glass renderer with the card, with no external CDN requests. Share one WebGL context across icons and cards, cache rendered images, and fall back to classic SVG when WebGL is unavailable.
+
+### Changed
+
+- Show coffee and water as one diluted liquid in the glass style, using their volumes to determine concentration while preserving the supplied fill level. Keep milk and milk foam as separate layers.
+- Respect reduced-motion preferences and pause steam for hidden icons and browser tabs. Update glass lighting when the dashboard theme changes, including after background color transitions.
+- Translate the appearance selector into all supported card languages.
+
 ## [2.13.0] — 2026-11-16
 
 ### Added

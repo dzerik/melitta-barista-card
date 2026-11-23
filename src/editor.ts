@@ -2,6 +2,7 @@ import { LitElement, html, css, nothing, CSSResultGroup } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { HomeAssistant } from "custom-card-helpers";
 import type { MelittaCardConfig } from "./types";
+import { normalizeCupStyle } from "./glass-model";
 import { localize, setLanguage } from "./localize/localize";
 import {
   detectMelittaDevices,
@@ -186,6 +187,15 @@ export class MelittaBaristaCardEditor extends LitElement {
           .value=${String(scale)}
           @input=${(ev: Event) => this._scaleChanged(ev)}
         />
+      </div>
+
+      <div class="editor-row">
+        <label for="cup_style">${localize("editor.cup_style")}</label>
+        <select id="cup_style" .value=${normalizeCupStyle(this._config.cup_style)}
+          @change=${(ev: Event) => this._valueChanged("cup_style", ev)}>
+          <option value="classic" ?selected=${normalizeCupStyle(this._config.cup_style) === "classic"}>${localize("editor.cup_style_classic")}</option>
+          <option value="glass" ?selected=${this._config.cup_style === "glass"}>${localize("editor.cup_style_glass")}</option>
+        </select>
       </div>
 
       ${TOGGLES.map(({ key, defaultOn }) => html`

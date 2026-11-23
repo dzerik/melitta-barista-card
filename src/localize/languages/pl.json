@@ -185,6 +185,9 @@
     "show_maintenance": "Pokaż konserwację",
     "show_settings": "Pokaż ustawienia",
     "compact": "Tryb kompaktowy",
-    "scale": "Rozmiar tekstu i ikon"
+    "scale": "Rozmiar tekstu i ikon",
+    "cup_style": "Wygląd filiżanek",
+    "cup_style_classic": "Klasyczny",
+    "cup_style_glass": "Szkło 3D"
   }
 }

@@ -185,6 +185,9 @@
     "show_maintenance": "Mostrar mantenimiento",
     "show_settings": "Mostrar ajustes",
     "compact": "Modo compacto",
-    "scale": "Tamaño del texto y de los iconos"
+    "scale": "Tamaño del texto y de los iconos",
+    "cup_style": "Aspecto de las tazas",
+    "cup_style_classic": "Clásico",
+    "cup_style_glass": "Cristal 3D"
   }
 }

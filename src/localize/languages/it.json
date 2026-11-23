@@ -185,6 +185,9 @@
     "show_maintenance": "Mostra manutenzione",
     "show_settings": "Mostra impostazioni",
     "compact": "Modalità compatta",
-    "scale": "Dimensione di testo e icone"
+    "scale": "Dimensione di testo e icone",
+    "cup_style": "Aspetto delle tazze",
+    "cup_style_classic": "Classico",
+    "cup_style_glass": "Vetro 3D"
   }
 }

@@ -121,9 +121,17 @@ scale: 1.25
 | `show_settings`    | boolean | false         | Show machine settings section                  |
 | `compact`          | boolean | false         | Compact layout                                 |
 | `scale`            | number  | 1             | Text and icon size, `0.8`–`2` (1 = theme size) |
+| `cup_style`        | string  | `classic`     | Drink appearance: `classic` or `glass` |
 
 `scale` enlarges (or shrinks) the whole card body — text, icons and the tile grid alike —
 which helps on wall tablets and kitchen displays. The visual editor exposes it as a slider.
+
+Choose **Cup appearance → Dimensional glass** in the visual editor, or set
+`cup_style: glass` in YAML, to use the new glass cups in recipes, profile tiles,
+Freestyle, brewing and statistics. Composition and fill remain dynamic, with
+coffee and water shown as one diluted liquid. The glass renderer is bundled
+with the card and uses one shared WebGL context. Unsupported graphics devices
+automatically show the classic SVG; `cup_style: classic` restores it explicitly.
 Values outside `0.8`–`2` are clamped.
 
 If you have multiple Melitta machines, use the visual editor dropdown to select the desired device, or set `entity_prefix` manually.

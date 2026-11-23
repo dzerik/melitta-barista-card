@@ -236,6 +236,9 @@
     "show_maintenance": "Show maintenance",
     "show_settings": "Show settings",
     "compact": "Compact mode",
-    "scale": "Text and icon size"
+    "scale": "Text and icon size",
+    "cup_style": "Cup appearance",
+    "cup_style_classic": "Classic",
+    "cup_style_glass": "Dimensional glass"
   }
 }

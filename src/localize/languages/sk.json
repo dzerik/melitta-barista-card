@@ -185,6 +185,9 @@
     "show_maintenance": "Zobraziť údržbu",
     "show_settings": "Zobraziť nastavenia",
     "compact": "Kompaktný režim",
-    "scale": "Veľkosť textu a ikon"
+    "scale": "Veľkosť textu a ikon",
+    "cup_style": "Vzhľad šálok",
+    "cup_style_classic": "Klasický",
+    "cup_style_glass": "3D sklo"
   }
 }
