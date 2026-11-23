@@ -185,6 +185,9 @@
     "show_maintenance": "Wartung anzeigen",
     "show_settings": "Einstellungen anzeigen",
     "compact": "Kompaktmodus",
-    "scale": "Text- und Symbolgröße"
+    "scale": "Text- und Symbolgröße",
+    "cup_style": "Darstellung der Tassen",
+    "cup_style_classic": "Klassisch",
+    "cup_style_glass": "3D-Glas"
   }
 }

@@ -185,6 +185,9 @@
     "show_maintenance": "Mostrar manutenção",
     "show_settings": "Mostrar definições",
     "compact": "Modo compacto",
-    "scale": "Tamanho do texto e dos ícones"
+    "scale": "Tamanho do texto e dos ícones",
+    "cup_style": "Aspeto das chávenas",
+    "cup_style_classic": "Clássico",
+    "cup_style_glass": "Vidro 3D"
   }
 }

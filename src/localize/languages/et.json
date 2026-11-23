@@ -185,6 +185,9 @@
     "show_maintenance": "Kuva hooldus",
     "show_settings": "Kuva seaded",
     "compact": "Kompaktne režiim",
-    "scale": "Teksti ja ikoonide suurus"
+    "scale": "Teksti ja ikoonide suurus",
+    "cup_style": "Tasside välimus",
+    "cup_style_classic": "Klassikaline",
+    "cup_style_glass": "3D-klaas"
   }
 }

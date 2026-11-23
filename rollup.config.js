@@ -3,8 +3,10 @@ import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
 import json from "@rollup/plugin-json";
+import { readFileSync } from "node:fs";
 
 const dev = process.env.ROLLUP_WATCH === "true";
+const threeLicense = readFileSync(new URL("./node_modules/three/LICENSE", import.meta.url), "utf8");
 
 export default {
   input: "src/melitta-barista-card.ts",
@@ -13,6 +15,7 @@ export default {
     format: "es",
     inlineDynamicImports: true,
     sourcemap: true,
+    banner: `/*! Bundled dependency: Three.js\n${threeLicense}\n*/`,
   },
   plugins: [
     nodeResolve(),
@@ -21,7 +24,7 @@ export default {
     json(),
     !dev &&
       terser({
-        format: { comments: false },
+        format: { comments: "some" },
       }),
   ],
   onwarn(warning, warn) {

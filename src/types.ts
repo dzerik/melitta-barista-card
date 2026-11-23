@@ -14,6 +14,8 @@ export interface MelittaCardConfig {
   compact?: boolean;
   /** UI scale factor for text and icons, 0.8-2.0 (default 1 = theme size). */
   scale?: number;
+  /** Drink appearance; omitted or unrecognized values retain the classic SVG. */
+  cup_style?: "classic" | "glass";
 }
 
 /** Configured drink identity; category and profile still identify the brew slot. */

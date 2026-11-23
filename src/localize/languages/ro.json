@@ -185,6 +185,9 @@
     "show_maintenance": "Afișează întreținerea",
     "show_settings": "Afișează setările",
     "compact": "Mod compact",
-    "scale": "Dimensiunea textului și a pictogramelor"
+    "scale": "Dimensiunea textului și a pictogramelor",
+    "cup_style": "Aspectul ceștilor",
+    "cup_style_classic": "Clasic",
+    "cup_style_glass": "Sticlă 3D"
   }
 }

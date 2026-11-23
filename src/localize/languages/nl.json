@@ -185,6 +185,9 @@
     "show_maintenance": "Onderhoud tonen",
     "show_settings": "Instellingen tonen",
     "compact": "Compacte modus",
-    "scale": "Tekst- en pictogramgrootte"
+    "scale": "Tekst- en pictogramgrootte",
+    "cup_style": "Uiterlijk van kopjes",
+    "cup_style_classic": "Klassiek",
+    "cup_style_glass": "3D-glas"
   }
 }

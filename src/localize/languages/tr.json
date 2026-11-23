@@ -185,6 +185,9 @@
     "show_maintenance": "Bakımı göster",
     "show_settings": "Ayarları göster",
     "compact": "Kompakt mod",
-    "scale": "Metin ve simge boyutu"
+    "scale": "Metin ve simge boyutu",
+    "cup_style": "Fincan görünümü",
+    "cup_style_classic": "Klasik",
+    "cup_style_glass": "3D cam"
   }
 }

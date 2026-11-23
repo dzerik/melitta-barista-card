@@ -185,6 +185,9 @@
     "show_maintenance": "Näytä huolto",
     "show_settings": "Näytä asetukset",
     "compact": "Tiivis tila",
-    "scale": "Tekstin ja kuvakkeiden koko"
+    "scale": "Tekstin ja kuvakkeiden koko",
+    "cup_style": "Kuppien ulkoasu",
+    "cup_style_classic": "Klassinen",
+    "cup_style_glass": "3D-lasi"
   }
 }

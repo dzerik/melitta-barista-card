@@ -185,6 +185,9 @@
     "show_maintenance": "Visa underhåll",
     "show_settings": "Visa inställningar",
     "compact": "Kompakt läge",
-    "scale": "Text- och ikonstorlek"
+    "scale": "Text- och ikonstorlek",
+    "cup_style": "Kopparnas utseende",
+    "cup_style_classic": "Klassisk",
+    "cup_style_glass": "3D-glas"
   }
 }

@@ -9,20 +9,21 @@
 // pre-wiring caller keeps the exact 2.7.0 rendering.
 
 import { html, nothing, TemplateResult } from "lit";
+import { renderDrinkIcon } from "../drink-icon";
+import type { CupStyle } from "../glass-model";
 import { DK_LABELS, type DirectKeyCategory } from "../const";
 import { resolveDirectKeyModel, type DirectKeyModel } from "../directkey";
 import { directKeyRecipeLabel } from "../directkey-display";
 import { INTENSITY_DOTS } from "../format";
 import { localize } from "../localize/localize";
 import {
-  coffeeIconSvg,
-  coffeeIconSvgFromSpec,
   computeIconGeometry,
   type IconSpec,
 } from "../icons";
 import type { DirectKeyData, DirectKeyRecipe } from "../types";
 
 export interface DirectKeySectionProps {
+  cupStyle?: CupStyle;
   data: DirectKeyData;
   selected: string | null;
   twoCups: boolean;
@@ -65,7 +66,7 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
             @pointerup=${() => props.onLongPressCancel()}
             @pointerleave=${() => props.onLongPressCancel()}
             @contextmenu=${(e: Event) => e.preventDefault()}>
-            ${renderDkIcon(cat, catModel.icon, props.icons?.[cat])}
+            ${renderDkIcon(cat, catModel.icon, props.icons?.[cat], props.cupStyle)}
             ${hasDetails ? renderDkRecipeInfo(recipe) : nothing}
             <span class="dk-card-label">
               ${isSelected
@@ -99,21 +100,21 @@ export function renderDirectKey(props: DirectKeySectionProps): TemplateResult | 
  *   4. the generic drink glyph.
  */
 function renderDkIcon(
-  cat: string, mdiIcon: string | null, spec?: unknown,
+  cat: string, mdiIcon: string | null, spec?: unknown, style?: CupStyle,
 ): TemplateResult {
   // computeIconGeometry is the usability test: coffeeIconSvgFromSpec silently
   // falls back to the DEFAULT glyph on a spec it cannot read, which would be a
   // worse picture than the category glyph this tile already had.
   if (spec && typeof spec === "object"
       && computeIconGeometry(spec as IconSpec, 48) !== null) {
-    return coffeeIconSvgFromSpec(spec as IconSpec, 64, `dk-${cat}`);
+    return renderDrinkIcon(spec as IconSpec, 64, `dk-${cat}`, style);
   }
   const known = DK_LABELS[cat as DirectKeyCategory];
-  if (known !== undefined) return coffeeIconSvg(known, 64, `dk-${cat}`);
+  if (known !== undefined) return renderDrinkIcon(undefined, 64, `dk-${cat}`, style, known);
   if (mdiIcon !== null) {
     return html`<ha-icon class="dk-card-mdi" icon="${mdiIcon}" style="--mdc-icon-size: calc(var(--mbc-scale, 1) * 48px)"></ha-icon>`;
   }
-  return coffeeIconSvg(cat, 64, `dk-${cat}`);
+  return renderDrinkIcon(undefined, 64, `dk-${cat}`, style, cat);
 }
 
 /**

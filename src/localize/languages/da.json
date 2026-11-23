@@ -185,6 +185,9 @@
     "show_maintenance": "Vis vedligeholdelse",
     "show_settings": "Vis indstillinger",
     "compact": "Kompakt tilstand",
-    "scale": "Tekst- og ikonstørrelse"
+    "scale": "Tekst- og ikonstørrelse",
+    "cup_style": "Koppernes udseende",
+    "cup_style_classic": "Klassisk",
+    "cup_style_glass": "3D-glas"
   }
 }
